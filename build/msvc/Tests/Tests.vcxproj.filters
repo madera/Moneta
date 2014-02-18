@@ -13,6 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\externals">
+      <UniqueIdentifier>{03ece0dd-ccb2-4c8c-ae58-1554a5201987}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\externals\console">
+      <UniqueIdentifier>{caf787d1-16b6-404a-bcc4-6ff35a37eeed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\externals\sqlite3">
+      <UniqueIdentifier>{1b0a044b-c424-4f38-8d0c-fa8db2f69bef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3rdparty">
+      <UniqueIdentifier>{023af1f2-4b9a-4c91-9eff-4533ab6d83ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3rdparty\sqlite3">
+      <UniqueIdentifier>{5abbe6a5-a714-4063-bea0-28fb91e0b518}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -24,13 +39,22 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\externals\console\include\console\exception.hxx">
+      <Filter>Header Files\externals\console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\externals\console\include\console\shell.hxx">
+      <Filter>Header Files\externals\console</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tests.cpp">
+    <ClCompile Include="interactive_shell_test.cxx">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\3rdparty\sqlite3\src\sqlite3.c">
+      <Filter>Source Files\3rdparty\sqlite3</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
