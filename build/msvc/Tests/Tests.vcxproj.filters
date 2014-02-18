@@ -50,11 +50,11 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="interactive_shell_test.cxx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\3rdparty\sqlite3\src\sqlite3.c">
       <Filter>Source Files\3rdparty\sqlite3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\src\interactive_shell_test.cxx">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
