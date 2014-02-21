@@ -20,3 +20,35 @@
 			return #value; \
 		} \
 	};
+
+namespace moneta { namespace meta { namespace detail {
+
+	template <
+		template <typename T>
+		class MemberTraitWithGet,
+		class ContainerType
+	>
+	struct trait_back_inserter  {
+		ContainerType& _target;
+
+		trait_back_inserter(ContainerType& target)
+			: _target(target) {
+		}
+
+		template <class MemberType>
+		void operator()(MemberType& member) const {
+			_target.push_back(MemberTraitWithGet<MemberType>::get());
+		}
+	};
+
+	template <
+		template <typename T>
+		class MemberTraitWithGet,
+		class ContainerType
+	>
+	detail::trait_back_inserter<MemberTraitWithGet, ContainerType>
+	make_trait_back_inserter(ContainerType& target) {
+		return detail::trait_back_inserter<MemberTraitWithGet, ContainerType>(target);
+	}
+
+}}}
