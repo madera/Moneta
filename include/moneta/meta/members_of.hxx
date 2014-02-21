@@ -10,6 +10,8 @@ namespace moneta { namespace meta {
 	}
 
 	template <class EntityType>
-	struct members_of : detail::members_of<typename traits::pure_type<EntityType>::type> {};
+	struct members_of : detail::members_of<
+		typename traits::pure_type<EntityType>::type
+	> {};
 
 }}

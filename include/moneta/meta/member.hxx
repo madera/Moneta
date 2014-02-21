@@ -12,6 +12,7 @@ namespace moneta { namespace meta {
 		}
 	};
 
+	struct not_a_member {};
 }}
 
 #define MONETA_MEMBER(k, t, n) moneta::meta::member<k, t, &k::n>

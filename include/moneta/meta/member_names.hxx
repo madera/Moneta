@@ -9,27 +9,43 @@
 namespace moneta { namespace meta {
 
 	namespace detail {
-		struct field_name_back_inserter  {
-			std::vector<std::string>& fields;
+		template <
+			template <typename T>
+			class MemberTraitWithGet,
 
-			field_name_back_inserter(std::vector<std::string>& v)
-				: fields(v) {
+			typename ContainerType = std::vector<
+				typename MemberTraitWithGet<not_a_member>::trait_type
+			>
+		>
+		struct trait_back_inserter  {
+			ContainerType& _target;
+
+			trait_back_inserter(ContainerType& target)
+			 : _target(target) {
 			}
 
 			template <class MemberType>
 			void operator()(MemberType& member) const {
-				fields.push_back(member_name<MemberType>::get());
+				_target.push_back(MemberTraitWithGet<MemberType>::get());
 			}
 		};
 	}
 
 	template <class EntityType>
 	std::vector<std::string> get_member_names() {
-		
 		std::vector<std::string> result;
+
+		//boost::fusion::for_each(
+		//	typename members_of<EntityType>::type(),
+		//	detail::trait_back_inserter<
+		//		detail::member_name
+		//		//, std::vector<std::string>
+		//	>(result)
+		//);
+
 		boost::fusion::for_each(
 			typename members_of<EntityType>::type(),
-			detail::field_name_back_inserter(result)
+			detail::trait_back_inserter<detail::member_name, std::vector<std::string> >(result)
 		);
 
 		return result;
