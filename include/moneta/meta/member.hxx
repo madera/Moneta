@@ -1,5 +1,4 @@
 #pragma once
-#include "detail/member_trait_base.hxx"
 #include <boost/multi_index/member.hpp> // We reuse boost::multi_index::member<>
 
 namespace moneta { namespace meta {

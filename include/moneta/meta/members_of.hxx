@@ -1,7 +1,6 @@
 #pragma once
-#include "member.hxx"
 #include "../traits/pure_type.hxx"
-#include <boost/type_traits/integral_constant.hpp>
+#include <boost/type_traits/integral_constant.hpp> // boost::false_type
 
 namespace moneta { namespace meta {
 	

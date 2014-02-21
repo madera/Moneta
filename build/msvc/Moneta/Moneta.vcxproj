@@ -83,6 +83,7 @@
     <ClInclude Include="..\..\..\include\moneta\meta\detail\memptr_hacker.hxx" />
     <ClInclude Include="..\..\..\include\moneta\meta\member.hxx" />
     <ClInclude Include="..\..\..\include\moneta\meta\members_of.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\meta\member_name.hxx" />
     <ClInclude Include="..\..\..\include\moneta\meta\member_names.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\pure_type.hxx" />
     <ClInclude Include="stdafx.h" />

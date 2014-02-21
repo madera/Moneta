@@ -85,6 +85,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\externals\console\include\console\exception.hxx" />
     <ClInclude Include="..\..\..\externals\console\include\console\shell.hxx" />
+    <ClInclude Include="..\..\..\test\moneta\model\Person.hxx" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -100,6 +101,7 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\interactive_shell_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\meta\detail\memptr_hacker_tests.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\meta\members_of_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\meta\member_names_test.cxx">
       <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
     </ClCompile>

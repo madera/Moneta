@@ -60,6 +60,9 @@
     <ClInclude Include="..\..\..\include\moneta\meta\detail\member_trait_base.hxx">
       <Filter>Header Files\moneta\meta\detail</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\meta\member_name.hxx">
+      <Filter>Header Files\moneta\meta</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

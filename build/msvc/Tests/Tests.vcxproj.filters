@@ -54,6 +54,9 @@
     <ClInclude Include="..\..\..\externals\console\include\console\shell.hxx">
       <Filter>Header Files\externals\console</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\test\moneta\model\Person.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -72,6 +75,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\meta\member_names_test.cxx">
+      <Filter>Source Files\moneta\meta</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\meta\members_of_test.cxx">
       <Filter>Source Files\moneta\meta</Filter>
     </ClCompile>
   </ItemGroup>
