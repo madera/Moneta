@@ -28,6 +28,15 @@
     <Filter Include="Source Files\3rdparty\sqlite3">
       <UniqueIdentifier>{5abbe6a5-a714-4063-bea0-28fb91e0b518}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\moneta">
+      <UniqueIdentifier>{12b19f94-f5ee-4956-a824-009142ce7815}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moneta\meta">
+      <UniqueIdentifier>{080fdee2-9932-452d-8749-62ba384bb0e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moneta\meta\detail">
+      <UniqueIdentifier>{7b65abc0-8aba-4903-b493-5de4c2ee7cbb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -53,8 +62,17 @@
     <ClCompile Include="..\..\..\3rdparty\sqlite3\src\sqlite3.c">
       <Filter>Source Files\3rdparty\sqlite3</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\src\interactive_shell_test.cxx">
+    <ClCompile Include="..\..\..\test\moneta\meta\detail\memptr_hacker_tests.cxx">
+      <Filter>Source Files\moneta\meta\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\interactive_shell_test.cxx">
+      <Filter>Source Files\moneta</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\main.cxx">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\meta\member_names_test.cxx">
+      <Filter>Source Files\moneta\meta</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

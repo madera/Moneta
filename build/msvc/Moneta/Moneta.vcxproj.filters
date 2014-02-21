@@ -19,6 +19,18 @@
     <Filter Include="Source Files\moneta">
       <UniqueIdentifier>{b23712aa-6f93-4340-ac46-09949b9561d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Docs">
+      <UniqueIdentifier>{b4a22c72-a3be-4617-b7d2-662e0de13155}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\moneta\meta">
+      <UniqueIdentifier>{645b5a33-44f9-49e7-9f82-d2ae2b552d69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\moneta\meta\detail">
+      <UniqueIdentifier>{1c295e5a-1762-46b2-8b58-2d4573b37431}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\moneta\traits">
+      <UniqueIdentifier>{270a8cce-a8e4-426d-8832-342b71c8b78d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -30,10 +42,45 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\meta\detail\memptr_hacker.hxx">
+      <Filter>Header Files\moneta\meta\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\meta\member_names.hxx">
+      <Filter>Header Files\moneta\meta</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\pure_type.hxx">
+      <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\meta\members_of.hxx">
+      <Filter>Header Files\moneta\meta</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\meta\member.hxx">
+      <Filter>Header Files\moneta\meta</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\meta\detail\member_trait_base.hxx">
+      <Filter>Header Files\moneta\meta\detail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\doc\Descriptors.md">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="..\..\..\doc\DevLog.md">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="..\..\..\doc\draft.md">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="..\..\..\doc\Filters.md">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="..\..\..\doc\Moneta.md">
+      <Filter>Docs</Filter>
+    </None>
   </ItemGroup>
 </Project>
