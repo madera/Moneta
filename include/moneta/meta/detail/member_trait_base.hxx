@@ -11,7 +11,7 @@
 	}}}
 
 // FIXME: Do we need this type here?
-#define MONETA_MEMBER_TRAIT_BASE(trait_class, member, type, value) \
+#define MONETA_DEFINE_MEMBER_TRAIT(trait_class, member, type, value) \
 	template <> \
 	struct moneta::meta::detail::trait_class<member> { \
 		typedef type trait_type; \
@@ -28,10 +28,10 @@ namespace moneta { namespace meta { namespace detail {
 		class MemberTraitWithGet,
 		class ContainerType
 	>
-	struct trait_back_inserter  {
+	struct trait_back_inserter_iterator  {
 		ContainerType& _target;
 
-		trait_back_inserter(ContainerType& target)
+		trait_back_inserter_iterator(ContainerType& target)
 			: _target(target) {
 		}
 
@@ -46,9 +46,9 @@ namespace moneta { namespace meta { namespace detail {
 		class MemberTraitWithGet,
 		class ContainerType
 	>
-	detail::trait_back_inserter<MemberTraitWithGet, ContainerType>
-	make_trait_back_inserter(ContainerType& target) {
-		return detail::trait_back_inserter<MemberTraitWithGet, ContainerType>(target);
+	detail::trait_back_inserter_iterator<MemberTraitWithGet, ContainerType>
+	trait_back_inserter(ContainerType& target) {
+		return detail::trait_back_inserter_iterator<MemberTraitWithGet, ContainerType>(target);
 	}
 
 }}}

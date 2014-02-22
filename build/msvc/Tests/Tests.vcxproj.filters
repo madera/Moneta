@@ -74,10 +74,10 @@
     <ClCompile Include="..\..\..\test\main.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\meta\member_names_test.cxx">
+    <ClCompile Include="..\..\..\test\moneta\meta\members_of_test.cxx">
       <Filter>Source Files\moneta\meta</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\meta\members_of_test.cxx">
+    <ClCompile Include="..\..\..\test\moneta\meta\member_name_test.cxx">
       <Filter>Source Files\moneta\meta</Filter>
     </ClCompile>
   </ItemGroup>
