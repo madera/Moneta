@@ -31,6 +31,9 @@
     <Filter Include="Header Files\moneta\traits">
       <UniqueIdentifier>{270a8cce-a8e4-426d-8832-342b71c8b78d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\traits\detail">
+      <UniqueIdentifier>{8fb4a177-9494-4bff-baa6-a794a2edb4e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -71,6 +74,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\tuple.hxx">
       <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\sequence_parameter_constructor_opfx.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
