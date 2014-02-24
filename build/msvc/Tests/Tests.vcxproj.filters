@@ -37,6 +37,9 @@
     <Filter Include="Source Files\moneta\meta\detail">
       <UniqueIdentifier>{7b65abc0-8aba-4903-b493-5de4c2ee7cbb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\moneta\traits">
+      <UniqueIdentifier>{78b19416-cea5-4eaa-9230-1f527d1dda07}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -83,8 +86,11 @@
     <ClCompile Include="..\..\..\test\moneta\meta\member_pointers_test.cxx">
       <Filter>Source Files\moneta\meta</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\meta\tuple_tests.cxx">
-      <Filter>Source Files\moneta\meta</Filter>
+    <ClCompile Include="..\..\..\test\moneta\traits\to_tie_tests.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\tuple_tests.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

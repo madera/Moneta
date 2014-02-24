@@ -1,11 +1,15 @@
 #pragma once
-#include "members_of.hxx"
+#include "../meta/members_of.hxx"
 #include <boost/fusion/include/as_vector.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/mpl/transform.hpp>
 
-namespace moneta { namespace meta {
+// For our users...
+#include <boost/fusion/include/at_c.hpp>
+#include <boost/mpl/at.hpp>
+
+namespace moneta { namespace traits {
 
 	namespace detail {
 		struct get_result_type {
@@ -18,7 +22,7 @@ namespace moneta { namespace meta {
 		namespace mpl {
 			template <typename EntityType>
 			struct vector : boost::mpl::transform<
-				typename members_of<EntityType>::type,
+				typename meta::members_of<EntityType>::type,
 				get_result_type
 			> {};
 		}
@@ -44,5 +48,4 @@ namespace moneta { namespace meta {
 			boost::add_reference<boost::add_const<boost::mpl::_1> >
 		>::type
 	> {};
-
 }}

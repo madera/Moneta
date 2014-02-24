@@ -86,8 +86,9 @@
     <ClInclude Include="..\..\..\include\moneta\meta\members_of.hxx" />
     <ClInclude Include="..\..\..\include\moneta\meta\member_name.hxx" />
     <ClInclude Include="..\..\..\include\moneta\meta\member_pointers.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\meta\tuple.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\pure_type.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\to_tie.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\tuple.hxx" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
