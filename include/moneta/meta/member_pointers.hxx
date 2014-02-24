@@ -1,20 +1,9 @@
 #pragma once
 #include "members_of.hxx"
 #include "detail/sequence_parameter_constructor_sg.hxx"
-// TODO: Filter out exact include for fusion::result_of.
-#include <boost/fusion/algorithm.hpp> // for boost::fusion::result_of::as_vector
+#include <boost/fusion/include/as_vector.hpp>
 #include <boost/mpl/transform.hpp>
 
-//#pragma once
-//#include "detail/member_trait_base.hxx"
-//#include <boost/fusion/algorithm/iteration/for_each.hpp>
-//#include <boost/fusion/mpl.hpp>
-//
-//MONETA_DECLARE_MEMBER_TRAIT(member_name, std::string)
-//
-//#define MONETA_MEMBER_POINTER(member, name) \
-//	MONETA_DEFINE_MEMBER_TRAIT(member_name, member, std::string, name)
-//
 namespace moneta { namespace meta {
 
 	namespace detail {
