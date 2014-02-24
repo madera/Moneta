@@ -3,9 +3,6 @@
 #include "../model/Person.hxx"
 
 BOOST_AUTO_TEST_CASE(to_tie_test) {
-	using boost::is_same;
-	using boost::mpl::at_c;
-
 	Person person;
 	person.ID = 1;
 	person.Name = "John Smith";
@@ -22,9 +19,6 @@ BOOST_AUTO_TEST_CASE(to_tie_test) {
 }
 
 BOOST_AUTO_TEST_CASE(const_to_tie_test) {
-	using boost::is_same;
-	using boost::mpl::at_c;
-
 	Person person;
 	person.ID = 1;
 	person.Name = "John Smith";
