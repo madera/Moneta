@@ -1,5 +1,5 @@
 #pragma once
-#include "../meta/members_of.hxx"
+#include "members_of.hxx"
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/not.hpp>
@@ -20,11 +20,11 @@ namespace moneta { namespace traits {
 	struct has_pk : boost::mpl::not_<
 		boost::is_same<
 			typename boost::mpl::find_if<
-				typename members_of<EntityType>::type,
-				is_pk<boost::mpl::_1>
+				typename members<EntityType>::type,
+				detail::is_pk<boost::mpl::_1>
 			>::type,
 			typename boost::mpl::end<
-				typename members_of<EntityType>::type
+				typename members<EntityType>::type
 			>::type
 		>
 	> {};

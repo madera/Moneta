@@ -10,7 +10,7 @@ namespace moneta { namespace traits {
 			typename tie<EntityType>::type
 			operator()(EntityType& entity) {
 				return sequence_parameter_constructor_opfx<
-					meta::members_of<EntityType>::type,
+					members<EntityType>::type,
 					typename tie<EntityType>::type,
 					EntityType&
 				>()(entity);
@@ -19,7 +19,7 @@ namespace moneta { namespace traits {
 			typename const_tie<EntityType>::type
 			operator()(const EntityType& entity) {
 				return sequence_parameter_constructor_opfx<
-					meta::members_of<EntityType>::type,
+					members<EntityType>::type,
 					typename const_tie<EntityType>::type,
 					const EntityType&
 				>()(entity);

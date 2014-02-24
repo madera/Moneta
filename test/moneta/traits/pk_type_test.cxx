@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <moneta/traits/tuple.hxx>
+#include <moneta/traits/pk_type.hxx>
 #include "../model/Person.hxx"
 
 BOOST_AUTO_TEST_CASE(pk_type_test) {
