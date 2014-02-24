@@ -1,5 +1,5 @@
 #pragma once
-#include "detail/member_trait_base.hxx"
+#include "../traits/detail/member_trait_base.hxx"
 #include "members_of.hxx"
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/fusion/mpl.hpp>
@@ -19,7 +19,7 @@ namespace moneta { namespace meta {
 
 		boost::fusion::for_each(
 			typename members_of<EntityType>::type(),
-			detail::trait_back_inserter<detail::member_name>(result)
+			traits::detail::trait_back_inserter<traits::detail::member_name>(result)
 		);
 
 		return result;

@@ -40,6 +40,12 @@
     <Filter Include="Source Files\moneta\traits">
       <UniqueIdentifier>{78b19416-cea5-4eaa-9230-1f527d1dda07}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta">
+      <UniqueIdentifier>{b8d88e09-f939-4699-87d7-051e54ede9f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\moneta\model">
+      <UniqueIdentifier>{2f429059-c97a-4500-8f5d-c95a01268410}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -58,7 +64,7 @@
       <Filter>Header Files\externals\console</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\moneta\model\Person.hxx">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\moneta\model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +99,9 @@
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\tuple_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\pk_type_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
   </ItemGroup>

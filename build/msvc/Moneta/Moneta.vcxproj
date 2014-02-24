@@ -79,14 +79,15 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\moneta\meta\detail\member_trait_base.hxx" />
     <ClInclude Include="..\..\..\include\moneta\meta\detail\memptr_hacker.hxx" />
     <ClInclude Include="..\..\..\include\moneta\meta\detail\sequence_parameter_constructor_sg.hxx" />
     <ClInclude Include="..\..\..\include\moneta\meta\member.hxx" />
     <ClInclude Include="..\..\..\include\moneta\meta\members_of.hxx" />
     <ClInclude Include="..\..\..\include\moneta\meta\member_name.hxx" />
     <ClInclude Include="..\..\..\include\moneta\meta\member_pointers.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\member_trait_base.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sequence_parameter_constructor_opfx.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\pk_type.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\pure_type.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\to_entity.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\to_tie.hxx" />

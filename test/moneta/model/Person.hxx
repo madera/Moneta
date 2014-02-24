@@ -4,6 +4,7 @@
 #include <moneta/meta/members_of.hxx> // members_of
 #include <moneta/meta/member.hxx>
 #include <moneta/meta/member_name.hxx>
+#include <moneta/traits/pk_type.hxx>
 #include <boost/mpl/vector.hpp>
 #include <string>
 
@@ -23,6 +24,8 @@ namespace moneta { namespace meta { namespace detail {
 		MONETA_MEMBER(Person, int,         Fingers)
 	> {};
 }}}
+
+MONETA_PRIMARY_KEY(MONETA_MEMBER(Person, int, ID))
 
 MONETA_MEMBER_NAME(MONETA_MEMBER(Person, int,         ID     ), ID     )
 MONETA_MEMBER_NAME(MONETA_MEMBER(Person, std::string, Name   ), Name   )

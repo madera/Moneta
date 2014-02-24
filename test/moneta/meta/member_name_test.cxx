@@ -4,22 +4,22 @@
 
 BOOST_AUTO_TEST_CASE(member_name_test) {
 	BOOST_CHECK_EQUAL(
-		(moneta::meta::detail::member_name<MONETA_MEMBER(Person, int, ID)>::get()),
+		(moneta::traits::detail::member_name<MONETA_MEMBER(Person, int, ID)>::get()),
 		"ID"
 	);
 
 	BOOST_CHECK_EQUAL(
-		(moneta::meta::detail::member_name<MONETA_MEMBER(Person, std::string, Name)>::get()),
+		(moneta::traits::detail::member_name<MONETA_MEMBER(Person, std::string, Name)>::get()),
 		"Name"
 	);
 
 	BOOST_CHECK_EQUAL(
-		(moneta::meta::detail::member_name<MONETA_MEMBER(Person, double, Height)>::get()),
+		(moneta::traits::detail::member_name<MONETA_MEMBER(Person, double, Height)>::get()),
 		"Height"
 	);
 
 	BOOST_CHECK_EQUAL(
-		(moneta::meta::detail::member_name<MONETA_MEMBER(Person, int, Fingers)>::get()),
+		(moneta::traits::detail::member_name<MONETA_MEMBER(Person, int, Fingers)>::get()),
 		"Fingers"
 	);
 }

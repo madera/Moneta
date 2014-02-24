@@ -106,6 +106,7 @@
       <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\meta\member_pointers_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\traits\pk_type_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\to_entity_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\to_tie_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\tuple_test.cxx" />

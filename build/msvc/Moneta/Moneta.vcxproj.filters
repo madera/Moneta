@@ -57,9 +57,6 @@
     <ClInclude Include="..\..\..\include\moneta\meta\member.hxx">
       <Filter>Header Files\moneta\meta</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\meta\detail\member_trait_base.hxx">
-      <Filter>Header Files\moneta\meta\detail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\meta\member_name.hxx">
       <Filter>Header Files\moneta\meta</Filter>
     </ClInclude>
@@ -79,6 +76,12 @@
       <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\to_entity.hxx">
+      <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\member_trait_base.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\pk_type.hxx">
       <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
   </ItemGroup>
