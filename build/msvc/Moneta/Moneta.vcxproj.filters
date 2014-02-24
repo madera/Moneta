@@ -78,6 +78,9 @@
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sequence_parameter_constructor_opfx.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\to_entity.hxx">
+      <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

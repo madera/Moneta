@@ -39,17 +39,4 @@ namespace moneta { namespace traits {
 		return detail::tie_maker<EntityType>()(x);
 	}
 
-	//template <class T, class U>
-	//T to_entity(const U& tuple) {
-	//	T x;
-	//	to_tie(x) = tuple;
-	//	return x;
-	//}
-
-	//template <class T, class U>
-	//T to_entity_nc_dbg(U& tuple) {
-	//	T x;
-	//	to_tie(x) = tuple;
-	//	return x;
-	//}
 }}

@@ -68,9 +68,6 @@
     <ClCompile Include="..\..\..\3rdparty\sqlite3\src\sqlite3.c">
       <Filter>Source Files\3rdparty\sqlite3</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\meta\detail\memptr_hacker_tests.cxx">
-      <Filter>Source Files\moneta\meta\detail</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\interactive_shell_test.cxx">
       <Filter>Source Files\moneta</Filter>
     </ClCompile>
@@ -86,10 +83,16 @@
     <ClCompile Include="..\..\..\test\moneta\meta\member_pointers_test.cxx">
       <Filter>Source Files\moneta\meta</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\traits\to_tie_tests.cxx">
+    <ClCompile Include="..\..\..\test\moneta\traits\to_entity_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\traits\tuple_tests.cxx">
+    <ClCompile Include="..\..\..\test\moneta\meta\detail\memptr_hacker_test.cxx">
+      <Filter>Source Files\moneta\meta\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\to_tie_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\tuple_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
   </ItemGroup>
