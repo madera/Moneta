@@ -1,6 +1,6 @@
 #pragma once
 #include "../traits/detail/member_trait_base.hxx"
-#include "../traits/members_of.hxx"
+#include "../traits/members.hxx"
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/fusion/mpl.hpp>
 #include <vector>

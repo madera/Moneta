@@ -1,5 +1,5 @@
 #pragma once
-#include "members_of.hxx"
+#include "members.hxx"
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/not.hpp>

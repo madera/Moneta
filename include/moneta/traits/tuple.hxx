@@ -1,5 +1,5 @@
 #pragma once
-#include "members_of.hxx"
+#include "members.hxx"
 #include <boost/fusion/include/as_vector.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>

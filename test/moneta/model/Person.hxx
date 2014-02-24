@@ -1,7 +1,7 @@
 //
 // User entity.
 //
-#include <moneta/traits/members_of.hxx>
+#include <moneta/traits/members.hxx>
 #include <moneta/meta/member.hxx>
 #include <moneta/meta/member_name.hxx>
 #include <moneta/traits/pk_type.hxx>

@@ -1,5 +1,5 @@
 #pragma once
-#include "../traits/members_of.hxx"
+#include "../traits/members.hxx"
 #include "detail/sequence_parameter_constructor_sg.hxx"
 #include <boost/fusion/include/as_vector.hpp>
 #include <boost/mpl/transform.hpp>
