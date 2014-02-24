@@ -80,5 +80,8 @@
     <ClCompile Include="..\..\..\test\moneta\meta\member_name_test.cxx">
       <Filter>Source Files\moneta\meta</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\meta\member_pointers_test.cxx">
+      <Filter>Source Files\moneta\meta</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

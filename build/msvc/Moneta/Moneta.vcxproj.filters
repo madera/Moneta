@@ -60,6 +60,12 @@
     <ClInclude Include="..\..\..\include\moneta\meta\member_name.hxx">
       <Filter>Header Files\moneta\meta</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\meta\member_pointers.hxx">
+      <Filter>Header Files\moneta\meta</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\meta\detail\sequence_parameter_constructor_sg.hxx">
+      <Filter>Header Files\moneta\meta\detail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
