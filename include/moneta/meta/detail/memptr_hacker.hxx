@@ -1,4 +1,5 @@
 #pragma once
+#include "../member_pointers.hxx"
 #include <boost/fusion/algorithm/iteration/for_each_fwd.hpp>
 #include <vector>
 
@@ -7,7 +8,6 @@ namespace moneta {
 	typedef unsigned long long member_ptr_interceptor_t;
 
 	namespace detail {
-
 		template <typename MemberPointerType, typename InterceptorType = member_ptr_interceptor_t>
 		union memptr_hacker {
 			typedef memptr_hacker<MemberPointerType, InterceptorType> this_type;
@@ -31,7 +31,7 @@ namespace moneta {
 		}
 
 		struct memptr_fingerprinter {
-			std::vector<member_ptr_interceptor_t>& _vector;
+			std::vector<member_ptr_interceptor_t>& _vector; // XXX: Container?
 
 			memptr_fingerprinter(std::vector<member_ptr_interceptor_t>& vector)
 			 : _vector(vector) {
@@ -48,7 +48,7 @@ namespace moneta {
 			static inline const std::vector<member_ptr_interceptor_t>& get() {
 				static std::vector<member_ptr_interceptor_t> result;
 				if (result.empty()) {
-					boost::fusion::for_each(traits::member_pointers<EntityType>::get(), memptr_fingerprinter(result));
+					boost::fusion::for_each(meta::member_pointers<EntityType>::get(), memptr_fingerprinter(result));
 				}
 
 				return result;
@@ -71,5 +71,4 @@ namespace moneta {
 		assert(itr != fingerprints.end());
 		return std::distance(fingerprints.begin(), itr);
 	}
-
 }
