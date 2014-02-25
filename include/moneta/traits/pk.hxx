@@ -40,7 +40,7 @@ namespace moneta { namespace traits {
 			template <class EntityType>
 			struct apply : boost::mpl::copy_if<
 				typename members<EntityType>::type,
-				traits::detail::is_pk<boost::mpl::_1>,
+				is_pk<boost::mpl::_1>,
 				boost::mpl::back_inserter<boost::mpl::vector<> >
 			> {};
 		};

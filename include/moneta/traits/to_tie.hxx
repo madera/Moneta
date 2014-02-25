@@ -34,7 +34,7 @@ namespace moneta { namespace traits {
 	}
 
 	template <typename EntityType>
-	typename traits::const_tie<EntityType>::type
+	typename const_tie<EntityType>::type
 	to_tie(const EntityType& x) {
 		return detail::tie_maker<EntityType>()(x);
 	}

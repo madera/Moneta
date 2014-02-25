@@ -11,7 +11,7 @@ namespace moneta { namespace traits {
 
 	template <class EntityType>
 	struct members : detail::members_of<
-		typename traits::pure_type<EntityType>::type
+		typename pure_type<EntityType>::type
 	> {};
 
 }}

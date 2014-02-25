@@ -54,7 +54,7 @@ namespace moneta { namespace traits {
 		typename pk_tie<EntityType>::type
 	>::type
 	extract_pk(EntityType& entity) {
-		BOOST_MPL_ASSERT((moneta::traits::has_pk<EntityType>));
+		BOOST_MPL_ASSERT((has_pk<EntityType>));
 		return detail::pk_extractor<EntityType>(entity);
 	}
 
