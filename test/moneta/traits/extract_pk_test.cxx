@@ -1,10 +1,8 @@
 #include "stdafx.h"
 #include <moneta/traits/extract_pk.hxx>
+#include <moneta/traits/same_pk.hxx>
 #include "../model/Person.hxx"
 #include "../model/Dog.hxx"
-
-#include <boost/utility/result_of.hpp>
-#include <boost/mpl/print.hpp>
 
 BOOST_AUTO_TEST_CASE(extract_pk_test) {
 	Person person;

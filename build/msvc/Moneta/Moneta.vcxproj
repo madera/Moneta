@@ -80,12 +80,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\moneta\make_entity.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\blanker.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\is_fusion_vector.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\member_trait_base.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_constructor.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_hacker.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sequence_parameter_constructor_opfx.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sequence_parameter_constructor_sg.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\empty_pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\extract_pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\is_entity.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\member.hxx" />

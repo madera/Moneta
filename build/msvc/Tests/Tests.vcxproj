@@ -103,6 +103,7 @@
     <ClCompile Include="..\..\..\test\moneta\interactive_shell_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\make_entity_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\memptr_hacker_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\traits\empty_pk_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\extract_pk_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\is_entity_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\members_of_test.cxx" />

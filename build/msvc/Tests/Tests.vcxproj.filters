@@ -116,5 +116,8 @@
     <ClCompile Include="..\..\..\test\moneta\make_entity_test.cxx">
       <Filter>Source Files\moneta</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\empty_pk_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

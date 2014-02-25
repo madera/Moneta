@@ -102,41 +102,4 @@ namespace moneta { namespace traits {
 		return single_memptr(entity);
 	}
 
-
-	// TODO: Move to pk.hxx
-	template <class EntityType>
-	typename const bool same_pk(const EntityType& a, const EntityType& b) {
-		return extract_pk(a) == extract_pk(b);
-	}
-
-
-
-
-	//template <class EntityType>
-	//typename boost::enable_if<
-	//	detail::is_fusion_vector<typename pk<EntityType>::type>,
-	//	typename pk<EntityType>::type
-	//>::type
-	//empty_pk() {
-	//	typename pk<EntityType>::type result;
-	//	return boost::fusion::transform(result, detail::blanker());
-	//}
-
-	//template <class EntityType>
-	//typename boost::enable_if<
-	//	boost::mpl::not_<
-	//		traits::is_fusion_vector<typename pk_tie<EntityType>::type>
-	//	>,
-	//	typename pk<EntityType>::type
-	//>::type
-	//empty_pk() {
-	//	typename traits::pk<EntityType>::type result{};
-	//	return result;
-	//}
-
-	//template <class EntityType>
-	//const bool has_empty_pk(EntityType& entity) { // FIXME: Use const. This is a query function.
-	//	return traits::extract_pk<EntityType>(entity) == empty_pk<EntityType>();
-	//}
-
 }}
