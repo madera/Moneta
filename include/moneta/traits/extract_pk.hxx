@@ -21,7 +21,7 @@ namespace moneta { namespace traits {
 		template <class EntityType>
 		typename pk_tie<EntityType>::type
 		pk_extractor(EntityType& entity) {
-			return moneta::traits::detail::memptr_constructor<
+			return memptr_constructor<
 				typename pk_tie<EntityType>::type,
 				typename boost::mpl::apply<get_pk_memptr_types, EntityType>::type,
 				EntityType,
@@ -34,7 +34,7 @@ namespace moneta { namespace traits {
 		template <class EntityType>
 		typename const_pk_tie<EntityType>::type
 		pk_extractor(const EntityType& entity) {
-			return moneta::traits::detail::memptr_constructor<
+			return memptr_constructor<
 				typename const_pk_tie<EntityType>::type,
 				typename boost::mpl::apply<get_pk_memptr_types, EntityType>::type,
 				EntityType,
@@ -50,7 +50,7 @@ namespace moneta { namespace traits {
 
 	template <class EntityType>
 	typename boost::enable_if<
-		traits::detail::is_fusion_vector<typename pk_tie<EntityType>::type>,
+		detail::is_fusion_vector<typename pk_tie<EntityType>::type>,
 		typename pk_tie<EntityType>::type
 	>::type
 	extract_pk(EntityType& entity) {
@@ -60,11 +60,11 @@ namespace moneta { namespace traits {
 
 	template <class EntityType>
 	typename boost::enable_if<
-		traits::detail::is_fusion_vector<typename const_pk_tie<EntityType>::type>,
+		detail::is_fusion_vector<typename const_pk_tie<EntityType>::type>,
 		typename const_pk_tie<EntityType>::type
 	>::type
 	extract_pk(const EntityType& entity) {
-		BOOST_MPL_ASSERT((moneta::traits::has_pk<EntityType>));
+		BOOST_MPL_ASSERT((has_pk<EntityType>));
 		return detail::pk_extractor<EntityType>(entity);
 	}
 
@@ -72,11 +72,11 @@ namespace moneta { namespace traits {
 
 	template <class EntityType>
 	typename boost::enable_if<
-		boost::mpl::not_<traits::detail::is_fusion_vector<typename pk_tie<EntityType>::type> >,
+		boost::mpl::not_<detail::is_fusion_vector<typename pk_tie<EntityType>::type> >,
 		typename pk_tie<EntityType>::type
 	>::type
 	extract_pk(EntityType& entity) {
-		BOOST_MPL_ASSERT((moneta::traits::has_pk<EntityType>));
+		BOOST_MPL_ASSERT((has_pk<EntityType>));
 	
 		typename boost::mpl::at_c<
 			typename boost::mpl::apply<detail::get_pk_memptr_types, EntityType>::type,
@@ -88,11 +88,11 @@ namespace moneta { namespace traits {
 
 	template <class EntityType>
 	typename boost::enable_if<
-		boost::mpl::not_<traits::detail::is_fusion_vector<typename const_pk_tie<EntityType>::type> >,
+		boost::mpl::not_<detail::is_fusion_vector<typename const_pk_tie<EntityType>::type> >,
 		typename const_pk_tie<EntityType>::type
 	>::type
 	extract_pk(const EntityType& entity) {
-		BOOST_MPL_ASSERT((moneta::traits::has_pk<EntityType>));
+		BOOST_MPL_ASSERT((has_pk<EntityType>));
 	
 		typename boost::mpl::at_c<
 			typename boost::mpl::apply<detail::get_pk_memptr_types, EntityType>::type,
@@ -102,17 +102,17 @@ namespace moneta { namespace traits {
 		return single_memptr(entity);
 	}
 
+	// TODO: Move to pk.hxx
+	template <class EntityType>
+	typename const bool same_pk(const EntityType& a, const EntityType& b) {
+		return extract_pk(a) == extract_pk(b);
+	}
 
-	//template <class EntityType>
-	//typename const bool same_pk(const EntityType& a, const EntityType& b) {
-	//	return extract_pk(a) == extract_pk(b);
-	//}
-
-
+	// TODO: Move to pk.hxx
 	//template <class EntityType>
 	//std::vector<std::string> get_pk_type_names() {
 	//	return fucker::get_member_names_from_vector<
-	//		typename boost::mpl::apply<fucker::detail::get_primary_key_memptr_types, EntityType>::type
+	//		
 	//	>();
 	//}
 

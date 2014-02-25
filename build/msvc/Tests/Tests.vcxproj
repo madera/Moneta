@@ -101,17 +101,17 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\interactive_shell_test.cxx" />
-    <ClCompile Include="..\..\..\test\moneta\meta\detail\memptr_hacker_test.cxx" />
-    <ClCompile Include="..\..\..\test\moneta\meta\members_of_test.cxx" />
-    <ClCompile Include="..\..\..\test\moneta\meta\member_name_test.cxx">
-      <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\meta\member_pointers_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\traits\detail\memptr_hacker_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\extract_pk_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\traits\members_of_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\traits\member_name_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\traits\member_pointers_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\traits\pk_member_names_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\pk_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\to_entity_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\to_tie_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\tuple_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\traits\tuple_tests.cxx" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

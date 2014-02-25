@@ -2,7 +2,7 @@
 #pragma once
 #include <boost/mpl/size.hpp>
 
-namespace moneta { namespace meta { namespace detail {
+namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P = void*, int Size = boost::mpl::size<S>::value>
 	struct sequence_parameter_constructor_sg;

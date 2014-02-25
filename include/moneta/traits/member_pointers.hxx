@@ -1,10 +1,10 @@
 #pragma once
-#include "../traits/members.hxx"
+#include "members.hxx"
 #include "detail/sequence_parameter_constructor_sg.hxx"
 #include <boost/fusion/include/as_vector.hpp>
 #include <boost/mpl/transform.hpp>
 
-namespace moneta { namespace meta {
+namespace moneta { namespace traits {
 
 	namespace detail {
 		struct get_pointer_type {
@@ -19,14 +19,14 @@ namespace moneta { namespace meta {
 	struct member_pointers {
 		typedef typename boost::fusion::result_of::as_vector<
 			typename boost::mpl::transform<
-				typename traits::members<EntityType>::type,
+				typename members<EntityType>::type,
 				detail::get_pointer_type
 			>::type
 		>::type type;
 
 		static const type get() {
 			return detail::sequence_parameter_constructor_sg<
-				typename traits::members<EntityType>::type,
+				typename members<EntityType>::type,
 				type
 			>()();
 		}

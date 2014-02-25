@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <moneta/meta/member_pointers.hxx>
+#include <moneta/traits/member_pointers.hxx>
 #include <boost/fusion/include/at_c.hpp>
 #include <boost/mpl/at.hpp>
 #include "../model/Person.hxx"
@@ -8,7 +8,7 @@ BOOST_AUTO_TEST_CASE(member_pointers_type_test) {
 	using boost::is_same;
 	using boost::mpl::at_c;
 
-	typedef moneta::meta::member_pointers<Person>::type type;
+	typedef moneta::traits::member_pointers<Person>::type type;
 
 	BOOST_MPL_ASSERT((is_same<at_c<type, 0>::type, int         Person::*>)); // ID
 	BOOST_MPL_ASSERT((is_same<at_c<type, 1>::type, std::string Person::*>)); // Name
@@ -17,7 +17,7 @@ BOOST_AUTO_TEST_CASE(member_pointers_type_test) {
 }
 
 BOOST_AUTO_TEST_CASE(member_pointers_test) {
-	using moneta::meta::member_pointers;
+	using moneta::traits::member_pointers;
 	member_pointers<Person>::type memptrs = member_pointers<Person>::get();
 
 	using boost::fusion::at_c;

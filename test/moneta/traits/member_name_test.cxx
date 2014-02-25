@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <moneta/meta/member_name.hxx>
+#include <moneta/traits/member_name.hxx>
 #include "../model/Person.hxx"
 
 BOOST_AUTO_TEST_CASE(member_name_test) {
@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE(member_name_test) {
 }
 
 BOOST_AUTO_TEST_CASE(member_names_test) {
-	std::vector<std::string> names = moneta::meta::get_member_names<Person>();
+	std::vector<std::string> names = moneta::traits::get_member_names<Person>();
 	BOOST_REQUIRE_EQUAL(names.size(), 4);
 	BOOST_CHECK_EQUAL(names[0], "ID");
 	BOOST_CHECK_EQUAL(names[1], "Name");

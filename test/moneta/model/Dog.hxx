@@ -2,8 +2,8 @@
 // User entity.
 //
 #include <moneta/traits/members.hxx>
-#include <moneta/meta/member.hxx>
-#include <moneta/meta/member_name.hxx>
+#include <moneta/traits/member.hxx>
+#include <moneta/traits/member_name.hxx>
 #include <moneta/traits/pk.hxx>
 #include <boost/mpl/vector.hpp>
 #include <string>

@@ -31,12 +31,6 @@
     <Filter Include="Source Files\moneta">
       <UniqueIdentifier>{12b19f94-f5ee-4956-a824-009142ce7815}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\moneta\meta">
-      <UniqueIdentifier>{080fdee2-9932-452d-8749-62ba384bb0e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\moneta\meta\detail">
-      <UniqueIdentifier>{7b65abc0-8aba-4903-b493-5de4c2ee7cbb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\moneta\traits">
       <UniqueIdentifier>{78b19416-cea5-4eaa-9230-1f527d1dda07}</UniqueIdentifier>
     </Filter>
@@ -45,6 +39,9 @@
     </Filter>
     <Filter Include="Header Files\moneta\model">
       <UniqueIdentifier>{2f429059-c97a-4500-8f5d-c95a01268410}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moneta\traits\detail">
+      <UniqueIdentifier>{e82a0497-c236-450d-af2d-71e9845119d4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -83,20 +80,8 @@
     <ClCompile Include="..\..\..\test\main.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\meta\members_of_test.cxx">
-      <Filter>Source Files\moneta\meta</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\meta\member_name_test.cxx">
-      <Filter>Source Files\moneta\meta</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\meta\member_pointers_test.cxx">
-      <Filter>Source Files\moneta\meta</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\to_entity_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\meta\detail\memptr_hacker_test.cxx">
-      <Filter>Source Files\moneta\meta\detail</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\to_tie_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
@@ -108,6 +93,21 @@
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\extract_pk_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\pk_member_names_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\detail\memptr_hacker_test.cxx">
+      <Filter>Source Files\moneta\traits\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\member_name_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\member_pointers_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\members_of_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
   </ItemGroup>
