@@ -90,6 +90,15 @@
     <ClInclude Include="..\..\..\include\moneta\traits\member_name.hxx">
       <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\make_entity.hxx">
+      <Filter>Header Files\moneta</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\same_pk.hxx">
+      <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\is_entity.hxx">
+      <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
