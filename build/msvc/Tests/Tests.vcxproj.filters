@@ -101,7 +101,7 @@
     <ClCompile Include="..\..\..\test\moneta\traits\tuple_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\traits\pk_type_test.cxx">
+    <ClCompile Include="..\..\..\test\moneta\traits\pk_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
   </ItemGroup>

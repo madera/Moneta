@@ -78,10 +78,10 @@
     <ClInclude Include="..\..\..\include\moneta\traits\detail\member_trait_base.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\traits\pk_type.hxx">
+    <ClInclude Include="..\..\..\include\moneta\traits\members.hxx">
       <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\traits\members.hxx">
+    <ClInclude Include="..\..\..\include\moneta\traits\pk.hxx">
       <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
   </ItemGroup>

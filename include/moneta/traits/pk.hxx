@@ -1,9 +1,15 @@
 #pragma once
 #include "members.hxx"
+#include "tuple.hxx" // for detail::get_result_type // TODO: Make this better.
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/not.hpp>
+#include <boost/mpl/transform.hpp>
+#include <boost/mpl/copy_if.hpp>
 #include <boost/mpl/find_if.hpp>
+#include <boost/mpl/vector.hpp>
+#include <boost/mpl/if.hpp>
+#include <boost/mpl/size.hpp>
 
 #define MONETA_PRIMARY_KEY(member) \
 	template<> struct moneta::traits::detail::is_pk<member> : boost::true_type {};
@@ -29,48 +35,55 @@ namespace moneta { namespace traits {
 		>
 	> {};
 
-	//namespace detail {
-	//	struct get_primary_key_memptr_types {
-	//		template <class EntityType>
-	//		struct apply : boost::mpl::copy_if<
-	//			typename members_of<EntityType>::type,
-	//			traits::is_pk<boost::mpl::_1>,
-	//			boost::mpl::back_inserter<boost::mpl::vector<> >
-	//		> {};
-	//	};
+	namespace detail {
+		struct get_pk_memptr_types {
+			template <class EntityType>
+			struct apply : boost::mpl::copy_if<
+				typename members<EntityType>::type,
+				traits::detail::is_pk<boost::mpl::_1>,
+				boost::mpl::back_inserter<boost::mpl::vector<> >
+			> {};
+		};
 
-	//	struct get_primary_key {
-	//		template <class EntityType>
-	//		struct apply : boost::mpl::transform<
-	//			typename get_primary_key_memptr_types::apply<
-	//				typename pure_type<EntityType>::type
-	//			>::type,
-	//			detail::get_result_type
-	//		> {};
-	//	};
-	//}
+		struct get_primary_key {
+			template <class EntityType>
+			struct apply : boost::mpl::transform<
+				typename get_pk_memptr_types::apply<EntityType>::type,
+				detail::get_result_type
+			> {};
+		};
 
-	//template <class EntityType>
-	//struct mpl_pk : boost::mpl::apply<detail::get_primary_key, EntityType> {};
-	//
-	//template <class EntityType>
-	//struct fusion_pk : boost::fusion::result_of::as_vector<
-	//	typename mpl_pk<EntityType>::type
-	//> {};
+		namespace mpl {
+			template <class EntityType>
+			struct pk : boost::mpl::apply<
+				detail::get_primary_key,
+				EntityType
+			> {};
+		}
 
-	//template <class EntityType>
-	//struct pk : boost::mpl::if_<
-	//	boost::mpl::equal_to<
-	//		typename boost::mpl::size<
-	//			typename fusion_pk<EntityType>::type
-	//		>::type,
-	//		boost::mpl::int_<1>
-	//	>,
-	//	typename boost::mpl::at_c<typename fusion_pk<EntityType>::type, 0>::type,
-	//	typename fusion_pk<EntityType>::type
-	//> {};
+		namespace fusion {
+			template <class EntityType>
+			struct pk : boost::fusion::result_of::as_vector<
+				typename mpl::pk<EntityType>::type
+			> {};
+		}
+	}
 
+	// Note: If the PK is a vector1<T>, then we extract T and use it as the key.
+	//       This keeps things simple for non-composite keys (which is mostly the case).
+	template <class EntityType>
+	struct pk {
+		typedef typename detail::fusion::pk<EntityType>::type actual_pk;
 
+		typedef typename boost::mpl::if_<
+			boost::mpl::equal_to<
+				typename boost::mpl::size<actual_pk>::type,
+				boost::mpl::int_<1>
+			>,
+			typename boost::mpl::at_c<actual_pk, 0>::type,
+			actual_pk
+		>::type type;
+	};
 
 	//template <class EntityType>
 	//struct mpl_pk_tie : boost::mpl::transform<

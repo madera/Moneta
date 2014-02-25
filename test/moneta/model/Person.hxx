@@ -4,7 +4,7 @@
 #include <moneta/traits/members.hxx>
 #include <moneta/meta/member.hxx>
 #include <moneta/meta/member_name.hxx>
-#include <moneta/traits/pk_type.hxx>
+#include <moneta/traits/pk.hxx>
 #include <boost/mpl/vector.hpp>
 #include <string>
 
