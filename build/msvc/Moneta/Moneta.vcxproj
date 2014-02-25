@@ -84,8 +84,11 @@
     <ClInclude Include="..\..\..\include\moneta\meta\member.hxx" />
     <ClInclude Include="..\..\..\include\moneta\meta\member_name.hxx" />
     <ClInclude Include="..\..\..\include\moneta\meta\member_pointers.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\is_fusion_vector.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\member_trait_base.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_constructor.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sequence_parameter_constructor_opfx.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\extract_pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\members.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\pure_type.hxx" />

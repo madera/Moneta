@@ -66,6 +66,9 @@
     <ClInclude Include="..\..\..\test\moneta\model\Person.hxx">
       <Filter>Header Files\moneta\model</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\test\moneta\model\Dog.hxx">
+      <Filter>Header Files\moneta\model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -102,6 +105,9 @@
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\pk_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\extract_pk_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
   </ItemGroup>

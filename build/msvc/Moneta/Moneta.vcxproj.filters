@@ -84,6 +84,15 @@
     <ClInclude Include="..\..\..\include\moneta\traits\pk.hxx">
       <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\extract_pk.hxx">
+      <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_constructor.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\is_fusion_vector.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

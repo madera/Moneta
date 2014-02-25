@@ -85,6 +85,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\externals\console\include\console\exception.hxx" />
     <ClInclude Include="..\..\..\externals\console\include\console\shell.hxx" />
+    <ClInclude Include="..\..\..\test\moneta\model\Dog.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Person.hxx" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -106,6 +107,7 @@
       <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\meta\member_pointers_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\traits\extract_pk_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\pk_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\to_entity_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\to_tie_test.cxx" />
