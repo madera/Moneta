@@ -93,6 +93,12 @@ namespace moneta { namespace traits {
 				typename pk<EntityType>::type,
 				boost::add_reference<boost::mpl::_>
 			> {};
+
+			template <class EntityType>
+			struct const_pk_tie : boost::mpl::transform<
+				typename pk<EntityType>::type,
+				boost::add_reference<boost::add_const<boost::mpl::_> >
+			> {}; // XXX: Needs test case.
 		}
 
 		namespace fusion {
@@ -100,6 +106,11 @@ namespace moneta { namespace traits {
 			struct pk_tie : boost::fusion::result_of::as_vector<
 				typename mpl::pk_tie<EntityType>::type
 			> {};
+
+			template <class EntityType>
+			struct const_pk_tie : boost::fusion::result_of::as_vector<
+				typename mpl::const_pk_tie<EntityType>::type
+			> {}; // XXX: Needs test case.
 		}
 	}
 
@@ -108,4 +119,8 @@ namespace moneta { namespace traits {
 		typename detail::fusion::pk_tie<EntityType>::type
 	> {};
 
+	template <class EntityType>
+	struct const_pk_tie : deref_if_unary<
+		typename detail::fusion::const_pk_tie<EntityType>::type
+	> {}; // XXX: Needs test case.
 }}
