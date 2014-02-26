@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <moneta/traits/member_name.hxx>
+#include <moneta/traits/member_names.hxx>
 #include "../model/Person.hxx"
 
 BOOST_AUTO_TEST_CASE(member_name_test) {

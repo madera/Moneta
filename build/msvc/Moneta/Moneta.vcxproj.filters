@@ -87,9 +87,6 @@
     <ClInclude Include="..\..\..\include\moneta\traits\member.hxx">
       <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\traits\member_name.hxx">
-      <Filter>Header Files\moneta\traits</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\make_entity.hxx">
       <Filter>Header Files\moneta</Filter>
     </ClInclude>
@@ -104,6 +101,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\detail\blanker.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\member_names.hxx">
+      <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
