@@ -54,15 +54,18 @@
 		>::get();                                            \
 	}
 
-#define MONETA_DEFINE_MEMBER_TRAIT_COLLECTOR(trait, name)            \
-	template <class EntityType>                                  \
-	const std::vector<moneta::traits::detail::trait::trait_type> \
-	name() {                                                     \
-		return moneta::traits::detail::get_member_traits<    \
-			moneta::traits::detail::trait,               \
-			moneta::traits::members<EntityType>::type    \
-		>();                                                 \
+#define MONETA_DEFINE_MEMBER_SEQUENCE_TRAIT_COLLECTOR(trait, name, members) \
+	template <class EntityType>                                         \
+	const std::vector<moneta::traits::detail::trait::trait_type>        \
+	name() {                                                            \
+		return moneta::traits::detail::get_member_traits_with_get<  \
+			moneta::traits::detail::trait,                      \
+			members                                             \
+		>();                                                        \
 	}
+
+#define MONETA_DEFINE_MEMBER_TRAIT_COLLECTOR(trait, name) \
+	MONETA_DEFINE_MEMBER_SEQUENCE_TRAIT_COLLECTOR(trait, name, moneta::traits::members<EntityType>::type)
 
 namespace moneta { namespace traits { namespace detail {
 
@@ -99,7 +102,7 @@ namespace moneta { namespace traits { namespace detail {
 		class MemberTraitWithGet,
 		class MemberPointersSequence
 	>
-	std::vector<std::string> get_member_traits() {
+	std::vector<std::string> get_member_traits_with_get() {
 		std::vector<std::string> result;
 		boost::fusion::for_each(
 			typename MemberPointersSequence(),

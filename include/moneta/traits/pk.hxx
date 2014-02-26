@@ -69,6 +69,12 @@ namespace moneta { namespace traits {
 		}
 	}
 
+	template <class EntityType>
+	struct pk_members : boost::mpl::apply<
+		detail::get_pk_memptr_types,
+		EntityType
+	> {};
+
 	// XXX: Move.
 	// Type: vector1<T> --> T, else: Sequence.
 	template <class Sequence>
