@@ -135,6 +135,9 @@
     <ClInclude Include="..\..\..\include\moneta\sql\generators\insert.hxx">
       <Filter>Header Files\moneta\sql\generators</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\generators\delete.hxx">
+      <Filter>Header Files\moneta\sql\generators</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

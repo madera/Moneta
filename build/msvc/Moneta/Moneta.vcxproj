@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\moneta\make_entity.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\sql\generators\delete.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\generators\detail\generate_params.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\generators\insert.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\generators\select.hxx" />

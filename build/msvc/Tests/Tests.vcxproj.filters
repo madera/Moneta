@@ -140,5 +140,8 @@
     <ClCompile Include="..\..\..\test\moneta\sql\generators\insert_test.cxx">
       <Filter>Source Files\moneta\sql\generators</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\sql\generators\delete_test.cxx">
+      <Filter>Source Files\moneta\sql\generators</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
