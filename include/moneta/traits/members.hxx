@@ -7,6 +7,7 @@ MONETA_DECLARE_ENTITY_TRAIT(members_of, void)
 
 namespace moneta { namespace traits {
 
+	// TODO: Maybe this pattern will reappear. If it does, macro it off.
 	template <class EntityType>
 	struct members : detail::members_of<
 		typename pure_type<EntityType>::type

@@ -1,5 +1,4 @@
 #pragma once
-#include "detail/generate_params.hxx"
 #include "../../traits/pk_member_names.hxx"
 #include <boost/algorithm/string/join.hpp>
 #include <boost/format.hpp>
