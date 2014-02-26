@@ -34,7 +34,6 @@ MONETA_MEMBER_NAME(MONETA_MEMBER(Dog, std::string, Name   ), Name   )
 
 
 MONETA_SQL_TABLE_NAME(Dog, DOG)
-
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Dog, std::string, Owner  ), OWNER  )
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Dog, int,         ID     ), ID     )
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Dog, std::string, Name   ), NAME   )
+MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Dog, std::string, Owner  ), DOG_OWNER)
+MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Dog, int,         ID     ), DOG_ID   )
+MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Dog, std::string, Name   ), DOG_NAME )

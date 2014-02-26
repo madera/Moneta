@@ -36,8 +36,7 @@ MONETA_MEMBER_NAME(MONETA_MEMBER(Person, int,         Fingers), Fingers)
 
 
 MONETA_SQL_TABLE_NAME(Person, PERSON)
-
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Person, int,         ID     ), ID     )
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Person, std::string, Name   ), NAME   )
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Person, double,      Height ), HEIGHT )
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Person, int,         Fingers), FINGERS)
+MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Person, int,         ID     ), PERSON_ID     )
+MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Person, std::string, Name   ), PERSON_NAME   )
+MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Person, double,      Height ), PERSON_HEIGHT )
+MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Person, int,         Fingers), PERSON_FINGERS)
