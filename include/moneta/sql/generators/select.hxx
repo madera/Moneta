@@ -12,7 +12,7 @@ namespace moneta { namespace sql { namespace generators {
 	const std::string select_all_from_table() {
 		std::ostringstream oss;
 		oss << "SELECT " << boost::join(traits::get_field_names<EntityType>(), ", ") << '\n'
-		    << "  FROM " << traits::table_name<EntityType>::get();
+		    << "  FROM " << traits::get_table_name<EntityType>();
 		return oss.str();
 	}
 
