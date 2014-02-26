@@ -28,9 +28,9 @@ namespace moneta { namespace traits {
 		return result;
 	}
 
-	//template <class EntityType>
-	//const bool has_empty_pk(const EntityType& entity) {
-	//	return traits::extract_pk<EntityType>(entity) == empty_pk<EntityType>();
-	//}
+	template <class EntityType>
+	const bool has_empty_pk(const EntityType& entity) {
+		return traits::extract_pk<EntityType>(entity) == empty_pk<EntityType>();
+	}
 
 }}

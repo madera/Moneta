@@ -4,16 +4,6 @@
 #include "detail/is_fusion_vector.hxx"
 #include <boost/fusion/include/equal_to.hpp>
 
-//#include <boost/type_traits/integral_constant.hpp>
-//#include <boost/type_traits/is_same.hpp>
-//#include <boost/mpl/not.hpp>
-//#include <boost/mpl/transform.hpp>
-//#include <boost/mpl/copy_if.hpp>
-//#include <boost/mpl/find_if.hpp>
-//#include <boost/mpl/vector.hpp>
-//#include <boost/mpl/if.hpp>
-//#include <boost/mpl/size.hpp>
-
 namespace moneta { namespace traits {
 
 	namespace detail {
@@ -45,8 +35,6 @@ namespace moneta { namespace traits {
 		}
 
 	}
-
-
 
 	template <class EntityType>
 	typename boost::enable_if<
