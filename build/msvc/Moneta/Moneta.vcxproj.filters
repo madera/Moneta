@@ -28,6 +28,21 @@
     <Filter Include="Header Files\moneta\traits\detail">
       <UniqueIdentifier>{8fb4a177-9494-4bff-baa6-a794a2edb4e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\serialization">
+      <UniqueIdentifier>{742dfa80-49bb-416c-b38e-cdca44ba4942}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\moneta\sql">
+      <UniqueIdentifier>{0a9b5c23-6f75-4573-baae-a8453a0c35a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\moneta\sql\generators">
+      <UniqueIdentifier>{0aab10f5-83aa-4662-9daf-64bfe0e961c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\moneta\sql\generators\detail">
+      <UniqueIdentifier>{814dd3a1-3f2d-488b-a068-705ff61adc5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\moneta\sql\traits">
+      <UniqueIdentifier>{467d7ec4-30b9-4502-b4f6-7797e446e65b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -104,6 +119,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\member_names.hxx">
       <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\generators\select.hxx">
+      <Filter>Header Files\moneta\sql\generators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\generators\detail\generate_params.hxx">
+      <Filter>Header Files\moneta\sql\generators\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\field_names.hxx">
+      <Filter>Header Files\moneta\sql\traits</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

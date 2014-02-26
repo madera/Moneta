@@ -43,6 +43,9 @@
     <Filter Include="Source Files\moneta\traits\detail">
       <UniqueIdentifier>{e82a0497-c236-450d-af2d-71e9845119d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\moneta\sql">
+      <UniqueIdentifier>{a3a81998-dcd7-4309-a7eb-82fc1b264fd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -101,9 +104,6 @@
     <ClCompile Include="..\..\..\test\moneta\traits\detail\memptr_hacker_test.cxx">
       <Filter>Source Files\moneta\traits\detail</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\traits\member_name_test.cxx">
-      <Filter>Source Files\moneta\traits</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\member_pointers_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
@@ -118,6 +118,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\empty_pk_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\member_names_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\sql\traits\field_names_test.cxx">
+      <Filter>Source Files\moneta\sql</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

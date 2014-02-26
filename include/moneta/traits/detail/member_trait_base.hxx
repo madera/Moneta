@@ -10,7 +10,6 @@
 		}; \
 	}}}
 
-// FIXME: Do we need this type here?
 #define MONETA_DEFINE_MEMBER_TRAIT(trait_class, member, type, value) \
 	template <> \
 	struct moneta::traits::detail::trait_class<member> { \
@@ -20,6 +19,15 @@
 			return #value; \
 		} \
 	};
+
+#define MONETA_DEFINE_MEMBER_TRAIT_ACCESSOR(trait_class, name) \
+	template <class EntityType> \
+	std::vector<std::string> name() { \
+		return moneta::traits::detail::get_member_traits< \
+			moneta::traits::detail::trait_class, \
+			moneta::traits::members<EntityType>::type \
+		>(); \
+	}
 
 namespace moneta { namespace traits { namespace detail {
 
@@ -49,6 +57,21 @@ namespace moneta { namespace traits { namespace detail {
 	detail::trait_back_inserter_iterator<MemberTraitWithGet, ContainerType>
 	trait_back_inserter(ContainerType& target) {
 		return detail::trait_back_inserter_iterator<MemberTraitWithGet, ContainerType>(target);
+	}
+
+	template <
+		template <typename T>
+		class MemberTraitWithGet,
+		class MemberPointersSequence
+	>
+	std::vector<std::string> get_member_traits() {
+		std::vector<std::string> result;
+		boost::fusion::for_each(
+			typename MemberPointersSequence(),
+			detail::trait_back_inserter<MemberTraitWithGet>(result)
+		);
+
+		return result;
 	}
 
 }}}
