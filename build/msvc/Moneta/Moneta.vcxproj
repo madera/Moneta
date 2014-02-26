@@ -83,6 +83,7 @@
     <ClInclude Include="..\..\..\include\moneta\sql\generators\detail\generate_params.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\generators\select.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\traits\field_names.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\table_name.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\blanker.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\is_fusion_vector.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\member_trait_base.hxx" />

@@ -46,6 +46,12 @@
     <Filter Include="Source Files\moneta\sql">
       <UniqueIdentifier>{a3a81998-dcd7-4309-a7eb-82fc1b264fd9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\moneta\sql\traits">
+      <UniqueIdentifier>{f083417c-cf40-42e3-8648-a23d4f6fe177}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moneta\sql\generators">
+      <UniqueIdentifier>{95339085-815f-4853-a859-2a5e9348e1a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -123,7 +129,13 @@
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\sql\traits\field_names_test.cxx">
-      <Filter>Source Files\moneta\sql</Filter>
+      <Filter>Source Files\moneta\sql\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\sql\generators\select_test.cxx">
+      <Filter>Source Files\moneta\sql\generators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\sql\traits\table_name_test.cxx">
+      <Filter>Source Files\moneta\sql\traits</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

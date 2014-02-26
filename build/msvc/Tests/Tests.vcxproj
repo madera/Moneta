@@ -102,7 +102,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\interactive_shell_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\make_entity_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\sql\generators\select_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\traits\field_names_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\sql\traits\table_name_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\memptr_hacker_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\empty_pk_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\extract_pk_test.cxx" />

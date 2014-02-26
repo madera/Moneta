@@ -129,6 +129,9 @@
     <ClInclude Include="..\..\..\include\moneta\sql\traits\field_names.hxx">
       <Filter>Header Files\moneta\sql\traits</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\table_name.hxx">
+      <Filter>Header Files\moneta\sql\traits</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
