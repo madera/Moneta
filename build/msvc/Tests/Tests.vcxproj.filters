@@ -52,6 +52,15 @@
     <Filter Include="Source Files\moneta\sql\generators">
       <UniqueIdentifier>{95339085-815f-4853-a859-2a5e9348e1a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\moneta\serializers">
+      <UniqueIdentifier>{b0507f1e-f61f-42bd-8ff2-80a79ea1cf01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moneta\serializers\detail">
+      <UniqueIdentifier>{a749a435-60b6-40f4-b0e1-59b6d0c859e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moneta\serializers\shell">
+      <UniqueIdentifier>{7f1aa187-06c2-43ca-b725-df33acb3ced4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -142,6 +151,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\sql\generators\delete_test.cxx">
       <Filter>Source Files\moneta\sql\generators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\serialization\detail\from_text_impl_test.cxx">
+      <Filter>Source Files\moneta\serializers\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\serialization\shell\shell_codec_test.cxx">
+      <Filter>Source Files\moneta\serializers\shell</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

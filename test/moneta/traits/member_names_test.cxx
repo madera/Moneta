@@ -32,3 +32,10 @@ BOOST_AUTO_TEST_CASE(member_names_test) {
 	BOOST_CHECK_EQUAL(names[2], "Height");
 	BOOST_CHECK_EQUAL(names[3], "Fingers");
 }
+
+BOOST_AUTO_TEST_CASE(get_member_name_index_test) {
+	BOOST_CHECK_EQUAL(moneta::traits::get_member_name_index<Person>("ID"), 0);
+	BOOST_CHECK_EQUAL(moneta::traits::get_member_name_index<Person>("Name"), 1);
+	BOOST_CHECK_EQUAL(moneta::traits::get_member_name_index<Person>("Height"), 2);
+	BOOST_CHECK_EQUAL(moneta::traits::get_member_name_index<Person>("Fingers"), 3);
+}
