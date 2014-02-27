@@ -1,6 +1,7 @@
 //
 // User entity.
 //
+#pragma once
 #include <moneta/traits/members.hxx>
 #include <moneta/traits/member.hxx>
 #include <moneta/traits/member_names.hxx>

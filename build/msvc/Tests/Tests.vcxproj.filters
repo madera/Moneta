@@ -84,6 +84,9 @@
     <ClInclude Include="..\..\..\test\moneta\model\Dog.hxx">
       <Filter>Header Files\moneta\model</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\test\moneta\model\Composite.hxx">
+      <Filter>Header Files\moneta\model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

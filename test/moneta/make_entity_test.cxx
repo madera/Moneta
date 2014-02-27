@@ -2,25 +2,7 @@
 #include <moneta/make_entity.hxx>
 #include "model/Person.hxx"
 #include "model/Dog.hxx"
-
-struct Composite {
-	int x;
-	char y;
-	short z;
-	Person Person;
-	Dog Dog;
-};
-
-namespace moneta { namespace traits { namespace detail {
-	template <>
-	struct members_of<Composite> : boost::mpl::vector<
-		MONETA_MEMBER(Composite, int,    x     ),
-		MONETA_MEMBER(Composite, char,   y     ),
-		MONETA_MEMBER(Composite, short,  z     ),
-		MONETA_MEMBER(Composite, Person, Person),
-		MONETA_MEMBER(Composite, Dog,    Dog   )
-	> {};
-}}}
+#include "model/Composite.hxx"
 
 BOOST_AUTO_TEST_CASE(make_entity_test) {
 	Person person = moneta::make_entity<Person>();
@@ -35,9 +17,7 @@ BOOST_AUTO_TEST_CASE(make_entity_test) {
 	BOOST_CHECK(dog.Name.empty());
 
 	Composite composite = moneta::make_entity<Composite>();
-	BOOST_CHECK_EQUAL(composite.x, 0);
-	BOOST_CHECK_EQUAL(composite.y, 0);
-	BOOST_CHECK_EQUAL(composite.z, 0);
+	BOOST_CHECK_EQUAL(composite.Identifier, 0);
 
 	BOOST_CHECK_EQUAL(composite.Person.ID, 0);
 	BOOST_CHECK(composite.Person.Name.empty());

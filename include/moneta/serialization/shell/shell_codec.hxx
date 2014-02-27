@@ -1,6 +1,9 @@
 #pragma once
+#include <boost/format.hpp>
 #include <boost/fusion/include/at_c.hpp>
 #include "../detail/from_text_impl.hxx"
+#include "../../traits/member_names.hxx"
+#include "../../traits/detail/memptr_hacker.hxx"
 #include "../../traits/is_entity.hxx"
 #include "../../make_entity.hxx"
 #include <vector>
@@ -10,6 +13,10 @@
 namespace moneta { namespace serialization { namespace shell {
 
 	namespace detail {
+
+		//
+		// Decoder
+		//
 
 		std::vector<std::string> special_split(const std::string& line) {
 			std::vector<std::string> result;
@@ -45,8 +52,9 @@ namespace moneta { namespace serialization { namespace shell {
 				}
 			}
 
-			if (!token.empty())
+			if (!token.empty()) {
 				result.push_back(token);
+			}
 
 			return result;
 		}
@@ -73,75 +81,82 @@ namespace moneta { namespace serialization { namespace shell {
 			return result;
 		}
 
-
-
 		//
 		// Encoder
 		//
+
 		template <class EntityType, class OstreamType = std::basic_ostream<char> >
 		class member_ostreamer {
-			EntityType& _entity;
+			const EntityType& _entity;
 			OstreamType& _output;
 		public:
-			member_ostreamer(EntityType& entity, OstreamType& output = std::cout)
+			member_ostreamer(const EntityType& entity, OstreamType& output = std::cout)
 				: _entity(entity), _output(output) {
 			}
 
 			template <typename T>
 			void operator()(T& memptr) const {
-				const size_t ordinal = fucker::member_ordinal(memptr);
-				const std::string name = fucker::name<EntityType>(ordinal);
-				_output << boost::format("%s=%s ") % name % 
-					textonator<
-						std::remove_reference<decltype(_entity.*memptr)>::type // XXX: C++03!
-					>()(_entity.*memptr);
-			}
+				const size_t ordinal = traits::member_ordinal(memptr);
+				const std::string name = traits::get_member_name<EntityType>(ordinal);
+				_output << boost::format("%s=%s") % name % textonize(memptr, _entity);
 
-			OstreamType& output() {
-				return _output;
+				if (ordinal + 1 != boost::mpl::size<traits::members<EntityType>::type>::value) {
+					_output << ", ";
+				}
 			}
 		};
-
-
 
 		template <class EntityType, class Enable = void>
 		struct textonator;
 
 		template <class NonEntityType>
-		struct textonator<NonEntityType, typename std::enable_if<
-			!moneta::traits::is_entity<
-				typename std::remove_reference<NonEntityType>::type
-			>::value
-		>::type> {
+		struct textonator<
+			NonEntityType,
+			typename std::enable_if<
+				!traits::is_entity<NonEntityType>::value
+			>::type
+		> {
 			const std::string operator()(const NonEntityType& value) {
 				return boost::lexical_cast<std::string>(value);
 			}
 		};
 
 		template<class EntityType>
-		struct textonator<EntityType, typename std::enable_if<
-			moneta::traits::is_entity<
-				typename std::remove_reference<EntityType>::type
-			>::value
-		>::type> {
+		struct textonator<
+			EntityType,
+			typename std::enable_if<
+				traits::is_entity<EntityType>::value
+			>::type
+		> {
 			const std::string operator()(const EntityType& entity) {
 				std::ostringstream oss;
-				member_ostreamer<EntityType, std::ostringstream> functor(const_cast<EntityType&>(entity), oss);
-				boost::fusion::for_each(traits::member_pointers<EntityType>::get(), functor);
-				return functor.output().str();
+				oss << '{';
+
+				boost::fusion::for_each(
+					traits::member_pointers<EntityType>::get(),
+					member_ostreamer<EntityType, std::ostringstream>(entity, oss)
+				);
+
+				oss << '}';
+				return oss.str();
 			}
 		};
+
+		template <typename T, class K>
+		const std::string textonize(T K::* memptr, const K& x) {
+			return textonator<T>()(x.*memptr);
+		}
 
 	} // namespace detail
 
 	template <class EntityType>
 	EntityType from_kv(std::map<std::string, std::string>& kv, EntityType& result = make_entity<EntityType>()) {
-		fucker::from_text_impl<EntityType> text_assigner;
+		serialization::detail::from_text_impl<EntityType> text_assigner;
 		for (const auto& pair : kv) {
 			const std::string& key = pair.first;
 			const std::string& value = pair.second;
 
-			const size_t index = fucker::name_index<EntityType>(key.c_str());
+			const size_t index = moneta::traits::get_member_name_index<EntityType>(key.c_str());
 			text_assigner(result, index, value);
 		}
 
@@ -150,7 +165,6 @@ namespace moneta { namespace serialization { namespace shell {
 
 	template <class EntityType>
 	EntityType from_line(const std::string& line, EntityType& result = make_entity<EntityType>()) {
-		std::cerr << "from_line: " << line << std::endl;
 		return from_kv<EntityType>(detail::line_to_kv(line), result);
 	}
 

@@ -85,6 +85,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\externals\console\include\console\exception.hxx" />
     <ClInclude Include="..\..\..\externals\console\include\console\shell.hxx" />
+    <ClInclude Include="..\..\..\test\moneta\model\Composite.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Dog.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Person.hxx" />
     <ClInclude Include="stdafx.h" />
