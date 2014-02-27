@@ -16,7 +16,7 @@ namespace moneta { namespace sql { namespace generators {
 		oss << "INSERT INTO " << traits::get_table_name<EntityType>() << " (\n"
 		    << '\t' << boost::join(fields, ", ") << '\n'
 		    << ") VALUES (\n"
-		    << '\t' << boost::algorithm::join(detail::generate_params(fields.size()), ", ") << '\n'
+		    << '\t' << detail::generate_parameters<EntityType>() << '\n'
 		    << ")";
 		return oss.str();
 	}

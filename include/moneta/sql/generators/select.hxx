@@ -1,4 +1,5 @@
 #pragma once
+#include "detail/generate_params.hxx"
 #include "../../traits/pk_member_names.hxx"
 #include "../traits/field_names.hxx"
 #include <boost/algorithm/string/join.hpp>
@@ -20,17 +21,7 @@ namespace moneta { namespace sql { namespace generators {
 	const std::string select_all_from_table_where_pk() {
 		std::ostringstream oss;
 		oss << select_all_from_table<EntityType>()
-		    << "\n WHERE " << oss.str();
-		
-		const std::vector<std::string> fields = moneta::sql::traits::get_pk_field_names<EntityType>();
-		
-		for (size_t i=0; i < fields.size(); ++i) {
-			oss << boost::format("%s = :%s") % fields[i] % boost::to_lower_copy(fields[i]);
-			if (i+1 != fields.size()) {
-				oss << " AND ";
-			}
-		}
-
+		    << "\n WHERE " << detail::generate_parameters_k_eq_v<EntityType>();
 		return oss.str();
 	}
 
