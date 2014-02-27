@@ -8,4 +8,10 @@ MONETA_DECLARE_MEMBER_TRAIT(sql_field_name, std::string)
 
 namespace moneta { namespace sql { namespace traits {
 	MONETA_DEFINE_MEMBER_TRAIT_COLLECTOR(sql_field_name, get_field_names)
+
+	MONETA_DEFINE_MEMBER_SEQUENCE_TRAIT_COLLECTOR(
+		sql_field_name,
+		get_pk_field_names,
+		moneta::traits::pk_members<EntityType>::type
+	)
 }}}

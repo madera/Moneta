@@ -1,5 +1,6 @@
 #pragma once
 #include "../../traits/pk_member_names.hxx"
+#include "../traits/field_names.hxx"
 #include <boost/algorithm/string/join.hpp>
 #include <boost/format.hpp>
 #include <boost/algorithm/string.hpp>
@@ -21,7 +22,7 @@ namespace moneta { namespace sql { namespace generators {
 		oss << select_all_from_table<EntityType>()
 		    << "\n WHERE " << oss.str();
 		
-		const std::vector<std::string> fields = moneta::traits::get_pk_member_names<EntityType>();
+		const std::vector<std::string> fields = moneta::sql::traits::get_pk_field_names<EntityType>();
 		
 		for (size_t i=0; i < fields.size(); ++i) {
 			oss << boost::format("%s = :%s") % fields[i] % boost::to_lower_copy(fields[i]);

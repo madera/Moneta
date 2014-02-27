@@ -18,11 +18,11 @@ BOOST_AUTO_TEST_CASE(delete_from_table_test) {
 BOOST_AUTO_TEST_CASE(delete_from_table_where_pk_test) {
 	BOOST_CHECK_EQUAL(
 		moneta::sql::generators::delete_from_table_where_pk<Person>(),
-		"DELETE FROM PERSON\n WHERE ID = :id"
+		"DELETE FROM PERSON\n WHERE PERSON_ID = :person_id"
 	);
 
 	BOOST_CHECK_EQUAL(
 		moneta::sql::generators::delete_from_table_where_pk<Dog>(),
-		"DELETE FROM DOG\n WHERE Owner = :owner AND ID = :id"
+		"DELETE FROM DOG\n WHERE DOG_OWNER = :dog_owner AND DOG_ID = :dog_id"
 	);
 }
