@@ -21,7 +21,7 @@ namespace moneta { namespace sql { namespace generators {
 	const std::string select_all_from_table_where_pk() {
 		std::ostringstream oss;
 		oss << select_all_from_table<EntityType>()
-		    << "\n WHERE " << detail::generate_parameters_k_eq_v<EntityType>();
+		    << "\n WHERE " << detail::generate_filter_parameters<EntityType>();
 		return oss.str();
 	}
 
