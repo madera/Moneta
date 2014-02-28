@@ -33,11 +33,12 @@ namespace moneta { namespace serialization { namespace shell {
 			std::string token;
 			bool inside_sq_text = false;
 			bool inside_dq_text = false;
-			bool inside_bk_text = false;
+			
+			int level = 0;
 
 			for (const char c : line) {
 				if (c == ' ') {
-					if (inside_sq_text || inside_dq_text || inside_bk_text) {
+					if (inside_sq_text || inside_dq_text || level != 0) {
 						token += c;
 					} else {
 						if (!token.empty()) {
@@ -46,26 +47,31 @@ namespace moneta { namespace serialization { namespace shell {
 						}
 					}
 				} else if (c == '\'') {
-					if (inside_dq_text) {
+					if (inside_dq_text || level != 0) {
 						token += c;
 					} else {
 						inside_sq_text = !inside_sq_text;
 					}
 				} else if (c == '"') {
-					if (inside_sq_text) {
+					if (inside_sq_text || level != 0) {
 						token += c;
 					} else {
 						inside_dq_text = !inside_dq_text;
 					}
 				} else if (c == '{') {
+					++level;
 					token += c;
-					if (!inside_sq_text && !inside_dq_text && !inside_bk_text) {
-						inside_bk_text = true;
+					if (!inside_sq_text && !inside_dq_text && level != 0) {
+						
 					}
 				} else if (c == '}') {
+					--level;
 					token += c;
-					if (!inside_sq_text && !inside_dq_text && !inside_bk_text) {
-						inside_dq_text = false;
+					if (level == 0) {
+						if (!token.empty()) {
+							result.push_back(token);
+							token.clear();
+						}
 					}
 				} else {
 					token += c;

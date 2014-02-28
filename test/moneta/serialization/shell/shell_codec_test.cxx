@@ -45,6 +45,12 @@ BOOST_AUTO_TEST_CASE(detail_special_split_test) {
 		BOOST_CHECK_EQUAL(v[1], "b=t u v");
 		BOOST_CHECK_EQUAL(v[2], "c={'a'}");
 	}
+
+	{
+		std::vector<std::string> v = special_split("{Dog={Name='Sam Doe'}}");
+		BOOST_REQUIRE_EQUAL(v.size(), 1);
+		BOOST_CHECK_EQUAL(v[0], "Dog={Name='Sam Doe'}");
+	}
 }
 
 BOOST_AUTO_TEST_CASE(shell_codec_to_line_test) {
@@ -71,7 +77,7 @@ BOOST_AUTO_TEST_CASE(shell_codec_from_line_test) {
 	}
 
 	{
-		const char* line = "{Identifier=2600 Person={ID=5 Name=John Height=1.80 Fingers=12}}";
+		const char* line = "{Identifier=2600 Person={ID=5 Name=John Height=1.80 Fingers=12} Dog={Owner='Charlie Brown' ID=1 Name=Snoopy}}";
 		const Composite composite = moneta::serialization::shell::from_line<Composite>(line);
 		BOOST_CHECK_EQUAL(composite.Identifier, 2600);
 
@@ -79,5 +85,9 @@ BOOST_AUTO_TEST_CASE(shell_codec_from_line_test) {
 		BOOST_CHECK_EQUAL(composite.Person.Name, "John");
 		BOOST_CHECK_CLOSE(composite.Person.Height, 1.80, 0.1);
 		BOOST_CHECK_EQUAL(composite.Person.Fingers, 12);
+
+		BOOST_CHECK_EQUAL(composite.Dog.Owner, "Charlie Brown");
+		BOOST_CHECK_EQUAL(composite.Dog.ID, 1);
+		BOOST_CHECK_EQUAL(composite.Dog.Name, "Snoopy");
 	}
 }
