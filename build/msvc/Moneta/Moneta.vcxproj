@@ -97,7 +97,6 @@
     <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_constructor.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_hacker.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_opfx.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_filtered_opfx.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_sg.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\empty_pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\extract_pk.hxx" />

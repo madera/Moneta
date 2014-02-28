@@ -1,6 +1,6 @@
 #pragma once
 #include "db_tuple.hxx"
-#include "../../traits/detail/sepacon_filtered_opfx.hxx"
+#include "../../traits/detail/sepacon_opfx.hxx"
 #include "../../traits/is_entity.hxx"
 #include "../../traits/tuple.hxx"
 #include "../../traits/pk_or_type_filter.hxx"
@@ -15,7 +15,7 @@ namespace moneta { namespace sql { namespace traits {
 		struct db_tuple_maker {
 			typename db_tuple<EntityType>::type
 			operator()(EntityType& entity) {
-				return moneta::traits::detail::sepacon_filtered_opfx<
+				return moneta::traits::detail::sepacon_opfx<
 					moneta::traits::members<EntityType>::type,
 					typename db_tuple<EntityType>::type,
 					EntityType&,

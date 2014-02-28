@@ -3,81 +3,104 @@
 
 namespace moneta { namespace traits { namespace detail {
 
-	template <class S, class K, typename P = void*, int Size = boost::mpl::size<S>::value>
+	template <typename T>
+	struct sepacon_opfx_blank_filter {
+		T& operator()(T& x) {
+			return x;
+		}
+
+		const T& operator()(const T& x) {
+			return x;
+		}
+	};
+
+	template <
+		class S,
+		class K,
+		typename P,
+		template <typename T> class Filter = sepacon_opfx_blank_filter,
+		int Size = boost::mpl::size<S>::value
+	>
 	struct sepacon_opfx;
 
-	template <class S, class K, typename P>
-	struct sepacon_opfx<S, K, P, 0> {
+	template <class S, class K, typename P, template <typename T> class Filter>
+	struct sepacon_opfx<S, K, P, Filter, 0> {
 		K operator()(P p) const {
 			return K();
 		}
 	};
 
-	template <class S, class K, typename P>
-	struct sepacon_opfx<S, K, P, 1> {
+	template <class S, class K, typename P, template <typename T> class Filter>
+	struct sepacon_opfx<S, K, P, Filter, 1> {
 		K operator()(P p = nullptr) const {
+			using namespace boost::mpl;
 			return K(
-				boost::mpl::at_c<S, 0>::type()(p)
+				Filter<typename at_c<S, 0>::type::result_type>()(at_c<S, 0>::type()(p))
 			);
 		}
 	};
 
-	template <class S, class K, typename P>
-	struct sepacon_opfx<S, K, P, 2> {
+	template <class S, class K, typename P, template <typename T> class Filter>
+	struct sepacon_opfx<S, K, P, Filter, 2> {
 		K operator()(P p = nullptr) const {
+			using namespace boost::mpl;
 			return K(
-				boost::mpl::at_c<S, 0>::type()(p),
-				boost::mpl::at_c<S, 1>::type()(p)
+				Filter<typename at_c<S, 0>::type::result_type>()(at_c<S, 0>::type()(p)),
+				Filter<typename at_c<S, 1>::type::result_type>()(at_c<S, 1>::type()(p))
 			);
 		}
 	};
 
-	template <class S, class K, typename P>
-	struct sepacon_opfx<S, K, P, 3> {
+	template <class S, class K, typename P, template <typename T> class Filter>
+	struct sepacon_opfx<S, K, P, Filter, 3> {
 		K operator()(P p = nullptr) const {
+			using namespace boost::mpl;
 			return K(
-				boost::mpl::at_c<S, 0>::type()(p),
-				boost::mpl::at_c<S, 1>::type()(p),
-				boost::mpl::at_c<S, 2>::type()(p)
+				Filter<typename at_c<S, 0>::type::result_type>()(at_c<S, 0>::type()(p)),
+				Filter<typename at_c<S, 1>::type::result_type>()(at_c<S, 1>::type()(p)),
+				Filter<typename at_c<S, 2>::type::result_type>()(at_c<S, 2>::type()(p))
 			);
 		}
 	};
 
-	template <class S, class K, typename P>
-	struct sepacon_opfx<S, K, P, 4> {
+	template <class S, class K, typename P, template <typename T> class Filter>
+	struct sepacon_opfx<S, K, P, Filter, 4> {
 		K operator()(P p = nullptr) const {
+			using namespace boost::mpl;
 			return K(
-				boost::mpl::at_c<S, 0>::type()(p),
-				boost::mpl::at_c<S, 1>::type()(p),
-				boost::mpl::at_c<S, 2>::type()(p),
-				boost::mpl::at_c<S, 3>::type()(p)
+				Filter<typename at_c<S, 0>::type::result_type>()(at_c<S, 0>::type()(p)),
+				Filter<typename at_c<S, 1>::type::result_type>()(at_c<S, 1>::type()(p)),
+				Filter<typename at_c<S, 2>::type::result_type>()(at_c<S, 2>::type()(p)),
+				Filter<typename at_c<S, 3>::type::result_type>()(at_c<S, 3>::type()(p))
 			);
 		}
 	};
 
-	template <class S, class K, typename P>
-	struct sepacon_opfx<S, K, P, 5> {
+	template <class S, class K, typename P, template <typename T> class Filter>
+	struct sepacon_opfx<S, K, P, Filter, 5> {
 		K operator()(P p = nullptr) const {
+			using namespace boost::mpl;
 			return K(
-				boost::mpl::at_c<S, 0>::type()(p),
-				boost::mpl::at_c<S, 1>::type()(p),
-				boost::mpl::at_c<S, 2>::type()(p),
-				boost::mpl::at_c<S, 3>::type()(p),
-				boost::mpl::at_c<S, 4>::type()(p)
+				Filter<typename at_c<S, 0>::type::result_type>()(at_c<S, 0>::type()(p)),
+				Filter<typename at_c<S, 1>::type::result_type>()(at_c<S, 1>::type()(p)),
+				Filter<typename at_c<S, 2>::type::result_type>()(at_c<S, 2>::type()(p)),
+				Filter<typename at_c<S, 3>::type::result_type>()(at_c<S, 3>::type()(p)),
+				Filter<typename at_c<S, 4>::type::result_type>()(at_c<S, 4>::type()(p))
 			);
 		}
 	};
 
-	template <class S, class K, typename P>
-	struct sepacon_opfx<S, K, P, 6> {
+	template <class S, class K, typename P, template <typename T> class Filter>
+	struct sepacon_opfx<S, K, P, Filter, 6> {
 		K operator()(P p = nullptr) const {
+			using namespace boost::mpl;
 			return K(
-				boost::mpl::at_c<S, 0>::type()(p),
-				boost::mpl::at_c<S, 1>::type()(p),
-				boost::mpl::at_c<S, 2>::type()(p),
-				boost::mpl::at_c<S, 3>::type()(p),
-				boost::mpl::at_c<S, 4>::type()(p),
-				boost::mpl::at_c<S, 5>::type()(p)
+				Filter<typename at_c<S, 0>::type::result_type>()(at_c<S, 0>::type()(p)),
+				Filter<typename at_c<S, 1>::type::result_type>()(at_c<S, 1>::type()(p)),
+				Filter<typename at_c<S, 2>::type::result_type>()(at_c<S, 2>::type()(p)),
+				Filter<typename at_c<S, 3>::type::result_type>()(at_c<S, 3>::type()(p)),
+				Filter<typename at_c<S, 4>::type::result_type>()(at_c<S, 4>::type()(p)),
+				Filter<typename at_c<S, 5>::type::result_type>()(at_c<S, 5>::type()(p))
 			);
 		}
 	};

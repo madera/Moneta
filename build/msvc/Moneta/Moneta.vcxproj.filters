@@ -159,9 +159,6 @@
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_opfx.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_filtered_opfx.hxx">
-      <Filter>Header Files\moneta\traits\detail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_sg.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
