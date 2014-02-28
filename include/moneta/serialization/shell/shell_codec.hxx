@@ -9,6 +9,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <boost/algorithm/string/trim.hpp>
 
 namespace moneta { namespace serialization { namespace shell {
 
@@ -18,16 +19,25 @@ namespace moneta { namespace serialization { namespace shell {
 		// Decoder
 		//
 
-		std::vector<std::string> special_split(const std::string& line) {
+		inline std::vector<std::string> special_split(std::string line) {
+			boost::trim(line);
+			if (line.size() >= 2) {
+				if (line.front() == '{' && line.back() == '}') {
+					line.erase(0, 1);
+					line.erase(line.size() - 1);
+				}
+			}
+
 			std::vector<std::string> result;
 
 			std::string token;
 			bool inside_sq_text = false;
 			bool inside_dq_text = false;
+			bool inside_bk_text = false;
 
 			for (const char c : line) {
 				if (c == ' ') {
-					if (inside_sq_text || inside_dq_text) {
+					if (inside_sq_text || inside_dq_text || inside_bk_text) {
 						token += c;
 					} else {
 						if (!token.empty()) {
@@ -47,6 +57,16 @@ namespace moneta { namespace serialization { namespace shell {
 					} else {
 						inside_dq_text = !inside_dq_text;
 					}
+				} else if (c == '{') {
+					token += c;
+					if (!inside_sq_text && !inside_dq_text && !inside_bk_text) {
+						inside_bk_text = true;
+					}
+				} else if (c == '}') {
+					token += c;
+					if (!inside_sq_text && !inside_dq_text && !inside_bk_text) {
+						inside_dq_text = false;
+					}
 				} else {
 					token += c;
 				}
@@ -59,7 +79,7 @@ namespace moneta { namespace serialization { namespace shell {
 			return result;
 		}
 
-		std::map<std::string, std::string> line_to_kv(const std::string& line) {
+		inline std::map<std::string, std::string> line_to_kv(const std::string& line) {
 			std::map<std::string, std::string> result;
 
 			std::vector<std::string> split = special_split(line);
@@ -101,7 +121,7 @@ namespace moneta { namespace serialization { namespace shell {
 				_output << boost::format("%s=%s") % name % textonize(memptr, _entity);
 
 				if (ordinal + 1 != boost::mpl::size<traits::members<EntityType>::type>::value) {
-					_output << ", ";
+					_output << " ";
 				}
 			}
 		};

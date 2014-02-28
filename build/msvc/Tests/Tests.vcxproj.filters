@@ -161,5 +161,8 @@
     <ClCompile Include="..\..\..\test\moneta\serialization\shell\shell_codec_test.cxx">
       <Filter>Source Files\moneta\serializers\shell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\serialization\iostream_test.cxx">
+      <Filter>Source Files\moneta\serializers</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

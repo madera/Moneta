@@ -33,7 +33,7 @@ std::basic_ostream<T, U>& operator<<(std::basic_ostream<T, U>& output, const Ent
 	const long format = output.iword(output_format_flag);
 	switch (format) {
 	case fmt_textual:
-		output << fucker::serialization::textual::to_line(rhs);
+		output << moneta::serialization::shell::to_line(rhs);
 		break;
 	case fmt_xml:
 		output << "XXX: OUTPUT: xml_format_here\n";
@@ -55,7 +55,7 @@ std::basic_istream<T, U>& operator>>(std::basic_istream<T, U>& input, EntityType
 	case fmt_textual: {
 			std::string line;
 			std::getline(input, line);
-			rhs = fucker::serialization::textual::from_line<EntityType>(line);
+			rhs = moneta::serialization::shell::from_line<EntityType>(line);
 		} break;
 	case fmt_xml:
 		std::cerr << "XXX: INPUT: xml_format_here\n" << std::endl;
