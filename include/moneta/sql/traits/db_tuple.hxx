@@ -1,7 +1,5 @@
 #pragma once
 #include "../../traits/replace_entities_with.hxx"
-#include "../../traits/tuple.hxx"
-#include "../../traits/pk.hxx"
 
 namespace moneta { namespace sql { namespace traits {
 
@@ -12,4 +10,5 @@ namespace moneta { namespace sql { namespace traits {
 		>::type
 	> {};
 
+	// TODO: Const version.
 }}}

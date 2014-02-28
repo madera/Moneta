@@ -1,6 +1,6 @@
 #pragma once
 #include "tuple.hxx"
-#include "detail/sequence_parameter_constructor_opfx.hxx"
+#include "detail/sepacon_opfx.hxx"
 
 namespace moneta { namespace traits {
 
@@ -9,7 +9,7 @@ namespace moneta { namespace traits {
 		struct tie_maker {
 			typename tie<EntityType>::type
 			operator()(EntityType& entity) {
-				return sequence_parameter_constructor_opfx<
+				return sepacon_opfx<
 					members<EntityType>::type,
 					typename tie<EntityType>::type,
 					EntityType&
@@ -18,7 +18,7 @@ namespace moneta { namespace traits {
 
 			typename const_tie<EntityType>::type
 			operator()(const EntityType& entity) {
-				return sequence_parameter_constructor_opfx<
+				return sepacon_opfx<
 					members<EntityType>::type,
 					typename const_tie<EntityType>::type,
 					const EntityType&

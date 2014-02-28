@@ -4,17 +4,17 @@
 namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P = void*, int Size = boost::mpl::size<S>::value>
-	struct sequence_parameter_constructor_opfx;
+	struct sepacon_opfx;
 
 	template <class S, class K, typename P>
-	struct sequence_parameter_constructor_opfx<S, K, P, 0> {
+	struct sepacon_opfx<S, K, P, 0> {
 		K operator()(P p) const {
 			return K();
 		}
 	};
 
 	template <class S, class K, typename P>
-	struct sequence_parameter_constructor_opfx<S, K, P, 1> {
+	struct sepacon_opfx<S, K, P, 1> {
 		K operator()(P p = nullptr) const {
 			return K(
 				boost::mpl::at_c<S, 0>::type()(p)
@@ -23,7 +23,7 @@ namespace moneta { namespace traits { namespace detail {
 	};
 
 	template <class S, class K, typename P>
-	struct sequence_parameter_constructor_opfx<S, K, P, 2> {
+	struct sepacon_opfx<S, K, P, 2> {
 		K operator()(P p = nullptr) const {
 			return K(
 				boost::mpl::at_c<S, 0>::type()(p),
@@ -33,7 +33,7 @@ namespace moneta { namespace traits { namespace detail {
 	};
 
 	template <class S, class K, typename P>
-	struct sequence_parameter_constructor_opfx<S, K, P, 3> {
+	struct sepacon_opfx<S, K, P, 3> {
 		K operator()(P p = nullptr) const {
 			return K(
 				boost::mpl::at_c<S, 0>::type()(p),
@@ -44,7 +44,7 @@ namespace moneta { namespace traits { namespace detail {
 	};
 
 	template <class S, class K, typename P>
-	struct sequence_parameter_constructor_opfx<S, K, P, 4> {
+	struct sepacon_opfx<S, K, P, 4> {
 		K operator()(P p = nullptr) const {
 			return K(
 				boost::mpl::at_c<S, 0>::type()(p),
@@ -56,7 +56,7 @@ namespace moneta { namespace traits { namespace detail {
 	};
 
 	template <class S, class K, typename P>
-	struct sequence_parameter_constructor_opfx<S, K, P, 5> {
+	struct sepacon_opfx<S, K, P, 5> {
 		K operator()(P p = nullptr) const {
 			return K(
 				boost::mpl::at_c<S, 0>::type()(p),
@@ -69,7 +69,7 @@ namespace moneta { namespace traits { namespace detail {
 	};
 
 	template <class S, class K, typename P>
-	struct sequence_parameter_constructor_opfx<S, K, P, 6> {
+	struct sepacon_opfx<S, K, P, 6> {
 		K operator()(P p = nullptr) const {
 			return K(
 				boost::mpl::at_c<S, 0>::type()(p),

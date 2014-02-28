@@ -5,6 +5,7 @@
 #include "../../model/Person.hxx"
 #include "../../model/Dog.hxx"
 #include "../../model/Composite.hxx"
+#include "../../model/Cat.hxx"
 
 BOOST_AUTO_TEST_CASE(db_tuple_test) {
 	BOOST_MPL_ASSERT((
@@ -25,6 +26,13 @@ BOOST_AUTO_TEST_CASE(db_tuple_test) {
 		boost::mpl::equal<
 			moneta::sql::traits::db_tuple<Composite>::type,
 			boost::fusion::vector3<int, int, boost::fusion::vector2<std::string, int> >
+		>
+	));
+
+	BOOST_MPL_ASSERT((
+		boost::mpl::equal<
+			moneta::sql::traits::db_tuple<Cat>::type,
+			boost::fusion::vector3<int, std::string, int>
 		>
 	));
 }

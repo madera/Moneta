@@ -49,6 +49,9 @@
     <Filter Include="Header Files\moneta\serialization\detail">
       <UniqueIdentifier>{3dd76747-9fa6-49d5-9b95-68c7fdac93e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\sql\traits\detail">
+      <UniqueIdentifier>{be555001-c637-4f4d-9a14-9b713778493e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -68,9 +71,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\tuple.hxx">
       <Filter>Header Files\moneta\traits</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\traits\detail\sequence_parameter_constructor_opfx.hxx">
-      <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\to_entity.hxx">
       <Filter>Header Files\moneta\traits</Filter>
@@ -95,9 +95,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\pk_member_names.hxx">
       <Filter>Header Files\moneta\traits</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\traits\detail\sequence_parameter_constructor_sg.hxx">
-      <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_hacker.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
@@ -157,6 +154,21 @@
       <Filter>Header Files\moneta\sql\traits</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\replace_entities_with.hxx">
+      <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_opfx.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_filtered_opfx.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_sg.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\to_db_tuple.hxx">
+      <Filter>Header Files\moneta\sql\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\pk_or_type_filter.hxx">
       <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
   </ItemGroup>

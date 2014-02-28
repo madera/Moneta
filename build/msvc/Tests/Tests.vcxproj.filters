@@ -87,6 +87,12 @@
     <ClInclude Include="..\..\..\test\moneta\model\Composite.hxx">
       <Filter>Header Files\moneta\model</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\test\moneta\model\Address.hxx">
+      <Filter>Header Files\moneta\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\moneta\model\Cat.hxx">
+      <Filter>Header Files\moneta\model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -166,6 +172,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\sql\traits\db_tuple_test.cxx">
       <Filter>Source Files\moneta\sql\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\sql\traits\to_db_tuple_test.cxx">
+      <Filter>Source Files\moneta\sql\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\pk_or_type_filter_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

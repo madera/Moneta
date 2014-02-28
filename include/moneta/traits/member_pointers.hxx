@@ -1,6 +1,6 @@
 #pragma once
 #include "members.hxx"
-#include "detail/sequence_parameter_constructor_sg.hxx"
+#include "detail/sepacon_sg.hxx"
 #include <boost/fusion/include/as_vector.hpp>
 #include <boost/mpl/transform.hpp>
 
@@ -25,7 +25,7 @@ namespace moneta { namespace traits {
 		>::type type;
 
 		static const type get() {
-			return detail::sequence_parameter_constructor_sg<
+			return detail::sepacon_sg<
 				typename members<EntityType>::type,
 				type
 			>()();
