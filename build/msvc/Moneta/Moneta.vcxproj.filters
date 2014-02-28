@@ -153,6 +153,12 @@
     <ClInclude Include="..\..\..\include\moneta\serialization\detail\from_text_impl.hxx">
       <Filter>Header Files\moneta\serialization\detail</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\db_tuple.hxx">
+      <Filter>Header Files\moneta\sql\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\replace_entities_with.hxx">
+      <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

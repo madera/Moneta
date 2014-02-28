@@ -109,6 +109,7 @@
     <ClCompile Include="..\..\..\test\moneta\sql\generators\delete_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\generators\insert_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\generators\select_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\sql\traits\db_tuple_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\traits\field_names_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\traits\table_name_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\memptr_hacker_test.cxx" />

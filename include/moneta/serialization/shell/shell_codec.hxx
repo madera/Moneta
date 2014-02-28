@@ -129,9 +129,7 @@ namespace moneta { namespace serialization { namespace shell {
 				const bool has_spaces = (v.find(' ') != std::string::npos);
 				const bool has_brackets = !v.empty() && v[0] == '{';
 
-				const char* format_string =
-					(!has_brackets && has_spaces)? "%s='%s'" : "%s=%s";
-
+				const char* format_string = (!has_brackets && has_spaces)? "%s='%s'" : "%s=%s";
 				_output << boost::format(format_string) % k % v;
 
 				if (ordinal + 1 != boost::mpl::size<traits::members<EntityType>::type>::value) {
@@ -151,6 +149,8 @@ namespace moneta { namespace serialization { namespace shell {
 			>::type
 		> {
 			const std::string operator()(const NonEntityType& value) {
+				// FIXME: This is awful... we should use our own serializer.
+				// TODO: Rethink IO strategy.
 				return boost::lexical_cast<std::string>(value);
 			}
 		};
