@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE(shell_codec_from_line_test) {
 	}
 
 	{
-		const char* line = "{Identifier=2600 Person={ID=5 Name=John Height=1.80 Fingers=12} Dog={Owner='Charlie Brown' ID=1 Name=Snoopy}}";
+		const char* line = "{Identifier=2600 Person={ID=5 Name=John Height=1.8 Fingers=12} Dog={Owner='Charlie Brown' ID=1 Name=Snoopy}}";
 		const Composite composite = moneta::serialization::shell::from_line<Composite>(line);
 		BOOST_CHECK_EQUAL(composite.Identifier, 2600);
 
@@ -89,5 +89,9 @@ BOOST_AUTO_TEST_CASE(shell_codec_from_line_test) {
 		BOOST_CHECK_EQUAL(composite.Dog.Owner, "Charlie Brown");
 		BOOST_CHECK_EQUAL(composite.Dog.ID, 1);
 		BOOST_CHECK_EQUAL(composite.Dog.Name, "Snoopy");
+
+		// Roundtrip
+		const std::string serialized = moneta::serialization::shell::to_line(composite);
+		BOOST_CHECK_EQUAL(serialized, line);
 	}
 }

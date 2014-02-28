@@ -123,11 +123,19 @@ namespace moneta { namespace serialization { namespace shell {
 			template <typename T>
 			void operator()(T& memptr) const {
 				const size_t ordinal = traits::member_ordinal(memptr);
-				const std::string name = traits::get_member_name<EntityType>(ordinal);
-				_output << boost::format("%s=%s") % name % textonize(memptr, _entity);
+				const std::string k = traits::get_member_name<EntityType>(ordinal);
+				const std::string v = textonize(memptr, _entity);
+				
+				const bool has_spaces = (v.find(' ') != std::string::npos);
+				const bool has_brackets = !v.empty() && v[0] == '{';
+
+				const char* format_string =
+					(!has_brackets && has_spaces)? "%s='%s'" : "%s=%s";
+
+				_output << boost::format(format_string) % k % v;
 
 				if (ordinal + 1 != boost::mpl::size<traits::members<EntityType>::type>::value) {
-					_output << " ";
+					_output << ' ';
 				}
 			}
 		};
