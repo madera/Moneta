@@ -162,11 +162,17 @@
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_sg.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\sql\traits\to_db_tuple.hxx">
-      <Filter>Header Files\moneta\sql\traits</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\pk_or_type_filter.hxx">
       <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\tie.hxx">
+      <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\to_db_tie.hxx">
+      <Filter>Header Files\moneta\sql\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\db_tie.hxx">
+      <Filter>Header Files\moneta\sql\traits</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

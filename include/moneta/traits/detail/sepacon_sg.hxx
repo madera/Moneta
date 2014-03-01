@@ -1,4 +1,6 @@
 // TODO: Boost.PPize this thing. Must support C++03.
+// TODO: Support filters, like opfx does.
+
 #pragma once
 #include <boost/mpl/size.hpp>
 

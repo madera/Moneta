@@ -1,3 +1,4 @@
+// FIXME: This file needs work...
 #pragma once
 #include "is_entity.hxx"
 #include "pk.hxx"
@@ -7,17 +8,8 @@
 namespace moneta { namespace traits {
 
 	namespace detail {
-		template <typename NewType>
-		struct if_is_entity_substitute_with {
-			template <typename T>
-			struct apply : boost::mpl::if_<
-				is_entity<T>,
-				NewType,
-				T
-			> {};
-		};
 
-		struct if_is_entity_substitute_with_their_pk {
+		struct replace_entity_with_pk {
 			template <typename T>
 			struct apply : boost::mpl::if_<
 				is_entity<T>,
@@ -25,17 +17,36 @@ namespace moneta { namespace traits {
 				T
 			> {};
 		};
+
+		struct replace_entity_with_pk_tie {
+			template <typename T>
+			struct apply : boost::mpl::if_<
+				is_entity<T>,
+				typename pk_tie<T>::type,
+				T&
+			> {};
+		};
+
 	}
 
-	template <typename VectorType, typename NewType>
-	struct replace_entities_with : boost::mpl::transform<
-		VectorType,
-		detail::if_is_entity_substitute_with<NewType>
+
+	template <typename Sequence, typename F>
+	struct replace_entities : boost::mpl::transform<
+		Sequence,
+		F
 	> {};
 
+
 	template <typename VectorType>
-	struct replace_entities_with_their_pk : boost::mpl::transform<
+	struct replace_entities_with_pks : boost::mpl::transform<
 		VectorType,
-		detail::if_is_entity_substitute_with_their_pk
+		detail::replace_entity_with_pk
+	> {};
+
+
+	template <typename VectorType>
+	struct replace_entities_with_pk_ties : boost::mpl::transform<
+		VectorType,
+		detail::replace_entity_with_pk_tie
 	> {};
 }}
