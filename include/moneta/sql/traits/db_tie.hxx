@@ -1,5 +1,5 @@
 #pragma once
-#include "../../traits/pk_tie_or_type.hxx"
+#include "../../traits/pk_tie.hxx"
 
 namespace moneta { namespace sql { namespace traits {
 
@@ -7,7 +7,7 @@ namespace moneta { namespace sql { namespace traits {
 	struct db_tie : boost::fusion::result_of::as_vector<
 		typename boost::mpl::transform<
 			typename moneta::traits::detail::mpl::vector<EntityType>::type,
-			moneta::traits::detail::pk_tie_or_type<boost::mpl::_1>
+			moneta::traits::pk_tie<boost::mpl::_1>
 		>::type
 	> {};
 
@@ -15,7 +15,7 @@ namespace moneta { namespace sql { namespace traits {
 	struct const_db_tie : boost::fusion::result_of::as_vector<
 		typename boost::mpl::transform<
 			typename moneta::traits::detail::mpl::vector<EntityType>::type,
-			moneta::traits::detail::const_pk_tie_or_type<boost::mpl::_1>
+			moneta::traits::const_pk_tie<boost::mpl::_1>
 		>::type
 	> {};
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "members.hxx"
 #include "tuple.hxx" // for detail::get_result_type // TODO: Make this better.
+#include "is_entity.hxx"
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/not.hpp>
@@ -67,6 +68,23 @@ namespace moneta { namespace traits {
 				typename mpl::pk<EntityType>::type
 			> {};
 		}
+
+		// XXX: Move.
+		// Type: vector1<T> --> T, else: Sequence.
+		template <class Sequence>
+		struct deref_if_unary : boost::mpl::if_<
+			boost::mpl::equal_to<
+				typename boost::mpl::size<Sequence>::type,
+				boost::mpl::int_<1>
+			>,
+			typename boost::mpl::at_c<Sequence, 0>::type,
+			Sequence
+		> {};
+
+		template <class EntityType>
+		struct entity_pk : deref_if_unary<
+			typename detail::fusion::pk<EntityType>::type
+		> {};
 	}
 
 	template <class EntityType>
@@ -75,59 +93,40 @@ namespace moneta { namespace traits {
 		EntityType
 	> {};
 
-	// XXX: Move.
-	// Type: vector1<T> --> T, else: Sequence.
-	template <class Sequence>
-	struct deref_if_unary : boost::mpl::if_<
-		boost::mpl::equal_to<
-			typename boost::mpl::size<Sequence>::type,
-			boost::mpl::int_<1>
-		>,
-		typename boost::mpl::at_c<Sequence, 0>::type,
-		Sequence
-	> {};
+	template <class EntityType, class Enable = void>
+	struct pk;
 
-	template <class EntityType>
-	struct pk : deref_if_unary<
-		typename detail::fusion::pk<EntityType>::type
-	> {};
+	template <class NonEntityType>
+	struct pk<
+		NonEntityType,
+		typename boost::enable_if<
+			typename boost::mpl::not_<moneta::traits::is_entity<NonEntityType> >::type
+		>::type
+	> {
+		typedef NonEntityType type;
 
-	namespace detail {
-		namespace mpl {
-			template <class EntityType>
-			struct pk_tie : boost::mpl::transform<
-				typename pk<EntityType>::type,
-				boost::add_reference<boost::mpl::_>
-			> {};
-
-			template <class EntityType>
-			struct const_pk_tie : boost::mpl::transform<
-				typename pk<EntityType>::type,
-				boost::add_reference<boost::add_const<boost::mpl::_> >
-			> {};
+		type operator()(NonEntityType& value) {
+			return value;
 		}
+	};
 
-		namespace fusion {
-			template <class EntityType>
-			struct pk_tie : boost::fusion::result_of::as_vector<
-				typename mpl::pk_tie<EntityType>::type
-			> {};
-
-			template <class EntityType>
-			struct const_pk_tie : boost::fusion::result_of::as_vector<
-				typename mpl::const_pk_tie<EntityType>::type
-			> {};
+	template <class EntityType>
+	struct pk<
+		EntityType,
+		typename boost::enable_if<moneta::traits::is_entity<EntityType> >::type
+	> {
+		typedef typename moneta::traits::detail::entity_pk<EntityType>::type type;
+		
+		type operator()(EntityType& entity) {
+			return moneta::traits::extract_pk(entity);
 		}
-	}
+	};
 
-	template <class EntityType>
-	struct pk_tie : deref_if_unary<
-		typename detail::fusion::pk_tie<EntityType>::type
-	> {};
-
-	template <class EntityType>
-	struct const_pk_tie : deref_if_unary<
-		typename detail::fusion::const_pk_tie<EntityType>::type
-	> {};
+	template <typename T>
+	struct get_pk_functor {
+		typename pk<T>::type operator()(T& x) {
+			return pk<T>()(x);
+		}
+	};
 
 }}
