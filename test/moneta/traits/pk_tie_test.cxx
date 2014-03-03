@@ -120,3 +120,14 @@ BOOST_AUTO_TEST_CASE(const_pk_tie_test) {
 		>
 	));
 }
+
+BOOST_AUTO_TEST_CASE(pk_tie_opfx_test) {
+	Address address;
+	address.ID = 123;
+	address.Number = 10;
+	address.Street = "Some St.";
+
+	BOOST_MPL_ASSERT((boost::is_same<moneta::traits::pk_tie<Address>::type, int&>));
+
+	BOOST_CHECK_EQUAL(moneta::traits::pk_tie<Address>()(address), 123);
+}

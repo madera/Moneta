@@ -1,6 +1,7 @@
 #pragma once
 // TODO: Maybe extract exact includes?
 #include "pk.hxx"
+#include "detail/sepacon_opfx.hxx"
 
 namespace moneta { namespace traits {
 
@@ -69,8 +70,12 @@ namespace moneta { namespace traits {
 	> {
 		typedef typename moneta::traits::detail::entity_pk_tie<EntityType>::type type;
 		
-		type operator()(EntityType& entity) {
-			// TODO: Implement
+		typename type operator()(EntityType& entity) {
+			return moneta::traits::detail::sepacon_opfx<
+				moneta::traits::pk_members<EntityType>::type,
+				type,
+				EntityType&
+			>()(entity);
 		}
 	};
 
@@ -102,6 +107,13 @@ namespace moneta { namespace traits {
 		
 		type operator()(const EntityType& entity) {
 			// TODO: Implement
+		}
+	};
+
+	template <typename T>
+	struct get_pk_tie_functor {
+		typename pk_tie<T>::type operator()(T& x) {
+			return pk_tie<T>()(x);
 		}
 	};
 

@@ -171,6 +171,9 @@
     <ClInclude Include="..\..\..\include\moneta\traits\pk_tie.hxx">
       <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\to_db_tuple.hxx">
+      <Filter>Header Files\moneta\sql\traits</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
