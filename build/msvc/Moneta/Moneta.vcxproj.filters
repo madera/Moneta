@@ -153,9 +153,6 @@
     <ClInclude Include="..\..\..\include\moneta\sql\traits\db_tuple.hxx">
       <Filter>Header Files\moneta\sql\traits</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\traits\replace_entities_with.hxx">
-      <Filter>Header Files\moneta\traits</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_opfx.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>

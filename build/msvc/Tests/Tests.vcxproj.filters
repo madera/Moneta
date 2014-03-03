@@ -185,8 +185,5 @@
     <ClCompile Include="..\..\..\test\moneta\sql\traits\to_db_tie_test.cxx">
       <Filter>Source Files\moneta\sql\traits</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\traits\replace_entities_test.cxx">
-      <Filter>Source Files\moneta\traits</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

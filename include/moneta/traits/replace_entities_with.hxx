@@ -52,23 +52,6 @@ namespace moneta { namespace traits {
 	}
 
 
-
-
-	template <typename Sequence, typename F>
-	struct replace_entities : boost::mpl::transform<
-		Sequence,
-		F
-	> {};
-
-
-
-
-
-
-
-
-
-
 	template <typename VectorType>
 	struct replace_entities_with_pks : boost::mpl::transform<
 		VectorType,
