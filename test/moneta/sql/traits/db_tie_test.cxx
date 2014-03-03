@@ -25,14 +25,7 @@ BOOST_AUTO_TEST_CASE(db_tie_test) {
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
 			moneta::sql::traits::db_tie<Composite>::type,
-			boost::fusion::vector3<int&, int&, boost::fusion::vector2<std::string, int>& >
-		>
-	));
-
-	BOOST_MPL_ASSERT((
-		boost::mpl::equal<
-			moneta::sql::traits::db_tuple<Cat>::type,
-			boost::fusion::vector3<int, std::string, int>
+			boost::fusion::vector3<int&, int&, boost::fusion::vector2<std::string&, int&> >
 		>
 	));
 }
