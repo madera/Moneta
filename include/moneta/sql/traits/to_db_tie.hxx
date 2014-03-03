@@ -3,7 +3,7 @@
 #include "../../traits/detail/sepacon_opfx.hxx"
 #include "../../traits/is_entity.hxx"
 #include "../../traits/tuple.hxx"
-#include "../../traits/pk_or_type_filter.hxx"
+#include "../../traits/pk_or_type.hxx"
 #include "../../traits/extract_pk.hxx"
 #include <boost/utility/enable_if.hpp>
 

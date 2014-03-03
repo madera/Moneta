@@ -108,7 +108,8 @@
     <ClInclude Include="..\..\..\include\moneta\traits\member_pointers.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\pk_member_names.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\traits\pk_or_type_filter.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\pk_or_type.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\pk_tie_or_type.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\pure_type.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\same_pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\tie.hxx" />

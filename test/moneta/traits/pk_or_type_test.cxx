@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <moneta/traits/pk_or_type_filter.hxx>
+#include <moneta/traits/pk_or_type.hxx>
 #include <boost/mpl/equal.hpp>
 #include "../model/Cat.hxx"
 #include "../model/Dog.hxx"

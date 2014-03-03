@@ -29,3 +29,28 @@ BOOST_AUTO_TEST_CASE(db_tie_test) {
 		>
 	));
 }
+
+
+BOOST_AUTO_TEST_CASE(const_db_tie_test) {
+	BOOST_MPL_ASSERT((
+		boost::mpl::equal<
+			moneta::sql::traits::const_db_tie<Person>::type,
+			boost::mpl::vector4<const int&, const std::string&, const double&, const int&>
+		>
+	));
+
+	BOOST_MPL_ASSERT((
+		boost::mpl::equal<
+			moneta::sql::traits::const_db_tie<Dog>::type,
+			boost::mpl::vector3<const std::string&, const int&, const std::string&>
+		>
+	));
+
+	BOOST_MPL_ASSERT((
+		boost::mpl::equal<
+			moneta::sql::traits::const_db_tie<Composite>::type,
+			boost::fusion::vector3<const int&, const int&,
+				boost::fusion::vector2<const std::string&, const int&> >
+		>
+	));
+}
