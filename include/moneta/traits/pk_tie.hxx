@@ -81,6 +81,8 @@ namespace moneta { namespace traits {
 
 
 
+
+
 	template <class EntityType, class Enable = void>
 	struct const_pk_tie;
 
@@ -93,9 +95,6 @@ namespace moneta { namespace traits {
 	> {
 		typedef typename boost::add_const<NonEntityType>::type& type;
 
-		type operator()(type value) {
-			return value;
-		}
 	};
 
 	template <class EntityType>
@@ -106,7 +105,11 @@ namespace moneta { namespace traits {
 		typedef typename moneta::traits::detail::const_entity_pk_tie<EntityType>::type type;
 		
 		type operator()(const EntityType& entity) {
-			// TODO: Implement
+			return moneta::traits::detail::sepacon_opfx<
+				moneta::traits::pk_members<EntityType>::type,
+				type,
+				const EntityType&
+			>()(entity);
 		}
 	};
 

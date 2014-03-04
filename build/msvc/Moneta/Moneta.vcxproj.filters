@@ -63,9 +63,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\traits\pure_type.hxx">
-      <Filter>Header Files\moneta\traits</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\to_tie.hxx">
       <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
@@ -173,6 +170,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\sql\traits\to_db_tuple.hxx">
       <Filter>Header Files\moneta\sql\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\pure_type.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

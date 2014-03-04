@@ -1,6 +1,6 @@
 #pragma once
+#include "pure_type.hxx"
 #include "../is_entity.hxx"
-#include "../pure_type.hxx"
 
 namespace moneta { namespace traits { namespace detail {
 

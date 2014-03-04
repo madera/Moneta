@@ -98,6 +98,7 @@
     <ClInclude Include="..\..\..\include\moneta\traits\detail\member_trait_base.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_constructor.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_hacker.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\pure_type.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_opfx.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_sg.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\empty_pk.hxx" />
@@ -110,7 +111,6 @@
     <ClInclude Include="..\..\..\include\moneta\traits\pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\pk_member_names.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\pk_tie.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\traits\pure_type.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\same_pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\tie.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\to_entity.hxx" />

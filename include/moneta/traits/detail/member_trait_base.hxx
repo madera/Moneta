@@ -1,5 +1,5 @@
 #pragma once
-#include "../pure_type.hxx"
+#include "pure_type.hxx"
 // XXX: Re-evaluate the need for boost::false_type
 #include <boost/type_traits/integral_constant.hpp> // boost::false_type
 #include <boost/fusion/algorithm/iteration/for_each.hpp>

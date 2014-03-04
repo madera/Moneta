@@ -1,5 +1,5 @@
 #pragma once
-#include "../traits/pure_type.hxx"
+#include "../traits/detail/pure_type.hxx"
 #include <boost/type_traits/integral_constant.hpp> // boost::false_type
 #include "detail/member_trait_base.hxx"
 
