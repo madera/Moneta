@@ -1,16 +1,15 @@
 #pragma once
 #include "detail/soci_includes.hxx"
 #include "../../sql/traits/table_name.hxx"
+#include <boost/format.hpp>
 
 namespace moneta { namespace serialization { namespace soci {
 
 	template <class EntityType>
 	const size_t soci_count(::soci::session& session) {
-		const std::string table = traits::get_table_name<EntityType>();
-
-		int count; // XXX: Must be size_t
+		size_t count;
+		const std::string table = sql::traits::get_table_name<EntityType>();
 		session << boost::format("select count(*) from %s") % table, ::soci::into(count);
-
 		return count;
 	}
 
