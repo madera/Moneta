@@ -52,6 +52,12 @@
     <Filter Include="Header Files\moneta\sql\traits\detail">
       <UniqueIdentifier>{be555001-c637-4f4d-9a14-9b713778493e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\serialization\soci">
+      <UniqueIdentifier>{c9fdd198-6116-4a2f-b862-f8017102f11d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\moneta\serialization\soci\detail">
+      <UniqueIdentifier>{b1266b62-d81b-4064-af04-7076508095db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -173,6 +179,27 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\detail\pure_type.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\serialization\soci\soci_count.hxx">
+      <Filter>Header Files\moneta\serialization\soci</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\serialization\soci\soci_create.hxx">
+      <Filter>Header Files\moneta\serialization\soci</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\serialization\soci\soci_delete.hxx">
+      <Filter>Header Files\moneta\serialization\soci</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\serialization\soci\soci_list.hxx">
+      <Filter>Header Files\moneta\serialization\soci</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\serialization\soci\soci_read.hxx">
+      <Filter>Header Files\moneta\serialization\soci</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\serialization\soci\detail\soci_xlate_read.hxx">
+      <Filter>Header Files\moneta\serialization\soci\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\serialization\soci\detail\soci_includes.hxx">
+      <Filter>Header Files\moneta\serialization\soci\detail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

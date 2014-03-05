@@ -61,6 +61,9 @@
     <Filter Include="Source Files\moneta\serializers\shell">
       <UniqueIdentifier>{7f1aa187-06c2-43ca-b725-df33acb3ced4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\moneta\serializers\soci">
+      <UniqueIdentifier>{fce37c24-b88a-463e-9c28-092980c716ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -187,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\sql\traits\to_db_tuple_test.cxx">
       <Filter>Source Files\moneta\sql\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_count_test.cxx">
+      <Filter>Source Files\moneta\serializers\soci</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
