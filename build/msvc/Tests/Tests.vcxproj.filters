@@ -215,5 +215,8 @@
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_read_test.cxx">
       <Filter>Source Files\moneta\serializers\soci</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_create_test.cxx">
+      <Filter>Source Files\moneta\serializers\soci</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
