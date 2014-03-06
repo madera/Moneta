@@ -65,9 +65,15 @@ namespace moneta { namespace serialization { namespace soci {
 			void
 		>::type
 		operator()(T& pair) const {
-			BOOST_MPL_ASSERT((mpl::equal_to<mpl::size<T>::type, mpl::int_<2> >));
+			BOOST_MPL_ASSERT((
+				boost::mpl::equal_to<
+					boost::mpl::size<T>::type,
+					boost::mpl::int_<2>
+				>
+			));
+
 			boost::fusion::get<1>(pair) = soci_create<
-				typename traits::pure_type<typename mpl::at_c<T, 0>::type>::type
+				typename traits::pure_type<typename boost::mpl::at_c<T, 0>::type>::type
 			>(_session, boost::fusion::get<0>(pair));
 		}
 

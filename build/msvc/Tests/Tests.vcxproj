@@ -112,6 +112,7 @@
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\detail\soci_fixture.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_count_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_create_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_list_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_read_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\generators\delete_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\generators\insert_test.cxx" />
