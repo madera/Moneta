@@ -144,8 +144,8 @@ namespace moneta { namespace serialization { namespace shell {
 		template <class NonEntityType>
 		struct textonator<
 			NonEntityType,
-			typename std::enable_if<
-				!traits::is_entity<NonEntityType>::value
+			typename boost::enable_if<
+				boost::mpl::not_<traits::is_entity<NonEntityType> >
 			>::type
 		> {
 			const std::string operator()(const NonEntityType& value) {
@@ -158,8 +158,8 @@ namespace moneta { namespace serialization { namespace shell {
 		template<class EntityType>
 		struct textonator<
 			EntityType,
-			typename std::enable_if<
-				traits::is_entity<EntityType>::value
+			typename boost::enable_if<
+				traits::is_entity<EntityType>
 			>::type
 		> {
 			const std::string operator()(const EntityType& entity) {

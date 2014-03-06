@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "detail/soci_fixture.hxx"
 #include <moneta/serialization/soci/soci_count.hxx>
+#include "../../model/Person.hxx"
 #include "../../model/Cat.hxx"
 
 BOOST_FIXTURE_TEST_CASE(manual_soci_count_test, soci_test_fixture) {
@@ -10,5 +11,6 @@ BOOST_FIXTURE_TEST_CASE(manual_soci_count_test, soci_test_fixture) {
 }
 
 BOOST_FIXTURE_TEST_CASE(soci_count_test, soci_test_fixture) {
+	BOOST_CHECK_EQUAL(moneta::serialization::soci::soci_count<Person>(soci_session), 10);
 	BOOST_CHECK_EQUAL(moneta::serialization::soci::soci_count<Cat>(soci_session), 7);
 }
