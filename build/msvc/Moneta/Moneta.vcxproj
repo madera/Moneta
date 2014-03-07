@@ -84,7 +84,9 @@
     <ClInclude Include="..\..\..\include\moneta\pp\apply_spec.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\core.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\detail\boostx.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\pp\detail\cat_include_name.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\detail\has_member_trait.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\pp\detail\includer.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\detail\kv.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\detail\seq_join.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\entity_postparser.hxx" />

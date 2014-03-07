@@ -1,5 +1,5 @@
 #define ENTITY_DEFINITION \
-	FQN((Test)(Model)(Ball)) \
+	FQN((Model)(Ball)) \
 	MEMBERS_BEGIN \
 		MEMBER(int,         ID         ) \
 		MEMBER(std::string, Description) \

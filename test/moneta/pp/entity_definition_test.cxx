@@ -3,7 +3,7 @@
 #include "../model/Ball.hxx"
 
 BOOST_AUTO_TEST_CASE(entity_definition_test) {
-	Test::Model::Ball ball;
+	Model::Ball ball;
 	ball.ID = 123;
 	ball.Description = "Basketball Supreme Original";
 	ball.Sport = "Basketball";

@@ -79,6 +79,9 @@
     <Filter Include="Source Files\moneta\pp">
       <UniqueIdentifier>{7578998a-123e-476b-8cbb-bdfb7d20eb37}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\moneta\pp\detail">
+      <UniqueIdentifier>{80d01ffc-eea9-4b6d-9750-70f607bca4ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -119,6 +122,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\test\moneta\model\Ball.hxx">
       <Filter>Header Files\moneta\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\moneta\pp\detail\includer_test_header.hxx">
+      <Filter>Source Files\moneta\pp\detail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -235,6 +241,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\pp\entity_definition_test.cxx">
       <Filter>Source Files\moneta\pp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\pp\detail\includer_test.cxx">
+      <Filter>Source Files\moneta\pp\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\pp\detail\cat_include_name_test.cxx">
+      <Filter>Source Files\moneta\pp\detail</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

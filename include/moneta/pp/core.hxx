@@ -45,3 +45,12 @@
 			(MEMBER_NAME)(name) \
 		) \
 	MEMBER_END
+
+#define SQL_MEMBER(type, name, field) MEMBER_BEGIN \
+	(\
+	(MEMBER_DATATYPE)(type) \
+	) \
+	(\
+	(MEMBER_NAME)(name) \
+	) \
+	MEMBER_END

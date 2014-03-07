@@ -11,6 +11,19 @@
 #include <boost/mpl/vector.hpp>
 #include <string>
 
+// -----
+#define ENTITY_DEFINITION \
+	FQN((Model)(Address)) \
+	MEMBERS_BEGIN \
+		SQL_MEMBER(int,         ID,     ADDRESS_ID    ) \
+		SQL_MEMBER(int,         Number, ADDRESS_NUMBER) \
+		SQL_MEMBER(std::string, Street, ADDRESS_STREET) \
+	MEMBERS_END
+
+#define MONETA_ENTITY_PROCESSOR <moneta/pp/specs/struct_spec.hxx>
+#include <moneta/end_entity>
+// -----
+
 struct Address {
 	int ID;
 	int Number;
