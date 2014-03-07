@@ -89,6 +89,7 @@
     <ClInclude Include="..\..\..\test\moneta\model\Composite.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Dog.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Address.hxx" />
+    <ClInclude Include="..\..\..\test\moneta\model\Hero.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Person.hxx" />
     <ClInclude Include="..\..\..\test\moneta\serialization\soci\detail\soci_fixture.hxx" />
     <ClInclude Include="stdafx.h" />
