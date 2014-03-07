@@ -58,6 +58,15 @@
     <Filter Include="Header Files\moneta\serialization\soci\detail">
       <UniqueIdentifier>{b1266b62-d81b-4064-af04-7076508095db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\pp">
+      <UniqueIdentifier>{9b1dc48b-ae4b-4001-a343-3f96d10ea1ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\moneta\pp\detail">
+      <UniqueIdentifier>{565d935d-3c6d-4eab-8aa8-5576e5e2d2d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\moneta\pp\specs">
+      <UniqueIdentifier>{7d07e902-5656-4114-b430-4017ba94f1c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -200,6 +209,39 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\serialization\soci\detail\soci_includes.hxx">
       <Filter>Header Files\moneta\serialization\soci\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\pp\apply_spec.hxx">
+      <Filter>Header Files\moneta\pp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\pp\core.hxx">
+      <Filter>Header Files\moneta\pp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\pp\entity_postparser.hxx">
+      <Filter>Header Files\moneta\pp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\pp\entity_preparser.hxx">
+      <Filter>Header Files\moneta\pp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\pp\moneta_pp.hxx">
+      <Filter>Header Files\moneta\pp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\pp\detail\boostx.hxx">
+      <Filter>Header Files\moneta\pp\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\pp\detail\has_member_trait.hxx">
+      <Filter>Header Files\moneta\pp\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\pp\detail\kv.hxx">
+      <Filter>Header Files\moneta\pp\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\pp\detail\seq_join.hxx">
+      <Filter>Header Files\moneta\pp\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\pp\specs\struct_spec.hxx">
+      <Filter>Header Files\moneta\pp\specs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\end_entity">
+      <Filter>Header Files\moneta</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

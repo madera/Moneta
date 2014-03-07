@@ -85,6 +85,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\externals\console\include\console\exception.hxx" />
     <ClInclude Include="..\..\..\externals\console\include\console\shell.hxx" />
+    <ClInclude Include="..\..\..\test\moneta\model\Ball.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Cat.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Composite.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Dog.hxx" />
@@ -107,6 +108,7 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\interactive_shell_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\make_entity_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\pp\entity_definition_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\detail\from_text_impl_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\iostream_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\shell\shell_codec_test.cxx" />

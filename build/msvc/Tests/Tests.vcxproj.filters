@@ -76,6 +76,9 @@
     <Filter Include="Header Files\moneta\serialization\soci\detail">
       <UniqueIdentifier>{7fea66c5-acfb-4ce8-8e22-8e22cabfac16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\moneta\pp">
+      <UniqueIdentifier>{7578998a-123e-476b-8cbb-bdfb7d20eb37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -112,6 +115,9 @@
       <Filter>Header Files\moneta\serialization\soci\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\moneta\model\Hero.hxx">
+      <Filter>Header Files\moneta\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\moneta\model\Ball.hxx">
       <Filter>Header Files\moneta\model</Filter>
     </ClInclude>
   </ItemGroup>
@@ -226,6 +232,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_delete_test.cxx">
       <Filter>Source Files\moneta\serializers\soci</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\pp\entity_definition_test.cxx">
+      <Filter>Source Files\moneta\pp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

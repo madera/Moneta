@@ -1,5 +1,5 @@
 #pragma once
-#include <moneta/pp/util/boostx.hxx>
+#include "boostx.hxx"
 #include <boost/preprocessor/repetition/repeat.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/control/if.hpp>

@@ -79,7 +79,18 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\moneta\end_entity" />
     <ClInclude Include="..\..\..\include\moneta\make_entity.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\pp\apply_spec.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\pp\core.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\pp\detail\boostx.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\pp\detail\has_member_trait.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\pp\detail\kv.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\pp\detail\seq_join.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\pp\entity_postparser.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\pp\entity_preparser.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\pp\moneta_pp.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\pp\specs\struct_spec.hxx" />
     <ClInclude Include="..\..\..\include\moneta\serialization\detail\from_text_impl.hxx" />
     <ClInclude Include="..\..\..\include\moneta\serialization\iostream.hxx" />
     <ClInclude Include="..\..\..\include\moneta\serialization\shell\shell_codec.hxx" />
