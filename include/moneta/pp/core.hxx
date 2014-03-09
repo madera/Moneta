@@ -26,31 +26,64 @@
 //
 // User Macros
 //
-#define NAMESPACE(ns) ((ENTITY_NAMESPACE) (ns))
-#define NAME(name) ((ENTITY_NAME) (name))
+#define NAMESPACE(ns) ((ENTITY_NAMESPACE) (ns  ))
+#define NAME(name)    ((ENTITY_NAME     ) (name))
 
 #define FQN(fqn) NAMESPACE(BOOST_PP_SEQ_POP_BACK(fqn)) NAME(BOOSTX_PP_SEQ_LAST(fqn))
 
 #define MEMBERS_BEGIN ((ENTITY_MEMBERS)(
-#define MEMBERS_END ))
+#define MEMBERS_END   ))
 
 #define MEMBER_BEGIN ((ENTITY_MEMBER)(
-#define MEMBER_END ))
+#define MEMBER_END   ))
 
-#define MEMBER(type, name) MEMBER_BEGIN \
-		( \
-			(MEMBER_DATATYPE)(type) \
-		) \
-		( \
-			(MEMBER_NAME)(name) \
-		) \
+#define MEMBER(type, name) \
+	MEMBER_BEGIN \
+	( (MEMBER_DATATYPE)(type) ) \
+	( (MEMBER_NAME)    (name) ) \
 	MEMBER_END
 
-#define SQL_MEMBER(type, name, field) MEMBER_BEGIN \
-	(\
-	(MEMBER_DATATYPE)(type) \
-	) \
-	(\
-	(MEMBER_NAME)(name) \
-	) \
+#define SQL_MEMBER_FIELD_NAME 200
+
+#define SQL_MEMBER(type, name, field) \
+	MEMBER_BEGIN \
+	( (MEMBER_DATATYPE)      (type)  ) \
+	( (MEMBER_NAME)          (name)  ) \
+	( (SQL_MEMBER_FIELD_NAME)(field) ) \
 	MEMBER_END
+
+//
+// XXX: Move somewhere else!!
+//
+
+#define MONETA_MEMBER_FROM_TN_PAIR(entity, pair) \
+	MONETA_MEMBER(entity, BOOST_PP_TUPLE_ELEM(2, 0, pair), BOOST_PP_TUPLE_ELEM(2, 1, pair))
+
+#define __MONETA_PP_EXPAND_ENTITY_MEMBERS(r, _, pair) \
+	BOOST_PP_COMMA_IF(BOOST_PP_NOT_EQUAL(r, 2)) MONETA_MEMBER_FROM_TN_PAIR(_, pair)
+#define MONETA_PP_EXPAND_ENTITY_MEMBERS(entity, member_sequence) \
+	BOOST_PP_SEQ_FOR_EACH(__MONETA_PP_EXPAND_ENTITY_MEMBERS, entity, member_sequence)
+
+#define __MONETA_PP_EXPAND_ENTITY_MEMBER_NAMES(r, _, pair) \
+	MONETA_MEMBER_NAME(MONETA_MEMBER_FROM_TN_PAIR(_, pair), BOOST_PP_TUPLE_ELEM(2, 1, pair))
+#define MONETA_PP_EXPAND_ENTITY_MEMBER_NAMES(entity, member_sequence) \
+	BOOST_PP_SEQ_FOR_EACH(__MONETA_PP_EXPAND_ENTITY_MEMBER_NAMES, entity, member_sequence)
+
+#define MONETA_DESCRIBE_ENTITY(entity, members) \
+	namespace moneta { namespace traits { namespace detail { \
+		template <> \
+		struct members_of<entity> : boost::mpl::vector< \
+			MONETA_PP_EXPAND_ENTITY_MEMBERS(entity, members) \
+		>{}; \
+	}}} \
+	MONETA_PP_EXPAND_ENTITY_MEMBER_NAMES(entity, members)
+
+#define __MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES(r, _, pair) \
+	MONETA_SQL_FIELD_NAME(MONETA_MEMBER_FROM_TN_PAIR(_, pair), BOOST_PP_TUPLE_ELEM(3, 2, pair))
+#define MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES(entity, member_sequence) \
+	BOOST_PP_SEQ_FOR_EACH(__MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES, entity, member_sequence)
+
+#define MONETA_DESCRIBE_SQL_ENTITY(entity, table, members) \
+	MONETA_DESCRIBE_ENTITY(entity, members) \
+	MONETA_SQL_TABLE_NAME(entity, table) \
+	MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES(entity, members)

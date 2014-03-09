@@ -249,6 +249,9 @@
     <ClInclude Include="..\..\..\include\moneta\pp\detail\cat_include_name.hxx">
       <Filter>Header Files\moneta\pp\detail</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\pp\detail\debug.hxx">
+      <Filter>Header Files\moneta\pp\detail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

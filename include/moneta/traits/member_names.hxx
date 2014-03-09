@@ -4,7 +4,7 @@
 MONETA_DECLARE_MEMBER_TRAIT(member_name, std::string)
 
 #define MONETA_MEMBER_NAME(member, name) \
-	MONETA_DEFINE_TRAIT_WITH_GET(member_name, member, std::string, #name)
+	MONETA_DEFINE_TRAIT_WITH_GET(member_name, member, std::string, name)
 
 namespace moneta { namespace traits {
 

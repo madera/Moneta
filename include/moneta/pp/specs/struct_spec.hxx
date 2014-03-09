@@ -23,13 +23,7 @@ using boost::optional;
 
 MONETA_PP_NAMESPACE_BEGIN(CLASS_NAMESPACE)
 
-#ifndef MONETA_NO_BASE_CLASS
-//#include "../../entity.hxx"
-//	struct CLASS_NAME : public moneta::entity {
 	struct CLASS_NAME {
-#else
-	struct CLASS_NAME {
-#endif
 		typedef CLASS_NAME this_type;
 
 		MONETA_PP_MEMBER_DECLARATIONS(CLASS_MEMBER_DATATYPES, CLASS_MEMBER_NAMES)

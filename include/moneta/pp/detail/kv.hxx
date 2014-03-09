@@ -9,6 +9,7 @@
 #include <boost/preprocessor/seq/pop_back.hpp>
 #include <boost/preprocessor/seq/fold_left.hpp>
 #include <boost/preprocessor/seq/size.hpp>
+#include <boost/preprocessor/seq/for_each.hpp>
 #include <boost/preprocessor/facilities/empty.hpp>
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
@@ -69,7 +70,12 @@
 #define __PP_KVS_FOREACH(r, kv_op, tag) kv_op(BOOST_PP_SEQ_ELEM(0, tag), BOOST_PP_SEQ_ELEM(1, tag))
 #define PP_KVS_FOREACH(kv_op, data) BOOST_PP_SEQ_FOR_EACH_R(1, __PP_KVS_FOREACH, kv_op, data)
 
+#define __PP_KVS_FOREACH_VALUE(r, v_op, tag) v_op(BOOST_PP_SEQ_ELEM(1, tag))
+#define PP_KVS_FOREACH_VALUE(v_op, data) BOOST_PP_SEQ_FOR_EACH_R(1, __PP_KVS_FOREACH_VALUE, v_op, data)
+
 //
 // PP_KVS_PATH_FOREACH
 //
 #define PP_KVS_PATH_FOREACH(kv_op, data, ns_seq) PP_KVS_FOREACH(kv_op, PP_KVS_PATH_VALUE(data, ns_seq))
+
+#define PP_KVS_PATH_FOREACH_VALUE(v_op, data, ns_seq) PP_KVS_FOREACH_VALUE(v_op, PP_KVS_PATH_VALUE(data, ns_seq))

@@ -2,6 +2,7 @@
 #include <moneta/traits/member_names.hxx>
 #include "../model/Person.hxx"
 #include "../model/Dog.hxx"
+#include "../model/Address.hxx"
 
 BOOST_AUTO_TEST_CASE(member_name_test) {
 	//
@@ -43,6 +44,24 @@ BOOST_AUTO_TEST_CASE(member_name_test) {
 	BOOST_CHECK_EQUAL(
 		(moneta::traits::detail::member_name<MONETA_MEMBER(Dog, std::string, Name)>::get()),
 		"Name"
+	);
+
+	//
+	// Address
+	//
+	BOOST_CHECK_EQUAL(
+		(moneta::traits::detail::member_name<MONETA_MEMBER(Address, int, ID)>::get()),
+		"ID"
+	);
+
+	BOOST_CHECK_EQUAL(
+		(moneta::traits::detail::member_name<MONETA_MEMBER(Address, int, Number)>::get()),
+		"Number"
+	);
+
+	BOOST_CHECK_EQUAL(
+		(moneta::traits::detail::member_name<MONETA_MEMBER(Address, std::string, Street)>::get()),
+		"Street"
 	);
 }
 
