@@ -11,21 +11,11 @@ struct Composite {
 	Dog Dog;
 };
 
-namespace moneta { namespace traits { namespace detail {
-	template <>
-	struct members_of<Composite> : boost::mpl::vector<
-		MONETA_MEMBER(Composite, int,    Identifier),
-		MONETA_MEMBER(Composite, Person, Person),
-		MONETA_MEMBER(Composite, Dog,    Dog   )
-	> {};
-}}}
-
 MONETA_PRIMARY_KEY(MONETA_MEMBER(Composite, int, Identifier))
 
-MONETA_MEMBER_NAME(MONETA_MEMBER(Composite, int,    Identifier), Identifier)
-MONETA_MEMBER_NAME(MONETA_MEMBER(Composite, Person, Person    ), Person    )
-MONETA_MEMBER_NAME(MONETA_MEMBER(Composite, Dog,    Dog       ), Dog       )
-
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Composite, int,    Identifier), COMPOSITE_IDENTIFIER)
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Composite, Person, Person    ), COMPOSITE_PERSON    )
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Composite, Dog,    Dog       ), COMPOSITE_DOG       )
+MONETA_DESCRIBE_SQL_ENTITY(
+	Composite, COMPOSITE,
+	(int,    Identifier, COMPOSITE_IDENTIFIER)
+	(Person, Person,     COMPOSITE_PERSON    )
+	(Dog,    Dog,        COMPOSITE_DOG       )
+)

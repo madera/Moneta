@@ -17,24 +17,12 @@ struct Dog {
 	std::string Name;
 };
 
-namespace moneta { namespace traits { namespace detail {
-	template <>
-	struct members_of<Dog> : boost::mpl::vector<
-		MONETA_MEMBER(Dog, std::string, Owner),
-		MONETA_MEMBER(Dog, int,         ID   ),
-		MONETA_MEMBER(Dog, std::string, Name )
-	> {};
-}}}
-
 MONETA_PRIMARY_KEY(MONETA_MEMBER(Dog, std::string, Owner))
-MONETA_PRIMARY_KEY(MONETA_MEMBER(Dog, int,         ID   ))
+MONETA_PRIMARY_KEY(MONETA_MEMBER(Dog, int, ID))
 
-MONETA_MEMBER_NAME(MONETA_MEMBER(Dog, std::string, Owner  ), Owner  )
-MONETA_MEMBER_NAME(MONETA_MEMBER(Dog, int,         ID     ), ID     )
-MONETA_MEMBER_NAME(MONETA_MEMBER(Dog, std::string, Name   ), Name   )
-
-
-MONETA_SQL_TABLE_NAME(Dog, DOG)
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Dog, std::string, Owner  ), DOG_OWNER)
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Dog, int,         ID     ), DOG_ID   )
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Dog, std::string, Name   ), DOG_NAME )
+MONETA_DESCRIBE_SQL_ENTITY(
+	Dog, DOG,
+	(std::string, Owner, DOG_OWNER)
+	(int,         ID,    DOG_ID   )
+	(std::string, Name,  DOG_NAME )
+)
