@@ -28,7 +28,7 @@
 	struct moneta::traits::detail::trait<type> {                   \
 		typedef get_type trait_type;                           \
 		static trait_type get() {                              \
-			return get_value;                              \
+			return #get_value;                              \
 		}                                                      \
 	};
 

@@ -10,6 +10,7 @@
 #include <moneta/sql/traits/field_names.hxx>
 #include <boost/mpl/vector.hpp>
 #include <string>
+#include <moneta/pp/core.hxx>
 
 struct Person {
 	int ID;
@@ -18,26 +19,12 @@ struct Person {
 	int Fingers;
 };
 
-namespace moneta { namespace traits { namespace detail {
-	template <>
-	struct members_of<Person> : boost::mpl::vector<
-		MONETA_MEMBER(Person, int,         ID     ),
-		MONETA_MEMBER(Person, std::string, Name   ),
-		MONETA_MEMBER(Person, double,      Height ),
-		MONETA_MEMBER(Person, int,         Fingers)
-	> {};
-}}}
+MONETA_DESCRIBE_SQL_ENTITY(
+	Person, PERSON,
+	((int,         ID,      PERSON_ID     ))
+	((std::string, Name,    PERSON_NAME   ))
+	((double,      Height,  PERSON_HEIGHT ))
+	((int,         Fingers, PERSON_FINGERS))
+)
 
 MONETA_PRIMARY_KEY(MONETA_MEMBER(Person, int, ID))
-
-MONETA_MEMBER_NAME(MONETA_MEMBER(Person, int,         ID     ), ID     )
-MONETA_MEMBER_NAME(MONETA_MEMBER(Person, std::string, Name   ), Name   )
-MONETA_MEMBER_NAME(MONETA_MEMBER(Person, double,      Height ), Height )
-MONETA_MEMBER_NAME(MONETA_MEMBER(Person, int,         Fingers), Fingers)
-
-
-MONETA_SQL_TABLE_NAME(Person, PERSON)
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Person, int,         ID     ), PERSON_ID     )
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Person, std::string, Name   ), PERSON_NAME   )
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Person, double,      Height ), PERSON_HEIGHT )
-MONETA_SQL_FIELD_NAME(MONETA_MEMBER(Person, int,         Fingers), PERSON_FINGERS)
