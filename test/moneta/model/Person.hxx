@@ -21,10 +21,10 @@ struct Person {
 
 MONETA_DESCRIBE_SQL_ENTITY(
 	Person, PERSON,
-	((int,         ID,      PERSON_ID     ))
-	((std::string, Name,    PERSON_NAME   ))
-	((double,      Height,  PERSON_HEIGHT ))
-	((int,         Fingers, PERSON_FINGERS))
+	(int,         ID,      PERSON_ID     )
+	(std::string, Name,    PERSON_NAME   )
+	(double,      Height,  PERSON_HEIGHT )
+	(int,         Fingers, PERSON_FINGERS)
 )
 
 MONETA_PRIMARY_KEY(MONETA_MEMBER(Person, int, ID))

@@ -12,7 +12,7 @@
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/preprocessor/iteration/iterate.hpp>
-
+#include <moneta/pp/detail/add_parentheses.hxx>
 #include "moneta_pp.hxx"
 
 #define ENTITY_NAMESPACE 1
@@ -69,7 +69,9 @@
 #define MONETA_PP_EXPAND_ENTITY_MEMBER_NAMES(entity, member_sequence) \
 	BOOST_PP_SEQ_FOR_EACH(__MONETA_PP_EXPAND_ENTITY_MEMBER_NAMES, entity, member_sequence)
 
-#define MONETA_DESCRIBE_ENTITY(entity, members) \
+
+
+#define MONETA_DESCRIBE_ENTITY_BASE(entity, members) \
 	namespace moneta { namespace traits { namespace detail { \
 		template <> \
 		struct members_of<entity> : boost::mpl::vector< \
@@ -78,12 +80,22 @@
 	}}} \
 	MONETA_PP_EXPAND_ENTITY_MEMBER_NAMES(entity, members)
 
+#define MONETA_DESCRIBE_ENTITY(entity, members) \
+	MONETA_DESCRIBE_ENTITY_BASE(entity, MONETA_PP_ADD_PARENTHESES_2(members))
+
+
+
+// SQL
+
 #define __MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES(r, _, pair) \
 	MONETA_SQL_FIELD_NAME(MONETA_MEMBER_FROM_TN_PAIR(_, pair), BOOST_PP_TUPLE_ELEM(3, 2, pair))
+
 #define MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES(entity, member_sequence) \
 	BOOST_PP_SEQ_FOR_EACH(__MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES, entity, member_sequence)
 
+
+
 #define MONETA_DESCRIBE_SQL_ENTITY(entity, table, members) \
-	MONETA_DESCRIBE_ENTITY(entity, members) \
+	MONETA_DESCRIBE_ENTITY_BASE(entity, MONETA_PP_ADD_PARENTHESES_3(members)) \
 	MONETA_SQL_TABLE_NAME(entity, table) \
-	MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES(entity, members)
+	MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES(entity, MONETA_PP_ADD_PARENTHESES_3(members))

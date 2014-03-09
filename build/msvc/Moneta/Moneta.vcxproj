@@ -83,6 +83,7 @@
     <ClInclude Include="..\..\..\include\moneta\make_entity.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\apply_spec.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\core.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\pp\detail\add_parentheses.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\detail\boostx.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\detail\cat_include_name.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\detail\has_member_trait.hxx" />
