@@ -2,16 +2,6 @@
 // User entity.
 //
 #pragma once
-#include <moneta/traits/pk.hxx>
-#include <moneta/traits/members.hxx>
-#include <moneta/traits/member.hxx>
-#include <moneta/traits/member_names.hxx>
-#include <moneta/sql/traits/table_name.hxx>
-#include <moneta/sql/traits/field_names.hxx>
-#include <boost/mpl/vector.hpp>
-#include <boost/optional.hpp>
-#include <string>
-
 #include "Cat.hxx"
 #include "Dog.hxx"
 #include "Address.hxx"

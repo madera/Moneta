@@ -94,6 +94,7 @@
     <ClInclude Include="..\..\..\include\moneta\pp\entity_preparser.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\moneta_pp.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\specs\struct_spec.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\pp\sql_entity.hxx" />
     <ClInclude Include="..\..\..\include\moneta\serialization\detail\from_text_impl.hxx" />
     <ClInclude Include="..\..\..\include\moneta\serialization\iostream.hxx" />
     <ClInclude Include="..\..\..\include\moneta\serialization\shell\shell_codec.hxx" />

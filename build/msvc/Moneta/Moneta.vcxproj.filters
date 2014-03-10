@@ -252,6 +252,9 @@
     <ClInclude Include="..\..\..\include\moneta\pp\detail\add_parentheses.hxx">
       <Filter>Header Files\moneta\pp\detail</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\pp\sql_entity.hxx">
+      <Filter>Header Files\moneta\pp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

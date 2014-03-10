@@ -120,9 +120,6 @@
     <ClInclude Include="..\..\..\test\moneta\model\Hero.hxx">
       <Filter>Header Files\moneta\model</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\moneta\model\Ball.hxx">
-      <Filter>Header Files\moneta\model</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\test\moneta\pp\detail\includer_test_header.hxx">
       <Filter>Source Files\moneta\pp\detail</Filter>
     </ClInclude>
@@ -238,9 +235,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_delete_test.cxx">
       <Filter>Source Files\moneta\serializers\soci</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\pp\entity_definition_test.cxx">
-      <Filter>Source Files\moneta\pp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\pp\detail\includer_test.cxx">
       <Filter>Source Files\moneta\pp\detail</Filter>
