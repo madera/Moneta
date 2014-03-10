@@ -12,8 +12,10 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/size.hpp>
 
-#define MONETA_PRIMARY_KEY(member) \
-	template<> struct moneta::traits::detail::is_pk<member> : boost::true_type {};
+#define MONETA_DECLARE_PRIMARY_KEY(k, t, m) \
+	template<> struct moneta::traits::detail::is_pk< \
+		moneta::traits::member<k, t, &k::m> \
+	> : boost::true_type {};
 
 namespace moneta { namespace traits {
 

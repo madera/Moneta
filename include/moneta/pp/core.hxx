@@ -23,6 +23,8 @@
 #define MEMBER_DATATYPE  100
 #define MEMBER_NAME      101
 
+#define MONETA_PRIMARY_KEY 137
+
 //
 // User Macros
 //
@@ -93,9 +95,25 @@
 #define MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES(entity, member_sequence) \
 	BOOST_PP_SEQ_FOR_EACH(__MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES, entity, member_sequence)
 
+#define PROCESS_SQL_4(entity, tuple) \
+	BOOST_PP_IIF( \
+		BOOST_PP_EQUAL(BOOST_PP_TUPLE_ELEM(4, 3, tuple), MONETA_PRIMARY_KEY), \
+		MONETA_DECLARE_PRIMARY_KEY, \
+		BOOST_PP_TUPLE_EAT_3 \
+	)(entity, BOOST_PP_TUPLE_ELEM(4, 0, tuple), BOOST_PP_TUPLE_ELEM(4, 1, tuple))
 
+#define __MONETA_PP_EXPAND_PRIMARY_KEYS(r, entity, tuple) \
+	BOOST_PP_IIF( \
+		BOOST_PP_EQUAL(BOOST_PP_TUPLE_SIZE(tuple), 4), \
+		PROCESS_SQL_4, \
+		BOOST_PP_TUPLE_EAT(BOOST_PP_TUPLE_SIZE(tuple)) \
+	)(entity, tuple)
+
+#define MONETA_PP_EXPAND_PRIMARY_KEYS(entity, members) \
+	BOOST_PP_SEQ_FOR_EACH(__MONETA_PP_EXPAND_PRIMARY_KEYS, entity, members)
 
 #define MONETA_DESCRIBE_SQL_ENTITY(entity, table, members) \
-	MONETA_DESCRIBE_ENTITY_BASE(entity, MONETA_PP_ADD_PARENTHESES_3(members)) \
+	MONETA_DESCRIBE_ENTITY_BASE(entity, members) \
 	MONETA_SQL_TABLE_NAME(entity, table) \
-	MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES(entity, MONETA_PP_ADD_PARENTHESES_3(members))
+	MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES(entity, members) \
+	MONETA_PP_EXPAND_PRIMARY_KEYS(entity, members)

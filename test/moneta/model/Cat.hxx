@@ -10,11 +10,9 @@ struct Cat {
 	Address Address;
 };
 
-MONETA_PRIMARY_KEY(MONETA_MEMBER(Cat, int, ID))
-
 MONETA_DESCRIBE_SQL_ENTITY(
 	Cat, CAT,
-	(int,         ID     , CAT_ID     )
-	(std::string, Name   , CAT_NAME   )
-	(Address,     Address, CAT_ADDRESS)
+	((int,         ID,      CAT_ID,     MONETA_PRIMARY_KEY))
+	((std::string, Name,    CAT_NAME                      ))
+	((Address,     Address, CAT_ADDRESS                   ))
 )

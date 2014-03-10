@@ -10,6 +10,7 @@
 #include <moneta/traits/pk.hxx>
 #include <boost/mpl/vector.hpp>
 #include <string>
+#include <moneta/pp/core.hxx>
 
 struct Dog {
 	std::string Owner;
@@ -17,12 +18,9 @@ struct Dog {
 	std::string Name;
 };
 
-MONETA_PRIMARY_KEY(MONETA_MEMBER(Dog, std::string, Owner))
-MONETA_PRIMARY_KEY(MONETA_MEMBER(Dog, int, ID))
-
 MONETA_DESCRIBE_SQL_ENTITY(
 	Dog, DOG,
-	(std::string, Owner, DOG_OWNER)
-	(int,         ID,    DOG_ID   )
-	(std::string, Name,  DOG_NAME )
+	((std::string, Owner, DOG_OWNER, MONETA_PRIMARY_KEY))
+	((int,         ID,    DOG_ID,    MONETA_PRIMARY_KEY))
+	((std::string, Name,  DOG_NAME                     ))
 )

@@ -1,4 +1,5 @@
 #pragma once
+#include <boost/preprocessor/tuple/size.hpp>
 
 #define MONETA_PP_ADD_PARENTHESES_2_1(A, B) ((A, B)) MONETA_PP_ADD_PARENTHESES_2_2
 #define MONETA_PP_ADD_PARENTHESES_2_2(A, B) ((A, B)) MONETA_PP_ADD_PARENTHESES_2_1

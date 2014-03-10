@@ -27,15 +27,13 @@ struct Hero {
 	boost::optional<Hero> Supervisor;
 };
 
-MONETA_PRIMARY_KEY(MONETA_MEMBER(Hero, int, ID))
-
 MONETA_DESCRIBE_SQL_ENTITY(
 	Hero, HERO,
-	(int,                      ID,         HERO_ID        )
-	(std::string,              Name,       HERO_NAME      )
-	(boost::optional<Cat>,     Cat,        HERO_CAT       )
-	(boost::optional<Dog>,     Dog,        HERO_DOG       )
-	(boost::optional<Address>, Address,    HERO_ADDRESS   )
-	(boost::optional<Person>,  BestFriend, HERO_BESTFRIEND)
-	(boost::optional<Hero>,    Supervisor, HERO_SUPERVISOR)
+	((int,                      ID,         HERO_ID,        MONETA_PRIMARY_KEY))
+	((std::string,              Name,       HERO_NAME                         ))
+	((boost::optional<Cat>,     Cat,        HERO_CAT                          ))
+	((boost::optional<Dog>,     Dog,        HERO_DOG                          ))
+	((boost::optional<Address>, Address,    HERO_ADDRESS                      ))
+	((boost::optional<Person>,  BestFriend, HERO_BESTFRIEND                   ))
+	((boost::optional<Hero>,    Supervisor, HERO_SUPERVISOR                   ))
 )
