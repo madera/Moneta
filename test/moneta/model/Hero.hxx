@@ -7,17 +7,7 @@
 #include "Address.hxx"
 #include "Person.hxx"
 
-struct Hero {
-	int ID;
-	std::string Name;
-	boost::optional<Cat> Cat;
-	boost::optional<Dog> Dog;
-	boost::optional<Address> Address;
-	boost::optional<Person> BestFriend;
-	boost::optional<Hero> Supervisor;
-};
-
-MONETA_DESCRIBE_SQL_ENTITY(
+MONETA_DEFINE_AND_DESCRIBE_SQL_ENTITY(
 	Hero, HERO,
 	((int,                      ID,         HERO_ID,        MONETA_PRIMARY_KEY))
 	((std::string,              Name,       HERO_NAME                         ))

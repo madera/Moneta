@@ -84,3 +84,14 @@
 
 #define MONETA_DESCRIBE_ENTITY(entity, members) \
 	MONETA_DESCRIBE_ENTITY_BASE(entity, MONETA_PP_ADD_PARENTHESES_2(members))
+
+//
+// XXX: New interface...
+//
+#define __MONETA_PP_DEFINE_MEMBERS(r, _, tuple) BOOST_PP_TUPLE_ELEM(2, 0, tuple) BOOST_PP_TUPLE_ELEM(2, 1, tuple);
+#define MONETA_PP_DEFINE_MEMBERS(members) BOOST_PP_SEQ_FOR_EACH(__MONETA_PP_DEFINE_MEMBERS, _, members)
+
+#define MONETA_PP_DEFINE_ENTITY_STRUCT(entity, members) \
+	struct entity { \
+		MONETA_PP_DEFINE_MEMBERS(members) \
+	};

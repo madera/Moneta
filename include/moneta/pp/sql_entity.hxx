@@ -39,3 +39,7 @@
 	MONETA_SQL_TABLE_NAME(entity, table) \
 	MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES(entity, members) \
 	MONETA_PP_EXPAND_PRIMARY_KEYS(entity, members)
+
+#define MONETA_DEFINE_AND_DESCRIBE_SQL_ENTITY(entity, table, members) \
+	MONETA_PP_DEFINE_ENTITY_STRUCT(entity, members) \
+	MONETA_DESCRIBE_SQL_ENTITY(entity, table, members)
