@@ -2,7 +2,9 @@
 #include "detail/soci_fixture.hxx"
 #include <moneta/serialization/soci/soci_list.hxx>
 #include "../../model/Person.hxx"
+#include "../../model/Address.hxx"
 #include "../../model/Cat.hxx"
+#include <vector>
 
 BOOST_FIXTURE_TEST_CASE(soci_list_test, soci_test_fixture) {
 	std::vector<Address> addresses;

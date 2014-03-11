@@ -255,6 +255,9 @@
     <ClInclude Include="..\..\..\include\moneta\pp\sql_entity.hxx">
       <Filter>Header Files\moneta\pp</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\relational_context.hxx">
+      <Filter>Header Files\moneta</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
