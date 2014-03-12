@@ -242,7 +242,10 @@
     <ClCompile Include="..\..\..\test\moneta\pp\detail\cat_include_name_test.cxx">
       <Filter>Source Files\moneta\pp\detail</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\relational_context.cxx">
+    <ClCompile Include="..\..\..\test\moneta\relational_context_test.cxx">
+      <Filter>Source Files\moneta</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\entity_container_test.cxx">
       <Filter>Source Files\moneta</Filter>
     </ClCompile>
   </ItemGroup>
