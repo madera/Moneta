@@ -80,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\moneta\end_entity" />
-    <ClInclude Include="..\..\..\include\moneta\entity_container.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\relational_container.hxx" />
     <ClInclude Include="..\..\..\include\moneta\make_entity.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\apply_spec.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\core.hxx" />

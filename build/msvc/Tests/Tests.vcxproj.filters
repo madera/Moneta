@@ -245,7 +245,7 @@
     <ClCompile Include="..\..\..\test\moneta\relational_context_test.cxx">
       <Filter>Source Files\moneta</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\entity_container_test.cxx">
+    <ClCompile Include="..\..\..\test\moneta\relational_container_test.cxx">
       <Filter>Source Files\moneta</Filter>
     </ClCompile>
   </ItemGroup>

@@ -106,7 +106,7 @@
     <ClCompile Include="..\..\..\test\main.cxx">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\entity_container_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\relational_container_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\interactive_shell_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\make_entity_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\pp\detail\cat_include_name_test.cxx" />

@@ -258,7 +258,7 @@
     <ClInclude Include="..\..\..\include\moneta\relational_context.hxx">
       <Filter>Header Files\moneta</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\entity_container.hxx">
+    <ClInclude Include="..\..\..\include\moneta\relational_container.hxx">
       <Filter>Header Files\moneta</Filter>
     </ClInclude>
   </ItemGroup>
