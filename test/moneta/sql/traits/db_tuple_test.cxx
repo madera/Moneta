@@ -14,6 +14,13 @@ static void static_test() {
 			boost::mpl::vector<const int, const std::string, const double, const int>
 		>
 	));
+
+	BOOST_MPL_ASSERT((
+		boost::mpl::equal<
+			moneta::sql::traits::const_db_tuple<Cat>::type,
+			boost::mpl::vector<const int, const std::string, const int>
+		>
+	));
 }
 
 BOOST_AUTO_TEST_CASE(db_tuple_test) {

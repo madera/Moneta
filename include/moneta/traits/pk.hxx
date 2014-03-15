@@ -102,7 +102,9 @@ namespace moneta { namespace traits {
 	struct pk<
 		NonEntityType,
 		typename boost::enable_if<
-			typename boost::mpl::not_<moneta::traits::is_entity<NonEntityType> >::type
+			typename boost::mpl::not_<
+				moneta::traits::is_entity<NonEntityType>
+			>::type
 		>::type
 	> {
 		typedef NonEntityType type;
@@ -115,7 +117,9 @@ namespace moneta { namespace traits {
 	template <class EntityType>
 	struct pk<
 		EntityType,
-		typename boost::enable_if<moneta::traits::is_entity<EntityType> >::type
+		typename boost::enable_if<
+			moneta::traits::is_entity<EntityType>
+		>::type
 	> {
 		typedef typename moneta::traits::detail::entity_pk<EntityType>::type type;
 		
@@ -123,6 +127,45 @@ namespace moneta { namespace traits {
 			return moneta::traits::extract_pk(entity);
 		}
 	};
+
+
+
+	template <class EntityType, class Enable = void>
+	struct const_pk;
+
+	template <class NonEntityType>
+	struct const_pk<
+		NonEntityType,
+		typename boost::enable_if<
+			typename boost::mpl::not_<
+				moneta::traits::is_entity<NonEntityType>
+			>::type
+		>::type
+	> {
+		typedef typename boost::add_const<NonEntityType>::type type;
+
+		type operator()(NonEntityType& value) {
+			return value;
+		}
+	};
+
+	template <class EntityType>
+	struct const_pk<
+		EntityType,
+		typename boost::enable_if<
+			moneta::traits::is_entity<EntityType>
+		>::type
+	> {
+		typedef typename boost::add_const<
+			typename moneta::traits::detail::entity_pk<EntityType>::type
+		>::type type;
+		
+		type operator()(const EntityType& entity) {
+			return moneta::traits::extract_pk(entity);
+		}
+	};
+
+
 
 	template <typename T>
 	struct get_pk_functor {

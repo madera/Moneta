@@ -5,6 +5,15 @@
 #include "../model/Dog.hxx"
 #include "../model/Cat.hxx"
 
+static void static_test() {
+	BOOST_MPL_ASSERT((
+		boost::mpl::equal<
+			moneta::traits::pk<const Person>::type,
+			const int
+		>
+	));
+}
+
 struct Dummy {
 };
 

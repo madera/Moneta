@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include <moneta/traits/tuple.hxx>
+#include <boost/mpl/equal.hpp>
 #include "../model/Person.hxx"
 
 static void static_test() {
 	BOOST_MPL_ASSERT((
-		is_same<
-			at_c<mpl_vector_type, 0>::type,
-			int
+		boost::mpl::equal<
+			moneta::traits::const_tuple<Person>::type,
+			boost::mpl::vector<const int, const std::string, const double, const int>
 		>
 	));
 }
