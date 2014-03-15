@@ -7,6 +7,15 @@
 #include "../../model/Composite.hxx"
 #include "../../model/Cat.hxx"
 
+static void static_test() {
+	BOOST_MPL_ASSERT((
+		boost::mpl::equal<
+			moneta::sql::traits::const_db_tuple<Person>::type,
+			boost::mpl::vector<const int, const std::string, const double, const int>
+		>
+	));
+}
+
 BOOST_AUTO_TEST_CASE(db_tuple_test) {
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<

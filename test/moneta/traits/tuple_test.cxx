@@ -2,6 +2,15 @@
 #include <moneta/traits/tuple.hxx>
 #include "../model/Person.hxx"
 
+static void static_test() {
+	BOOST_MPL_ASSERT((
+		is_same<
+			at_c<mpl_vector_type, 0>::type,
+			int
+		>
+	));
+}
+
 BOOST_AUTO_TEST_CASE(tuple_types_test) {
 	using boost::is_same;
 	using boost::mpl::at_c;

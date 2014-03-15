@@ -37,4 +37,9 @@ namespace moneta { namespace traits {
 		typename detail::mpl::vector<EntityType>::type
 	> {};
 
+	template <typename EntityType>
+	struct const_tuple : boost::fusion::result_of::as_vector<
+		typename detail::mpl::vector<EntityType>::type
+	> {};
+
 }}
