@@ -82,13 +82,13 @@ static void static_test() {
 
 
 	//
-	// detail_fusion_const_pk_tie
+	// detail_fusion_pk_tie of const
 	//
 
 	// Person
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
-			moneta::traits::detail::fusion::const_pk_tie<Person>::type,
+			moneta::traits::detail::fusion::pk_tie<const Person>::type,
 			boost::fusion::vector<const int&>
 		>
 	));
@@ -96,7 +96,7 @@ static void static_test() {
 	// Dog
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
-			moneta::traits::detail::fusion::const_pk_tie<Dog>::type,
+			moneta::traits::detail::fusion::pk_tie<const Dog>::type,
 			boost::fusion::vector<const std::string&, const int&>
 		>
 	));
@@ -126,7 +126,7 @@ static void static_test() {
 	));
 
 	//
-	// const_pk_tie
+	// pk_tie of const
 	//
 
 	// Person
@@ -157,7 +157,7 @@ BOOST_AUTO_TEST_CASE(pk_tie_opfx_test) {
 	BOOST_CHECK_EQUAL(moneta::traits::pk_tie<Address>()(address), 123);
 }
 
-BOOST_AUTO_TEST_CASE(const_pk_tie_opfx_test) {
+BOOST_AUTO_TEST_CASE(pk_tie_of_const_opfx_test) {
 	Address address;
 	address.ID = 123;
 	address.Number = 10;
@@ -165,5 +165,5 @@ BOOST_AUTO_TEST_CASE(const_pk_tie_opfx_test) {
 
 	const Address& const_address = address;
 
-	BOOST_CHECK_EQUAL(moneta::traits::const_pk_tie<Address>()(const_address), 123);
+	BOOST_CHECK_EQUAL(moneta::traits::pk_tie<const Address>()(const_address), 123);
 }

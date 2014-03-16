@@ -45,10 +45,10 @@ BOOST_AUTO_TEST_CASE(const_extract_pk_test) {
 	dog.Name = "Snoopy";
 	
 	const Dog& const_dog = dog;
-	moneta::traits::const_pk_tie<Dog>::type const_pk_tie = moneta::traits::extract_pk(const_dog);
+	moneta::traits::pk_tie<const Dog>::type cpk_tie = moneta::traits::extract_pk(const_dog);
 	
-	BOOST_CHECK_EQUAL(const_pk_tie.m0, "Charlie");
-	BOOST_CHECK_EQUAL(const_pk_tie.m1, 1);
+	BOOST_CHECK_EQUAL(cpk_tie.m0, "Charlie");
+	BOOST_CHECK_EQUAL(cpk_tie.m1, 1);
 
 	// Alternate syntax... TODO: Just keep one of the two: using .mN or at_c<N>().
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(moneta::traits::extract_pk(const_dog)), "Charlie");
