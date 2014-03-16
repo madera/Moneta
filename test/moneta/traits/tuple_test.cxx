@@ -2,12 +2,40 @@
 #include <moneta/traits/tuple.hxx>
 #include <boost/mpl/equal.hpp>
 #include "../model/Person.hxx"
+#include "../model/Cat.hxx"
 
 static void static_test() {
+	// Person
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
-			moneta::traits::const_tuple<Person>::type,
+			moneta::traits::tuple<Person>::type,
+			boost::mpl::vector<int, std::string, double, int>
+		>
+	));
+
+	// const Person
+	BOOST_MPL_ASSERT((
+		boost::mpl::equal<
+			moneta::traits::tuple<const Person>::type,
 			boost::mpl::vector<const int, const std::string, const double, const int>
+		>
+	));
+
+
+
+	// Cat
+	BOOST_MPL_ASSERT((
+		boost::mpl::equal<
+			moneta::traits::tuple<Cat>::type,
+			boost::mpl::vector<int, std::string, Address>
+		>
+	));
+
+	// const Cat
+	BOOST_MPL_ASSERT((
+		boost::mpl::equal<
+			moneta::traits::tuple<const Cat>::type,
+			boost::mpl::vector<const int, const std::string, const Address>
 		>
 	));
 }

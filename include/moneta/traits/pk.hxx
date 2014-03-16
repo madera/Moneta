@@ -20,6 +20,7 @@
 namespace moneta { namespace traits {
 
 	namespace detail {
+		// XXX: Maybe export this? Looks useful...
 		template <class MemberType>
 		struct is_pk : boost::false_type {
 		};
@@ -48,18 +49,19 @@ namespace moneta { namespace traits {
 			> {};
 		};
 
+		template <class EntityType>
 		struct get_primary_key {
 			template <class EntityType>
 			struct apply : boost::mpl::transform<
 				typename get_pk_memptr_types::apply<EntityType>::type,
-				detail::get_result_type
+				detail::get_result_type<EntityType>
 			> {};
 		};
 
 		namespace mpl {
 			template <class EntityType>
 			struct pk : boost::mpl::apply<
-				detail::get_primary_key,
+				detail::get_primary_key<EntityType>,
 				EntityType
 			> {};
 		}
@@ -127,45 +129,6 @@ namespace moneta { namespace traits {
 			return moneta::traits::extract_pk(entity);
 		}
 	};
-
-
-
-	template <class EntityType, class Enable = void>
-	struct const_pk;
-
-	template <class NonEntityType>
-	struct const_pk<
-		NonEntityType,
-		typename boost::enable_if<
-			typename boost::mpl::not_<
-				moneta::traits::is_entity<NonEntityType>
-			>::type
-		>::type
-	> {
-		typedef typename boost::add_const<NonEntityType>::type type;
-
-		type operator()(NonEntityType& value) {
-			return value;
-		}
-	};
-
-	template <class EntityType>
-	struct const_pk<
-		EntityType,
-		typename boost::enable_if<
-			moneta::traits::is_entity<EntityType>
-		>::type
-	> {
-		typedef typename boost::add_const<
-			typename moneta::traits::detail::entity_pk<EntityType>::type
-		>::type type;
-		
-		type operator()(const EntityType& entity) {
-			return moneta::traits::extract_pk(entity);
-		}
-	};
-
-
 
 	template <typename T>
 	struct get_pk_functor {

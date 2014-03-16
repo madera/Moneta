@@ -9,43 +9,60 @@
 struct Dummy {
 };
 
-BOOST_AUTO_TEST_CASE(detail_mpl_pk_tie_test) {
+static void static_test() {
+	using boost::is_same;
+	using boost::mpl::equal;
+	using moneta::traits::pk;
+	using moneta::traits::has_pk;
+	using moneta::traits::detail::is_pk;
+
+	namespace fusion = boost::fusion;
+	namespace mpl = boost::mpl;
+
+
+
+	//
+	// detail_mpl_pk_tie
+	//
+
 	// Person
 	BOOST_MPL_ASSERT((
-		boost::mpl::equal<
+		equal<
 			moneta::traits::detail::mpl::pk_tie<Person>::type,
-			boost::mpl::vector<int&>
+			mpl::vector<int&>
 		>
 	));
 
 	// Dog
 	BOOST_MPL_ASSERT((
-		boost::mpl::equal<
+		equal<
 			moneta::traits::detail::mpl::pk_tie<Dog>::type,
-			boost::mpl::vector<std::string&, int&>
+			mpl::vector<std::string&, int&>
 		>
 	));
-}
 
-BOOST_AUTO_TEST_CASE(detail_mpl_const_pk_tie_test) {
 	// Person
 	BOOST_MPL_ASSERT((
-		boost::mpl::equal<
-			moneta::traits::detail::mpl::const_pk_tie<Person>::type,
-			boost::mpl::vector<const int&>
+		equal<
+			moneta::traits::detail::mpl::pk_tie<const Person>::type,
+			mpl::vector<const int&>
 		>
 	));
 
 	// Dog
 	BOOST_MPL_ASSERT((
-		boost::mpl::equal<
-			moneta::traits::detail::mpl::const_pk_tie<Dog>::type,
-			boost::mpl::vector<const std::string&, const int&>
+		equal<
+			moneta::traits::detail::mpl::pk_tie<const Dog>::type,
+			mpl::vector<const std::string&, const int&>
 		>
 	));
-}
 
-BOOST_AUTO_TEST_CASE(detail_fusion_pk_tie_test) {
+
+
+	//
+	// detail_fusion_pk_tie
+	//
+
 	// Person
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
@@ -61,9 +78,13 @@ BOOST_AUTO_TEST_CASE(detail_fusion_pk_tie_test) {
 			boost::fusion::vector<std::string&, int&>
 		>
 	));
-}
 
-BOOST_AUTO_TEST_CASE(detail_fusion_const_pk_tie_test) {
+
+
+	//
+	// detail_fusion_const_pk_tie
+	//
+
 	// Person
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
@@ -79,9 +100,10 @@ BOOST_AUTO_TEST_CASE(detail_fusion_const_pk_tie_test) {
 			boost::fusion::vector<const std::string&, const int&>
 		>
 	));
-}
 
-BOOST_AUTO_TEST_CASE(pk_tie_test) {
+	//
+	// pk_tie
+	//
 
 	BOOST_MPL_ASSERT((boost::is_same<moneta::traits::pk_tie<int>::type, int&>));
 	BOOST_MPL_ASSERT((boost::is_same<moneta::traits::pk_tie<std::string>::type, std::string&>));
@@ -102,13 +124,15 @@ BOOST_AUTO_TEST_CASE(pk_tie_test) {
 			boost::fusion::vector2<std::string&, int&>
 		>
 	));
-}
 
-BOOST_AUTO_TEST_CASE(const_pk_tie_test) {
+	//
+	// const_pk_tie
+	//
+
 	// Person
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
-			moneta::traits::const_pk_tie<Person>::type,
+			moneta::traits::pk_tie<const Person>::type,
 			const int&
 		>
 	));
@@ -116,7 +140,7 @@ BOOST_AUTO_TEST_CASE(const_pk_tie_test) {
 	// Dog
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
-			moneta::traits::const_pk_tie<Dog>::type,
+			moneta::traits::pk_tie<const Dog>::type,
 			boost::fusion::vector2<const std::string&, const int&>
 		>
 	));

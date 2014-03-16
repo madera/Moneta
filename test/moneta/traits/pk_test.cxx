@@ -5,64 +5,75 @@
 #include "../model/Dog.hxx"
 #include "../model/Cat.hxx"
 
-static void static_test() {
-	BOOST_MPL_ASSERT((
-		boost::mpl::equal<
-			moneta::traits::pk<const Person>::type,
-			const int
-		>
-	));
-}
-
 struct Dummy {
 };
 
-BOOST_AUTO_TEST_CASE(pk_type_test) {
-	BOOST_MPL_ASSERT((boost::is_same<moneta::traits::pk<int>::type, int>));
-	BOOST_MPL_ASSERT((boost::is_same<moneta::traits::pk<short>::type, short>));
-	BOOST_MPL_ASSERT((boost::is_same<moneta::traits::pk<std::string>::type, std::string>));
-	BOOST_MPL_ASSERT((boost::is_same<moneta::traits::pk<Dummy>::type, Dummy>));
+static void static_test() {
+	using boost::is_same;
+	using boost::mpl::equal;
+	using moneta::traits::pk;
+	using moneta::traits::has_pk;
+	using moneta::traits::detail::is_pk;
+
+	namespace fusion = boost::fusion;
+	namespace mpl = boost::mpl;
+
+	BOOST_MPL_ASSERT((equal<pk<Person>::type, int>));
+	BOOST_MPL_ASSERT((equal<pk<const Person>::type, const int>));
+
+	BOOST_MPL_ASSERT((equal<pk<Dog      >::type, fusion::vector<std::string,       int      > >));
+	BOOST_MPL_ASSERT((equal<pk<const Dog>::type, fusion::vector<const std::string, const int> >));
+
+	// Non Entities (and entities without a pk) must be their own pk.
+	BOOST_MPL_ASSERT((is_same<pk<int        >::type, int        >));
+	BOOST_MPL_ASSERT((is_same<pk<short      >::type, short      >));
+	BOOST_MPL_ASSERT((is_same<pk<std::string>::type, std::string>));
+	BOOST_MPL_ASSERT((is_same<pk<Dummy      >::type, Dummy      >));
 
 	// Person
-	BOOST_MPL_ASSERT((moneta::traits::detail::is_pk<MONETA_MEMBER(Person, int, ID)>));
-	BOOST_MPL_ASSERT_NOT((moneta::traits::detail::is_pk<MONETA_MEMBER(Person, std::string, Name   )>));
-	BOOST_MPL_ASSERT_NOT((moneta::traits::detail::is_pk<MONETA_MEMBER(Person, double,      Height )>));
-	BOOST_MPL_ASSERT_NOT((moneta::traits::detail::is_pk<MONETA_MEMBER(Person, int,         Fingers)>));
+	BOOST_MPL_ASSERT((is_pk<MONETA_MEMBER(Person, int, ID)>));
+
+	BOOST_MPL_ASSERT_NOT((is_pk<MONETA_MEMBER(Person, std::string, Name   )>));
+	BOOST_MPL_ASSERT_NOT((is_pk<MONETA_MEMBER(Person, double,      Height )>));
+	BOOST_MPL_ASSERT_NOT((is_pk<MONETA_MEMBER(Person, int,         Fingers)>));
 
 	// Dog
-	BOOST_MPL_ASSERT((moneta::traits::detail::is_pk<MONETA_MEMBER(Dog, std::string, Owner)>));
-	BOOST_MPL_ASSERT((moneta::traits::detail::is_pk<MONETA_MEMBER(Dog, int, ID)>));
-	BOOST_MPL_ASSERT_NOT((moneta::traits::detail::is_pk<MONETA_MEMBER(Person, std::string, Name   )>));
-}
+	BOOST_MPL_ASSERT((is_pk<MONETA_MEMBER(Dog, std::string, Owner)>));
+	BOOST_MPL_ASSERT((is_pk<MONETA_MEMBER(Dog, int,         ID   )>));
 
-BOOST_AUTO_TEST_CASE(has_pk_test) {
-	BOOST_MPL_ASSERT((moneta::traits::has_pk<Person>));
-	BOOST_MPL_ASSERT((moneta::traits::has_pk<Dog>));
-	BOOST_MPL_ASSERT_NOT((moneta::traits::has_pk<Dummy>));
-}
+	BOOST_MPL_ASSERT_NOT((is_pk<MONETA_MEMBER(Person, std::string, Name)>));
 
-BOOST_AUTO_TEST_CASE(detail_mpl_pk_test) {
+	//
+	// has_pk
+	//
+	BOOST_MPL_ASSERT((has_pk<Person>));
+	BOOST_MPL_ASSERT((has_pk<Dog>));
+	BOOST_MPL_ASSERT_NOT((has_pk<Dummy>));
+
+	//
+	// detail_mpl_pk
+	//
+
 	// Person
 	BOOST_MPL_ASSERT((
-		boost::mpl::equal<
-			moneta::traits::detail::mpl::pk<Person>::type,
-			boost::mpl::vector<int>
-		>
+		equal<moneta::traits::detail::mpl::pk<Person>::type, boost::mpl::vector<int> >
 	));
 
 	// Dog
 	BOOST_MPL_ASSERT((
-		boost::mpl::equal<
+		equal<
 			moneta::traits::detail::mpl::pk<Dog>::type,
 			boost::mpl::vector<std::string, int>
 		>
 	));
-}
 
-BOOST_AUTO_TEST_CASE(detail_fusion_pk_test) {
+	//
+	// detail_fusion_pk
+	//
+
 	// Person
 	BOOST_MPL_ASSERT((
-		boost::mpl::equal<
+		equal<
 			moneta::traits::detail::fusion::pk<Person>::type,
 			boost::fusion::vector<int>
 		>
@@ -70,27 +81,21 @@ BOOST_AUTO_TEST_CASE(detail_fusion_pk_test) {
 
 	// Dog
 	BOOST_MPL_ASSERT((
-		boost::mpl::equal<
+		equal<
 			moneta::traits::detail::fusion::pk<Dog>::type,
 			boost::fusion::vector<std::string, int>
 		>
 	));
 }
 
-BOOST_AUTO_TEST_CASE(pk_test) {
-	// Person
-	BOOST_MPL_ASSERT((
-		boost::mpl::equal<
-			moneta::traits::pk<Person>::type,
-			int
-		>
-	));
+BOOST_AUTO_TEST_CASE(pk_extraction_test) {
+	BOOST_MPL_ASSERT((boost::is_same<moneta::traits::pk<Person>::type, int>));
 
-	// Dog
-	BOOST_MPL_ASSERT((
-		boost::mpl::equal<
-			moneta::traits::pk<Dog>::type,
-			boost::fusion::vector<std::string, int>
-		>
-	));
+	Person person;
+	person.ID = 1;
+
+	moneta::traits::pk<Person> pk;
+	BOOST_CHECK_EQUAL(pk(person), 1);
+
+
 }

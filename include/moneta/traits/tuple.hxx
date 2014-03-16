@@ -14,35 +14,34 @@ namespace moneta { namespace traits {
 
 	namespace detail {
 
+		template <class EntityType>
 		struct get_result_type {
 			template <typename T>
 			struct apply {
-				typedef typename T::result_type type;
+				typedef typename boost::mpl::if_<
+					boost::is_const<EntityType>,
+					typename boost::add_const<
+						typename T::result_type
+					>::type,
+					typename T::result_type
+				>::type type;
 			};
 		};
 
 		namespace mpl {
 
-			template <typename EntityType>
+			template <class EntityType>
 			struct vector : boost::mpl::transform<
 				typename members<EntityType>::type,
-				get_result_type
+				get_result_type<EntityType>
 			> {};
 
 		}
 	}
 
-	template <typename EntityType>
+	template <class EntityType>
 	struct tuple : boost::fusion::result_of::as_vector<
 		typename detail::mpl::vector<EntityType>::type
-	> {};
-
-	template <typename EntityType>
-	struct const_tuple : boost::fusion::result_of::as_vector<
-		typename boost::mpl::transform<
-			typename detail::mpl::vector<EntityType>::type,
-			boost::add_const<boost::mpl::_1>
-		>::type
 	> {};
 
 }}

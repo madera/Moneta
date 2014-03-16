@@ -2,7 +2,8 @@
 #include "../model/Person.hxx"
 #include <boost/mpl/at.hpp>
 
-BOOST_AUTO_TEST_CASE(members_of_test) {
+static void static_test() {
+
 	BOOST_MPL_ASSERT((
 		boost::is_same<
 			boost::mpl::at_c<moneta::traits::members<Person>::type, 0>::type,
@@ -30,13 +31,16 @@ BOOST_AUTO_TEST_CASE(members_of_test) {
 			MONETA_MEMBER(Person, int, Fingers)
 		>
 	));
-}
 
-BOOST_AUTO_TEST_CASE(member_inequality_test) {
+	//
+	// member_inequality_test
+	//
+
 	BOOST_MPL_ASSERT_NOT((
 		boost::is_same<
 			MONETA_MEMBER(Person, int, ID),
 			MONETA_MEMBER(Person, int, Fingers)
 		>
 	));
+
 }
