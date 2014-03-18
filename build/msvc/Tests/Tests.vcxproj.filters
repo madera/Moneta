@@ -82,6 +82,9 @@
     <Filter Include="Source Files\moneta\pp\detail">
       <UniqueIdentifier>{80d01ffc-eea9-4b6d-9750-70f607bca4ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\moneta\container">
+      <UniqueIdentifier>{eaa21cb5-31b0-4189-91bd-67adecd87810}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -247,6 +250,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\relational_container_test.cxx">
       <Filter>Source Files\moneta</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\container\hash_state_tracker_test.cxx">
+      <Filter>Source Files\moneta\container</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

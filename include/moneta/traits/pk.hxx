@@ -135,6 +135,10 @@ namespace moneta { namespace traits {
 		typename pk<T>::type operator()(T& x) {
 			return pk<T>()(x);
 		}
+
+		typename pk<const T>::type operator()(const T& x) {
+			return pk<const T>()(x);
+		}
 	};
 
 }}

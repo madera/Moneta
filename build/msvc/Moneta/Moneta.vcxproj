@@ -79,6 +79,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\moneta\container\hash_state_tracker.hxx" />
     <ClInclude Include="..\..\..\include\moneta\end_entity" />
     <ClInclude Include="..\..\..\include\moneta\relational_container.hxx" />
     <ClInclude Include="..\..\..\include\moneta\make_entity.hxx" />

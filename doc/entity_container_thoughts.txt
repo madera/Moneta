@@ -1,0 +1,96 @@
+
+	  ______________________________  ___________________________________________________________________
+	 /___REQ___  ________REQ________\/__________________ OR _______________________ OR __________________\
+	||  status || data              ||        copy       ||          hash           ||      bitfield     ||
+	||---------||-------------------||-------------------||-------------------------||-------------------||
+	||  int32  || tuple<ET>         || tuple<ET>         || hash_tuple<sizeof_<ET>> || bits<N>           ||
+	||  flags  || t0, t1, ..., tN-1 || t0, t1, ..., tN-1 || t0, t1, ..., tN-1       || b0, b1, ..., bN-1 ||
+	\\_________/\___________________/\___________________________________________________________________//
+
+
+
+	template <class EntityType>
+	struct hash_state_tracker {
+		boost::tuple<int32, ...> state;
+		
+		void update(const EntityType& entity) {
+			tuple = to_db_tuple(entity);
+			
+		}
+	};
+
+
+
+	template <
+		class EntityType,
+		class StateTracker // = { copy, hash, bitfield }
+	>
+	struct entity_container {
+		typedef db_tuple<EntityType>::type tuple_type;
+		
+		struct entry : StateTracker {
+			int status;
+			tuple_type data;
+		};
+		
+		void revert() {
+			StateTracker::revert();
+		}
+
+		void update(const EntityType& entity) {
+			pk<const EntityType> pk(entity);
+			entry_itr = get_entry(pk);
+			assert(entry_itr != end());
+
+			entry entry = *entry_itr;
+
+			tuple_type tuple = to_db_tuple(entity);
+			new_state = StateTracker::create(tuple);
+			if (entry.state != new_state) {
+				entry.status |= DIRTY_BIT;
+			}
+			
+			replace_in_index(entry);
+		}
+
+	};
+
+	void example() {
+		entity_container<Person> container;
+		
+		Person person;
+		person.Name = "John";
+		person.Age = 20;
+		entity_container.insert(person); // , status=0);
+
+		// action: {
+		//	entry newcomer;
+		//	newcomer.status = 0;
+		//	newcomer.data = db_tuple<>(person);
+		// }
+
+		person.Name = "Jane";
+		entity_container.update(person);
+		
+		
+		
+		entity_container.dirty();
+		
+		std::cerr << entity_container << std::endl;
+	}
+
+
+	context.update(person);
+	context.revert(person);
+	context.status();
+	context.commit();
+	
+	context with full state history
+	
+	context with hash history
+	context.revert() -> compile time error
+	
+	context<hash_state_tracker>
+	
+
+

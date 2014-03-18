@@ -67,6 +67,9 @@
     <Filter Include="Header Files\moneta\pp\specs">
       <UniqueIdentifier>{7d07e902-5656-4114-b430-4017ba94f1c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\container">
+      <UniqueIdentifier>{6b692fe3-ef4d-42f7-ad5d-85783496772d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -260,6 +263,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\relational_container.hxx">
       <Filter>Header Files\moneta</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\container\hash_state_tracker.hxx">
+      <Filter>Header Files\moneta\container</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

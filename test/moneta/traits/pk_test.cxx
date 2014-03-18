@@ -88,14 +88,14 @@ static void static_test() {
 	));
 }
 
-BOOST_AUTO_TEST_CASE(pk_extraction_test) {
-	BOOST_MPL_ASSERT((boost::is_same<moneta::traits::pk<Person>::type, int>));
-
-	Person person;
-	person.ID = 1;
-
-	moneta::traits::pk<Person> pk;
-	//BOOST_CHECK_EQUAL(pk(person), 1);
-
-
-}
+// Commented since extract_pk could be embedded into pk() as a simplifier.
+// It's future is TBD.
+//BOOST_AUTO_TEST_CASE(pk_extraction_test) {
+//	BOOST_MPL_ASSERT((boost::is_same<moneta::traits::pk<Person>::type, int>));
+//
+//	Person person;
+//	person.ID = 1;
+//
+//	moneta::traits::pk<Person> pk;
+//	BOOST_CHECK_EQUAL(moneta::traits::extract_pk(person), 1);
+//}

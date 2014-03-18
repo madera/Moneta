@@ -66,6 +66,10 @@ namespace moneta { namespace traits {
 		typename pk_tie<T>::type operator()(T& x) {
 			return pk_tie<T>()(x);
 		}
+
+		typename pk_tie<const T>::type operator()(const T& x) {
+			return pk_tie<const T>()(x);
+		}
 	};
 
 }}

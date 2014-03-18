@@ -25,8 +25,8 @@ BOOST_AUTO_TEST_CASE(const_to_tie_test) {
 	person.Height = 1.80;
 	person.Fingers = 10;
 	
-	moneta::traits::const_tie<Person>::type const_tie = moneta::traits::to_tie(person);
+	moneta::traits::tie<const Person>::type const_tie = moneta::traits::to_tie(person);
 
 	const Person& const_person = person;
-	moneta::traits::const_tie<Person>::type const_tie2 = moneta::traits::to_tie(const_person);
+	moneta::traits::tie<const Person>::type const_tie2 = moneta::traits::to_tie(const_person);
 }

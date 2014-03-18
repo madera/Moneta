@@ -2,8 +2,6 @@
 #include <moneta/relational_container.hxx>
 #include "model/Cat.hxx"
 
-#include <moneta/sql/traits/db_tuple.hxx>
-
 BOOST_AUTO_TEST_CASE(entity_container_test) {
 	moneta::relational_container<Cat> cat_container;
 
