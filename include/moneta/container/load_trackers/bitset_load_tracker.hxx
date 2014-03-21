@@ -1,0 +1,42 @@
+#pragma once
+#pragma once
+#include <boost/array.hpp>
+#include <boost/fusion/include/copy.hpp>
+#include <boost/fusion/include/transform.hpp>
+#include <boost/fusion/include/boost_array.hpp>
+#include "../../sql/traits/db_tuple.hxx"
+#include "../../sql/traits/to_db_tuple.hxx"
+#include "../../sql/traits/to_db_tie.hxx"
+#include <bitset>
+
+namespace moneta { namespace container {
+
+	template <class EntityType>
+	struct bitset_load_tracker {
+		typedef typename std::bitset<
+			boost::mpl::size<
+				typename moneta::sql::traits::db_tuple<EntityType>::type
+			>::value
+		> state_type;
+
+	public:
+		state_type load_state;
+
+	public:
+		bitset_load_tracker() {
+		}
+
+		bitset_load_tracker(const bool all_loaded) {
+			load_state.set();
+		}
+
+		const bool loaded(const size_t index) const {
+			return load_state[index];
+		}
+
+		void loaded(const size_t index, const bool value) {
+			load_state[index] = value;
+		}
+	};
+
+}}

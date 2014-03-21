@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include <moneta/container/hash_state_tracker.hxx>
-#include "../model/Cat.hxx"
+#include <moneta/container/change_trackers/hash_change_tracker.hxx>
+#include "../../model/Cat.hxx"
 
 BOOST_AUTO_TEST_CASE(hash_state_tracker_test) {
 	Cat cat;
@@ -10,6 +10,6 @@ BOOST_AUTO_TEST_CASE(hash_state_tracker_test) {
 	cat.Address.Number = 123;
 	cat.Address.Street = "Infinite Av.";
 
-	moneta::container::hash_state_tracker<Cat> tracker;
+	moneta::container::hash_change_tracker<Cat> tracker;
 	tracker.update(cat);
 }

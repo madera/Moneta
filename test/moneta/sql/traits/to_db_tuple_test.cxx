@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(const_to_db_tuple_test) {
 	cat.ID = 555;
 	cat.Name = "Garfield";
 	cat.Address.ID = 255;
-	cat.Address.Street = 1;
+	cat.Address.Number = 1;
 	cat.Address.Street = "Infinite Loop";
 
 	const Cat& ccat = cat;
@@ -60,4 +60,7 @@ BOOST_AUTO_TEST_CASE(const_to_db_tuple_test) {
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(db_tuple), 555);
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<1>(db_tuple), "Garfield");
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<2>(db_tuple), 255);
+
+	moneta::sql::traits::db_tuple<Cat>::type non_const_tuple = 
+		moneta::sql::traits::to_db_tuple<const Cat>(ccat);
 }

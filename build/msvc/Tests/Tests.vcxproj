@@ -108,8 +108,10 @@
     <ClCompile Include="..\..\..\test\main.cxx">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\container\hash_state_tracker_test.cxx" />
-    <ClCompile Include="..\..\..\test\moneta\relational_container_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\container\change_trackers\bitset_change_tracker_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\container\change_trackers\hash_change_tracker_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\container\load_trackers\bitset_load_tracker_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\container\relational_container_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\interactive_shell_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\make_entity_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\pp\detail\cat_include_name_test.cxx" />
@@ -129,6 +131,8 @@
     <ClCompile Include="..\..\..\test\moneta\sql\generators\delete_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\generators\insert_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\generators\select_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\sql\traits\db_pk_tie_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\sql\traits\db_pk_tuple_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\traits\db_tie_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\traits\db_tuple_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\traits\field_names_test.cxx" />

@@ -79,7 +79,12 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\moneta\container\hash_state_tracker.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\container\change_trackers\bitset_change_tracker.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\container\change_trackers\hash_change_tracker.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\container\change_trackers\null_change_tracker.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\container\load_trackers\bitset_load_tracker.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\container\load_trackers\null_load_tracker.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\container\relational_container.hxx" />
     <ClInclude Include="..\..\..\include\moneta\end_entity" />
     <ClInclude Include="..\..\..\include\moneta\relational_container.hxx" />
     <ClInclude Include="..\..\..\include\moneta\make_entity.hxx" />
@@ -112,6 +117,8 @@
     <ClInclude Include="..\..\..\include\moneta\sql\generators\detail\generate_params.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\generators\insert.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\generators\select.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\db_pk_tie.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\db_pk_tuple.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\traits\db_tie.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\traits\db_tuple.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\traits\field_names.hxx" />

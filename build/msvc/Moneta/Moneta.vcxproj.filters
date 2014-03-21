@@ -70,6 +70,12 @@
     <Filter Include="Header Files\moneta\container">
       <UniqueIdentifier>{6b692fe3-ef4d-42f7-ad5d-85783496772d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\container\load_trackers">
+      <UniqueIdentifier>{4192ec0f-7e09-49f8-b354-466d97ae47c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\moneta\container\change_trackers">
+      <UniqueIdentifier>{3c6791c6-16fb-4444-80b9-2bea2220343c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -264,8 +270,29 @@
     <ClInclude Include="..\..\..\include\moneta\relational_container.hxx">
       <Filter>Header Files\moneta</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\container\hash_state_tracker.hxx">
+    <ClInclude Include="..\..\..\include\moneta\container\relational_container.hxx">
       <Filter>Header Files\moneta\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\container\load_trackers\bitset_load_tracker.hxx">
+      <Filter>Header Files\moneta\container\load_trackers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\container\load_trackers\null_load_tracker.hxx">
+      <Filter>Header Files\moneta\container\load_trackers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\container\change_trackers\hash_change_tracker.hxx">
+      <Filter>Header Files\moneta\container\change_trackers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\container\change_trackers\null_change_tracker.hxx">
+      <Filter>Header Files\moneta\container\change_trackers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\container\change_trackers\bitset_change_tracker.hxx">
+      <Filter>Header Files\moneta\container\change_trackers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\db_pk_tie.hxx">
+      <Filter>Header Files\moneta\sql\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\db_pk_tuple.hxx">
+      <Filter>Header Files\moneta\sql\traits</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

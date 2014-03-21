@@ -3,14 +3,15 @@
 #include <boost/fusion/include/copy.hpp>
 #include <boost/fusion/include/transform.hpp>
 #include <boost/fusion/include/boost_array.hpp>
-#include "../sql/traits/db_tuple.hxx"
-#include "../sql/traits/to_db_tuple.hxx"
-#include "../sql/traits/to_db_tie.hxx"
+#include "../../sql/traits/db_tuple.hxx"
+#include "../../sql/traits/to_db_tuple.hxx"
+#include "../../sql/traits/to_db_tie.hxx"
 
 namespace moneta { namespace container {
 
 	template <class EntityType>
-	struct hash_state_tracker {
+	struct hash_change_tracker {
+
 		typedef boost::array<
 			size_t,
 			boost::mpl::size<
@@ -18,6 +19,7 @@ namespace moneta { namespace container {
 			>::value
 		> state_type;
 
+	private:
 		struct accumulator {
 			typedef const size_t result_type;
 
@@ -54,7 +56,7 @@ namespace moneta { namespace container {
 		};
 
 		template <class EntityType>
-		typename state_type to_hash_array(const EntityType& entity) {
+		typename state_type hash_entity(const EntityType& entity) {
 			state_type result;
 
 			boost::fusion::copy(
@@ -69,10 +71,23 @@ namespace moneta { namespace container {
 		}
 
 	public:
-		state_type state;
+		state_type change_state;
+	public:
+		hash_change_tracker() {
+			change_state.assign(0);
+		}
+
+		hash_change_tracker(const EntityType& entity) {
+			update(entity);
+		}
 
 		void update(const EntityType& entity) {
-			state_type hash = to_hash_array(entity);
+			change_state = hash_entity(entity);
+		}
+
+		const bool dirty() const {
+	//		flags = 1;
+//			return hash_entity;
 		}
 	};
 

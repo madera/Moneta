@@ -1,5 +1,6 @@
 
-	  ______________________________  ___________________________________________________________________
+                                                                     ChangeTracker                                 LoadTracker
+	  ______________________________  ___________________________________________________________________      available or not
 	 /___REQ___  ________REQ________\/__________________ OR _______________________ OR __________________\
 	||  status || data              ||        copy       ||          hash           ||      bitfield     ||
 	||---------||-------------------||-------------------||-------------------------||-------------------||
@@ -9,21 +10,10 @@
 
 
 
-	template <class EntityType>
-	struct hash_state_tracker {
-		boost::tuple<int32, ...> state;
-		
-		void update(const EntityType& entity) {
-			tuple = to_db_tuple(entity);
-			
-		}
-	};
-
-
-
 	template <
 		class EntityType,
-		class StateTracker // = { copy, hash, bitfield }
+		class LoadTracker = bitset_load_tracker<EntityType>,
+		class ChangeTracker = hash_change_tracker<EntityType> // = { copy, hash, bitfield }
 	>
 	struct entity_container {
 		typedef db_tuple<EntityType>::type tuple_type;

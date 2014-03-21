@@ -1,15 +1,29 @@
 #include "stdafx.h"
-#include <moneta/relational_container.hxx>
-#include "model/Cat.hxx"
+#include <moneta/container/relational_container.hxx>
+#include "../model/Cat.hxx"
 
 BOOST_AUTO_TEST_CASE(entity_container_test) {
-	moneta::relational_container<Cat> cat_container;
+	Cat cat;
+	cat.ID = 1;
+	cat.Name = "Garfield";
+	cat.Address.ID = 1;
+	cat.Address.Number = 123;
+	cat.Address.Street = "Infinite Av.";
 
-	BOOST_CHECK_EQUAL(cat_container.size(), 0);
+	moneta::container::relational_container<Cat> container;
+	BOOST_CHECK_EQUAL(container.size(), 0);
+	BOOST_CHECK_EQUAL(container.bound(cat), false);
 
-	Cat cat = moneta::make_entity<Cat>();
-	cat_container.insert(cat);
-	BOOST_CHECK_EQUAL(cat_container.size(), 1);
+	container.insert(cat);
+	BOOST_CHECK_EQUAL(container.size(), 1);
+	BOOST_CHECK_EQUAL(container.bound(cat), true);
+
+//	container.dirty(cat);
+
+
+	//Cat cat = moneta::make_entity<Cat>();
+	//cat_container.insert(cat);
+	//BOOST_CHECK_EQUAL(cat_container.size(), 1);
 	//BOOST_CHECK(cat_container.is_bound(cat));
 	//BOOST_CHECK(cat_container.is_new(cat));
 

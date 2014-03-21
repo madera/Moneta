@@ -5,6 +5,7 @@
 #include "../../traits/tuple.hxx"
 #include "../../traits/pk.hxx"
 #include "../../traits/extract_pk.hxx"
+#include "../../traits/detail/blanker.hxx"
 #include <boost/utility/enable_if.hpp>
 
 namespace moneta { namespace sql { namespace traits {
@@ -30,6 +31,13 @@ namespace moneta { namespace sql { namespace traits {
 	typename db_tuple<EntityType>::type
 	to_db_tuple(EntityType& x) {
 		return detail::db_tuple_maker<EntityType>()(x);
+	}
+
+	// XXX: Move this somewhere else.
+	template <class EntityType>
+	typename sql::traits::db_tuple<EntityType>::type make_db_tuple() {
+		sql::traits::db_tuple<EntityType>::type result;
+		return boost::fusion::transform(result, moneta::traits::detail::blanker());
 	}
 
 }}}

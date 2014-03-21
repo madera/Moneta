@@ -85,6 +85,12 @@
     <Filter Include="Source Files\moneta\container">
       <UniqueIdentifier>{eaa21cb5-31b0-4189-91bd-67adecd87810}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\moneta\container\change_trackers">
+      <UniqueIdentifier>{6e43e80c-b920-46f1-84e9-d4a052e6dec4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moneta\container\load_trackers">
+      <UniqueIdentifier>{b646d0cd-a93f-483f-b79d-d2dfbf4617ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -248,11 +254,23 @@
     <ClCompile Include="..\..\..\test\moneta\relational_context_test.cxx">
       <Filter>Source Files\moneta</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\relational_container_test.cxx">
-      <Filter>Source Files\moneta</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\container\hash_state_tracker_test.cxx">
+    <ClCompile Include="..\..\..\test\moneta\container\relational_container_test.cxx">
       <Filter>Source Files\moneta\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\container\change_trackers\hash_change_tracker_test.cxx">
+      <Filter>Source Files\moneta\container\change_trackers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\container\load_trackers\bitset_load_tracker_test.cxx">
+      <Filter>Source Files\moneta\container\load_trackers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\container\change_trackers\bitset_change_tracker_test.cxx">
+      <Filter>Source Files\moneta\container\change_trackers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\sql\traits\db_pk_tuple_test.cxx">
+      <Filter>Source Files\moneta\sql\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\sql\traits\db_pk_tie_test.cxx">
+      <Filter>Source Files\moneta\sql\traits</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
