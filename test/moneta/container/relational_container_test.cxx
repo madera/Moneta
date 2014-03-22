@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <moneta/container/relational_container.hxx>
 #include "../model/Cat.hxx"
+#include "../model/Lizard.hxx"
 
 BOOST_AUTO_TEST_CASE(entity_container_test) {
 	Cat cat;
@@ -17,6 +18,9 @@ BOOST_AUTO_TEST_CASE(entity_container_test) {
 	container.insert(cat);
 	BOOST_CHECK_EQUAL(container.size(), 1);
 	BOOST_CHECK_EQUAL(container.bound(cat), true);
+
+	moneta::container::relational_container<Lizard> container2;
+	container2.size();
 
 //	container.dirty(cat);
 
