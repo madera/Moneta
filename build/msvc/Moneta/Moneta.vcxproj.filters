@@ -249,9 +249,6 @@
     <ClInclude Include="..\..\..\include\moneta\pp\specs\struct_spec.hxx">
       <Filter>Header Files\moneta\pp\specs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\end_entity">
-      <Filter>Header Files\moneta</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\pp\detail\includer.hxx">
       <Filter>Header Files\moneta\pp\detail</Filter>
     </ClInclude>
@@ -293,6 +290,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\sql\traits\db_pk_tuple.hxx">
       <Filter>Header Files\moneta\sql\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\sub_tie.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

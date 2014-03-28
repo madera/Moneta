@@ -7,6 +7,21 @@
 #include "../../sql/traits/to_db_tuple.hxx"
 #include "../../sql/traits/to_db_tie.hxx"
 
+// XXX: Move somewhere.
+template <class T, class U, class X, const int Y>
+std::basic_ostream<T, U>& operator<<(std::basic_ostream<T, U>& output, const boost::array<X, Y>& rhs) {
+	typedef typename boost::array<X, Y>::const_iterator const_iterator_type;
+
+	const_iterator_type last = std::begin(rhs) + rhs.size() - 1;
+	const_iterator_type  itr = std::begin(rhs);
+	for ( ; itr != std::end(rhs); ++itr) {
+		output << *itr
+		       << (itr != last? ", " : "");
+	}
+
+	return output;
+}
+
 namespace moneta { namespace container {
 
 	template <class EntityType>
@@ -86,8 +101,7 @@ namespace moneta { namespace container {
 		}
 
 		const bool dirty() const {
-	//		flags = 1;
-//			return hash_entity;
+			return true;
 		}
 	};
 

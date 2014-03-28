@@ -85,7 +85,6 @@
     <ClInclude Include="..\..\..\include\moneta\container\load_trackers\bitset_load_tracker.hxx" />
     <ClInclude Include="..\..\..\include\moneta\container\load_trackers\null_load_tracker.hxx" />
     <ClInclude Include="..\..\..\include\moneta\container\relational_container.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\end_entity" />
     <ClInclude Include="..\..\..\include\moneta\relational_container.hxx" />
     <ClInclude Include="..\..\..\include\moneta\make_entity.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\apply_spec.hxx" />
@@ -133,6 +132,7 @@
     <ClInclude Include="..\..\..\include\moneta\traits\detail\pure_type.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_opfx.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_sg.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\sub_tie.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\empty_pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\extract_pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\is_entity.hxx" />

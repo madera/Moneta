@@ -27,15 +27,17 @@ namespace moneta { namespace container {
 		}
 
 		bitset_load_tracker(const bool all_loaded) {
-			load_state.set();
+			if (all_loaded) {
+				load_state.set();
+			}
 		}
 
-		const bool loaded(const size_t index) const {
-			return load_state[index];
+		const bool loaded(const size_t ordinal) const {
+			return load_state[ordinal];
 		}
 
-		void loaded(const size_t index, const bool value) {
-			load_state[index] = value;
+		void loaded(const size_t ordinal, const bool value) {
+			load_state[ordinal] = value;
 		}
 	};
 

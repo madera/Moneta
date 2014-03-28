@@ -6,7 +6,7 @@
 BOOST_AUTO_TEST_CASE(entity_container_test) {
 	Cat cat;
 	cat.ID = 1;
-	cat.Name = "Garfield";
+	cat.Name = "Somecat";
 	cat.Address.ID = 1;
 	cat.Address.Number = 123;
 	cat.Address.Street = "Infinite Av.";
@@ -15,12 +15,24 @@ BOOST_AUTO_TEST_CASE(entity_container_test) {
 	BOOST_CHECK_EQUAL(container.size(), 0);
 	BOOST_CHECK_EQUAL(container.bound(cat), false);
 
-	container.insert(cat);
-	BOOST_CHECK_EQUAL(container.size(), 1);
-	BOOST_CHECK_EQUAL(container.bound(cat), true);
+	container.insert(cat, true);
 
-	moneta::container::relational_container<Lizard> container2;
-	container2.size();
+	BOOST_CHECK_EQUAL(container.size(), 1);
+	BOOST_CHECK(container.bound(cat));
+	BOOST_CHECK(container.bound(1));
+
+//	BOOST_CHECK(!container.dirty(cat));
+	BOOST_CHECK(container.newcomer(cat));
+
+	Cat garfield;
+	garfield.ID = 2;
+	garfield.Name = "Garfield";
+	garfield.Address.ID = 3;
+	garfield.Address.Number = 555;
+	garfield.Address.Street = "Supreme Av.";
+	container.insert(garfield);
+
+	container.dbg();
 
 //	container.dirty(cat);
 

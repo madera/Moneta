@@ -42,6 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -56,6 +57,8 @@
       <AdditionalIncludeDirectories>$(ProjectDir);$(INCLUDE);../../../externals/console/include;../../../include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
+      <EnablePREfast>false</EnablePREfast>
+      <AdditionalOptions>/Bt+ %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,6 +144,7 @@
     <ClCompile Include="..\..\..\test\moneta\sql\traits\to_db_tie_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\traits\to_db_tuple_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\memptr_hacker_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\traits\detail\sub_tie_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\empty_pk_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\extract_pk_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\is_entity_test.cxx" />

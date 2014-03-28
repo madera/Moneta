@@ -15,7 +15,7 @@ namespace moneta { namespace container {
 		null_load_tracker() {
 		}
 
-		null_load_tracker(const EntityType& ignored) {
+		null_load_tracker(const bool ignored) {
 		}
 
 		const bool loaded(const size_t index) const {

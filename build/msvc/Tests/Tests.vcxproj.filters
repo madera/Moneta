@@ -275,5 +275,8 @@
     <ClCompile Include="..\..\..\test\moneta\sql\traits\db_pk_tie_test.cxx">
       <Filter>Source Files\moneta\sql\traits</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\detail\sub_tie_test.cxx">
+      <Filter>Source Files\moneta\traits\detail</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

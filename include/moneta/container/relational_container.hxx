@@ -16,7 +16,14 @@
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 
+#include <iomanip>
+#include <boost/tuple/tuple_io.hpp>
+#include <boost/fusion/sequence/io.hpp>
+#include <boost/fusion/include/io.hpp>
+#include <boost/format.hpp>
 #include <boost/mpl/print.hpp>
+#include <boost/fusion/sequence/io.hpp>
+#include <boost/fusion/include/io.hpp>
 
 namespace moneta { namespace container {
 
@@ -26,8 +33,8 @@ namespace moneta { namespace container {
 
 	template <
 		class EntityType,
-		class LoadTracker = null_load_tracker<EntityType>, //bitset_load_tracker<EntityType>,
-		class ChangeTracker = null_change_tracker<EntityType> //hash_change_tracker<EntityType>
+		class LoadTracker = /*null_load_tracker<EntityType>,*/ bitset_load_tracker<EntityType>,
+		class ChangeTracker = /*null_change_tracker<EntityType>*/ hash_change_tracker<EntityType>
 	>
 	class relational_container : boost::noncopyable {
 
@@ -52,16 +59,33 @@ namespace moneta { namespace container {
 
 			int flags;
 			db_pk_tuple_type pk;
-			db_tuple_type tuple;
+			db_tuple_type data;
 
-			explicit entry(const EntityType& entity)
-			 : LoadTracker(entity), ChangeTracker(entity),
+			explicit entry(
+				const EntityType& entity,
+				const bool newcomer = false,
+				const bool all_loaded = true
+			)
+			 : LoadTracker(all_loaded),
+			   ChangeTracker(entity),
 			   flags(0),
 			   pk(traits::pk_tie<const EntityType>()(entity)),
-			   tuple(sql::traits::to_db_tuple(entity)) {};
+			   data(sql::traits::to_db_tuple(entity)) {
+				if (newcomer) {
+					flags |= 1;
+				}
+			};
 
 			const bool operator==(const db_pk_tuple_type& rhs) const {
 				return pk == rhs;
+			}
+
+			const bool newcomer() const {
+				return flags & 1;
+			}
+
+			void newcomer(const bool value) const {
+				flags |= value;
 			}
 
 		};
@@ -94,12 +118,7 @@ namespace moneta { namespace container {
 			index::const_iterator begin = _container.get<by_hash>().begin();
 			index::const_iterator   end = _container.get<by_hash>().end();
 			index::const_iterator   itr = std::find(begin, end, entity);
-
-			if (itr == end) {
-				return boost::optional<entry>();
-			}
-
-			return *itr;
+			return (itr == end)? boost::optional<entry>() : *itr;
 		}
 
 	private:
@@ -110,18 +129,9 @@ namespace moneta { namespace container {
 			return _container.get<0>().size();
 		}
 
-		void insert(const EntityType& entity) {
-			_container.get<by_hash>().insert(entry(entity));
+		void insert(const EntityType& entity, const bool newcomer = false) {
+			_container.get<by_hash>().insert(entry(entity, newcomer));
 		}
-
-		//boost::optional<EntityType> retrieve(db_pk_tuple_param_type pk) {
-		//	boost::optional<entry> entry = get_entry(pk);
-		//	if (!entry.is_initialized()) {
-		//		return boost::optional<EntityType>();
-		//	}
-		//
-		//	return moneta::traits::to_entity<EntityType>(entry->tuple);
-		//}
 
 		// --------------------------------------------------------------------------------
 
@@ -147,13 +157,36 @@ namespace moneta { namespace container {
 
 		// --------------------------------------------------------------------------------
 
-		const bool is_new(const EntityType& entity) const {
-			return is_new(traits::pk_tie<const EntityType>()(entity));
+		const bool newcomer(const EntityType& entity) const {
+			return newcomer(traits::pk_tie<const EntityType>()(entity));
 		}
 
-		const bool is_new(db_pk_tuple_param_type pk) const {
+		const bool newcomer(db_pk_tuple_param_type pk) const {
 			boost::optional<entry> entry = get_entry(pk);
-			return (entry.is_initialized())? entry->flags & 1 : false;
+			return (entry.is_initialized())? entry->newcomer() : false;
+		}
+	public:
+		void dbg() {
+			auto& index = _container.get<by_sequence>();
+			auto begin = index.begin();
+			auto end = index.end();
+
+			for (auto itr = begin; itr != end; ++itr) {
+				std::ostringstream oss;
+				oss << boost::fusion::tuple_open("")
+				    << boost::fusion::tuple_close("")
+				    << boost::fusion::tuple_delimiter(", ")
+				    << itr->data;
+
+				std::cerr
+					<< itr->flags << " | "
+					<< itr->pk    << " | "
+					<< std::setw(-30) << oss.str() << " | "
+					//	itr->load_state   //%
+					//<< itr->change_state
+					<< std::endl;
+
+			}
 		}
 	};
 
