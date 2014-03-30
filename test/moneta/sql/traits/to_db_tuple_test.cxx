@@ -14,12 +14,12 @@ BOOST_AUTO_TEST_CASE(to_db_tuple_test) {
 	cat.Address.Street = 1;
 	cat.Address.Street = "Infinite Loop";
 
-	moneta::sql::traits::db_tuple<Cat>::type db_tuple =
+	moneta::sql::traits::rtuple<Cat>::type rtuple =
 		moneta::sql::traits::to_db_tuple<Cat>(cat);
 
-	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(db_tuple), 555);
-	BOOST_CHECK_EQUAL(boost::fusion::at_c<1>(db_tuple), "Garfield");
-	BOOST_CHECK_EQUAL(boost::fusion::at_c<2>(db_tuple), 255);
+	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(rtuple), 555);
+	BOOST_CHECK_EQUAL(boost::fusion::at_c<1>(rtuple), "Garfield");
+	BOOST_CHECK_EQUAL(boost::fusion::at_c<2>(rtuple), 255);
 }
 
 BOOST_AUTO_TEST_CASE(to_db_tuple_2_test) {
@@ -33,13 +33,13 @@ BOOST_AUTO_TEST_CASE(to_db_tuple_2_test) {
 	composite.Dog.ID = 555;
 	composite.Dog.Name = "Doggy";
 
-	moneta::sql::traits::db_tuple<Composite>::type db_tuple =
+	moneta::sql::traits::rtuple<Composite>::type rtuple =
 		moneta::sql::traits::to_db_tuple<Composite>(composite);
 
-	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(db_tuple), 2600);
-	BOOST_CHECK_EQUAL(boost::fusion::at_c<1>(db_tuple), 123);
+	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(rtuple), 2600);
+	BOOST_CHECK_EQUAL(boost::fusion::at_c<1>(rtuple), 123);
 
-	const moneta::traits::pk<Dog>::type dog_pk = boost::fusion::at_c<2>(db_tuple);
+	const moneta::traits::pk<Dog>::type dog_pk = boost::fusion::at_c<2>(rtuple);
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(dog_pk), "Someowner");
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<1>(dog_pk), 555);
 }
@@ -54,13 +54,13 @@ BOOST_AUTO_TEST_CASE(const_to_db_tuple_test) {
 
 	const Cat& ccat = cat;
 
-	moneta::sql::traits::db_tuple<const Cat>::type db_tuple =
+	moneta::sql::traits::rtuple<const Cat>::type rtuple =
 		moneta::sql::traits::to_db_tuple<const Cat>(ccat);
 
-	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(db_tuple), 555);
-	BOOST_CHECK_EQUAL(boost::fusion::at_c<1>(db_tuple), "Garfield");
-	BOOST_CHECK_EQUAL(boost::fusion::at_c<2>(db_tuple), 255);
+	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(rtuple), 555);
+	BOOST_CHECK_EQUAL(boost::fusion::at_c<1>(rtuple), "Garfield");
+	BOOST_CHECK_EQUAL(boost::fusion::at_c<2>(rtuple), 255);
 
-	moneta::sql::traits::db_tuple<Cat>::type non_const_tuple = 
+	moneta::sql::traits::rtuple<Cat>::type non_const_tuple = 
 		moneta::sql::traits::to_db_tuple<const Cat>(ccat);
 }

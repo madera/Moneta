@@ -171,9 +171,6 @@
     <ClInclude Include="..\..\..\include\moneta\serialization\detail\from_text_impl.hxx">
       <Filter>Header Files\moneta\serialization\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\sql\traits\db_tuple.hxx">
-      <Filter>Header Files\moneta\sql\traits</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_opfx.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
@@ -293,6 +290,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sub_tie.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\rtuple.hxx">
+      <Filter>Header Files\moneta\sql\traits</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

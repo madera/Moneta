@@ -6,7 +6,7 @@
 #include "../make_entity.hxx"
 #include "../traits/to_entity.hxx"
 #include "../sql/traits/db_pk_tuple.hxx"
-#include "../sql/traits/db_tuple.hxx"
+#include "../sql/traits/rtuple.hxx"
 #include "../sql/traits/to_db_tuple.hxx"
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
@@ -49,7 +49,7 @@ namespace moneta { namespace container {
 			db_pk_tuple_type
 		>::param_type db_pk_tuple_param_type;
 
-		typedef typename sql::traits::db_tuple<
+		typedef typename sql::traits::rtuple<
 			typename boost::remove_const<EntityType>::type
 		>::type db_tuple_type;
 

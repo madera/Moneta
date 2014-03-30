@@ -3,7 +3,7 @@
 #include <boost/fusion/include/copy.hpp>
 #include <boost/fusion/include/transform.hpp>
 #include <boost/fusion/include/boost_array.hpp>
-#include "../../sql/traits/db_tuple.hxx"
+#include "../../sql/traits/rtuple.hxx"
 #include "../../sql/traits/to_db_tuple.hxx"
 #include "../../sql/traits/to_db_tie.hxx"
 
@@ -30,7 +30,7 @@ namespace moneta { namespace container {
 		typedef boost::array<
 			size_t,
 			boost::mpl::size<
-				typename sql::traits::db_tuple<EntityType>::type
+				typename sql::traits::rtuple<EntityType>::type
 			>::value
 		> state_type;
 
@@ -93,7 +93,7 @@ namespace moneta { namespace container {
 		}
 	public:
 		state_type change_state;
-		typedef typename sql::traits::db_tuple<EntityType>::type tuple_type;
+		typedef typename sql::traits::rtuple<EntityType>::type tuple_type;
 	public:
 		hash_change_tracker() {
 			change_state.assign(0);

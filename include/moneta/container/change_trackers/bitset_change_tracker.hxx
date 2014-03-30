@@ -4,7 +4,7 @@
 #include <boost/fusion/include/copy.hpp>
 #include <boost/fusion/include/transform.hpp>
 #include <boost/fusion/include/boost_array.hpp>
-#include "../../sql/traits/db_tuple.hxx"
+#include "../../sql/traits/rtuple.hxx"
 #include "../../sql/traits/to_db_tuple.hxx"
 #include "../../sql/traits/to_db_tie.hxx"
 #include <bitset>
@@ -15,7 +15,7 @@ namespace moneta { namespace container {
 	struct bitset_change_tracker {
 		typedef typename std::bitset<
 			boost::mpl::size<
-				typename moneta::sql::traits::db_tuple<EntityType>::type
+				typename moneta::sql::traits::rtuple<EntityType>::type
 			>::value
 		> state_type;
 

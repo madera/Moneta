@@ -2,7 +2,7 @@
 #include "soci_includes.hxx"
 #include "../../../make_entity.hxx"
 #include "../../../traits/is_entity.hxx"
-#include "../../../sql/traits/db_tuple.hxx"
+#include "../../../sql/traits/rtuple.hxx"
 #include <boost/fusion/view/zip_view.hpp>
 #include <boost/fusion/tuple.hpp>
 
@@ -48,15 +48,15 @@ namespace moneta { namespace serialization { namespace soci { namespace detail {
 	template <class EntityType>
 	EntityType soci_xlate_read(
 		::soci::session& session,
-		typename moneta::sql::traits::db_tuple<EntityType>::type& db_tuple
+		typename moneta::sql::traits::rtuple<EntityType>::type& rtuple
 	) {
 		typedef boost::fusion::vector<
 			traits::tuple<EntityType>::type&,
-			sql::traits::db_tuple<EntityType>::type&
+			sql::traits::rtuple<EntityType>::type&
 		> zip_vector_type;
 
 		typename traits::tuple<EntityType>::type tuple = make_tuple<EntityType>();
-		boost::fusion::zip_view<zip_vector_type> zip(zip_vector_type(tuple, db_tuple));
+		boost::fusion::zip_view<zip_vector_type> zip(zip_vector_type(tuple, rtuple));
 		boost::fusion::for_each(zip, fufu(session));
 	
 		EntityType result;

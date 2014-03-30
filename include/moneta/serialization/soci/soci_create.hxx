@@ -3,7 +3,7 @@
 #include "../../make_entity.hxx"
 #include "../../traits/is_entity.hxx"
 #include "../../traits/extract_pk.hxx"
-#include "../../sql/traits/db_tuple.hxx"
+#include "../../sql/traits/rtuple.hxx"
 #include "../../sql/generators/insert.hxx"
 #include <boost/fusion/view/zip_view.hpp>
 #include <boost/fusion/tuple.hpp>
@@ -110,17 +110,17 @@ namespace moneta { namespace serialization { namespace soci {
 		//}
 
 		traits::tie<EntityType>::type entity_tuple = moneta::traits::to_tie<EntityType>(entity);
-		sql::traits::db_tuple<EntityType>::type db_tuple;
+		sql::traits::rtuple<EntityType>::type rtuple;
 
 		typedef boost::fusion::vector<
 			traits::tie<EntityType>::type&,
-			sql::traits::db_tuple<EntityType>::type&
+			sql::traits::rtuple<EntityType>::type&
 		> zip_vector_type;
 
-		boost::fusion::zip_view<zip_vector_type> zip(zip_vector_type(entity_tuple, db_tuple));
+		boost::fusion::zip_view<zip_vector_type> zip(zip_vector_type(entity_tuple, rtuple));
 		boost::fusion::for_each(zip, huhu(session));
 
-		session << sql::generators::insert_into_table<EntityType>(), ::soci::use(db_tuple);
+		session << sql::generators::insert_into_table<EntityType>(), ::soci::use(rtuple);
 
 		return traits::extract_pk(entity);
 	}
