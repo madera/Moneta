@@ -180,14 +180,8 @@
     <ClInclude Include="..\..\..\include\moneta\traits\tie.hxx">
       <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\sql\traits\to_db_tie.hxx">
-      <Filter>Header Files\moneta\sql\traits</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\pk_tie.hxx">
       <Filter>Header Files\moneta\traits</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\sql\traits\to_db_tuple.hxx">
-      <Filter>Header Files\moneta\sql\traits</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\detail\pure_type.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
@@ -292,6 +286,12 @@
       <Filter>Header Files\moneta\sql\traits</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\sql\traits\rtie.hxx">
+      <Filter>Header Files\moneta\sql\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\to_rtuple.hxx">
+      <Filter>Header Files\moneta\sql\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\to_rtie.hxx">
       <Filter>Header Files\moneta\sql\traits</Filter>
     </ClInclude>
   </ItemGroup>

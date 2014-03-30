@@ -7,7 +7,7 @@
 #include "../traits/to_entity.hxx"
 #include "../sql/traits/db_pk_tuple.hxx"
 #include "../sql/traits/rtuple.hxx"
-#include "../sql/traits/to_db_tuple.hxx"
+#include "../sql/traits/to_rtuple.hxx"
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index/ordered_index.hpp>
@@ -51,7 +51,7 @@ namespace moneta { namespace container {
 
 		typedef typename sql::traits::rtuple<
 			typename boost::remove_const<EntityType>::type
-		>::type db_tuple_type;
+		>::type rtuple_type;
 
 
 
@@ -59,7 +59,7 @@ namespace moneta { namespace container {
 
 			int flags;
 			db_pk_tuple_type pk;
-			db_tuple_type data;
+			rtuple_type data;
 
 			explicit entry(
 				const EntityType& entity,
@@ -67,10 +67,10 @@ namespace moneta { namespace container {
 				const bool all_loaded = true
 			)
 			 : LoadTracker(all_loaded),
-			   ChangeTracker(sql::traits::to_db_tuple(entity)),
+			   ChangeTracker(sql::traits::to_rtuple(entity)),
 			   flags(0),
 			   pk(traits::pk_tie<const EntityType>()(entity)),
-			   data(sql::traits::to_db_tuple(entity)) {
+			   data(sql::traits::to_rtuple(entity)) {
 				if (newcomer) {
 					flags |= 1;
 				}

@@ -12,7 +12,7 @@ namespace moneta { namespace sql { namespace traits {
 	namespace detail {
 
 		template <class EntityType>
-		struct db_tie_maker {
+		struct rtie_maker {
 			typename rtie<EntityType>::type
 			operator()(EntityType& entity) {
 				return moneta::traits::detail::sepacon_opfx<
@@ -28,8 +28,8 @@ namespace moneta { namespace sql { namespace traits {
 
 	template <class EntityType>
 	typename rtie<EntityType>::type
-	to_db_tie(EntityType& x) {
-		return detail::db_tie_maker<EntityType>()(x);
+	to_rtie(EntityType& x) {
+		return detail::rtie_maker<EntityType>()(x);
 	}
 
 }}}

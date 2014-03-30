@@ -70,7 +70,7 @@ static void static_test() {
 	));
 }
 
-BOOST_AUTO_TEST_CASE(db_tie_test) {
+BOOST_AUTO_TEST_CASE(rtie_test) {
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
 			moneta::sql::traits::rtie<Person>::type,

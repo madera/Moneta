@@ -4,8 +4,8 @@
 #include <boost/fusion/include/transform.hpp>
 #include <boost/fusion/include/boost_array.hpp>
 #include "../../sql/traits/rtuple.hxx"
-#include "../../sql/traits/to_db_tuple.hxx"
-#include "../../sql/traits/to_db_tie.hxx"
+#include "../../sql/traits/to_rtuple.hxx"
+#include "../../sql/traits/to_rtie.hxx"
 
 // XXX: Move somewhere. The trash, maybe?
 template <class T, class U, class X, const int Y>
@@ -76,7 +76,7 @@ namespace moneta { namespace container {
 
 		//	boost::fusion::copy(
 		//		boost::fusion::transform(
-		//			sql::traits::to_db_tie(entity),
+		//			sql::traits::to_rtie(entity),
 		//			std_hasher()
 		//		),
 		//		result

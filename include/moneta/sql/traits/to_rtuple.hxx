@@ -13,7 +13,7 @@ namespace moneta { namespace sql { namespace traits {
 	namespace detail {
 
 		template <class EntityType>
-		struct db_tuple_maker {
+		struct rtuple_maker {
 			typename rtuple<EntityType>::type
 			operator()(EntityType& entity) {
 				return moneta::traits::detail::sepacon_opfx<
@@ -29,13 +29,13 @@ namespace moneta { namespace sql { namespace traits {
 
 	template <class EntityType>
 	typename rtuple<EntityType>::type
-	to_db_tuple(EntityType& x) {
-		return detail::db_tuple_maker<EntityType>()(x);
+	to_rtuple(EntityType& x) {
+		return detail::rtuple_maker<EntityType>()(x);
 	}
 
 	// XXX: Move this somewhere else.
 	template <class EntityType>
-	typename sql::traits::rtuple<EntityType>::type make_db_tuple() {
+	typename sql::traits::rtuple<EntityType>::type make_rtuple() {
 		sql::traits::rtuple<EntityType>::type result;
 		return boost::fusion::transform(result, moneta::traits::detail::blanker());
 	}

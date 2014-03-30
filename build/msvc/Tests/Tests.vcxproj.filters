@@ -212,23 +212,11 @@
     <ClCompile Include="..\..\..\test\moneta\serialization\iostream_test.cxx">
       <Filter>Source Files\moneta\serializers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\sql\traits\db_tuple_test.cxx">
-      <Filter>Source Files\moneta\sql\traits</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\tie_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\sql\traits\db_tie_test.cxx">
-      <Filter>Source Files\moneta\sql\traits</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\sql\traits\to_db_tie_test.cxx">
-      <Filter>Source Files\moneta\sql\traits</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\pk_tie_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\sql\traits\to_db_tuple_test.cxx">
-      <Filter>Source Files\moneta\sql\traits</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_count_test.cxx">
       <Filter>Source Files\moneta\serializers\soci</Filter>
@@ -277,6 +265,18 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\detail\sub_tie_test.cxx">
       <Filter>Source Files\moneta\traits\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\sql\traits\to_rtuple_test.cxx">
+      <Filter>Source Files\moneta\sql\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\sql\traits\to_rtie_test.cxx">
+      <Filter>Source Files\moneta\sql\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\sql\traits\rtie_test.cxx">
+      <Filter>Source Files\moneta\sql\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\sql\traits\rtuple_test.cxx">
+      <Filter>Source Files\moneta\sql\traits</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

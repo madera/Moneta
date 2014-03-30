@@ -122,8 +122,8 @@
     <ClInclude Include="..\..\..\include\moneta\sql\traits\rtuple.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\traits\field_names.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\traits\table_name.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\sql\traits\to_db_tie.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\sql\traits\to_db_tuple.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\to_rtie.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\to_rtuple.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\blanker.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\is_fusion_vector.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\member_trait_base.hxx" />
