@@ -10,6 +10,6 @@ BOOST_AUTO_TEST_CASE(hash_state_tracker_test) {
 	cat.Address.Number = 123;
 	cat.Address.Street = "Infinite Av.";
 
-	moneta::container::hash_change_tracker<Cat> tracker;
-	tracker.update(cat);
+//	moneta::container::hash_change_tracker<Cat> tracker;
+//	tracker.update(cat);
 }

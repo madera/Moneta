@@ -7,9 +7,7 @@ BOOST_AUTO_TEST_CASE(entity_container_test) {
 	Cat cat;
 	cat.ID = 1;
 	cat.Name = "Somecat";
-	cat.Address.ID = 1;
-	cat.Address.Number = 123;
-	cat.Address.Street = "Infinite Av.";
+	cat.Address.ID = 10;
 
 	moneta::container::relational_container<Cat> container;
 	BOOST_CHECK_EQUAL(container.size(), 0);
@@ -21,61 +19,29 @@ BOOST_AUTO_TEST_CASE(entity_container_test) {
 	BOOST_CHECK(container.bound(cat));
 	BOOST_CHECK(container.bound(1));
 
-//	BOOST_CHECK(!container.dirty(cat));
+	BOOST_CHECK(!container.dirty(cat));
 	BOOST_CHECK(container.newcomer(cat));
 
-	Cat garfield;
-	garfield.ID = 2;
-	garfield.Name = "Garfield";
-	garfield.Address.ID = 3;
-	garfield.Address.Number = 555;
-	garfield.Address.Street = "Supreme Av.";
-	container.insert(garfield);
+	{ Cat cat; cat.ID = 2; cat.Name = "Garfield"; cat.Address.ID = 15; container.insert(cat, true); }
+	{ Cat cat; cat.ID = 3; cat.Name = "Felix";    cat.Address.ID = 30; container.insert(cat, true); }
+	{ Cat cat; cat.ID = 4; cat.Name = "Bob";      cat.Address.ID = 10; container.insert(cat, true); }
+
+	BOOST_CHECK_EQUAL(container.size(), 4);
+	BOOST_CHECK(container.bound(2));
+	BOOST_CHECK(container.bound(3));
+	BOOST_CHECK(container.bound(4));
+	BOOST_CHECK(container.newcomer(2));
+	BOOST_CHECK(container.newcomer(3));
+	BOOST_CHECK(container.newcomer(4));
+	BOOST_CHECK(!container.dirty(2));
+	BOOST_CHECK(!container.dirty(3));
+	BOOST_CHECK(!container.dirty(4));
 
 	container.dbg();
 
-//	container.dirty(cat);
+	container.remove(1);
+	BOOST_CHECK(container.removed(1));
 
-
-	//Cat cat = moneta::make_entity<Cat>();
-	//cat_container.insert(cat);
-	//BOOST_CHECK_EQUAL(cat_container.size(), 1);
-	//BOOST_CHECK(cat_container.is_bound(cat));
-	//BOOST_CHECK(cat_container.is_new(cat));
-
-
-	//std::vector<moneta::sql::traits::db_tuple<Cat>::type> v;
-	//v.push_back(moneta::sql::traits::db_tuple<Cat>::type(1, "Text", 3));
-
-
-
-	//john.Name = "John";
-	//container.insert(john);
-	//assert(container.size() == 1);
-
-	//container.erase(john);
-	//assert(container.size() == 0);
-	//assert(!container.is_bound(john));
-
-	//container.insert(john);
-	//assert(container.size() == 1);
-	//assert(container.is_bound(john));
-	//assert(container.is_new(john));
-	//assert(!container.is_persisted(john));
-	//assert(!container.is_deleted(john));
-
-	//container.set_deleted(john);
-	//assert(container.size() == 1);
-	//assert(!container.is_new(john));
-	//assert(container.is_deleted(john));
-
-	//std::cerr << "New entities:" << std::endl;
-	//container.for_each_new([](const Person& entity) {
-	//	std::cerr << entity << std::endl;
-	//});
-
-	//std::cerr << "Deleted entities:" << std::endl;
-	//container.for_each_deleted([](const Person& entity) {
-	//	std::cerr << entity << std::endl;
-	//});
+	//container.persist(1);
+	//BOOST_CHECK(container.persisted(1));
 }

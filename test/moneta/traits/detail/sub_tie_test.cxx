@@ -14,3 +14,5 @@ static void static_test() {
 	moneta::traits::detail::sub_tie<tuple_type, boost::mpl::vector_c<int, 0, 1   > > pk2(tuple);
 	moneta::traits::detail::sub_tie<tuple_type, boost::mpl::vector_c<int, 0, 1, 2> > pk3(tuple);
 }
+
+// TODO: Add tests. This is far from finished.

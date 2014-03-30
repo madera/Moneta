@@ -67,7 +67,7 @@ namespace moneta { namespace container {
 				const bool all_loaded = true
 			)
 			 : LoadTracker(all_loaded),
-			   ChangeTracker(entity),
+			   ChangeTracker(sql::traits::to_db_tuple(entity)),
 			   flags(0),
 			   pk(traits::pk_tie<const EntityType>()(entity)),
 			   data(sql::traits::to_db_tuple(entity)) {
@@ -80,14 +80,25 @@ namespace moneta { namespace container {
 				return pk == rhs;
 			}
 
+			// -------------------------------------------------
+
 			const bool newcomer() const {
 				return flags & 1;
 			}
 
-			void newcomer(const bool value) const {
+			void newcomer(const bool value) {
 				flags |= value;
 			}
 
+			// -------------------------------------------------
+
+			const bool removed() const {
+				return flags & 2;
+			}
+
+			void remove(const bool value = true) {
+				flags |= (value << 2);
+			}
 		};
 
 	private:
@@ -152,7 +163,7 @@ namespace moneta { namespace container {
 
 		const bool dirty(db_pk_tuple_param_type pk) const {
 			boost::optional<entry> entry = get_entry(pk);
-			return (entry.is_initialized())? entry->dirty() : false;
+			return (entry.is_initialized())? entry->dirty(entry->data) : false;
 		}
 
 		// --------------------------------------------------------------------------------
@@ -165,12 +176,39 @@ namespace moneta { namespace container {
 			boost::optional<entry> entry = get_entry(pk);
 			return (entry.is_initialized())? entry->newcomer() : false;
 		}
+
+		// --------------------------------------------------------------------------------
+
+		const bool removed(const EntityType& entity) const {
+			return removed(traits::pk_tie<const EntityType>()(entity));
+		}
+
+		const bool removed(db_pk_tuple_param_type pk) const {
+			boost::optional<entry> entry = get_entry(pk);
+			return (entry.is_initialized())? entry->removed() : false;
+		}
+
+		// --------------------------------------------------------------------------------
+		
+		const void remove(const EntityType& entity) const {
+			return remove(traits::pk_tie<const EntityType>()(entity));
+		}
+
+		const void remove(db_pk_tuple_param_type pk) const {
+			boost::optional<entry> entry = get_entry(pk);
+			return (entry.is_initialized())? entry->remove() : false;
+		}
+
+		// --------------------------------------------------------------------------------
+
 	public:
 		void dbg() {
 			auto& index = _container.get<by_sequence>();
 			auto begin = index.begin();
 			auto end = index.end();
 
+			// Calc max size of this display column.
+			size_t max_size = 0;
 			for (auto itr = begin; itr != end; ++itr) {
 				std::ostringstream oss;
 				oss << boost::fusion::tuple_open("")
@@ -178,14 +216,39 @@ namespace moneta { namespace container {
 				    << boost::fusion::tuple_delimiter(", ")
 				    << itr->data;
 
+				const size_t size = oss.str().size();
+				if (size > max_size) {
+					max_size = size;
+				}
+			}
+
+			for (auto itr = begin; itr != end; ++itr) {
+				std::ostringstream data_oss;
+				data_oss << boost::fusion::tuple_open("")
+					 << boost::fusion::tuple_close("")
+					 << boost::fusion::tuple_delimiter(", ")
+					 << itr->data;
+
 				std::cerr
 					<< itr->flags << " | "
-					<< itr->pk    << " | "
-					<< std::setw(-30) << oss.str() << " | "
-					//	itr->load_state   //%
-					//<< itr->change_state
-					<< std::endl;
 
+					<< itr->pk    << " | "
+
+					<< std::dec
+					<< std::setw(max_size)
+					<< std::setfill('\0')
+					<< std::left
+					<< data_oss.str() << " | "
+					
+					<< itr->load_state << " | "
+
+					<< std::hex
+					<< std::setw(8)
+					<< std::setfill('0')
+					<< std::right
+					<< itr->change_state
+
+					<< std::endl;
 			}
 		}
 	};
