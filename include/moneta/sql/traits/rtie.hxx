@@ -4,7 +4,7 @@
 namespace moneta { namespace sql { namespace traits {
 
 	template <class EntityType>
-	struct db_tie : boost::fusion::result_of::as_vector<
+	struct rtie : boost::fusion::result_of::as_vector<
 		typename boost::mpl::transform<
 			typename moneta::traits::detail::mpl::vector<EntityType>::type,
 			moneta::traits::pk_tie<boost::mpl::_1>
