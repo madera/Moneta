@@ -116,8 +116,8 @@
     <ClInclude Include="..\..\..\include\moneta\sql\generators\detail\generate_params.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\generators\insert.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\generators\select.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\sql\traits\db_pk_tie.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\sql\traits\db_pk_tuple.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\pk_rtie.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\pk_rtuple.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\traits\rtie.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\traits\rtuple.hxx" />
     <ClInclude Include="..\..\..\include\moneta\sql\traits\field_names.hxx" />

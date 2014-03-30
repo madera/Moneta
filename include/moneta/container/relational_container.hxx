@@ -5,7 +5,7 @@
 #include "load_trackers/null_load_tracker.hxx"
 #include "../make_entity.hxx"
 #include "../traits/to_entity.hxx"
-#include "../sql/traits/db_pk_tuple.hxx"
+#include "../sql/traits/pk_rtuple.hxx"
 #include "../sql/traits/rtuple.hxx"
 #include "../sql/traits/to_rtuple.hxx"
 #include <boost/multi_index_container.hpp>
@@ -41,13 +41,13 @@ namespace moneta { namespace container {
 		// We don't support entities with no PKs (yet).
 		BOOST_MPL_ASSERT((moneta::traits::has_pk<EntityType>));
 
-		typedef typename sql::traits::db_pk_tuple<
+		typedef typename sql::traits::pk_rtuple<
 			EntityType
-		>::type db_pk_tuple_type;
+		>::type pk_rtuple_type;
 		
 		typedef typename boost::call_traits<
-			db_pk_tuple_type
-		>::param_type db_pk_tuple_param_type;
+			pk_rtuple_type
+		>::param_type pk_rtuple_param_type;
 
 		typedef typename sql::traits::rtuple<
 			typename boost::remove_const<EntityType>::type
@@ -58,7 +58,7 @@ namespace moneta { namespace container {
 		struct entry : LoadTracker, ChangeTracker {
 
 			int flags;
-			db_pk_tuple_type pk;
+			pk_rtuple_type pk;
 			rtuple_type data;
 
 			explicit entry(
@@ -76,7 +76,7 @@ namespace moneta { namespace container {
 				}
 			};
 
-			const bool operator==(const db_pk_tuple_type& rhs) const {
+			const bool operator==(const pk_rtuple_type& rhs) const {
 				return pk == rhs;
 			}
 
@@ -114,7 +114,7 @@ namespace moneta { namespace container {
 				>,
 				mi::hashed_unique<
 					mi::tag<by_hash>,
-					mi::member<entry, db_pk_tuple_type, &entry::pk>
+					mi::member<entry, pk_rtuple_type, &entry::pk>
 				>,
 				mi::ordered_non_unique<
 					mi::tag<by_flags>,
@@ -124,7 +124,7 @@ namespace moneta { namespace container {
 		> container_type;
 
 	private:
-		boost::optional<entry> get_entry(db_pk_tuple_param_type entity) const {
+		boost::optional<entry> get_entry(pk_rtuple_param_type entity) const {
 			typedef typename container_type::template index<by_hash>::type index;
 			index::const_iterator begin = _container.get<by_hash>().begin();
 			index::const_iterator   end = _container.get<by_hash>().end();
@@ -150,7 +150,7 @@ namespace moneta { namespace container {
 			return bound(traits::pk_tie<const EntityType>()(entity));
 		}
 
-		const bool bound(db_pk_tuple_param_type pk) const {
+		const bool bound(pk_rtuple_param_type pk) const {
 			boost::optional<entry> entry = get_entry(pk);
 			return entry.is_initialized();
 		}
@@ -161,7 +161,7 @@ namespace moneta { namespace container {
 			return dirty(traits::pk_tie<const EntityType>()(entity));
 		}
 
-		const bool dirty(db_pk_tuple_param_type pk) const {
+		const bool dirty(pk_rtuple_param_type pk) const {
 			boost::optional<entry> entry = get_entry(pk);
 			return (entry.is_initialized())? entry->dirty(entry->data) : false;
 		}
@@ -172,7 +172,7 @@ namespace moneta { namespace container {
 			return newcomer(traits::pk_tie<const EntityType>()(entity));
 		}
 
-		const bool newcomer(db_pk_tuple_param_type pk) const {
+		const bool newcomer(pk_rtuple_param_type pk) const {
 			boost::optional<entry> entry = get_entry(pk);
 			return (entry.is_initialized())? entry->newcomer() : false;
 		}
@@ -183,7 +183,7 @@ namespace moneta { namespace container {
 			return removed(traits::pk_tie<const EntityType>()(entity));
 		}
 
-		const bool removed(db_pk_tuple_param_type pk) const {
+		const bool removed(pk_rtuple_param_type pk) const {
 			boost::optional<entry> entry = get_entry(pk);
 			return (entry.is_initialized())? entry->removed() : false;
 		}
@@ -194,7 +194,7 @@ namespace moneta { namespace container {
 			return remove(traits::pk_tie<const EntityType>()(entity));
 		}
 
-		const void remove(db_pk_tuple_param_type pk) const {
+		const void remove(pk_rtuple_param_type pk) const {
 			boost::optional<entry> entry = get_entry(pk);
 			return (entry.is_initialized())? entry->remove() : false;
 		}

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <moneta/sql/traits/db_pk_tuple.hxx>
+#include <moneta/sql/traits/pk_rtuple.hxx>
 #include <boost/mpl/equal.hpp>
 #include "../../model/Cat.hxx"
 #include "../../model/Dog.hxx"
@@ -8,21 +8,21 @@
 static void static_test() {
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
-			moneta::sql::traits::db_pk_tuple<Cat>::type,
+			moneta::sql::traits::pk_rtuple<Cat>::type,
 			int
 		>
 	));
 
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
-			moneta::sql::traits::db_pk_tuple<Dog>::type,
+			moneta::sql::traits::pk_rtuple<Dog>::type,
 			boost::fusion::vector<std::string, int>
 		>
 	));
 
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
-			moneta::sql::traits::db_pk_tuple<Lizard>::type,
+			moneta::sql::traits::pk_rtuple<Lizard>::type,
 			boost::fusion::vector<int, int>
 		>
 	));

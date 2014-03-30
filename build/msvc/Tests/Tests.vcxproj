@@ -134,8 +134,8 @@
     <ClCompile Include="..\..\..\test\moneta\sql\generators\delete_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\generators\insert_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\generators\select_test.cxx" />
-    <ClCompile Include="..\..\..\test\moneta\sql\traits\db_pk_tie_test.cxx" />
-    <ClCompile Include="..\..\..\test\moneta\sql\traits\db_pk_tuple_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\sql\traits\pk_rtie_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\sql\traits\pk_rtuple_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\traits\rtie_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\traits\rtuple_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\traits\field_names_test.cxx" />

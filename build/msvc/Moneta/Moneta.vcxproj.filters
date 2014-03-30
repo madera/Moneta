@@ -273,12 +273,6 @@
     <ClInclude Include="..\..\..\include\moneta\container\change_trackers\bitset_change_tracker.hxx">
       <Filter>Header Files\moneta\container\change_trackers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\sql\traits\db_pk_tie.hxx">
-      <Filter>Header Files\moneta\sql\traits</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\sql\traits\db_pk_tuple.hxx">
-      <Filter>Header Files\moneta\sql\traits</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sub_tie.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
@@ -292,6 +286,12 @@
       <Filter>Header Files\moneta\sql\traits</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\sql\traits\to_rtie.hxx">
+      <Filter>Header Files\moneta\sql\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\pk_rtie.hxx">
+      <Filter>Header Files\moneta\sql\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\sql\traits\pk_rtuple.hxx">
       <Filter>Header Files\moneta\sql\traits</Filter>
     </ClInclude>
   </ItemGroup>
