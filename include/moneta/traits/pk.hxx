@@ -2,6 +2,7 @@
 #include "members.hxx"
 #include "tuple.hxx" // for detail::get_result_type // TODO: Make this better.
 #include "is_entity.hxx"
+#include "detail/deref_if_unary.hxx"
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/not.hpp>
@@ -73,20 +74,8 @@ namespace moneta { namespace traits {
 			> {};
 		}
 
-		// XXX: Move.
-		// Type: vector1<T> --> T, else: Sequence.
-		template <class Sequence>
-		struct deref_if_unary : boost::mpl::if_<
-			boost::mpl::equal_to<
-				typename boost::mpl::size<Sequence>::type,
-				boost::mpl::int_<1>
-			>,
-			typename boost::mpl::at_c<Sequence, 0>::type,
-			Sequence
-		> {};
-
 		template <class EntityType>
-		struct entity_pk : deref_if_unary<
+		struct entity_pk : detail::deref_if_unary<
 			typename detail::fusion::pk<EntityType>::type
 		> {};
 	}

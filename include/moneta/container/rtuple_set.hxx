@@ -5,6 +5,7 @@
 #include "load_trackers/null_load_tracker.hxx"
 #include "../make_entity.hxx"
 #include "../traits/to_entity.hxx"
+#include "../traits/detail/sub_tie.hxx"
 #include "../sql/traits/pk_rtuple.hxx"
 #include "../sql/traits/rtuple.hxx"
 #include "../sql/traits/to_rtuple.hxx"
@@ -15,6 +16,7 @@
 #include <boost/multi_index/member.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
+#include <boost/mpl/vector_c.hpp>
 
 #include <iomanip>
 #include <boost/tuple/tuple_io.hpp>
@@ -25,21 +27,62 @@
 #include <boost/fusion/sequence/io.hpp>
 #include <boost/fusion/include/io.hpp>
 
+
+// XXX: Move!
+template <class EntityType>
+struct rtuple_pk_extractor {
+	BOOST_MPL_ASSERT((moneta::traits::is_entity<EntityType>));
+
+	// XXX: Temporary... just for now.
+	BOOST_MPL_ASSERT_NOT((boost::is_const<EntityType>));
+
+	typedef typename moneta::sql::traits::rtuple<EntityType>::type rtuple_type;	
+	typedef boost::mpl::vector_c<int, 0> pk_indeces;
+	typedef moneta::traits::detail::sub_tie<rtuple_type, pk_indeces> rtuple_pk_type;
+	typedef moneta::traits::detail::deref_if_unary<rtuple_pk_type> pk_derefer_type;
+	typedef typename pk_derefer_type::type type;
+
+	type operator()(rtuple_type& rtuple) const {
+		return pk_derefer_type()(rtuple_pk_type(rtuple));
+	}
+
+	type operator()(const rtuple_type& rtuple) const {
+		auto x = rtuple_pk_type(rtuple);
+		return pk_derefer_type()(x);
+	}
+};
+template <class EntityType>
+typename rtuple_pk_extractor<EntityType>::type
+extract_rtuple_pk(const typename rtuple_pk_extractor<EntityType>::rtuple_type& rtuple) {
+	return rtuple_pk_extractor<EntityType>()(rtuple);
+}
+// !evoM :XXX
+
+
+
 namespace moneta { namespace container {
 
 	namespace mi = boost::multi_index;
-
-
 
 	template <
 		class EntityType,
 		class LoadTracker = /*null_load_tracker<EntityType>,*/ bitset_load_tracker<EntityType>,
 		class ChangeTracker = /*null_change_tracker<EntityType>*/ hash_change_tracker<EntityType>
 	>
-	class relational_container : boost::noncopyable {
+	class rtuple_set { // : boost::noncopyable {
 
 		// We don't support entities with no PKs (yet).
 		BOOST_MPL_ASSERT((moneta::traits::has_pk<EntityType>));
+
+		// XXX: Temporary... just for now.
+		BOOST_MPL_ASSERT_NOT((boost::is_const<EntityType>));
+
+		// TODO: Make this intelligent.
+		enum {
+			NEWCOMER_FLAG = 128,
+			DIRTY_FLAG    = 64,
+			REMOVED_FLAG  = 32
+		};
 
 		typedef typename sql::traits::pk_rtuple<
 			EntityType
@@ -50,10 +93,8 @@ namespace moneta { namespace container {
 		>::param_type pk_rtuple_param_type;
 
 		typedef typename sql::traits::rtuple<
-			typename boost::remove_const<EntityType>::type
+			EntityType
 		>::type rtuple_type;
-
-
 
 		struct entry : LoadTracker, ChangeTracker {
 
@@ -62,17 +103,18 @@ namespace moneta { namespace container {
 			rtuple_type data;
 
 			explicit entry(
-				const EntityType& entity,
+				const rtuple_type& rtuple,
 				const bool newcomer = false,
 				const bool all_loaded = true
 			)
 			 : LoadTracker(all_loaded),
-			   ChangeTracker(sql::traits::to_rtuple(entity)),
+			   ChangeTracker(rtuple),
 			   flags(0),
-			   pk(traits::pk_tie<const EntityType>()(entity)),
-			   data(sql::traits::to_rtuple(entity)) {
+			   pk(1),
+			   //pk(extract_rtuple_pk<EntityType>(rtuple)),
+			   data(rtuple) {
 				if (newcomer) {
-					flags |= 1;
+					flags |= NEWCOMER_FLAG;
 				}
 			};
 
@@ -80,25 +122,6 @@ namespace moneta { namespace container {
 				return pk == rhs;
 			}
 
-			// -------------------------------------------------
-
-			const bool newcomer() const {
-				return flags & 1;
-			}
-
-			void newcomer(const bool value) {
-				flags |= value;
-			}
-
-			// -------------------------------------------------
-
-			const bool removed() const {
-				return flags & 2;
-			}
-
-			void remove(const bool value = true) {
-				flags |= (value << 2);
-			}
 		};
 
 	private:
@@ -124,14 +147,35 @@ namespace moneta { namespace container {
 		> container_type;
 
 	private:
-		boost::optional<entry> get_entry(pk_rtuple_param_type entity) const {
+		boost::optional<entry> get_entry(const pk_rtuple_param_type pk) const {
 			typedef typename container_type::template index<by_hash>::type index;
 			index::const_iterator begin = _container.get<by_hash>().begin();
 			index::const_iterator   end = _container.get<by_hash>().end();
-			index::const_iterator   itr = std::find(begin, end, entity);
+			index::const_iterator   itr = std::find(begin, end, pk);
 			return (itr == end)? boost::optional<entry>() : *itr;
 		}
 
+		void replace_entry(const pk_rtuple_param_type pk, const entry& entry) {
+			typedef typename container_type::template index<by_hash>::type index;
+			index::const_iterator begin = _container.get<by_hash>().begin();
+			index::const_iterator   end = _container.get<by_hash>().end();
+			index::const_iterator   itr = std::find(begin, end, pk);
+			assert(itr != end);
+			_container.get<by_hash>().replace(itr, entry);
+		}
+
+		void set_entry_flag(const pk_rtuple_param_type pk, const size_t flag, const bool value = true) {
+			boost::optional<entry> entry = get_entry(pk);
+			if (entry) {
+				if (value) {
+					entry->flags |=  flag;
+				} else {
+					entry->flags &= ~flag;
+				}
+
+				replace_entry(pk, *entry);
+			}
+		}
 	private:
 		container_type _container;
 
@@ -140,69 +184,51 @@ namespace moneta { namespace container {
 			return _container.get<0>().size();
 		}
 
-		void insert(const EntityType& entity, const bool newcomer = false) {
-			_container.get<by_hash>().insert(entry(entity, newcomer));
+		void insert(const rtuple_type& rtuple, const bool newcomer = false) {
+			_container.get<by_hash>().insert(entry(rtuple, newcomer));
+		}
+
+		// --------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------
+
+		const bool is_bound(const pk_rtuple_param_type pk) const {
+			return get_entry(pk).is_initialized();
 		}
 
 		// --------------------------------------------------------------------------------
 
-		const bool bound(const EntityType& entity) const {
-			return bound(traits::pk_tie<const EntityType>()(entity));
-		}
-
-		const bool bound(pk_rtuple_param_type pk) const {
-			boost::optional<entry> entry = get_entry(pk);
-			return entry.is_initialized();
-		}
-
-		// --------------------------------------------------------------------------------
-
-		const bool dirty(const EntityType& entity) const {
-			return dirty(traits::pk_tie<const EntityType>()(entity));
-		}
-
-		const bool dirty(pk_rtuple_param_type pk) const {
+		const bool is_dirty(const pk_rtuple_param_type pk) const {
 			boost::optional<entry> entry = get_entry(pk);
 			return (entry.is_initialized())? entry->dirty(entry->data) : false;
 		}
 
 		// --------------------------------------------------------------------------------
 
-		const bool newcomer(const EntityType& entity) const {
-			return newcomer(traits::pk_tie<const EntityType>()(entity));
-		}
-
-		const bool newcomer(pk_rtuple_param_type pk) const {
+		const bool is_newcomer(const pk_rtuple_param_type pk) const {
 			boost::optional<entry> entry = get_entry(pk);
-			return (entry.is_initialized())? entry->newcomer() : false;
+			return (entry.is_initialized())? ((entry->flags & NEWCOMER_FLAG) != 0) : false;
 		}
 
 		// --------------------------------------------------------------------------------
 
-		const bool removed(const EntityType& entity) const {
-			return removed(traits::pk_tie<const EntityType>()(entity));
-		}
-
-		const bool removed(pk_rtuple_param_type pk) const {
+		const bool is_removed(const pk_rtuple_param_type pk) const {
 			boost::optional<entry> entry = get_entry(pk);
-			return (entry.is_initialized())? entry->removed() : false;
+			return (entry.is_initialized())? ((entry->flags & REMOVED_FLAG) != 0) : false;
 		}
 
+		// --------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------
 		// --------------------------------------------------------------------------------
 		
-		const void remove(const EntityType& entity) const {
-			return remove(traits::pk_tie<const EntityType>()(entity));
-		}
-
-		const void remove(pk_rtuple_param_type pk) const {
-			boost::optional<entry> entry = get_entry(pk);
-			return (entry.is_initialized())? entry->remove() : false;
+		const void remove(pk_rtuple_param_type pk) {
+			set_entry_flag(pk, REMOVED_FLAG);
 		}
 
 		// --------------------------------------------------------------------------------
 
 	public:
-		void dbg() {
+		void debug_dump() {
 			auto& index = _container.get<by_sequence>();
 			auto begin = index.begin();
 			auto end = index.end();

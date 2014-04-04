@@ -50,17 +50,17 @@ namespace moneta { namespace serialization { namespace soci {
 		}
 	};
 
-	class huhu {
+	class recursive_soci_serializer {
 		::soci::session& _session;
 	public:
-		huhu(::soci::session& session)
+		recursive_soci_serializer(::soci::session& session)
 		: _session(session) {
 		}
 
 		template <typename T>
 		typename boost::enable_if<
 			traits::is_entity<
-			typename boost::mpl::at_c<T, 0>::type
+				typename boost::mpl::at_c<T, 0>::type
 			>,
 			void
 		>::type
@@ -109,7 +109,9 @@ namespace moneta { namespace serialization { namespace soci {
 		//	traits::extract_pk(entity) = id_generator();
 		//}
 
-		traits::tie<EntityType>::type entity_tuple = moneta::traits::to_tie<EntityType>(entity);
+
+
+		traits::tie<EntityType>::type entity_tuple = traits::to_tie<EntityType>(entity);
 		sql::traits::rtuple<EntityType>::type rtuple;
 
 		typedef boost::fusion::vector<
@@ -118,7 +120,7 @@ namespace moneta { namespace serialization { namespace soci {
 		> zip_vector_type;
 
 		boost::fusion::zip_view<zip_vector_type> zip(zip_vector_type(entity_tuple, rtuple));
-		boost::fusion::for_each(zip, huhu(session));
+		boost::fusion::for_each(zip, recursive_soci_serializer(session));
 
 		session << sql::generators::insert_into_table<EntityType>(), ::soci::use(rtuple);
 

@@ -91,6 +91,9 @@
     <Filter Include="Source Files\moneta\container\load_trackers">
       <UniqueIdentifier>{b646d0cd-a93f-483f-b79d-d2dfbf4617ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\moneta\container\detail">
+      <UniqueIdentifier>{a9512d70-1394-49fa-b539-fc7d82ea0b3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -242,12 +245,6 @@
     <ClCompile Include="..\..\..\test\moneta\pp\detail\cat_include_name_test.cxx">
       <Filter>Source Files\moneta\pp\detail</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\relational_context_test.cxx">
-      <Filter>Source Files\moneta</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\container\relational_container_test.cxx">
-      <Filter>Source Files\moneta\container</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\container\change_trackers\hash_change_tracker_test.cxx">
       <Filter>Source Files\moneta\container\change_trackers</Filter>
     </ClCompile>
@@ -277,6 +274,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\sql\traits\pk_rtie_test.cxx">
       <Filter>Source Files\moneta\sql\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\detail\deref_if_unary_test.cxx">
+      <Filter>Source Files\moneta\traits\detail</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

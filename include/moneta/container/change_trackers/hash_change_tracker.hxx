@@ -54,19 +54,20 @@ namespace moneta { namespace container {
 		//	return boost::fusion::accumulate(hashes, 0, accumulator());
 		//}
 
-		template <typename T>
-		static
-		typename boost::disable_if<traits::is_entity<T>, size_t>::type
-		hash(const T x) {
-			return std::hash<T>()(x);
-		}
+		//template <typename T>
+		//static
+		//typename boost::disable_if<traits::is_entity<T>, size_t>::type
+		//hash(const T x) {
+		//	return std::hash<T>()(x);
+		//}
 
 		struct std_hasher {
 			typedef const size_t result_type;
 
 			template <typename T>
 			const result_type operator()(const T value) const {		
-				return hash(value);
+				return std::hash<T>()(value);
+				//return hash(value);
 			}
 		};
 

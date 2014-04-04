@@ -249,15 +249,6 @@
     <ClInclude Include="..\..\..\include\moneta\pp\sql_entity.hxx">
       <Filter>Header Files\moneta\pp</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\relational_context.hxx">
-      <Filter>Header Files\moneta</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\relational_container.hxx">
-      <Filter>Header Files\moneta</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\container\relational_container.hxx">
-      <Filter>Header Files\moneta\container</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\container\load_trackers\bitset_load_tracker.hxx">
       <Filter>Header Files\moneta\container\load_trackers</Filter>
     </ClInclude>
@@ -293,6 +284,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\sql\traits\pk_rtuple.hxx">
       <Filter>Header Files\moneta\sql\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\container\rtuple_set.hxx">
+      <Filter>Header Files\moneta\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\container\rcontext.hxx">
+      <Filter>Header Files\moneta\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\deref_if_unary.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
