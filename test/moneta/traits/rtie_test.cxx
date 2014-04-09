@@ -1,11 +1,11 @@
 #include "stdafx.h"
-#include <moneta/sql/traits/rtie.hxx>
+#include <moneta/traits/rtie.hxx>
 #include <boost/mpl/equal.hpp>
 
-#include "../../model/Person.hxx"
-#include "../../model/Dog.hxx"
-#include "../../model/Composite.hxx"
-#include "../../model/Cat.hxx"
+#include "../model/Person.hxx"
+#include "../model/Dog.hxx"
+#include "../model/Composite.hxx"
+#include "../model/Cat.hxx"
 
 static void static_test() {
 	// Person

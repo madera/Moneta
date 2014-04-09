@@ -254,24 +254,6 @@
     <ClCompile Include="..\..\..\test\moneta\container\change_trackers\bitset_change_tracker_test.cxx">
       <Filter>Source Files\moneta\container\change_trackers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\sql\traits\to_rtuple_test.cxx">
-      <Filter>Source Files\moneta\sql\traits</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\sql\traits\to_rtie_test.cxx">
-      <Filter>Source Files\moneta\sql\traits</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\sql\traits\rtie_test.cxx">
-      <Filter>Source Files\moneta\sql\traits</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\sql\traits\rtuple_test.cxx">
-      <Filter>Source Files\moneta\sql\traits</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\sql\traits\pk_rtuple_test.cxx">
-      <Filter>Source Files\moneta\sql\traits</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\sql\traits\pk_rtie_test.cxx">
-      <Filter>Source Files\moneta\sql\traits</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\detail\deref_if_unary_test.cxx">
       <Filter>Source Files\moneta\traits\detail</Filter>
     </ClCompile>
@@ -286,6 +268,24 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\detail\sub_tie_vector_test.cxx">
       <Filter>Source Files\moneta\traits\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\pk_rtie_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\pk_rtuple_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\rtie_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\rtuple_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\to_rtie_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\to_rtuple_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

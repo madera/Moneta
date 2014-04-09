@@ -6,9 +6,9 @@
 #include "../make_entity.hxx"
 #include "../traits/to_entity.hxx"
 #include "../traits/detail/sub_tie_vector.hxx"
-#include "../sql/traits/pk_rtuple.hxx"
-#include "../sql/traits/rtuple.hxx"
-#include "../sql/traits/to_rtuple.hxx"
+#include "../traits/pk_rtuple.hxx"
+#include "../traits/rtuple.hxx"
+#include "../traits/to_rtuple.hxx"
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index/ordered_index.hpp>

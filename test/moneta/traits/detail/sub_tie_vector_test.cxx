@@ -4,10 +4,10 @@
 #include <string>
 #include "../../model/Cat.hxx"
 
-#include <moneta/sql/traits/rtuple.hxx>
-#include <moneta/sql/traits/rtie.hxx>
-#include <moneta/sql/traits/to_rtuple.hxx>
-#include <moneta/sql/traits/to_rtie.hxx>
+#include <moneta/traits/rtuple.hxx>
+#include <moneta/traits/rtie.hxx>
+#include <moneta/traits/to_rtuple.hxx>
+#include <moneta/traits/to_rtie.hxx>
 
 #include <boost/mpl/print.hpp>
 

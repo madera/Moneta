@@ -3,7 +3,7 @@
 #include "../../make_entity.hxx"
 #include "../../traits/is_entity.hxx"
 #include "../../traits/extract_pk.hxx"
-#include "../../sql/traits/rtuple.hxx"
+#include "../../traits/rtuple.hxx"
 #include "../../sql/generators/insert.hxx"
 #include <boost/fusion/view/zip_view.hpp>
 #include <boost/fusion/tuple.hpp>

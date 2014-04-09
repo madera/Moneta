@@ -1,6 +1,6 @@
 #pragma once
-#include "../../traits/pk.hxx"
-#include "../../traits/tuple.hxx"
+#include "../traits/pk.hxx"
+#include "../traits/tuple.hxx"
 
 namespace moneta { namespace sql { namespace traits {
 

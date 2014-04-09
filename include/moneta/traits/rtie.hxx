@@ -1,5 +1,5 @@
 #pragma once
-#include "../../traits/pk_tie.hxx"
+#include "../traits/pk_tie.hxx"
 
 namespace moneta { namespace sql { namespace traits {
 

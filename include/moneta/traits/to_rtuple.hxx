@@ -1,11 +1,11 @@
 #pragma once
 #include "rtuple.hxx"
-#include "../../traits/detail/sepacon_opfx.hxx"
-#include "../../traits/is_entity.hxx"
-#include "../../traits/tuple.hxx"
-#include "../../traits/pk.hxx"
-#include "../../traits/extract_pk.hxx"
-#include "../../traits/detail/blanker.hxx"
+#include "../traits/detail/sepacon_opfx.hxx"
+#include "../traits/is_entity.hxx"
+#include "../traits/tuple.hxx"
+#include "../traits/pk.hxx"
+#include "../traits/extract_pk.hxx"
+#include "../traits/detail/blanker.hxx"
 #include <boost/utility/enable_if.hpp>
 
 namespace moneta { namespace sql { namespace traits {

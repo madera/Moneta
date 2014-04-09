@@ -1,11 +1,11 @@
 #include "stdafx.h"
-#include <moneta/sql/traits/rtuple.hxx>
+#include <moneta/traits/rtuple.hxx>
 #include <boost/mpl/equal.hpp>
 
-#include "../../model/Person.hxx"
-#include "../../model/Dog.hxx"
-#include "../../model/Composite.hxx"
-#include "../../model/Cat.hxx"
+#include "../model/Person.hxx"
+#include "../model/Dog.hxx"
+#include "../model/Composite.hxx"
+#include "../model/Cat.hxx"
 
 static void static_test() {
 

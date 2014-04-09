@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include <moneta/sql/traits/to_rtie.hxx>
+#include <moneta/traits/to_rtie.hxx>
 #include <boost/mpl/equal.hpp>
-#include "../../model/Person.hxx"
-#include "../../model/Dog.hxx"
-#include "../../model/Composite.hxx"
-#include "../../model/Cat.hxx"
+#include "../model/Person.hxx"
+#include "../model/Dog.hxx"
+#include "../model/Composite.hxx"
+#include "../model/Cat.hxx"
 
 BOOST_AUTO_TEST_CASE(to_rtie_test) {
 	Cat cat;

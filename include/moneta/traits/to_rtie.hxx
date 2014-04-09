@@ -1,10 +1,10 @@
 #pragma once
 #include "rtie.hxx"
-#include "../../traits/detail/sepacon_opfx.hxx"
-#include "../../traits/is_entity.hxx"
-#include "../../traits/tie.hxx"
-#include "../../traits/pk.hxx"
-#include "../../traits/extract_pk.hxx"
+#include "../traits/detail/sepacon_opfx.hxx"
+#include "../traits/is_entity.hxx"
+#include "../traits/tie.hxx"
+#include "../traits/pk.hxx"
+#include "../traits/extract_pk.hxx"
 #include <boost/utility/enable_if.hpp>
 
 namespace moneta { namespace sql { namespace traits {
