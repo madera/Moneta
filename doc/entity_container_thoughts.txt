@@ -9,6 +9,9 @@
 	\\_________/\___________________/\___________________________________________________________________//
 
 
+	flags | data | change_tracker | load_tracker | atime | 
+
+
 
 	template <
 		class EntityType,
@@ -81,6 +84,57 @@
 	context.revert() -> compile time error
 	
 	context<hash_state_tracker>
+	
+	
+	
+	
+	Entity Entry Flags:
+	
+	
+		New
+			Deleted
+				Dirty
+					Persisted
+		
+	
+	
+	
+	
+	class Person {
+		std::string Contract;
+		int ID;
+		std::string Name;
+		Address Address;
+		Computer Computer;
+	};
+	
+	 tuple<Person>::type --> tuple<std::string, int, std::string, Address, Computer>
+	rtuple<Person>::type --> tuple<std::string, int, std::string, int, int>
+	
+		
+	
+__F__   _______PK_________   _____________________DATA________________   ____LT___   __________________CT_____________________
+int32 | <std::string, int> | <std::string, int, std::string, int, int> | bitset<5> | <std::string, int, std::string, int, int>
+
+template <class EntityType>
+void fx(const EntityType& entity) {
+	given an rtuple<T>, find it by pk_tuple (<std::string, int>)
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
 

@@ -264,9 +264,6 @@
     <ClInclude Include="..\..\..\include\moneta\container\change_trackers\bitset_change_tracker.hxx">
       <Filter>Header Files\moneta\container\change_trackers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\traits\detail\sub_tie.hxx">
-      <Filter>Header Files\moneta\traits\detail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\sql\traits\rtuple.hxx">
       <Filter>Header Files\moneta\sql\traits</Filter>
     </ClInclude>
@@ -292,6 +289,12 @@
       <Filter>Header Files\moneta\container</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\detail\deref_if_unary.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\tie_vector.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\sub_tie_vector.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
   </ItemGroup>

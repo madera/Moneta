@@ -132,7 +132,8 @@
     <ClInclude Include="..\..\..\include\moneta\traits\detail\pure_type.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_opfx.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_sg.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\traits\detail\sub_tie.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\sub_tie_vector.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\tie_vector.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\empty_pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\extract_pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\is_entity.hxx" />

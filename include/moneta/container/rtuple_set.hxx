@@ -5,7 +5,7 @@
 #include "load_trackers/null_load_tracker.hxx"
 #include "../make_entity.hxx"
 #include "../traits/to_entity.hxx"
-#include "../traits/detail/sub_tie.hxx"
+#include "../traits/detail/sub_tie_vector.hxx"
 #include "../sql/traits/pk_rtuple.hxx"
 #include "../sql/traits/rtuple.hxx"
 #include "../sql/traits/to_rtuple.hxx"
@@ -29,33 +29,34 @@
 
 
 // XXX: Move!
-template <class EntityType>
-struct rtuple_pk_extractor {
-	BOOST_MPL_ASSERT((moneta::traits::is_entity<EntityType>));
-
-	// XXX: Temporary... just for now.
-	BOOST_MPL_ASSERT_NOT((boost::is_const<EntityType>));
-
-	typedef typename moneta::sql::traits::rtuple<EntityType>::type rtuple_type;	
-	typedef boost::mpl::vector_c<int, 0> pk_indeces;
-	typedef moneta::traits::detail::sub_tie<rtuple_type, pk_indeces> rtuple_pk_type;
-	typedef moneta::traits::detail::deref_if_unary<rtuple_pk_type> pk_derefer_type;
-	typedef typename pk_derefer_type::type type;
-
-	type operator()(rtuple_type& rtuple) const {
-		return pk_derefer_type()(rtuple_pk_type(rtuple));
-	}
-
-	type operator()(const rtuple_type& rtuple) const {
-		auto x = rtuple_pk_type(rtuple);
-		return pk_derefer_type()(x);
-	}
-};
-template <class EntityType>
-typename rtuple_pk_extractor<EntityType>::type
-extract_rtuple_pk(const typename rtuple_pk_extractor<EntityType>::rtuple_type& rtuple) {
-	return rtuple_pk_extractor<EntityType>()(rtuple);
-}
+//template <class EntityType>
+//struct rtuple_pk_extractor {
+//	BOOST_MPL_ASSERT((moneta::traits::is_entity<EntityType>));
+//
+//	// XXX: Temporary... just for now.
+//	BOOST_MPL_ASSERT_NOT((boost::is_const<EntityType>));
+//
+//	typedef typename moneta::sql::traits::rtuple<EntityType>::type rtuple_type;	
+//	typedef boost::mpl::vector_c<int, 0> pk_indeces;
+//	typedef moneta::traits::detail::sub_tie<rtuple_type, pk_indeces> rtuple_pk_type;
+//	typedef moneta::traits::detail::deref_if_unary<rtuple_pk_type> pk_derefer_type;
+//	typedef typename pk_derefer_type::type type;
+//
+//	type operator()(rtuple_type& rtuple) const {
+//		return pk_derefer_type()(rtuple_pk_type(rtuple));
+//	}
+//
+//	type operator()(const rtuple_type& rtuple) const {
+//		auto x = rtuple_pk_type(rtuple);
+//		return pk_derefer_type()(x);
+//	}
+//};
+//
+//template <class EntityType>
+//typename rtuple_pk_extractor<EntityType>::type
+//extract_rtuple_pk(const typename rtuple_pk_extractor<EntityType>::rtuple_type& rtuple) {
+//	return rtuple_pk_extractor<EntityType>()(rtuple);
+//}
 // !evoM :XXX
 
 
@@ -96,6 +97,13 @@ namespace moneta { namespace container {
 			EntityType
 		>::type rtuple_type;
 
+		typedef traits::detail::sub_tie_vector<
+			rtuple_type,
+			boost::mpl::vector_c<int, 0>
+		> sub_tie_vectorizer_type;
+
+		typedef typename sub_tie_vectorizer_type::type sub_tie_vector_type;
+
 		struct entry : LoadTracker, ChangeTracker {
 
 			int flags;
@@ -110,8 +118,8 @@ namespace moneta { namespace container {
 			 : LoadTracker(all_loaded),
 			   ChangeTracker(rtuple),
 			   flags(0),
-			   pk(1),
-			   //pk(extract_rtuple_pk<EntityType>(rtuple)),
+			   pk(rand()),
+			  // pk(traits::detail::unary_deref(sub_tie_vectorizer_type()(rtuple))),
 			   data(rtuple) {
 				if (newcomer) {
 					flags |= NEWCOMER_FLAG;

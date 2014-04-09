@@ -114,6 +114,8 @@
     <ClCompile Include="..\..\..\test\moneta\container\change_trackers\bitset_change_tracker_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\container\change_trackers\hash_change_tracker_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\container\load_trackers\bitset_load_tracker_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\container\rcontext_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\container\rtuple_set_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\interactive_shell_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\make_entity_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\pp\detail\cat_include_name_test.cxx" />
@@ -142,7 +144,8 @@
     <ClCompile Include="..\..\..\test\moneta\sql\traits\to_rtuple_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\deref_if_unary_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\memptr_hacker_test.cxx" />
-    <ClCompile Include="..\..\..\test\moneta\traits\detail\sub_tie_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\traits\detail\sub_tie_vector_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\traits\detail\tie_vector_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\empty_pk_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\extract_pk_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\is_entity_test.cxx" />

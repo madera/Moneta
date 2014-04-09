@@ -1,0 +1,2 @@
+* Refactor eager templates in favor of transform_view and other lazy elements.
+

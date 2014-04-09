@@ -27,3 +27,7 @@ static void static_test() {
 		>
 	));
 }
+
+BOOST_AUTO_TEST_CASE(pk_rtuple_extraction_test) {
+	int x = 0;
+}

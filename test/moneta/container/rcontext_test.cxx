@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE(rcontext_test) {
 	BOOST_CHECK_EQUAL(context.size<Cat>(), 4);
 //	BOOST_CHECK_EQUAL(context.size<Address>(), 4);
 
-//	context.get_container<Cat    >()->debug_dump();
+	context.get_container<Cat    >()->debug_dump();
 //	context.get_container<Address>()->debug_dump();
 
 }

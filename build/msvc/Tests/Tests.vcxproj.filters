@@ -254,9 +254,6 @@
     <ClCompile Include="..\..\..\test\moneta\container\change_trackers\bitset_change_tracker_test.cxx">
       <Filter>Source Files\moneta\container\change_trackers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\traits\detail\sub_tie_test.cxx">
-      <Filter>Source Files\moneta\traits\detail</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\sql\traits\to_rtuple_test.cxx">
       <Filter>Source Files\moneta\sql\traits</Filter>
     </ClCompile>
@@ -276,6 +273,18 @@
       <Filter>Source Files\moneta\sql\traits</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\detail\deref_if_unary_test.cxx">
+      <Filter>Source Files\moneta\traits\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\container\rcontext_test.cxx">
+      <Filter>Source Files\moneta\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\container\rtuple_set_test.cxx">
+      <Filter>Source Files\moneta\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\detail\tie_vector_test.cxx">
+      <Filter>Source Files\moneta\traits\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\detail\sub_tie_vector_test.cxx">
       <Filter>Source Files\moneta\traits\detail</Filter>
     </ClCompile>
   </ItemGroup>
