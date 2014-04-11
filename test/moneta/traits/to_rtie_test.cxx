@@ -14,8 +14,8 @@ BOOST_AUTO_TEST_CASE(to_rtie_test) {
 	cat.Address.Street = 1;
 	cat.Address.Street = "Infinite Loop";
 
-	moneta::sql::traits::rtie<Cat>::type rtie =
-		moneta::sql::traits::to_rtie<Cat>(cat);
+	moneta::traits::rtie<Cat>::type rtie =
+		moneta::traits::to_rtie<Cat>(cat);
 
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(rtie), 555);
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<1>(rtie), "Garfield");
@@ -33,8 +33,8 @@ BOOST_AUTO_TEST_CASE(to_rtie_2_test) {
 	composite.Dog.ID = 555;
 	composite.Dog.Name = "Doggy";
 
-	moneta::sql::traits::rtie<Composite>::type rtie =
-		moneta::sql::traits::to_rtie<Composite>(composite);
+	moneta::traits::rtie<Composite>::type rtie =
+		moneta::traits::to_rtie<Composite>(composite);
 
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(rtie), 2600);
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<1>(rtie), 123);
@@ -52,8 +52,8 @@ BOOST_AUTO_TEST_CASE(const_to_rtie_test) {
 	cat.Address.Street = 1;
 	cat.Address.Street = "Infinite Loop";
 
-	moneta::sql::traits::rtie<Cat>::type rtie =
-		moneta::sql::traits::to_rtie<Cat>(cat);
+	moneta::traits::rtie<Cat>::type rtie =
+		moneta::traits::to_rtie<Cat>(cat);
 
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(rtie), 555);
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<1>(rtie), "Garfield");

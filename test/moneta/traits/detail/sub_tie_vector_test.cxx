@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include <moneta/traits/detail/sub_tie_vector.hxx>
-#include <boost/mpl/vector_c.hpp>
+#include <moneta/traits/rtuple.hxx>    //
+#include <moneta/traits/rtie.hxx>      //
+#include <moneta/traits/to_rtuple.hxx> //
+#include <moneta/traits/to_rtie.hxx>   //
+#include <boost/mpl/vector_c.hpp>      //
+#include <boost/mpl/equal.hpp>         //
 #include <string>
 #include "../../model/Cat.hxx"
-
-#include <moneta/traits/rtuple.hxx>
-#include <moneta/traits/rtie.hxx>
-#include <moneta/traits/to_rtuple.hxx>
-#include <moneta/traits/to_rtie.hxx>
 
 #include <boost/mpl/print.hpp>
 
@@ -17,8 +17,8 @@ struct rtie_pk_extractor {
 	BOOST_MPL_ASSERT((moneta::traits::is_entity<EntityType>));
 	BOOST_MPL_ASSERT_NOT((boost::is_const<EntityType>)); // XXX: Temporary... just for now.
 
-	typedef typename moneta::sql::traits::rtuple<EntityType>::type rtuple_type;
-	typedef typename moneta::sql::traits::rtie  <EntityType>::type   rtie_type;
+	typedef typename moneta::traits::rtuple<EntityType>::type rtuple_type;
+	typedef typename moneta::traits::rtie  <EntityType>::type   rtie_type;
 	
 	typedef boost::mpl::vector_c<int, 0> pk_indeces;
 	typedef moneta::traits::detail::sub_tie_vector<rtie_type, pk_indeces> rtie_pk_type;
@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(temp_move) {
 	cat.Address.Street = 1;
 	cat.Address.Street = "Infinite Loop";
 
-//	moneta::sql::traits::rtuple<Cat>::type rtuple = moneta::sql::traits::to_rtuple(cat);
+//	moneta::traits::rtuple<Cat>::type rtuple = moneta::traits::to_rtuple(cat);
 //	auto fx = extract_rtuple_pk<Cat>(rtuple);
 
 }
@@ -62,37 +62,33 @@ BOOST_AUTO_TEST_CASE(tuple_sub_tie_test) {
 
 	typedef moneta::traits::tuple<Cat>::type tuple_type;
 	tuple_type tuple;
-	//sub_tie_vector<tuple_type, vector_c<int, 0      > > pk (tuple);
-	//sub_tie_vector<tuple_type, vector_c<int, 0, 1   > > pk2(tuple);
-	//sub_tie_vector<tuple_type, vector_c<int, 0, 1, 2> > pk3(tuple);
+	sub_tie_vector<tuple_type, vector_c<int, 0      > >()(tuple);
+	sub_tie_vector<tuple_type, vector_c<int, 0, 1   > >()(tuple);
+	sub_tie_vector<tuple_type, vector_c<int, 0, 1, 2> >()(tuple);
 
-	//typedef moneta::traits::tuple<const Cat>::type const_tuple_type;
-	//const_tuple_type const_tuple;
-	//sub_tie_vector<const_tuple_type, vector_c<int, 0      > > cpk (const_tuple);
-	//sub_tie_vector<const_tuple_type, vector_c<int, 0, 1   > > cpk2(const_tuple);
-	//sub_tie_vector<const_tuple_type, vector_c<int, 0, 1, 2> > cpk3(const_tuple);
+	typedef moneta::traits::tuple<const Cat>::type const_tuple_type;
+	const_tuple_type const_tuple;
+	sub_tie_vector<const_tuple_type, vector_c<int, 0      > >()(const_tuple);
+	sub_tie_vector<const_tuple_type, vector_c<int, 0, 1   > >()(const_tuple);
+	sub_tie_vector<const_tuple_type, vector_c<int, 0, 1, 2> >()(const_tuple);
 }
 
-//BOOST_AUTO_TEST_CASE(rtuple_sub_tie_test) {
-//	using boost::mpl::vector_c;
-//	using moneta::traits::detail::sub_tie_vector;
-//
-//	typedef moneta::traits::rtuple<Cat>::type rtuple_type;
-//	rtuple_type tuple;
-//	sub_tie_vector<rtuple_type, vector_c<int, 0      > > pk (rtuple);
-//	sub_tie_vector<rtuple_type, vector_c<int, 0, 1   > > pk2(rtuple);
-//	sub_tie_vector<rtuple_type, vector_c<int, 0, 1, 2> > pk3(rtuple);
-//
-//	typedef moneta::traits::rtuple<const Cat>::type const_rtuple_type;
-//	const_tuple_type const_tuple;
-//	sub_tie_vector<const_rtuple_type, vector_c<int, 0      > > cpk (const_rtuple);
-//	sub_tie_vector<const_rtuple_type, vector_c<int, 0, 1   > > cpk2(const_rtuple);
-//	sub_tie_vector<const_rtuple_type, vector_c<int, 0, 1, 2> > cpk3(const_rtuple);
-//}
+BOOST_AUTO_TEST_CASE(rtuple_sub_tie_test) {
+	using boost::mpl::vector_c;
+	using moneta::traits::detail::sub_tie_vector;
 
-// TODO: FIXME: Add tests. This is far from finished.
+	typedef moneta::traits::rtuple<Cat>::type rtuple_type;
+	rtuple_type rtuple;
+	sub_tie_vector<rtuple_type, vector_c<int, 0      > >()(rtuple);
+	sub_tie_vector<rtuple_type, vector_c<int, 0, 1   > >()(rtuple);
+	sub_tie_vector<rtuple_type, vector_c<int, 0, 1, 2> >()(rtuple);
 
-#include <boost/mpl/equal.hpp>
+	typedef moneta::traits::rtuple<const Cat>::type const_rtuple_type;
+	const_rtuple_type const_rtuple;
+	sub_tie_vector<const_rtuple_type, vector_c<int, 0      > >()(const_rtuple);
+	sub_tie_vector<const_rtuple_type, vector_c<int, 0, 1   > >()(const_rtuple);
+	sub_tie_vector<const_rtuple_type, vector_c<int, 0, 1, 2> >()(const_rtuple);
+}
 
 static void static_test() {
 
@@ -127,7 +123,9 @@ static void static_test() {
 		vector<char&, short&, int&>
 	>));
 
+	//
 	// This test should cause an assertion fail inside sub_tie_vector.
+	//
 	//BOOST_MPL_ASSERT((boost::mpl::equal<
 	//	sub_tie_vector<
 	//		vector<char, short, int>,
@@ -155,6 +153,6 @@ BOOST_AUTO_TEST_CASE(sub_tie_test) {
 	int first = unary_deref(tie);
 	BOOST_CHECK_EQUAL(at_c<0>(tuple), first);
 
-	deref_if_unary<tuple_t>::type same = unary_deref(same);
+	deref_if_unary<tuple_t>::type same = unary_deref(tuple);
 	BOOST_CHECK_EQUAL(at_c<0>(tuple), at_c<0>(same));
 }

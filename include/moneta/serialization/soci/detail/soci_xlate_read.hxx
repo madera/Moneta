@@ -48,11 +48,11 @@ namespace moneta { namespace serialization { namespace soci { namespace detail {
 	template <class EntityType>
 	EntityType soci_xlate_read(
 		::soci::session& session,
-		typename moneta::sql::traits::rtuple<EntityType>::type& rtuple
+		typename moneta::traits::rtuple<EntityType>::type& rtuple
 	) {
 		typedef boost::fusion::vector<
 			traits::tuple<EntityType>::type&,
-			sql::traits::rtuple<EntityType>::type&
+			traits::rtuple<EntityType>::type&
 		> zip_vector_type;
 
 		typename traits::tuple<EntityType>::type tuple = make_tuple<EntityType>();

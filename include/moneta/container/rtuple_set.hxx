@@ -36,7 +36,7 @@
 //	// XXX: Temporary... just for now.
 //	BOOST_MPL_ASSERT_NOT((boost::is_const<EntityType>));
 //
-//	typedef typename moneta::sql::traits::rtuple<EntityType>::type rtuple_type;	
+//	typedef typename moneta::traits::rtuple<EntityType>::type rtuple_type;	
 //	typedef boost::mpl::vector_c<int, 0> pk_indeces;
 //	typedef moneta::traits::detail::sub_tie<rtuple_type, pk_indeces> rtuple_pk_type;
 //	typedef moneta::traits::detail::deref_if_unary<rtuple_pk_type> pk_derefer_type;
@@ -85,7 +85,7 @@ namespace moneta { namespace container {
 			REMOVED_FLAG  = 32
 		};
 
-		typedef typename sql::traits::pk_rtuple<
+		typedef typename traits::pk_rtuple<
 			EntityType
 		>::type pk_rtuple_type;
 		
@@ -93,7 +93,7 @@ namespace moneta { namespace container {
 			pk_rtuple_type
 		>::param_type pk_rtuple_param_type;
 
-		typedef typename sql::traits::rtuple<
+		typedef typename traits::rtuple<
 			EntityType
 		>::type rtuple_type;
 
@@ -119,7 +119,7 @@ namespace moneta { namespace container {
 			   ChangeTracker(rtuple),
 			   flags(0),
 			   pk(rand()),
-			  // pk(traits::detail::unary_deref(sub_tie_vectorizer_type()(rtuple))),
+			   //pk(traits::detail::to_pk_rtuple(rtuple)),
 			   data(rtuple) {
 				if (newcomer) {
 					flags |= NEWCOMER_FLAG;

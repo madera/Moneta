@@ -15,7 +15,7 @@ namespace moneta { namespace container {
 	struct bitset_change_tracker {
 		typedef typename std::bitset<
 			boost::mpl::size<
-				typename moneta::sql::traits::rtuple<EntityType>::type
+				typename moneta::traits::rtuple<EntityType>::type
 			>::value
 		> state_type;
 

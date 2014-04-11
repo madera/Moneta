@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_CASE(entity_set_test) {
 	BOOST_CHECK_EQUAL(set.size(), 0);
 	BOOST_CHECK_EQUAL(set.is_bound(1), false);
 
-	set.insert(moneta::sql::traits::to_rtuple(cat), true);
+	set.insert(moneta::traits::to_rtuple(cat), true);
 
 	BOOST_CHECK_EQUAL(set.size(), 1);
 	BOOST_CHECK(set.is_bound(1));
@@ -22,9 +22,9 @@ BOOST_AUTO_TEST_CASE(entity_set_test) {
 	BOOST_CHECK(!set.is_dirty(1));
 	BOOST_CHECK(set.is_newcomer(1));
 
-	{ Cat cat; cat.ID = 2; cat.Name = "Garfield"; cat.Address.ID = 15; set.insert(moneta::sql::traits::to_rtuple(cat), true); }
-	{ Cat cat; cat.ID = 3; cat.Name = "Felix";    cat.Address.ID = 30; set.insert(moneta::sql::traits::to_rtuple(cat), true); }
-	{ Cat cat; cat.ID = 4; cat.Name = "Bob";      cat.Address.ID = 10; set.insert(moneta::sql::traits::to_rtuple(cat), true); }
+	{ Cat cat; cat.ID = 2; cat.Name = "Garfield"; cat.Address.ID = 15; set.insert(moneta::traits::to_rtuple(cat), true); }
+	{ Cat cat; cat.ID = 3; cat.Name = "Felix";    cat.Address.ID = 30; set.insert(moneta::traits::to_rtuple(cat), true); }
+	{ Cat cat; cat.ID = 4; cat.Name = "Bob";      cat.Address.ID = 10; set.insert(moneta::traits::to_rtuple(cat), true); }
 
 	BOOST_CHECK_EQUAL(set.size(), 4);
 	BOOST_CHECK(set.is_bound(2));

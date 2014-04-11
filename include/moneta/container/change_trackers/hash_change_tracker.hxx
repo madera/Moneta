@@ -30,7 +30,7 @@ namespace moneta { namespace container {
 		typedef boost::array<
 			size_t,
 			boost::mpl::size<
-				typename sql::traits::rtuple<EntityType>::type
+				typename traits::rtuple<EntityType>::type
 			>::value
 		> state_type;
 
@@ -77,7 +77,7 @@ namespace moneta { namespace container {
 
 		//	boost::fusion::copy(
 		//		boost::fusion::transform(
-		//			sql::traits::to_rtie(entity),
+		//			traits::to_rtie(entity),
 		//			std_hasher()
 		//		),
 		//		result
@@ -94,7 +94,7 @@ namespace moneta { namespace container {
 		}
 	public:
 		state_type change_state;
-		typedef typename sql::traits::rtuple<EntityType>::type tuple_type;
+		typedef typename traits::rtuple<EntityType>::type tuple_type;
 	public:
 		hash_change_tracker() {
 			change_state.assign(0);

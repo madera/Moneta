@@ -1,7 +1,7 @@
 #pragma once
 #include "../traits/pk_tie.hxx"
 
-namespace moneta { namespace sql { namespace traits {
+namespace moneta { namespace traits {
 
 	template <class EntityType>
 	struct rtie : boost::fusion::result_of::as_vector<
@@ -11,4 +11,4 @@ namespace moneta { namespace sql { namespace traits {
 		>::type
 	> {};
 
-}}}
+}}

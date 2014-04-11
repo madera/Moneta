@@ -7,7 +7,7 @@
 #include "../traits/extract_pk.hxx"
 #include <boost/utility/enable_if.hpp>
 
-namespace moneta { namespace sql { namespace traits {
+namespace moneta { namespace traits {
 
 	namespace detail {
 
@@ -32,4 +32,4 @@ namespace moneta { namespace sql { namespace traits {
 		return detail::rtie_maker<EntityType>()(x);
 	}
 
-}}}
+}}

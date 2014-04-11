@@ -29,7 +29,8 @@ namespace moneta { namespace traits { namespace detail {
 		> type;
 
 		type operator()(Tuple& tuple) const {
-			return type(boost::fusion::at_c<0>(tuple));
+			using boost::fusion::at_c;
+			return type(at_c<0>(tuple));
 		}
 	};
 
@@ -39,6 +40,11 @@ namespace moneta { namespace traits { namespace detail {
 			typename tuple_element_reference<Tuple, Indices, 0>::type,
 			typename tuple_element_reference<Tuple, Indices, 1>::type
 		> type;
+
+		type operator()(Tuple& tuple) const {
+			using boost::fusion::at_c;
+			return type(at_c<0>(tuple), at_c<1>(tuple));
+		}
 	};
 
 	template <class Tuple, class Indices>
@@ -48,6 +54,11 @@ namespace moneta { namespace traits { namespace detail {
 			typename tuple_element_reference<Tuple, Indices, 1>::type,
 			typename tuple_element_reference<Tuple, Indices, 2>::type
 		> type;
+
+		type operator()(Tuple& tuple) const {
+			using boost::fusion::at_c;
+			return type(at_c<0>(tuple), at_c<1>(tuple), at_c<2>(tuple));
+		}
 	};
 
 	template <class Tuple, class Indices>
@@ -58,5 +69,10 @@ namespace moneta { namespace traits { namespace detail {
 			typename tuple_element_reference<Tuple, Indices, 2>::type,
 			typename tuple_element_reference<Tuple, Indices, 3>::type
 		> type;
+
+		type operator()(Tuple& tuple) const {
+			using boost::fusion::at_c;
+			return type(at_c<0>(tuple), at_c<1>(tuple), at_c<2>(tuple), at_c<3>(tuple));
+		}
 	};
 }}}

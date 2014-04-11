@@ -6,7 +6,7 @@ namespace moneta { namespace serialization { namespace soci {
 
 	template <class EntityType, class OutputIteratorType>
 	const size_t soci_list(::soci::session& session, OutputIteratorType& output) {
-		typedef sql::traits::rtuple<EntityType>::type rtuple_type;
+		typedef traits::rtuple<EntityType>::type rtuple_type;
 		::soci::rowset<rtuple_type> rows = (
 			session.prepare << sql::generators::select_all_from_table<EntityType>()
 		);

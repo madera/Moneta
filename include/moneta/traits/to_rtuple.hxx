@@ -8,7 +8,7 @@
 #include "../traits/detail/blanker.hxx"
 #include <boost/utility/enable_if.hpp>
 
-namespace moneta { namespace sql { namespace traits {
+namespace moneta { namespace traits {
 
 	namespace detail {
 
@@ -35,9 +35,9 @@ namespace moneta { namespace sql { namespace traits {
 
 	// XXX: Move this somewhere else.
 	template <class EntityType>
-	typename sql::traits::rtuple<EntityType>::type make_rtuple() {
-		sql::traits::rtuple<EntityType>::type result;
+	typename traits::rtuple<EntityType>::type make_rtuple() {
+		traits::rtuple<EntityType>::type result;
 		return boost::fusion::transform(result, moneta::traits::detail::blanker());
 	}
 
-}}}
+}}

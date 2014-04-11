@@ -287,5 +287,11 @@
     <ClCompile Include="..\..\..\test\moneta\traits\to_rtuple_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\to_pk_rtuple_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\detail\indices_of_test.cxx">
+      <Filter>Source Files\moneta\traits\detail</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

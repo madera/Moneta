@@ -112,11 +112,11 @@ namespace moneta { namespace serialization { namespace soci {
 
 
 		traits::tie<EntityType>::type entity_tuple = traits::to_tie<EntityType>(entity);
-		sql::traits::rtuple<EntityType>::type rtuple;
+		traits::rtuple<EntityType>::type rtuple;
 
 		typedef boost::fusion::vector<
 			traits::tie<EntityType>::type&,
-			sql::traits::rtuple<EntityType>::type&
+			traits::rtuple<EntityType>::type&
 		> zip_vector_type;
 
 		boost::fusion::zip_view<zip_vector_type> zip(zip_vector_type(entity_tuple, rtuple));

@@ -104,7 +104,7 @@ namespace moneta { namespace container {
 				set.reset(rtuple_set<EntityType>());
 			}
 
-			set->insert(moneta::sql::traits::to_rtuple(entity));
+			set->insert(moneta::traits::to_rtuple(entity));
 		}
 
 	};

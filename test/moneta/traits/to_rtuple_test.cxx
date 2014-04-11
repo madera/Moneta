@@ -14,8 +14,8 @@ BOOST_AUTO_TEST_CASE(to_rtuple_test) {
 	cat.Address.Street = 1;
 	cat.Address.Street = "Infinite Loop";
 
-	moneta::sql::traits::rtuple<Cat>::type rtuple =
-		moneta::sql::traits::to_rtuple<Cat>(cat);
+	moneta::traits::rtuple<Cat>::type rtuple =
+		moneta::traits::to_rtuple<Cat>(cat);
 
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(rtuple), 555);
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<1>(rtuple), "Garfield");
@@ -33,8 +33,8 @@ BOOST_AUTO_TEST_CASE(to_rtuple_2_test) {
 	composite.Dog.ID = 555;
 	composite.Dog.Name = "Doggy";
 
-	moneta::sql::traits::rtuple<Composite>::type rtuple =
-		moneta::sql::traits::to_rtuple<Composite>(composite);
+	moneta::traits::rtuple<Composite>::type rtuple =
+		moneta::traits::to_rtuple<Composite>(composite);
 
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(rtuple), 2600);
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<1>(rtuple), 123);
@@ -54,13 +54,13 @@ BOOST_AUTO_TEST_CASE(const_to_rtuple_test) {
 
 	const Cat& ccat = cat;
 
-	moneta::sql::traits::rtuple<const Cat>::type rtuple =
-		moneta::sql::traits::to_rtuple<const Cat>(ccat);
+	moneta::traits::rtuple<const Cat>::type rtuple =
+		moneta::traits::to_rtuple<const Cat>(ccat);
 
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(rtuple), 555);
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<1>(rtuple), "Garfield");
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<2>(rtuple), 255);
 
-	moneta::sql::traits::rtuple<Cat>::type non_const_tuple = 
-		moneta::sql::traits::to_rtuple<const Cat>(ccat);
+	moneta::traits::rtuple<Cat>::type non_const_tuple = 
+		moneta::traits::to_rtuple<const Cat>(ccat);
 }

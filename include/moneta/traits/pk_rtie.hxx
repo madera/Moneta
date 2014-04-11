@@ -1,7 +1,7 @@
 #pragma once
 #include "../traits/pk_tie.hxx"
 
-namespace moneta { namespace sql { namespace traits {
+namespace moneta { namespace traits {
 
 	template <class EntityType>
 	struct pk_rtie : moneta::traits::detail::deref_if_unary<
@@ -13,4 +13,4 @@ namespace moneta { namespace sql { namespace traits {
 		>::type
 	> {};
 
-}}}
+}}

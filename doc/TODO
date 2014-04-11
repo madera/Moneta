@@ -1,2 +1,4 @@
 * Refactor eager templates in favor of transform_view and other lazy elements.
+* Refactor sepacons in favor of standard fusion fused.
+* On MSVC, definition macros are making Intellisense nauseous.
 
