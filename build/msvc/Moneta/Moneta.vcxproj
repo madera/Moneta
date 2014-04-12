@@ -146,6 +146,7 @@
     <ClInclude Include="..\..\..\include\moneta\traits\same_pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\tie.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\to_entity.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\to_pk_rtuple.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\to_rtie.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\to_rtuple.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\to_tie.hxx" />
@@ -165,6 +166,7 @@
     <None Include="..\..\..\doc\draft.md" />
     <None Include="..\..\..\doc\Filters.md" />
     <None Include="..\..\..\doc\Moneta.md" />
+    <None Include="..\..\..\doc\TODO" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

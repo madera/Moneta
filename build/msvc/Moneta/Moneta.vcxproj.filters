@@ -297,6 +297,9 @@
     <ClInclude Include="..\..\..\include\moneta\traits\detail\indices_of.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\to_pk_rtuple.hxx">
+      <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -317,6 +320,9 @@
       <Filter>Docs</Filter>
     </None>
     <None Include="..\..\..\doc\Moneta.md">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="..\..\..\doc\TODO">
       <Filter>Docs</Filter>
     </None>
   </ItemGroup>

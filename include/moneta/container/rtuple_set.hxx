@@ -9,6 +9,8 @@
 #include "../traits/pk_rtuple.hxx"
 #include "../traits/rtuple.hxx"
 #include "../traits/to_rtuple.hxx"
+#include "../traits/to_pk_rtuple.hxx"
+
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index/ordered_index.hpp>
@@ -17,8 +19,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/mpl/vector_c.hpp>
-
-#include <iomanip>
 #include <boost/tuple/tuple_io.hpp>
 #include <boost/fusion/sequence/io.hpp>
 #include <boost/fusion/include/io.hpp>
@@ -26,40 +26,7 @@
 #include <boost/mpl/print.hpp>
 #include <boost/fusion/sequence/io.hpp>
 #include <boost/fusion/include/io.hpp>
-
-
-// XXX: Move!
-//template <class EntityType>
-//struct rtuple_pk_extractor {
-//	BOOST_MPL_ASSERT((moneta::traits::is_entity<EntityType>));
-//
-//	// XXX: Temporary... just for now.
-//	BOOST_MPL_ASSERT_NOT((boost::is_const<EntityType>));
-//
-//	typedef typename moneta::traits::rtuple<EntityType>::type rtuple_type;	
-//	typedef boost::mpl::vector_c<int, 0> pk_indeces;
-//	typedef moneta::traits::detail::sub_tie<rtuple_type, pk_indeces> rtuple_pk_type;
-//	typedef moneta::traits::detail::deref_if_unary<rtuple_pk_type> pk_derefer_type;
-//	typedef typename pk_derefer_type::type type;
-//
-//	type operator()(rtuple_type& rtuple) const {
-//		return pk_derefer_type()(rtuple_pk_type(rtuple));
-//	}
-//
-//	type operator()(const rtuple_type& rtuple) const {
-//		auto x = rtuple_pk_type(rtuple);
-//		return pk_derefer_type()(x);
-//	}
-//};
-//
-//template <class EntityType>
-//typename rtuple_pk_extractor<EntityType>::type
-//extract_rtuple_pk(const typename rtuple_pk_extractor<EntityType>::rtuple_type& rtuple) {
-//	return rtuple_pk_extractor<EntityType>()(rtuple);
-//}
-// !evoM :XXX
-
-
+#include <iomanip>
 
 namespace moneta { namespace container {
 
@@ -118,8 +85,7 @@ namespace moneta { namespace container {
 			 : LoadTracker(all_loaded),
 			   ChangeTracker(rtuple),
 			   flags(0),
-			   pk(rand()),
-			   //pk(traits::detail::to_pk_rtuple(rtuple)),
+			   pk(traits::to_pk_rtuple<EntityType>(rtuple)),
 			   data(rtuple) {
 				if (newcomer) {
 					flags |= NEWCOMER_FLAG;

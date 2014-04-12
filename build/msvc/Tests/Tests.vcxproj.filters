@@ -138,6 +138,9 @@
     <ClInclude Include="..\..\..\test\moneta\model\Lizard.hxx">
       <Filter>Header Files\moneta\model</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\is_unary_vector.hxx">
+      <Filter>Source Files\moneta\traits\detail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

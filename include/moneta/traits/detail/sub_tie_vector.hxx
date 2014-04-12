@@ -28,10 +28,15 @@ namespace moneta { namespace traits { namespace detail {
 			typename tuple_element_reference<Tuple, Indices, 0>::type
 		> type;
 
-		type operator()(Tuple& tuple) const {
-			using boost::fusion::at_c;
-			return type(at_c<0>(tuple));
+		template <class S>
+		type build(S& s) const {
+			return type(
+				boost::fusion::at_c<boost::mpl::at_c<Indices, 0>::type::value>(s)
+			);
 		}
+
+		type operator()(      Tuple& tuple) const { return build(tuple); }
+		type operator()(const Tuple& tuple) const { return build(tuple); }
 	};
 
 	template <class Tuple, class Indices>
@@ -41,10 +46,16 @@ namespace moneta { namespace traits { namespace detail {
 			typename tuple_element_reference<Tuple, Indices, 1>::type
 		> type;
 
-		type operator()(Tuple& tuple) const {
-			using boost::fusion::at_c;
-			return type(at_c<0>(tuple), at_c<1>(tuple));
+		template <class S>
+		type build(S& s) const {
+			return type(
+				boost::fusion::at_c<boost::mpl::at_c<Indices, 0>::type::value>(s),
+				boost::fusion::at_c<boost::mpl::at_c<Indices, 1>::type::value>(s)
+			);
 		}
+
+		type operator()(      Tuple& tuple) const { return build(tuple); }
+		type operator()(const Tuple& tuple) const { return build(tuple); }
 	};
 
 	template <class Tuple, class Indices>
@@ -55,24 +66,17 @@ namespace moneta { namespace traits { namespace detail {
 			typename tuple_element_reference<Tuple, Indices, 2>::type
 		> type;
 
-		type operator()(Tuple& tuple) const {
-			using boost::fusion::at_c;
-			return type(at_c<0>(tuple), at_c<1>(tuple), at_c<2>(tuple));
+		template <class S>
+		type build(S& s) const {
+			return type(
+				boost::fusion::at_c<boost::mpl::at_c<Indices, 0>::type::value>(s),
+				boost::fusion::at_c<boost::mpl::at_c<Indices, 1>::type::value>(s),
+				boost::fusion::at_c<boost::mpl::at_c<Indices, 2>::type::value>(s)
+			);
 		}
+
+		type operator()(      Tuple& tuple) const { return build(tuple); }
+		type operator()(const Tuple& tuple) const { return build(tuple); }
 	};
 
-	template <class Tuple, class Indices>
-	struct sub_tie_vector<Tuple, Indices, 4> {
-		typedef typename boost::fusion::vector<
-			typename tuple_element_reference<Tuple, Indices, 0>::type,
-			typename tuple_element_reference<Tuple, Indices, 1>::type,
-			typename tuple_element_reference<Tuple, Indices, 2>::type,
-			typename tuple_element_reference<Tuple, Indices, 3>::type
-		> type;
-
-		type operator()(Tuple& tuple) const {
-			using boost::fusion::at_c;
-			return type(at_c<0>(tuple), at_c<1>(tuple), at_c<2>(tuple), at_c<3>(tuple));
-		}
-	};
 }}}
