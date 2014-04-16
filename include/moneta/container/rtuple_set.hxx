@@ -208,7 +208,7 @@ namespace moneta { namespace container {
 			auto end = index.end();
 
 			// Calc max size of this display column.
-			size_t max_size = 0;
+			size_t data_max_size = 0;
 			for (auto itr = begin; itr != end; ++itr) {
 				std::ostringstream oss;
 				oss << boost::fusion::tuple_open("")
@@ -217,8 +217,8 @@ namespace moneta { namespace container {
 				    << itr->data;
 
 				const size_t size = oss.str().size();
-				if (size > max_size) {
-					max_size = size;
+				if (size > data_max_size) {
+					data_max_size = size;
 				}
 			}
 
@@ -232,10 +232,10 @@ namespace moneta { namespace container {
 				std::cerr
 					<< itr->flags << " | "
 
-					<< itr->pk    << " | "
-
 					<< std::dec
-					<< std::setw(max_size)
+					<< itr->pk << " | "
+
+					<< std::setw(data_max_size)
 					<< std::setfill('\0')
 					<< std::left
 					<< data_oss.str() << " | "

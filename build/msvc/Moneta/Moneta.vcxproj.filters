@@ -300,6 +300,9 @@
     <ClInclude Include="..\..\..\include\moneta\traits\to_pk_rtuple.hxx">
       <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\entity_name.hxx">
+      <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -2,10 +2,16 @@
 #include "detail/seek_entity_types.hxx"
 #include "rtuple_set.hxx"
 #include "../traits/tuple.hxx"
+#include "../traits/rtuple.hxx"
 #include "../traits/is_entity.hxx"
 #include <boost/mpl/transform.hpp>
 #include <boost/mpl/vector.hpp>
+#include <boost/mpl/identity.hpp>
 #include <boost/optional.hpp>
+#include <boost/fusion/view/zip_view.hpp>
+#include <boost/fusion/tuple.hpp>
+
+#include "../sql/generators/insert.hxx"
 
 namespace moneta { namespace container {
 
@@ -14,7 +20,6 @@ namespace moneta { namespace container {
 		// XXX: MOVE THIS!!
 		namespace mpl = boost::mpl;
 		namespace fuz = boost::fusion;
-		using namespace moneta::traits;
 
 		template <class ContextType>
 		struct rcontext_inserter {
@@ -24,32 +29,44 @@ namespace moneta { namespace container {
 			 : _context(context) {}
 
 			template <typename PairType>
-			typename boost::enable_if<is_entity<typename mpl::at_c<PairType, 0>::type>, void>::type
+			typename boost::enable_if<
+				traits::is_entity<typename mpl::at_c<PairType, 0>::type>,
+				void
+			>::type
 			operator()(PairType& pair) const {
-				typedef typename pure_type<typename mpl::at_c<PairType, 0>::type>::type type;
-				fuz::get<1>(pair) = soci_create<type>(fuz::get<0>(pair));
+				boost::fusion::get<1>(pair) = _context.insert<
+					typename traits::pure_type<typename mpl::at_c<PairType, 0>::type>::type
+				>(boost::fusion::get<0>(pair));
 			}
 
 			template <typename PairType>
-			typename boost::enable_if<mpl::not_<is_entity<typename mpl::at_c<PairType, 0>::type>>, void>::type
+			typename boost::enable_if<
+				mpl::not_<traits::is_entity<typename mpl::at_c<PairType, 0>::type> >,
+				void
+			>::type
 			operator()(PairType& pair) const {
-				fuz::get<1>(pair) = fuz::get<0>(pair);
+				boost::fusion::get<1>(pair) = boost::fusion::get<0>(pair);
 			}
 
 			template <class EntityType>
-			void insert(EntityType& entity) {
-				tie<EntityType>::type entity_tuple = to_tie<EntityType>(entity);
-				sql::rtuple<EntityType>::type rtuple;
+			typename traits::pk<EntityType>::type
+			insert(EntityType& entity) {
+				using namespace moneta::traits;
 
-				typedef fuz::vector<
-					tie<EntityType>::type&,
-					sql::rtuple<EntityType>::type&
+				tie<EntityType>::type entity_tuple = to_tie<EntityType>(entity);
+				traits::rtuple<EntityType>::type rtuple;
+
+				typedef boost::fusion::vector<
+					typename traits::   tie<EntityType>::type& ,
+					typename traits::rtuple<EntityType>::type&
 				> zip_vector_type;
 
 				fuz::zip_view<zip_vector_type> zip(zip_vector_type(entity_tuple, rtuple));
-				fuz::for_each(zip, recursive_soci_serializer(session));
+				fuz::for_each(zip, rcontext_inserter(_context));
 
-				session << sql::generators::insert_into_table<EntityType>(), ::soci::use(rtuple);
+				std::cout << "Inserting entity: "
+					  << traits::get_entity_name<EntityType>()
+					  << std::endl;
 
 				return extract_pk(entity);
 			}
@@ -58,16 +75,18 @@ namespace moneta { namespace container {
 
 	template <class RootEntityType>
 	class rcontext {
+		typedef rcontext this_type;
+
 		template <class EntityType>
-		struct container {
-			typedef boost::optional<
+		struct optional_rset : boost::mpl::identity<
+			boost::optional<
 				rtuple_set<EntityType>
-			> type;
-		};
+			>
+		> {};
 
 		struct make_container {
 			template <class EntityType>
-			struct apply : container<EntityType>
+			struct apply : optional_rset<EntityType>
 			{};
 		};
 
@@ -82,7 +101,7 @@ namespace moneta { namespace container {
 
 	public: // XXX: Exposed for debugging purposes :XXX
 		template <class EntityType>
-		typename container<EntityType>::type&
+		typename optional_rset<EntityType>::type&
 		get_container() {
 			return _containers;
 		}
@@ -90,21 +109,25 @@ namespace moneta { namespace container {
 	public:
 		template <class EntityType>
 		const size_t size() {
-			typename container<EntityType>::type& container = get_container<EntityType>();
-			return container? container->size() : 0;
+			typename optional_rset<EntityType>::type& optional_rset = get_container<EntityType>();
+			return optional_rset? optional_rset->size() : 0;
 		}
 
 		template <class EntityType>
-		void insert(const EntityType& entity) {
+		typename traits::pk<EntityType>::type
+		insert(EntityType& entity) {
+			detail::rcontext_inserter<this_type> inserter(*this);
+			inserter.insert(entity);
 
-			// Get container entry, and "allocate" a new instance if not initialized.
+			// Get optional_rset entry, and "allocate" a new instance if not initialized.
 			//
-			typename container<EntityType>::type& set = get_container<EntityType>();
-			if (!set.is_initialized()) {
-				set.reset(rtuple_set<EntityType>());
+			typename optional_rset<EntityType>::type& optional_rset = get_container<EntityType>();
+			if (!optional_rset.is_initialized()) {
+				optional_rset.reset(rtuple_set<EntityType>());
 			}
 
-			set->insert(moneta::traits::to_rtuple(entity));
+			optional_rset->insert(moneta::traits::to_rtuple(entity));
+			return traits::extract_pk(entity);
 		}
 
 	};

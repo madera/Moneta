@@ -94,6 +94,9 @@
     <Filter Include="Source Files\moneta\container\detail">
       <UniqueIdentifier>{a9512d70-1394-49fa-b539-fc7d82ea0b3c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\moneta\model">
+      <UniqueIdentifier>{4182a9bd-066d-412c-a372-d7e93847a4ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -140,6 +143,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\detail\is_unary_vector.hxx">
       <Filter>Source Files\moneta\traits\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\moneta\model\test_dataset.hxx">
+      <Filter>Header Files\moneta\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\moneta\model\CatDataset.hxx">
+      <Filter>Header Files\moneta\model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

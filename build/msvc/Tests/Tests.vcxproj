@@ -73,7 +73,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;_SCL_SECURE_NO_WARNINGS;BOOST_TEST_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(INCLUDE);../../../externals/console/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(INCLUDE);../../../externals/console/include;../../../include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -91,12 +91,14 @@
     <ClInclude Include="..\..\..\externals\console\include\console\shell.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\is_unary_vector.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Cat.hxx" />
+    <ClInclude Include="..\..\..\test\moneta\model\CatDataset.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Lizard.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Composite.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Dog.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Address.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Hero.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Person.hxx" />
+    <ClInclude Include="..\..\..\test\moneta\model\test_dataset.hxx" />
     <ClInclude Include="..\..\..\test\moneta\pp\detail\includer_test_header.hxx" />
     <ClInclude Include="..\..\..\test\moneta\serialization\soci\detail\soci_fixture.hxx" />
     <ClInclude Include="stdafx.h" />
@@ -111,6 +113,7 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\main.cxx">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\container\change_trackers\bitset_change_tracker_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\container\change_trackers\hash_change_tracker_test.cxx" />

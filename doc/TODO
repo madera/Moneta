@@ -2,3 +2,5 @@
 * Refactor sepacons in favor of standard fusion fused.
 * On MSVC, definition macros are making Intellisense nauseous.
 * Rethink strategy about to_rtuple functions. Maybe on to_tie variants should exist.
+* Refactor to get more out of the mpl.
+

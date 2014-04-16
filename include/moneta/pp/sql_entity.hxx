@@ -7,6 +7,7 @@
 #include <moneta/traits/members.hxx>
 #include <moneta/traits/member.hxx>
 #include <moneta/traits/member_names.hxx>
+#include <moneta/traits/entity_name.hxx>
 #include <moneta/sql/traits/table_name.hxx>
 #include <moneta/sql/traits/field_names.hxx>
 #include <boost/mpl/vector.hpp>
@@ -36,6 +37,7 @@
 
 #define MONETA_DESCRIBE_SQL_ENTITY(entity, table, members) \
 	MONETA_DESCRIBE_ENTITY_BASE(entity, members) \
+	MONETA_ENTITY_NAME(entity, entity) \
 	MONETA_SQL_TABLE_NAME(entity, table) \
 	MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES(entity, members) \
 	MONETA_PP_EXPAND_PRIMARY_KEYS(entity, members)
