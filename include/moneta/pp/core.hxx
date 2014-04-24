@@ -1,4 +1,6 @@
 #pragma once
+#include "moneta_pp.hxx"
+#include "detail/add_parentheses.hxx"
 #include "detail/boostx.hxx"
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/control/if.hpp>
@@ -12,8 +14,7 @@
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/preprocessor/iteration/iterate.hpp>
-#include <moneta/pp/detail/add_parentheses.hxx>
-#include "moneta_pp.hxx"
+#include <boost/preprocessor/tuple.hpp>
 
 #define ENTITY_NAMESPACE 1
 #define ENTITY_NAME      2
@@ -95,3 +96,4 @@
 	struct entity { \
 		MONETA_PP_DEFINE_MEMBERS(members) \
 	};
+
