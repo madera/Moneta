@@ -13,7 +13,9 @@ struct Composite {
 
 MONETA_DESCRIBE_SQL_ENTITY(
 	Composite, COMPOSITE,
-	((int,    Identifier, COMPOSITE_IDENTIFIER, MONETA_PRIMARY_KEY))
-	((Person, Person,     COMPOSITE_PERSON                        ))
-	((Dog,    Dog,        COMPOSITE_DOG                           ))
+	((int,    Identifier, COMPOSITE_IDENTIFIER))
+	((Person, Person,     COMPOSITE_PERSON    ))
+	((Dog,    Dog,        COMPOSITE_DOG       ))
 )
+
+MONETA_DECLARE_PRIMARY_KEY(Composite, int, Identifier)

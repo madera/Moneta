@@ -54,4 +54,19 @@ BOOST_AUTO_TEST_CASE(rcontext_test) {
 	context.get_container<Address>()->debug_dump();
 	std::cerr << "---------------------------------" << std::endl;
 
+	Cat conando = dataset[0];
+	conando.ID = 4;
+	conando.Name = "Conando";
+	conando.Address.ID = 10;
+	conando.Address.Number = 55;
+	conando.Address.Street = "Conan Av.";
+	
+	context.replace(conando);
+
+	std::cerr << "---------------------------------" << std::endl;
+	context.get_container<Cat>()->debug_dump();
+	std::cerr << "---------------------------------" << std::endl;
+	context.get_container<Address>()->debug_dump();
+	std::cerr << "---------------------------------" << std::endl;
+
 }

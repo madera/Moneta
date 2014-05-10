@@ -162,6 +162,21 @@ namespace moneta { namespace container {
 			_container.get<by_hash>().insert(entry(rtuple, newcomer));
 		}
 
+		void replace(const rtuple_type& rtuple) {
+			auto itr = _container.get<by_hash>().find(traits::to_pk_rtuple<EntityType>(rtuple));
+			if (itr != _container.get<by_hash>().end()) {
+				_container.get<by_hash>().replace(itr, entry(rtuple));
+			}
+		}
+
+		void erase(const rtuple_type& rtuple) {
+			erase(traits::to_pk_rtuple<EntityType>(rtuple));
+		}
+
+		void erase(const pk_rtuple_type pk) {
+			std::cerr << "erasing..." << std::endl;
+		}
+
 		// --------------------------------------------------------------------------------
 		// --------------------------------------------------------------------------------
 		// --------------------------------------------------------------------------------

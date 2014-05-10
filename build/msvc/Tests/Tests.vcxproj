@@ -140,6 +140,7 @@
     <ClCompile Include="..\..\..\test\moneta\sql\generators\select_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\traits\field_names_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\traits\table_name_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\test_sandbox.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\deref_if_unary_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\indices_of_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\memptr_hacker_test.cxx" />

@@ -305,5 +305,8 @@
     <ClCompile Include="..\..\..\test\moneta\traits\detail\indices_of_test.cxx">
       <Filter>Source Files\moneta\traits\detail</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\test_sandbox.cxx">
+      <Filter>Source Files\moneta</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

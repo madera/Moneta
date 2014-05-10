@@ -18,12 +18,12 @@ namespace moneta { namespace container {
 		null_load_tracker(const bool ignored) {
 		}
 
-		const bool loaded(const size_t index) const {
-			return true;
-		}
+		//const bool loaded(const size_t index) const {
+		//	return true;
+		//}
 
-		void loaded(const size_t, const bool value) {
-		}
+		//void loaded(const size_t, const bool value) {
+		//}
 	};
 
 }}

@@ -14,7 +14,10 @@ struct Lizard {
 
 MONETA_DESCRIBE_SQL_ENTITY(
 	Lizard, LIZARD,
-	((Person,      Owner, LIZARD_OWNER, MONETA_PRIMARY_KEY))
-	((int,         ID,    LIZARD_ID,    MONETA_PRIMARY_KEY))
-	((std::string, Name,  LIZARD_NAME                     ))
+	((Person,      Owner, LIZARD_OWNER))
+	((int,         ID,    LIZARD_ID,  ))
+	((std::string, Name,  LIZARD_NAME ))
 )
+
+MONETA_DECLARE_PRIMARY_KEY(Lizard, Person, Owner)
+MONETA_DECLARE_PRIMARY_KEY(Lizard, int   , ID   )

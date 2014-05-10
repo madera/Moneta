@@ -19,7 +19,7 @@ namespace moneta { namespace container {
 
 		// XXX: MOVE THIS!!
 		namespace mpl = boost::mpl;
-		namespace fuz = boost::fusion;
+		namespace fusion = boost::fusion;
 
 		template <class ContextType>
 		struct rcontext_inserter {
@@ -61,10 +61,62 @@ namespace moneta { namespace container {
 					typename traits::rtuple<EntityType>::type&
 				> zip_vector_type;
 
-				fuz::zip_view<zip_vector_type> zip(zip_vector_type(entity_tuple, rtuple));
-				fuz::for_each(zip, rcontext_inserter(_context));
+				fusion::zip_view<zip_vector_type> zip(zip_vector_type(entity_tuple, rtuple));
+				fusion::for_each(zip, rcontext_inserter(_context));
 
 				std::cout << "Inserting entity: "
+					  << traits::get_entity_name<EntityType>()
+					  << std::endl;
+
+				return extract_pk(entity);
+			}
+		};
+
+
+		template <class ContextType>
+		struct rcontext_replacer {
+			ContextType& _context;
+
+			rcontext_replacer(ContextType& context)
+			 : _context(context) {}
+
+			template <typename PairType>
+			typename boost::enable_if<
+				traits::is_entity<typename mpl::at_c<PairType, 0>::type>,
+				void
+			>::type
+			operator()(PairType& pair) const {
+				boost::fusion::get<1>(pair) = _context.replace<
+					typename traits::pure_type<typename mpl::at_c<PairType, 0>::type>::type
+				>(boost::fusion::get<0>(pair));
+			}
+
+			template <typename PairType>
+			typename boost::enable_if<
+				mpl::not_<traits::is_entity<typename mpl::at_c<PairType, 0>::type> >,
+				void
+			>::type
+			operator()(PairType& pair) const {
+				boost::fusion::get<1>(pair) = boost::fusion::get<0>(pair);
+			}
+
+			template <class EntityType>
+			typename traits::pk<EntityType>::type
+			replace(EntityType& entity) {
+				using namespace moneta::traits;
+
+				tie<EntityType>::type entity_tuple = to_tie<EntityType>(entity);
+				traits::rtuple<EntityType>::type rtuple;
+
+				typedef boost::fusion::vector<
+					typename traits::   tie<EntityType>::type& ,
+					typename traits::rtuple<EntityType>::type&
+				> zip_vector_type;
+
+				fusion::zip_view<zip_vector_type> zip(zip_vector_type(entity_tuple, rtuple));
+				fusion::for_each(zip, rcontext_replacer(_context));
+
+				std::cout << "Updating entity: "
 					  << traits::get_entity_name<EntityType>()
 					  << std::endl;
 
@@ -120,7 +172,6 @@ namespace moneta { namespace container {
 			inserter.insert(entity);
 
 			// Get optional_rset entry, and "allocate" a new instance if not initialized.
-			//
 			typename optional_rset<EntityType>::type& optional_rset = get_container<EntityType>();
 			if (!optional_rset.is_initialized()) {
 				optional_rset.reset(rtuple_set<EntityType>());
@@ -130,6 +181,21 @@ namespace moneta { namespace container {
 			return traits::extract_pk(entity);
 		}
 
+		template <class EntityType>
+		typename traits::pk<EntityType>::type
+		replace(EntityType& entity) {
+			detail::rcontext_replacer<this_type> replacer(*this);
+			replacer.replace(entity);
+
+			// Get optional_rset entry, and "allocate" a new instance if not initialized.
+			typename optional_rset<EntityType>::type& optional_rset = get_container<EntityType>();
+			if (!optional_rset.is_initialized()) {
+				optional_rset.reset(rtuple_set<EntityType>());
+			}
+
+			optional_rset->replace(moneta::traits::to_rtuple(entity));
+			return traits::extract_pk(entity);
+		}
 	};
 
 }}
