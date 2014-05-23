@@ -303,6 +303,15 @@
     <ClInclude Include="..\..\..\include\moneta\traits\entity_name.hxx">
       <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\container\meta_set.hxx">
+      <Filter>Header Files\moneta\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\container\pk_tracker.hxx">
+      <Filter>Header Files\moneta\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\container\rtuple_data.hxx">
+      <Filter>Header Files\moneta\container</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

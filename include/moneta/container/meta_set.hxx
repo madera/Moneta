@@ -1,0 +1,224 @@
+#pragma once
+#include "../pp/detail/has_member_trait.hxx"
+#include <boost/multi_index_container.hpp>
+#include <boost/multi_index/sequenced_index.hpp>
+#include <boost/multi_index/member.hpp>
+#include <boost/mpl/copy_if.hpp>
+#include <boost/mpl/inherit.hpp>
+#include <boost/mpl/inherit_linearly.hpp>
+#include <boost/mpl/transform.hpp>
+#include <boost/mpl/vector.hpp>
+#include <boost/optional.hpp>
+
+namespace moneta { namespace container {
+
+	template <class Sequence>
+	struct meta_set;
+
+	namespace detail {
+		
+		//
+		// Constructor hack
+		//
+		template <class InstanceType, class ArgumentType>
+		class sliced_constructor {
+			InstanceType& _instance;
+			ArgumentType& _argument;
+		public:
+			sliced_constructor(InstanceType& instance, ArgumentType& argument)
+			 : _instance(instance), _argument(argument) {}
+
+			template <class Base>
+			void operator()(const Base& ignored) const {
+				BOOST_MPL_ASSERT((boost::is_base_and_derived<Base, InstanceType>));
+				Base* base_ptr = &_instance;
+				new (base_ptr) Base(_argument); // Placement new on sliced entity.
+			}
+		};
+
+		//
+		// For entry to_string'ification.
+		//
+
+		DEFINE_HAS_MEMBER_TRAIT(to_string)
+
+		template <class T>
+		typename boost::enable_if<has_member_to_string<T>, std::string>::type
+		to_string_or_empty(const T& entity) {
+			return entity.to_string();
+		}
+
+		template <class T>
+		typename boost::disable_if<has_member_to_string<T>, std::string>::type
+		to_string_or_empty(const T& entity) {
+			return "";
+		}
+
+		template <class InstanceType, class OstreamType = std::basic_ostream<char> >
+		class sliced_to_string_or_empty_ostreamer {
+			const InstanceType& _instance;
+			OstreamType& _output;
+			std::string _separator;
+			const size_t _size;
+			size_t _iteration;
+		public:
+			sliced_to_string_or_empty_ostreamer(
+				const InstanceType& instance,
+				OstreamType& output,
+				const std::string separator = ", ",
+				const size_t size = -1
+			) : _instance(instance), _output(output), _separator(separator),
+			    _size(size), _iteration(0) {}
+
+			template <class Base>
+			void operator()(const Base& ignored) {
+				BOOST_MPL_ASSERT((boost::is_base_and_derived<Base, InstanceType>));
+				const Base& base = _instance;
+				_output << to_string_or_empty(base);
+
+				if (_size == -1 || ++_iteration < _size) {
+					_output << _separator;
+				}
+			}
+
+			const OstreamType& get_ostream() const {
+				return _output;
+			}
+		};
+
+		DEFINE_HAS_NESTED_TYPE(get_index)
+
+		template <class Sequence>
+		struct meta_set_bases : boost::mpl::transform<
+			Sequence,
+			boost::mpl::apply_wrap1<boost::mpl::_1, meta_set<Sequence> >
+		> {};
+
+		template <class T>
+		struct get_entry {
+			typedef typename T::entry type;
+		};
+	}
+
+	template <class Sequence>
+	struct meta_set : boost::mpl::inherit_linearly<
+		typename detail::meta_set_bases<Sequence>::type,
+		boost::mpl::inherit<
+			boost::mpl::_1,
+			boost::mpl::_2
+		>
+	>::type {
+		typedef meta_set this_type;
+
+		typedef typename detail::meta_set_bases<
+			Sequence
+		>::type traits_type;
+
+		typedef typename boost::mpl::transform<
+			traits_type,
+			detail::get_entry<boost::mpl::_1>
+		>::type entries_type;
+
+
+
+		struct entry : boost::mpl::inherit_linearly<
+			entries_type,
+			boost::mpl::inherit<boost::mpl::_1, boost::mpl::_2>
+		>::type {
+			entry() {}
+
+			template <class EntityType>
+			entry(EntityType& entity) {
+				boost::mpl::for_each<entries_type>(
+					sliced_constructor<entry, EntityType>(*this, entity)
+				);
+			}
+
+			std::string to_string() const {
+				std::ostringstream oss;
+				boost::mpl::for_each<entries_type>(
+					detail::sliced_to_string_or_empty_ostreamer<entry>(
+						*this, oss, " | ", boost::mpl::size<entries_type>::value
+					)
+				);
+
+				return oss.str();
+			}
+		};
+
+
+
+		template <typename T>
+		struct get_index : boost::mpl::apply<
+			typename T::get_index,
+			entry
+		> {};
+
+		typedef typename boost::mpl::copy_if<
+			traits_type,
+			detail::has_nested_type_get_index<boost::mpl::_1>,
+			boost::mpl::inserter<
+				boost::mpl::vector<>,
+				boost::mpl::push_back<
+					boost::mpl::_1,
+						get_index<boost::mpl::_2>
+				>
+			>
+		>::type index_vector;
+
+		BOOST_MPL_ASSERT(( // DBG //
+			boost::is_same<
+				typename boost::mpl::at_c<index_vector, 0>::type,
+				typename boost::mpl::at_c<traits_type, 0>::type::
+						get_index::template apply<entry>::type
+			>
+		));
+
+		struct sequenced_index_tag;
+
+		typedef boost::multi_index::multi_index_container<
+			entry,
+			typename boost::mpl::push_back<
+				index_vector,
+				boost::multi_index::sequenced<
+					boost::multi_index::tag<sequenced_index_tag>
+				>
+			>::type
+		> container_type;
+
+		//
+		// protected:
+		//
+		template <class This>
+		static this_type& get(This* _this) {
+			return *static_cast<this_type*>(_this);
+		}
+
+		template <class This>
+		static const this_type& get(const This* _this) {
+			return *static_cast<const this_type*>(_this);
+		}
+
+		template <class This>
+		static container_type& container(This* _this) {
+			return get(_this)._container;
+		}
+
+		template <class This>
+		static const container_type& container(const This* _this) {
+			return get(_this)._container;
+		}
+
+		//
+		// public:
+		//
+		void insert(const entry& entry) {
+			_container.insert(entry);
+			std::cerr << "Inserted: " << entry.to_string() << std::endl;
+		}
+
+	private:
+		container_type _container;
+	};
+
+}}
