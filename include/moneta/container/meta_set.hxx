@@ -12,9 +12,6 @@
 
 namespace moneta { namespace container {
 
-	template <class Sequence>
-	struct meta_set;
-
 	namespace detail {
 		
 		//
@@ -89,136 +86,164 @@ namespace moneta { namespace container {
 		DEFINE_HAS_NESTED_TYPE(get_index)
 
 		template <class Sequence>
+		struct meta_set_impl;
+
+		template <class Sequence>
 		struct meta_set_bases : boost::mpl::transform<
 			Sequence,
-			boost::mpl::apply_wrap1<boost::mpl::_1, meta_set<Sequence> >
+			boost::mpl::apply_wrap1<boost::mpl::_1, meta_set_impl<Sequence> >
 		> {};
 
 		template <class T>
 		struct get_entry {
 			typedef typename T::entry type;
 		};
-	}
-
-	template <class Sequence>
-	struct meta_set : boost::mpl::inherit_linearly<
-		typename detail::meta_set_bases<Sequence>::type,
-		boost::mpl::inherit<
-			boost::mpl::_1,
-			boost::mpl::_2
-		>
-	>::type {
-		typedef meta_set this_type;
-
-		typedef typename detail::meta_set_bases<
-			Sequence
-		>::type traits_type;
-
-		typedef typename boost::mpl::transform<
-			traits_type,
-			detail::get_entry<boost::mpl::_1>
-		>::type entries_type;
 
 
-
-		struct entry : boost::mpl::inherit_linearly<
-			entries_type,
+		template <class Sequence>
+		struct meta_set_impl : boost::mpl::inherit_linearly<
+			typename meta_set_bases<Sequence>::type,
 			boost::mpl::inherit<boost::mpl::_1, boost::mpl::_2>
 		>::type {
-			entry() {}
+			typedef meta_set_impl this_type;
+			typedef typename meta_set_bases<Sequence>::type bases_type;
 
-			template <class EntityType>
-			entry(EntityType& entity) {
-				boost::mpl::for_each<entries_type>(
-					sliced_constructor<entry, EntityType>(*this, entity)
-				);
+			typedef typename boost::mpl::transform<
+				bases_type,
+				get_entry<boost::mpl::_1>
+			>::type entries_type;
+
+
+
+			struct entry : boost::mpl::inherit_linearly<
+				entries_type,
+				boost::mpl::inherit<boost::mpl::_1, boost::mpl::_2>
+			>::type {
+				entry() {}
+
+				template <class EntityType>
+				entry(EntityType& entity) {
+					boost::mpl::for_each<entries_type>(
+						sliced_constructor<entry, EntityType>(*this, entity)
+					);
+				}
+
+				std::string to_string() const {
+					std::ostringstream oss;
+					boost::mpl::for_each<entries_type>(
+						sliced_to_string_or_empty_ostreamer<entry>(
+							*this, oss, " | ",
+							boost::mpl::size<entries_type>::value
+						)
+					);
+
+					return oss.str();
+				}
+			};
+
+			template <typename T>
+			struct get_index : boost::mpl::apply<
+				typename T::get_index,
+				entry
+			> {};
+
+			typedef typename boost::mpl::copy_if<
+				bases_type,
+				has_nested_type_get_index<boost::mpl::_1>,
+				boost::mpl::inserter<
+					boost::mpl::vector<>,
+					boost::mpl::push_back<
+						boost::mpl::_1,
+							get_index<boost::mpl::_2>
+					>
+				>
+			>::type index_vector;
+
+			//BOOST_MPL_ASSERT(( // DBG //
+			//	boost::is_same<
+			//		typename boost::mpl::at_c<index_vector, 0>::type,
+			//		typename boost::mpl::at_c<bases_type, 0>::type::
+			//				get_index::template apply<entry>::type
+			//	>
+			//));
+
+			struct sequenced_index_tag;
+
+			typedef boost::multi_index::multi_index_container<
+				entry,
+				typename boost::mpl::push_back<
+					index_vector,
+					boost::multi_index::sequenced< // XXX: Should this default exist?
+						boost::multi_index::tag<sequenced_index_tag>
+					>
+				>::type
+			> container_type;
+
+			//
+			// protected:
+			//
+			template <class This>
+			static this_type& get(This* _this) {
+				return *static_cast<this_type*>(_this);
 			}
 
-			std::string to_string() const {
-				std::ostringstream oss;
-				boost::mpl::for_each<entries_type>(
-					detail::sliced_to_string_or_empty_ostreamer<entry>(
-						*this, oss, " | ", boost::mpl::size<entries_type>::value
-					)
-				);
-
-				return oss.str();
+			template <class This>
+			static const this_type& get(const This* _this) {
+				return *static_cast<const this_type*>(_this);
 			}
+
+			template <class This>
+			static container_type& container(This* _this) {
+				return get(_this)._container;
+			}
+
+			template <class This>
+			static const container_type& container(const This* _this) {
+				return get(_this)._container;
+			}
+
+			//
+			// public:
+			//
+
+			// Insert into default sequential index.
+			void insert(const entry& entry) {
+				_container.get<sequenced_index_tag>().push_back(entry);
+				std::cerr << "Inserted: " << entry.to_string() << std::endl;
+			}
+
+			template <class T>
+			void insert(const T& x) {
+				insert(entry(x));
+			}
+
+			// Erase from default sequential index.
+			//void erase(entry& entry) {
+			//	auto& index = _container.get<sequenced_index_tag>();
+			//	auto itr = index.find(entry);
+			//	if (itr != index.end()) {
+			//		index.erase(itr);
+			//		std::cerr << "Erased: " << entry.to_string() << std::endl;
+			//	}
+			//}
+
+			size_t size() const {
+				return _container.size();
+			}
+
+		private:
+			container_type _container;
 		};
+	
+	} // detail
 
-
-
-		template <typename T>
-		struct get_index : boost::mpl::apply<
-			typename T::get_index,
-			entry
-		> {};
-
-		typedef typename boost::mpl::copy_if<
-			traits_type,
-			detail::has_nested_type_get_index<boost::mpl::_1>,
-			boost::mpl::inserter<
-				boost::mpl::vector<>,
-				boost::mpl::push_back<
-					boost::mpl::_1,
-						get_index<boost::mpl::_2>
-				>
-			>
-		>::type index_vector;
-
-		BOOST_MPL_ASSERT(( // DBG //
-			boost::is_same<
-				typename boost::mpl::at_c<index_vector, 0>::type,
-				typename boost::mpl::at_c<traits_type, 0>::type::
-						get_index::template apply<entry>::type
-			>
-		));
-
-		struct sequenced_index_tag;
-
-		typedef boost::multi_index::multi_index_container<
-			entry,
-			typename boost::mpl::push_back<
-				index_vector,
-				boost::multi_index::sequenced<
-					boost::multi_index::tag<sequenced_index_tag>
-				>
-			>::type
-		> container_type;
-
-		//
-		// protected:
-		//
-		template <class This>
-		static this_type& get(This* _this) {
-			return *static_cast<this_type*>(_this);
-		}
-
-		template <class This>
-		static const this_type& get(const This* _this) {
-			return *static_cast<const this_type*>(_this);
-		}
-
-		template <class This>
-		static container_type& container(This* _this) {
-			return get(_this)._container;
-		}
-
-		template <class This>
-		static const container_type& container(const This* _this) {
-			return get(_this)._container;
-		}
-
-		//
-		// public:
-		//
-		void insert(const entry& entry) {
-			_container.insert(entry);
-			std::cerr << "Inserted: " << entry.to_string() << std::endl;
-		}
-
-	private:
-		container_type _container;
-	};
-
+	template <
+		class T0,
+		class T1 = boost::mpl::na, class T2 = boost::mpl::na, class T3 = boost::mpl::na,
+		class T4 = boost::mpl::na, class T5 = boost::mpl::na, class T6 = boost::mpl::na,
+		class T7 = boost::mpl::na, class T8 = boost::mpl::na, class T9 = boost::mpl::na
+	>
+	struct meta_set : detail::meta_set_impl<
+		boost::mpl::vector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+	> {};
 }}

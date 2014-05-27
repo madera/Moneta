@@ -1,18 +1,16 @@
 #include "stdafx.h"
 #include <moneta/container/meta_set.hxx>
-#include <moneta/container/pk_tracker.hxx>
-#include <moneta/container/rtuple_data.hxx>
+#include <moneta/container/data_trackers/pk_tracker.hxx>
+#include <moneta/container/data_trackers/rtuple_data.hxx>
 #include <moneta/container/load_trackers/bitset_load_tracker.hxx>
 #include "model/Person.hxx"
 
 BOOST_AUTO_TEST_CASE(sandbox) {
 
 	typedef moneta::container::meta_set<
-		boost::mpl::vector<
-			moneta::container::pk_tracker<Person>,
-			moneta::container::bitset_load_tracker2<Person>,
-			moneta::container::rtuple_data<Person>
-		>
+		moneta::container::pk_tracker<Person>,
+		moneta::container::bitset_load_tracker2<Person>,
+		moneta::container::rtuple_data<Person>
 	> master_t;
 
 	master_t meta_set;

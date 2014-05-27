@@ -118,6 +118,7 @@
     <ClCompile Include="..\..\..\test\moneta\container\change_trackers\bitset_change_tracker_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\container\change_trackers\hash_change_tracker_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\container\load_trackers\bitset_load_tracker_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\container\meta_set_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\container\rcontext_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\container\rtuple_set_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\interactive_shell_test.cxx" />

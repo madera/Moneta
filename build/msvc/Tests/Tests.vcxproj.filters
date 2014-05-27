@@ -308,5 +308,8 @@
     <ClCompile Include="..\..\..\test\moneta\test_sandbox.cxx">
       <Filter>Source Files\moneta</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\container\meta_set_test.cxx">
+      <Filter>Source Files\moneta\container</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

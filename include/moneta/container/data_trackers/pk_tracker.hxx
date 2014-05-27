@@ -1,7 +1,7 @@
 #pragma once
-#include "meta_set.hxx"
-#include "../traits/pk.hxx"
-#include "../traits/extract_pk.hxx"
+#include "../meta_set.hxx"
+#include "../../traits/pk.hxx"
+#include "../../traits/extract_pk.hxx"
 #include <boost/multi_index/hashed_index.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -23,6 +23,7 @@ namespace moneta { namespace container {
 
 				entry() {}
 
+				// XXX: Add non-const too.
 				entry(const EntityType& entity) {
 					pk = moneta::traits::extract_pk(entity);
 				}
@@ -59,6 +60,18 @@ namespace moneta { namespace container {
 				index::const_iterator end   = _container.get<this_type>().end();
 				index::const_iterator itr   = std::find(begin, end, pk);
 				return (itr == end)? boost::optional<typename Master::entry>() : *itr;
+			}
+
+			void erase(param_type pk) {
+				Master::container_type& _container = Master::container(this);
+				typedef typename Master::container_type::template index<this_type>::type index;
+				index::const_iterator begin = _container.get<this_type>().begin();
+				index::const_iterator end   = _container.get<this_type>().end();
+				index::const_iterator itr   = std::find(begin, end, pk);
+
+				if (itr != end) {
+					_container.get<this_type>().erase(itr);
+				}
 			}
 
 			// DEPRECATED UNTIL REFACTORING

@@ -73,6 +73,9 @@
     <Filter Include="Header Files\moneta\container\change_trackers">
       <UniqueIdentifier>{3c6791c6-16fb-4444-80b9-2bea2220343c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\container\data_trackers">
+      <UniqueIdentifier>{61c7e5af-8c0d-4bbd-b676-d1df212871be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -249,13 +252,7 @@
     <ClInclude Include="..\..\..\include\moneta\container\load_trackers\bitset_load_tracker.hxx">
       <Filter>Header Files\moneta\container\load_trackers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\container\load_trackers\null_load_tracker.hxx">
-      <Filter>Header Files\moneta\container\load_trackers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\container\change_trackers\hash_change_tracker.hxx">
-      <Filter>Header Files\moneta\container\change_trackers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\container\change_trackers\null_change_tracker.hxx">
       <Filter>Header Files\moneta\container\change_trackers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\container\change_trackers\bitset_change_tracker.hxx">
@@ -306,11 +303,11 @@
     <ClInclude Include="..\..\..\include\moneta\container\meta_set.hxx">
       <Filter>Header Files\moneta\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\container\pk_tracker.hxx">
-      <Filter>Header Files\moneta\container</Filter>
+    <ClInclude Include="..\..\..\include\moneta\container\data_trackers\rtuple_data.hxx">
+      <Filter>Header Files\moneta\container\data_trackers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\container\rtuple_data.hxx">
-      <Filter>Header Files\moneta\container</Filter>
+    <ClInclude Include="..\..\..\include\moneta\container\data_trackers\pk_tracker.hxx">
+      <Filter>Header Files\moneta\container\data_trackers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
