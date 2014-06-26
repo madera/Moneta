@@ -76,6 +76,9 @@
     <Filter Include="Header Files\moneta\container\data_trackers">
       <UniqueIdentifier>{61c7e5af-8c0d-4bbd-b676-d1df212871be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\serialization\rawbin">
+      <UniqueIdentifier>{4804e86a-2115-46c1-a2dd-76f77de4b7ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -308,6 +311,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\container\data_trackers\pk_tracker.hxx">
       <Filter>Header Files\moneta\container\data_trackers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\serialization\detail\hexdump.hxx">
+      <Filter>Header Files\moneta\serialization\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\serialization\rawbin\decoder.hxx">
+      <Filter>Header Files\moneta\serialization\rawbin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\serialization\rawbin\encoder.hxx">
+      <Filter>Header Files\moneta\serialization\rawbin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\serialization\rawbin\io.hxx">
+      <Filter>Header Files\moneta\serialization\rawbin</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

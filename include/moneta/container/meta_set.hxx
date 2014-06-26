@@ -1,7 +1,7 @@
 #pragma once
 #include "../pp/detail/has_member_trait.hxx"
 #include <boost/multi_index_container.hpp>
-#include <boost/multi_index/sequenced_index.hpp>
+#include <boost/multi_index/random_access_index.hpp>
 #include <boost/multi_index/member.hpp>
 #include <boost/mpl/copy_if.hpp>
 #include <boost/mpl/inherit.hpp>
@@ -173,7 +173,8 @@ namespace moneta { namespace container {
 				entry,
 				typename boost::mpl::push_back<
 					index_vector,
-					boost::multi_index::sequenced< // XXX: Should this default exist?
+					// XXX: Should this default index exist?
+					boost::multi_index::random_access<
 						boost::multi_index::tag<sequenced_index_tag>
 					>
 				>::type
@@ -229,6 +230,14 @@ namespace moneta { namespace container {
 
 			size_t size() const {
 				return _container.size();
+			}
+
+			const entry& at(const size_t index) {
+				return _container.get<sequenced_index_tag>().at(index);
+			}
+
+			const entry& operator[](const size_t index) {
+				return at(index);
 			}
 
 		private:

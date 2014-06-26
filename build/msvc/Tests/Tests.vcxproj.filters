@@ -52,21 +52,6 @@
     <Filter Include="Source Files\moneta\sql\generators">
       <UniqueIdentifier>{95339085-815f-4853-a859-2a5e9348e1a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\moneta\serializers">
-      <UniqueIdentifier>{b0507f1e-f61f-42bd-8ff2-80a79ea1cf01}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\moneta\serializers\detail">
-      <UniqueIdentifier>{a749a435-60b6-40f4-b0e1-59b6d0c859e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\moneta\serializers\shell">
-      <UniqueIdentifier>{7f1aa187-06c2-43ca-b725-df33acb3ced4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\moneta\serializers\soci">
-      <UniqueIdentifier>{fce37c24-b88a-463e-9c28-092980c716ad}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\moneta\serializers\soci\detail">
-      <UniqueIdentifier>{685d6f50-b51d-45c5-89c1-2c1303e274f8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\moneta\serialization">
       <UniqueIdentifier>{69d5697b-be74-42f5-8cb0-b06c10af2580}</UniqueIdentifier>
     </Filter>
@@ -96,6 +81,24 @@
     </Filter>
     <Filter Include="Source Files\moneta\model">
       <UniqueIdentifier>{4182a9bd-066d-412c-a372-d7e93847a4ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moneta\serialization">
+      <UniqueIdentifier>{b0507f1e-f61f-42bd-8ff2-80a79ea1cf01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moneta\serialization\detail">
+      <UniqueIdentifier>{a749a435-60b6-40f4-b0e1-59b6d0c859e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moneta\serialization\shell">
+      <UniqueIdentifier>{7f1aa187-06c2-43ca-b725-df33acb3ced4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moneta\serialization\soci">
+      <UniqueIdentifier>{fce37c24-b88a-463e-9c28-092980c716ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moneta\serialization\soci\detail">
+      <UniqueIdentifier>{685d6f50-b51d-45c5-89c1-2c1303e274f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moneta\serialization\rawbin">
+      <UniqueIdentifier>{7ba52996-0bfa-444f-b132-de5a54584f23}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +152,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\test\moneta\model\CatDataset.hxx">
       <Filter>Header Files\moneta\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\moneta\hexdump.hxx">
+      <Filter>Header Files\moneta</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -219,13 +225,13 @@
       <Filter>Source Files\moneta\sql\generators</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\serialization\detail\from_text_impl_test.cxx">
-      <Filter>Source Files\moneta\serializers\detail</Filter>
+      <Filter>Source Files\moneta\serialization\detail</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\serialization\shell\shell_codec_test.cxx">
-      <Filter>Source Files\moneta\serializers\shell</Filter>
+      <Filter>Source Files\moneta\serialization\shell</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\serialization\iostream_test.cxx">
-      <Filter>Source Files\moneta\serializers</Filter>
+      <Filter>Source Files\moneta\serialization</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\tie_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
@@ -234,22 +240,22 @@
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_count_test.cxx">
-      <Filter>Source Files\moneta\serializers\soci</Filter>
+      <Filter>Source Files\moneta\serialization\soci</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\detail\soci_fixture.cxx">
-      <Filter>Source Files\moneta\serializers\soci\detail</Filter>
+      <Filter>Source Files\moneta\serialization\soci\detail</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_read_test.cxx">
-      <Filter>Source Files\moneta\serializers\soci</Filter>
+      <Filter>Source Files\moneta\serialization\soci</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_create_test.cxx">
-      <Filter>Source Files\moneta\serializers\soci</Filter>
+      <Filter>Source Files\moneta\serialization\soci</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_list_test.cxx">
-      <Filter>Source Files\moneta\serializers\soci</Filter>
+      <Filter>Source Files\moneta\serialization\soci</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_delete_test.cxx">
-      <Filter>Source Files\moneta\serializers\soci</Filter>
+      <Filter>Source Files\moneta\serialization\soci</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\pp\detail\includer_test.cxx">
       <Filter>Source Files\moneta\pp\detail</Filter>
@@ -310,6 +316,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\container\meta_set_test.cxx">
       <Filter>Source Files\moneta\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\serial_sandbox.cxx">
+      <Filter>Source Files\moneta</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\serialization\rawbin\encoder_test.cxx">
+      <Filter>Source Files\moneta\serialization\rawbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\serialization\rawbin\decoder_test.cxx">
+      <Filter>Source Files\moneta\serialization\rawbin</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

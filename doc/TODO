@@ -1,6 +1,19 @@
-* Refactor eager templates in favor of transform_view and other lazy elements.
-* Refactor sepacons in favor of standard fusion fused.
-* On MSVC, definition macros are making Intellisense nauseous.
-* Rethink strategy about to_rtuple functions. Maybe on to_tie variants should exist.
-* Refactor to get more out of the mpl.
+TODO:
+	* Check for proper const and non const ties, tuples et al.
+	* Refactor eager templates in favor of transform_view and other lazy elements.
+	* Refactor sepacons in favor of standard fusion fused.
+	* On MSVC, definition macros are making Intellisense nauseous.
+	* Rethink strategy about to_rtuple functions. Maybe on to_tie variants should exist.
+	* Refactor to get more out of the mpl.
+	* Add support for multiple index specifications on meta_set components.
+	* Create more meta_set tests. Elaborate and stress.
+	* Optimize find by member.
 
+Current Stack:
+
+	* hash_change_tracker
+	* Relational context creation (rcontext) using meta_set
+	* Entity container search by member
+	* Associations
+	* Apply associations to relational contexts
+	* Reference based entity composition

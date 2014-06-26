@@ -90,6 +90,7 @@
     <ClInclude Include="..\..\..\externals\console\include\console\exception.hxx" />
     <ClInclude Include="..\..\..\externals\console\include\console\shell.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\is_unary_vector.hxx" />
+    <ClInclude Include="..\..\..\test\moneta\hexdump.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Cat.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\CatDataset.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Lizard.hxx" />
@@ -129,6 +130,8 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\serialization\detail\from_text_impl_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\iostream_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\serialization\rawbin\decoder_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\serialization\rawbin\encoder_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\shell\shell_codec_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\detail\soci_fixture.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_count_test.cxx" />
@@ -136,6 +139,7 @@
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_delete_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_list_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_read_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\serial_sandbox.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\generators\delete_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\generators\insert_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\generators\select_test.cxx" />

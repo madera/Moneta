@@ -1,9 +1,13 @@
 #pragma once
+#include "../meta_set.hxx"
+#include <boost/multi_index/hashed_index.hpp>
 #include <boost/array.hpp>
 #include <boost/fusion/include/copy.hpp>
 #include <boost/fusion/include/transform.hpp>
 #include <boost/fusion/include/boost_array.hpp>
+#include <boost/format.hpp>
 #include "../../traits/rtuple.hxx"
+#include "../../traits/to_tie.hxx"
 #include "../../traits/to_rtuple.hxx"
 #include "../../traits/to_rtie.hxx"
 
@@ -16,7 +20,7 @@ std::basic_ostream<T, U>& operator<<(std::basic_ostream<T, U>& output, const boo
 	const_iterator_type  itr = std::begin(rhs);
 	for ( ; itr != std::end(rhs); ++itr) {
 		output << *itr
-		       << (itr != last? ", " : "");
+		       << (itr != last? ", [OLD] " : "");
 	}
 
 	return output;
@@ -112,5 +116,72 @@ namespace moneta { namespace container {
 			return change_state != hash_tuple(tuple);
 		}
 	};
+
+	namespace detail {
+
+		struct std_hasher {
+			typedef const size_t result_type;
+
+			template <typename T>
+			result_type operator()(const T value) const {		
+				return std::hash<T>()(value);
+			}
+		};
+
+		template <class Master, class EntityType>
+		struct hash_change_tracker_impl {
+			typedef hash_change_tracker_impl this_type;
+
+			struct entry {
+				typedef boost::array<
+					size_t,
+					boost::mpl::size<
+						typename traits::rtuple<EntityType>::type
+					>::value
+				> state_type;
+
+				state_type hash;
+
+				entry() {}
+				entry(const EntityType& entity) { update(entity); }
+
+				std::string to_string() const {
+					std::ostringstream oss;
+
+					state_type::const_iterator itr = std::begin(hash);
+					state_type::const_iterator last = itr + hash.size() - 1;
+
+					for ( ; itr != std::end(hash); ++itr) {
+						oss << boost::format("0x%|08x|") % *itr
+						    << (itr != last? ", " : "");
+					}
+
+					return oss.str();
+				}
+
+				void update(const EntityType& entity) {
+					EntityType tmp = entity; // XXX: HACK: Until const tie is done.
+					update(moneta::traits::to_tie(tmp));
+				}
+
+				void update(const typename moneta::traits::tie<EntityType>::type& tie) {
+					boost::fusion::copy(
+						boost::fusion::transform(tie, std_hasher()),
+						hash
+					);
+				}
+
+				bool dirty() const {
+					return false;
+				}
+			};
+		};
+	
+	} // namespace detail
+
+	template <class EntityType>
+	struct hash_change_tracker2 : boost::mpl::lambda<
+		detail::hash_change_tracker_impl<boost::mpl::_1, EntityType>
+	>::type {};
 
 }}
