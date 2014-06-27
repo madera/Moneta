@@ -324,6 +324,9 @@
     <ClInclude Include="..\..\..\include\moneta\serialization\rawbin\io.hxx">
       <Filter>Header Files\moneta\serialization\rawbin</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\serialization\for_each_member.hxx">
+      <Filter>Header Files\moneta\serialization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

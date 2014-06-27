@@ -326,5 +326,8 @@
     <ClCompile Include="..\..\..\test\moneta\serialization\rawbin\decoder_test.cxx">
       <Filter>Source Files\moneta\serialization\rawbin</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\serialization\for_each_member_test.cxx">
+      <Filter>Source Files\moneta\serialization</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -129,6 +129,7 @@
       <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\serialization\detail\from_text_impl_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\serialization\for_each_member_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\iostream_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\rawbin\decoder_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\rawbin\encoder_test.cxx" />
