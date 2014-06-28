@@ -7,7 +7,7 @@ BOOST_AUTO_TEST_CASE(default_encoder_test) {
 	Address address;
 	address.ID = 1;
 	address.Number = 10;
-	address.Street = "5th Avenue";
+	address.Street = "String St.";
 
 	unsigned char buffer[128];
 	std::fill(buffer, buffer + 128, 0x55);
@@ -15,6 +15,9 @@ BOOST_AUTO_TEST_CASE(default_encoder_test) {
 	moneta::serialization::rawbin::encode(address, buffer, buffer + 128);
 	hexdump(buffer, 128);
 }
+
+// TODO: Test custom encoders.
+// TODO: Add support for entity-wise encoder override.
 
 // namespace moneta { namespace serialization { namespace rawbin {
 // 

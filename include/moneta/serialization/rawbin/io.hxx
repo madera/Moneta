@@ -4,8 +4,10 @@ namespace moneta { namespace serialization { namespace rawbin {
 
 	namespace detail {
 
+		// Generic read
+		//
 		template <class T>
-		struct read_raw_impl {
+		struct read {
 			template <class IteratorType>
 			IteratorType operator()(IteratorType begin, IteratorType end, T& value) {
 				BOOST_ASSERT(std::distance(begin, end) >= sizeof(int));
@@ -14,8 +16,10 @@ namespace moneta { namespace serialization { namespace rawbin {
 			}
 		};
 
+		// Generic write
+		//
 		template <class T>
-		struct write_raw_impl {
+		struct write {
 			template <class IteratorType>
 			IteratorType operator()(const T& value, IteratorType begin, IteratorType end) {
 				BOOST_ASSERT(std::distance(begin, end) >= sizeof(T)); // XXX
@@ -25,8 +29,7 @@ namespace moneta { namespace serialization { namespace rawbin {
 			}
 		};
 
-		template <>
-		struct write_raw_impl<const std::string> {
+		struct write_string {
 			template <class IteratorType>
 			IteratorType operator()(const std::string& value, IteratorType begin, IteratorType end) {
 				BOOST_ASSERT(std::distance(begin, end) >= value.size()); // XXX
@@ -36,16 +39,28 @@ namespace moneta { namespace serialization { namespace rawbin {
 				return begin + value.size() + 1;
 			}
 		};
+
+		template <>
+		struct write<std::string> : write_string {};
+
+		template <>
+		struct write<const std::string> : write_string {};
+
 	}
+
+	//
+	//
+	//
 
 	template <class T, class IteratorType>
 	IteratorType read_raw(IteratorType begin, IteratorType end, T& value) {
-		return detail::read_raw_impl<T>()(begin, end, value);
+		return detail::read<T>()(begin, end, value);
 	}
 
 	template <class T, class IteratorType>
 	IteratorType write_raw(T& value, IteratorType begin, IteratorType end) {
-		return detail::write_raw_impl<T>()(value, begin, end);
+		std::cout << "-> " << typeid(T).name() << std::endl;
+		return detail::write<T>()(value, begin, end);
 	}
 
 }}}

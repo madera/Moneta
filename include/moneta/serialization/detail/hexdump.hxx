@@ -84,7 +84,7 @@ inline void hexdump(const unsigned char* data, const size_t size, std::ostream& 
 	stream << std::dec << size;
 	stream << " dec) ]\n";
 	stream << "[=============================================================================]\n";
-	stream << "[ Offset  x0 x1 x2 x3 x4 x5 x6 x7   x8 x9 xA xB xC xD xE xF       ASCII       ]\n";
+	stream << "[ Offset  x0 x1 x2 x3 x4 x5 x6 x7   x8 x9 xA xB xC xD xE xF  0123456789ABCDEF ]\n";
 	stream << "[-----------------------------------------------------------------------------]\n";
 
 	size_t addr = 0;
