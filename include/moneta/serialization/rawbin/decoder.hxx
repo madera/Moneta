@@ -35,7 +35,6 @@ namespace moneta { namespace serialization { namespace rawbin {
 			int operator()(typename Member::result_type& value, IteratorType begin, IteratorType end) const {
 				int length = moneta::serialization::rawbin::read(begin, end, value);
 				if (length >= 0) {
-					// Validate fixed value.
 					if (value != traits::detail::fixed_value<Member>::get()) {
 						return 0;
 					}
@@ -47,38 +46,41 @@ namespace moneta { namespace serialization { namespace rawbin {
 
 		template <class IteratorType>
 		struct decoder {
-			struct parameters {
+			struct state {
 				IteratorType& begin;
 				IteratorType& end;
 				bool good;
 				size_t total;
 
-				parameters(IteratorType& begin_, IteratorType& end_)
+				state(IteratorType& begin_, IteratorType& end_)
 				 : begin(begin_), end(end_), good(true), total(0) {
 				}
 			};
 
-			parameters& _parameters;
+			state& _state;
 
-			decoder(parameters& parameters)
-			 : _parameters(parameters) {
+			decoder(state& state)
+			 : _state(state) {
 			}
 
 			template <class EntityType, class Member>
 			void operator()(EntityType& entity, Member& member) const {
-				if (_parameters.good) {
-					int length = read_member<Member>()(member(entity), _parameters.begin, _parameters.end);
+				if (_state.good) {
+					int length = read_member<Member>()(member(entity), _state.begin, _state.end);
 					if (length <= 0) {
-						// Short circuit loop.
-						_parameters.total = 0;
-						_parameters.good = false;
+						_state.total = length;
+						_state.good = false;
 						return;
 					}
 
-					_parameters.begin += length;
-					_parameters.total += length;
+					_state.begin += length;
+					_state.total += length;
 
-					BOOST_ASSERT(_parameters.begin <= _parameters.end); // XXX
+					if (_state.begin > _state.end) {
+						_state.total = 0;
+						_state.good = false;
+						return;
+					}
 				}
 			}
 		};
@@ -87,9 +89,9 @@ namespace moneta { namespace serialization { namespace rawbin {
 
 	template <class EntityType, class IteratorType>
 	int decode(IteratorType begin, IteratorType end, EntityType& entity) {
-		detail::decoder<IteratorType>::parameters parameters(begin, end);
-		moneta::serialization::for_each_member(entity, detail::decoder<IteratorType>(parameters));
-		return parameters.total;
+		detail::decoder<IteratorType>::state state(begin, end);
+		moneta::serialization::for_each_member(entity, detail::decoder<IteratorType>(state));
+		return state.total;
 	}
 
 }}}

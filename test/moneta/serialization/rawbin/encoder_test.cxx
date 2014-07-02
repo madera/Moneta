@@ -1,40 +1,26 @@
 #include "stdafx.h"
 #include <moneta/serialization/rawbin/encoder.hxx>
 #include <moneta/serialization/detail/hexdump.hxx>
-#include "../../model/Address.hxx"
+#include "../../model/simple/ThreeInts.hxx"
 
 BOOST_AUTO_TEST_CASE(default_encoder_test) {
-	Address address;
-	address.ID = 1;
-	address.Number = 10;
-	address.Street = "String St.";
+	ThreeInts ints;
+	ints.One   = 0x11111111;
+	ints.Two   = 0x22222222;
+	ints.Three = 0x33333333;
 
 	unsigned char buffer[128];
 	std::fill(buffer, buffer + 128, 0x55);
 
-	moneta::serialization::rawbin::encode(address, buffer, buffer + 128);
-	hexdump(buffer, 128);
+	moneta::serialization::rawbin::encode(ints, buffer, buffer + 128);
+
+	unsigned char data[12] = {
+		0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0x22,
+		0x33, 0x33, 0x33, 0x33
+	};
+
+	BOOST_CHECK(memcmp(data, (void*)&ints, 12) == 0);
 }
-
-// TODO: Test custom encoders.
-// TODO: Add support for entity-wise encoder override.
-
-// namespace moneta { namespace serialization { namespace rawbin {
-// 
-// 	namespace detail {
-// 
-// 		template <>
-// 		struct encoder<Person> {
-// 
-// 			template <class IteratorType>
-// 			int operator()(Person& entity, IteratorType begin, IteratorType end) const {
-// 				return 0;
-// 			}
-// 		};
-// 
-// 	}
-// 
-// }}}
 
 BOOST_AUTO_TEST_CASE(custom_encoder_test) {
 	unsigned char buffer[1024];

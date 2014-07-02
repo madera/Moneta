@@ -102,7 +102,8 @@
     <ClInclude Include="..\..\..\test\moneta\model\Address.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Hero.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Person.hxx" />
-    <ClInclude Include="..\..\..\test\moneta\model\simple\Handshake.hxx" />
+    <ClInclude Include="..\..\..\test\moneta\model\simple\FourInts.hxx" />
+    <ClInclude Include="..\..\..\test\moneta\model\simple\ThreeInts.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\test_dataset.hxx" />
     <ClInclude Include="..\..\..\test\moneta\pp\detail\includer_test_header.hxx" />
     <ClInclude Include="..\..\..\test\moneta\serialization\soci\detail\soci_fixture.hxx" />

@@ -159,7 +159,10 @@
     <ClInclude Include="..\..\..\test\moneta\hexdump.hxx">
       <Filter>Header Files\moneta</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\moneta\model\simple\Handshake.hxx">
+    <ClInclude Include="..\..\..\test\moneta\model\simple\FourInts.hxx">
+      <Filter>Header Files\moneta\model\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\moneta\model\simple\ThreeInts.hxx">
       <Filter>Header Files\moneta\model\simple</Filter>
     </ClInclude>
   </ItemGroup>

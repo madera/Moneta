@@ -16,7 +16,11 @@ namespace moneta { namespace serialization { namespace rawbin {
 		struct read_impl<T, typename boost::enable_if<boost::is_arithmetic<T> >::type> {
 			template <class IteratorType>
 			int operator()(IteratorType begin, IteratorType end, T& value) {
-				BOOST_ASSERT(std::distance(begin, end) >= sizeof(int));
+				int length = std::distance(begin, end);
+				if (length < sizeof(T)) {
+					return length - sizeof(T);
+				}
+
 				std::copy(begin, begin + sizeof(T), reinterpret_cast<char*>(&value));
 				return sizeof(T);
 			}
@@ -26,7 +30,10 @@ namespace moneta { namespace serialization { namespace rawbin {
 		struct write_impl<T, typename boost::enable_if<boost::is_arithmetic<T> >::type> {
 			template <class IteratorType>
 			IteratorType operator()(const T& value, IteratorType begin, IteratorType end) {
-				BOOST_ASSERT(size_t(std::distance(begin, end)) >= sizeof(T));
+				if (std::distance(begin, end) < sizeof(T)) {
+					return begin;
+				}
+
 				const char* data = reinterpret_cast<const char*>(&value);
 				std::copy(data, data + sizeof(T), begin);
 				return begin + sizeof(T);
@@ -47,7 +54,10 @@ namespace moneta { namespace serialization { namespace rawbin {
 		> {
 			template <class IteratorType>
 			IteratorType operator()(const std::string& value, IteratorType begin, IteratorType end) {
-				BOOST_ASSERT(size_t(std::distance(begin, end)) >= value.size()); // XXX
+				if (size_t(std::distance(begin, end)) < value.size()) {
+					return begin;
+				}
+
 				const char* data = value.c_str();
 				std::copy(data, data + value.size(), begin);
 				*(begin + value.size()) = 0;

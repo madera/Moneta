@@ -21,7 +21,6 @@ MONETA_FIXED_VALUE(MONETA_MEMBER(Handshake, int, Category), 0x0010)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 BOOST_AUTO_TEST_CASE(serial_sandbox) {
-	using moneta::traits::detail::fixed_value;
 
 	unsigned char data[16] = {
 		0x47, 0x65, 0x4F, 0x76, 0x10, 0x00, 0x00, 0x00,
@@ -43,5 +42,4 @@ BOOST_AUTO_TEST_CASE(serial_sandbox) {
 
 	hexdump(data, 16);
 	hexdump_line(data, 16);
-
 }
