@@ -4,6 +4,7 @@
 #include <boost/type_traits/integral_constant.hpp> // boost::false_type
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/fusion/mpl.hpp>
+#include "../member.hxx"
 
 //
 // Types of Traits:
@@ -15,11 +16,10 @@
 //	  Examples: member_name and sql_field_name.
 //
 
-#define MONETA_DECLARE_TRAIT(trait, type)                        \
+#define MONETA_DECLARE_TRAIT(trait)                              \
 	namespace moneta { namespace traits { namespace detail { \
 		template <class EntityType>                      \
 		struct trait : boost::false_type {               \
-			typedef type trait_type;                 \
 		};                                               \
 	}}}
 
@@ -28,17 +28,15 @@
 	struct moneta::traits::detail::trait<type> {                   \
 		typedef get_type trait_type;                           \
 		static trait_type get() {                              \
-			return #get_value;                              \
+			return get_value;                              \
 		}                                                      \
 	};
 
+#define MONETA_DECLARE_ENTITY_TRAIT(trait) \
+	MONETA_DECLARE_TRAIT(trait)
 
-
-#define MONETA_DECLARE_ENTITY_TRAIT(trait, type) \
-	MONETA_DECLARE_TRAIT(trait, type)
-
-#define MONETA_DECLARE_MEMBER_TRAIT(trait, type) \
-	MONETA_DECLARE_TRAIT(trait, type)
+#define MONETA_DECLARE_MEMBER_TRAIT(trait) \
+	MONETA_DECLARE_TRAIT(trait)
 
 
 
@@ -54,18 +52,18 @@
 		>::get();                                            \
 	}
 
-#define MONETA_DEFINE_MEMBER_SEQUENCE_TRAIT_COLLECTOR(trait, name, members) \
-	template <class EntityType>                                         \
-	const std::vector<moneta::traits::detail::trait::trait_type>        \
-	name() {                                                            \
-		return moneta::traits::detail::get_member_traits_with_get<  \
-			moneta::traits::detail::trait,                      \
-			members                                             \
-		>();                                                        \
+// XXX: Remove const on return value.
+#define MONETA_DEFINE_MEMBER_SEQUENCE_TRAIT_COLLECTOR(trait, type, name, members) \
+	template <class EntityType>                                               \
+	const std::vector<type> name() {                                          \
+		return moneta::traits::detail::get_member_traits_with_get<        \
+			moneta::traits::detail::trait,                            \
+			members                                                   \
+		>();                                                              \
 	}
 
-#define MONETA_DEFINE_MEMBER_TRAIT_COLLECTOR(trait, name) \
-	MONETA_DEFINE_MEMBER_SEQUENCE_TRAIT_COLLECTOR(trait, name, moneta::traits::members<EntityType>::type)
+#define MONETA_DEFINE_MEMBER_TRAIT_COLLECTOR(trait, trait_type, name) \
+	MONETA_DEFINE_MEMBER_SEQUENCE_TRAIT_COLLECTOR(trait, trait_type, name, moneta::traits::members<EntityType>::type)
 
 namespace moneta { namespace traits { namespace detail {
 
@@ -97,6 +95,7 @@ namespace moneta { namespace traits { namespace detail {
 		return detail::trait_back_inserter_iterator<MemberTraitWithGet, ContainerType>(target);
 	}
 
+	// XXX: Type T is ignored...
 	template <
 		template <typename T>
 		class MemberTraitWithGet,

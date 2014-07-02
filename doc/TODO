@@ -8,6 +8,9 @@ TODO:
 	* Add support for multiple index specifications on meta_set components.
 	* Create more meta_set tests. Elaborate and stress.
 	* Optimize find by member.
+	* Review traits collector macros. They are awful right now. Better yet, review member_trait_base.hxx.
+	* Review traits::member<> naming.
+	* Move has_member_trait.hxx to a proper place.
 
 Current Stack:
 

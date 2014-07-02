@@ -4,8 +4,6 @@
 #include "../traits/is_entity.hxx"
 #include "../make_entity.hxx"
 
-// TODO: Use more sensible template argument names.
-
 namespace moneta { namespace serialization {
 
 	namespace detail {
@@ -17,35 +15,39 @@ namespace moneta { namespace serialization {
 		struct apply_operation<
 			MemberEntityType,
 			typename boost::enable_if<
-				traits::is_entity<MemberEntityType>
+				traits::is_entity<
+					typename MemberEntityType::result_type
+				>
 			>::type
 		> {
-			template <class Operation, class EntityType, class MemberPointer>
-			void operator()(Operation operation, EntityType& entity, MemberPointer memptr, MemberEntityType& value) {
-				for_each_member(value, operation);
+			template <class Operation, class EntityType>
+			void operator()(Operation operation, EntityType& entity) {
+				for_each_member(MemberEntityType()(entity), operation);
 			}
 
-			template <class Operation, class EntityType, class MemberPointer>
-			void operator()(Operation operation, const EntityType& entity, MemberPointer memptr, const MemberEntityType& value) {
-				for_each_member(value, operation);
+			template <class Operation, class EntityType>
+			void operator()(Operation operation, const EntityType& entity) {
+				for_each_member(MemberEntityType()(entity), operation);
 			}
 		};
 
 		template <class NonEntityMemberType>
 		struct apply_operation<
 			NonEntityMemberType,
-			typename boost::enable_if<
-				boost::mpl::not_<traits::is_entity<NonEntityMemberType> >
+			typename boost::disable_if<
+				traits::is_entity<
+					typename NonEntityMemberType::result_type
+				>
 			>::type
 		> {
-			template <class Operation, class EntityType, class MemberPointer>
-			void operator()(Operation operation, EntityType& entity, MemberPointer memptr, NonEntityMemberType& value) {
-				operation(entity, memptr, value);
+			template <class Operation, class EntityType>
+			void operator()(Operation operation, EntityType& entity) {
+				operation(entity, NonEntityMemberType());
 			}
 
-			template <class Operation, class EntityType, class MemberPointer>
-			void operator()(Operation operation, const EntityType& entity, MemberPointer memptr, const NonEntityMemberType& value) {
-				operation(entity, memptr, value);
+			template <class Operation, class EntityType>
+			void operator()(Operation operation, const EntityType& entity) {
+				operation(entity, NonEntityMemberType());
 			}
 		};
 
@@ -57,19 +59,9 @@ namespace moneta { namespace serialization {
 			member_operator(EntityType& entity, Operation operation)
 			 : _entity(entity), _operation(operation) {}
 
-			template <typename MemberPointer>
-			void operator()(MemberPointer& memptr) const {
-				decompose(memptr, _entity, _operation);
-			}
-
-			template <typename T, class K, class Operation>
-			static void decompose(T K::* memptr, K& entity, Operation operation) {
-				apply_operation<T>()(operation, entity, memptr, entity.*memptr);
-			}
-
-			template <typename T, class K, class Operation>
-			static void decompose(T K::* memptr, const K& entity, Operation operation) {
-				apply_operation<T>()(operation, entity, memptr, entity.*memptr);
+			template <typename Member>
+			void operator()(Member& member) const {
+				apply_operation<Member>()(_operation, _entity);
 			}
 		};
 
@@ -77,8 +69,7 @@ namespace moneta { namespace serialization {
 
 	template <class EntityType, class Operation>
 	void for_each_member(EntityType& entity, Operation operation) {
-		boost::fusion::for_each(
-			traits::member_pointers<EntityType>::get(),
+		boost::mpl::for_each<typename traits::members<EntityType>::type>(
 			detail::member_operator<EntityType, Operation>(entity, operation)
 		);
 	}

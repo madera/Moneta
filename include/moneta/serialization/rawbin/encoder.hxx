@@ -1,5 +1,5 @@
 #pragma once
-#include "io.hxx"
+#include "rawbin_io.hxx"
 #include "../for_each_member.hxx"
 #include "../../traits/member_names.hxx"
 #include "../../traits/detail/memptr_hacker.hxx"
@@ -18,9 +18,9 @@ namespace moneta { namespace serialization { namespace rawbin {
 			encoder(IteratorType& begin, IteratorType& end)
 			 : _begin(begin), _end(end) {}
 
-			template <class EntityType, class MemberPointer, typename MemberType>
-			void operator()(EntityType& entity, MemberPointer memptr, MemberType& value) const {
-				_begin = write_raw(value, _begin, _end);
+			template <class EntityType, class Member>
+			void operator()(EntityType& entity, Member& member) const {
+				_begin = rawbin::write(member(entity), _begin, _end);
 			}
 		};
 

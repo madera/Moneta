@@ -3,7 +3,7 @@
 #include <boost/type_traits/integral_constant.hpp> // boost::false_type
 #include "detail/member_trait_base.hxx"
 
-MONETA_DECLARE_ENTITY_TRAIT(members_of, void)
+MONETA_DECLARE_ENTITY_TRAIT(members_of)
 
 namespace moneta { namespace traits {
 

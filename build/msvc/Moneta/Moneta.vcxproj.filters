@@ -321,11 +321,14 @@
     <ClInclude Include="..\..\..\include\moneta\serialization\rawbin\encoder.hxx">
       <Filter>Header Files\moneta\serialization\rawbin</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\serialization\rawbin\io.hxx">
-      <Filter>Header Files\moneta\serialization\rawbin</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\serialization\for_each_member.hxx">
       <Filter>Header Files\moneta\serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\serialization\rawbin\rawbin_io.hxx">
+      <Filter>Header Files\moneta\serialization\rawbin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\fixed_values.hxx">
+      <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

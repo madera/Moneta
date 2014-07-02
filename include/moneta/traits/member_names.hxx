@@ -1,14 +1,14 @@
 #pragma once
 #include "detail/member_trait_base.hxx"
 
-MONETA_DECLARE_MEMBER_TRAIT(member_name, std::string)
+MONETA_DECLARE_MEMBER_TRAIT(member_name)
 
 #define MONETA_MEMBER_NAME(member, name) \
-	MONETA_DEFINE_TRAIT_WITH_GET(member_name, member, std::string, name)
+	MONETA_DEFINE_TRAIT_WITH_GET(member_name, member, std::string, BOOST_PP_STRINGIZE(name))
 
 namespace moneta { namespace traits {
 
-	MONETA_DEFINE_MEMBER_TRAIT_COLLECTOR(member_name, get_member_names)
+	MONETA_DEFINE_MEMBER_TRAIT_COLLECTOR(member_name, std::string, get_member_names)
 
 	template <class EntityType>
 	const std::string get_member_name(const size_t index) {
