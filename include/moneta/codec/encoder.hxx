@@ -1,5 +1,5 @@
 #pragma once
-#include "../serialization/for_each_member.hxx"
+#include "for_each_member.hxx"
 
 namespace moneta { namespace codec {
 	
@@ -48,7 +48,7 @@ namespace moneta { namespace codec {
 	template <class Codec, class Entity, class Iterator>
 	int encode(const Entity& entity, Iterator begin, Iterator end) {
 		detail::member_encoder<Codec, Iterator>::state state(begin, end);
-		moneta::serialization::for_each_member(entity, detail::member_encoder<Codec, Iterator>(state));
+		moneta::codec::for_each_member(entity, detail::member_encoder<Codec, Iterator>(state));
 		return state.total_written;
 	}
 

@@ -92,6 +92,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\externals\console\include\console\exception.hxx" />
     <ClInclude Include="..\..\..\externals\console\include\console\shell.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\codec\rawbin.hxx" />
     <ClInclude Include="..\..\..\test\moneta\hexdump.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Cat.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\CatDataset.hxx" />
@@ -126,7 +127,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\codec\decoder_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\codec\encoder_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\codec\for_each_member_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\codec\multi_decoder_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\codec\rawbin\rawbin_decoder_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\codec\rawbin\rawbin_encoder_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\container\change_trackers\bitset_change_tracker_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\container\change_trackers\hash_change_tracker_test.cxx" />
@@ -141,10 +144,7 @@
       <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\serialization\detail\from_text_impl_test.cxx" />
-    <ClCompile Include="..\..\..\test\moneta\serialization\for_each_member_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\iostream_test.cxx" />
-    <ClCompile Include="..\..\..\test\moneta\serialization\rawbin\old_rawbin_decoder_test.cxx" />
-    <ClCompile Include="..\..\..\test\moneta\serialization\rawbin\old_rawbin_encoder_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\shell\shell_codec_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\detail\soci_fixture.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_count_test.cxx" />

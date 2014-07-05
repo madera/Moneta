@@ -4,7 +4,7 @@
 #include "../traits/is_entity.hxx"
 #include "../make_entity.hxx"
 
-namespace moneta { namespace serialization {
+namespace moneta { namespace codec {
 
 	namespace detail {
 

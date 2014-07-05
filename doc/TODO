@@ -12,6 +12,8 @@ TODO:
 	* Review traits::member<> naming.
 	* Move has_member_trait.hxx to a proper place.
 	* Rethink about test entity names and using their traits in naming. It's a mess right now.
+	* Check const correctness on Codec API.
+	* Either all EntityType or all Entity.
 
 Current Stack:
 

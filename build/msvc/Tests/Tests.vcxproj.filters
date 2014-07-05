@@ -97,9 +97,6 @@
     <Filter Include="Source Files\moneta\serialization\soci\detail">
       <UniqueIdentifier>{685d6f50-b51d-45c5-89c1-2c1303e274f8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\moneta\serialization\rawbin">
-      <UniqueIdentifier>{7ba52996-0bfa-444f-b132-de5a54584f23}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\moneta\model\simple">
       <UniqueIdentifier>{1c0ea5c3-208a-4148-ae97-e4a5e0e8d550}</UniqueIdentifier>
     </Filter>
@@ -179,6 +176,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\test\moneta\model\simple\FixedThreeInts.hxx">
       <Filter>Header Files\moneta\model\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\codec\rawbin.hxx">
+      <Filter>Source Files\moneta\codec</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -344,9 +344,6 @@
     <ClCompile Include="..\..\..\test\moneta\serial_sandbox.cxx">
       <Filter>Source Files\moneta</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\serialization\for_each_member_test.cxx">
-      <Filter>Source Files\moneta\serialization</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\codec\multi_decoder_test.cxx">
       <Filter>Source Files\moneta\codec</Filter>
     </ClCompile>
@@ -356,12 +353,6 @@
     <ClCompile Include="..\..\..\test\moneta\codec\encoder_test.cxx">
       <Filter>Source Files\moneta\codec</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\serialization\rawbin\old_rawbin_decoder_test.cxx">
-      <Filter>Source Files\moneta\serialization\rawbin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\serialization\rawbin\old_rawbin_encoder_test.cxx">
-      <Filter>Source Files\moneta\serialization\rawbin</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\codec\decoder_test.cxx">
       <Filter>Source Files\moneta\codec</Filter>
     </ClCompile>
@@ -370,6 +361,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\detail\has_member_trait_test.cxx">
       <Filter>Source Files\moneta\traits\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\codec\rawbin\rawbin_decoder_test.cxx">
+      <Filter>Source Files\moneta\codec\rawbin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\codec\for_each_member_test.cxx">
+      <Filter>Source Files\moneta\codec</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

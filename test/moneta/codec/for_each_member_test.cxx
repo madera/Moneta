@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <moneta/serialization/for_each_member.hxx>
+#include <moneta/codec/for_each_member.hxx>
 
 #include "../model/Person.hxx"
 #include "../model/Cat.hxx"
@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE(for_each_member_test) {
 
 	{
 		size_t count = 0;
-		moneta::serialization::for_each_member(person, call_counter(count));
+		moneta::codec::for_each_member(person, call_counter(count));
 		BOOST_CHECK_EQUAL(count, 4);
 	}
 
@@ -39,14 +39,14 @@ BOOST_AUTO_TEST_CASE(for_each_member_test) {
 
 	{
 		size_t count = 0;
-		moneta::serialization::for_each_member(cat, call_counter(count));
+		moneta::codec::for_each_member(cat, call_counter(count));
 		BOOST_CHECK_EQUAL(count, 5);
 	}
 
 	{
 		size_t count = 0;
 		const Cat& const_cat = cat;
-		moneta::serialization::for_each_member(const_cat, call_counter(count));
+		moneta::codec::for_each_member(const_cat, call_counter(count));
 		BOOST_CHECK_EQUAL(count, 5);
 	}
 
@@ -83,7 +83,7 @@ BOOST_AUTO_TEST_CASE(mutable_for_each_member_test) {
 	person.Height = 1.75;
 	person.Fingers = 12;
 
-	moneta::serialization::for_each_member(person, member_incrementor());
+	moneta::codec::for_each_member(person, member_incrementor());
 
 	BOOST_CHECK_EQUAL(person.ID, 346);
 	BOOST_CHECK_EQUAL(person.Fingers, 13);

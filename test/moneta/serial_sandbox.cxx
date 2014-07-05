@@ -1,9 +1,7 @@
 #include "stdafx.h"
-#include <moneta/serialization/rawbin/old_rawbin_decoder.hxx>
-#include <moneta/serialization/rawbin/rawbin_io.hxx>
+#include <moneta/codec/rawbin.hxx>
 #include <moneta/serialization/detail/hexdump.hxx>
-#include <moneta/serialization/for_each_member.hxx>
-#include <moneta/pp/sql_entity.hxx> // Entity defs
+#include <moneta/pp/sql_entity.hxx> // XXX: XXX: XXX!!!
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -28,7 +26,7 @@ BOOST_AUTO_TEST_CASE(serial_sandbox) {
 	};
 
 	Handshake handshake;
-	int result = moneta::serialization::rawbin::decode(data, data + 16, handshake);
+	int result = moneta::codec::decode<moneta::codec::rawbin>(handshake, data, data + 16);
 
 	{
 		std::string message = (result == 0)? "unable" :
