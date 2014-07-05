@@ -1,9 +1,9 @@
 #include "stdafx.h"
-#include <moneta/serialization/rawbin/decoder.hxx>
+#include <moneta/serialization/rawbin/old_rawbin_decoder.hxx>
 #include "../../model/simple/ThreeInts.hxx"
 #include "../../model/simple/FourInts.hxx"
 
-BOOST_AUTO_TEST_CASE(simple_decoder_test) {
+BOOST_AUTO_TEST_CASE(old_simple_decoder_test) {
 
 	BOOST_STATIC_ASSERT(sizeof(FourInts) == 4*sizeof(int));
 
@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE(simple_decoder_test) {
 
 }
 
-BOOST_AUTO_TEST_CASE(fixed_values_decoder_test) {
+BOOST_AUTO_TEST_CASE(old_fixed_values_decoder_test) {
 
 	unsigned char bad[16] = {
 		0xba, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0xba,
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(fixed_values_decoder_test) {
 	BOOST_CHECK_EQUAL(ints.Three, 0x55555555);
 }
 
-BOOST_AUTO_TEST_CASE(need_more_data_decoder_test) {
+BOOST_AUTO_TEST_CASE(old_need_more_data_decoder_test) {
 
 	BOOST_STATIC_ASSERT(sizeof(int) == 4);
 

@@ -79,6 +79,12 @@
     <Filter Include="Header Files\moneta\serialization\rawbin">
       <UniqueIdentifier>{4804e86a-2115-46c1-a2dd-76f77de4b7ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\codec">
+      <UniqueIdentifier>{5f333633-88df-4c21-90d6-25018587e518}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\moneta\codec\rawbin">
+      <UniqueIdentifier>{b6a002a7-1ba8-466b-b5a5-f4c9d5aae2e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -315,12 +321,6 @@
     <ClInclude Include="..\..\..\include\moneta\serialization\detail\hexdump.hxx">
       <Filter>Header Files\moneta\serialization\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\serialization\rawbin\decoder.hxx">
-      <Filter>Header Files\moneta\serialization\rawbin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\serialization\rawbin\encoder.hxx">
-      <Filter>Header Files\moneta\serialization\rawbin</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\serialization\for_each_member.hxx">
       <Filter>Header Files\moneta\serialization</Filter>
     </ClInclude>
@@ -329,6 +329,24 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\fixed_values.hxx">
       <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\codec\multi_decoder.hxx">
+      <Filter>Header Files\moneta\codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\codec\rawbin\rawbin_encoder.hxx">
+      <Filter>Header Files\moneta\codec\rawbin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\codec\decoder.hxx">
+      <Filter>Header Files\moneta\codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\codec\encoder.hxx">
+      <Filter>Header Files\moneta\codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\serialization\rawbin\old_rawbin_decoder.hxx">
+      <Filter>Header Files\moneta\serialization\rawbin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\serialization\rawbin\old_rawbin_encoder.hxx">
+      <Filter>Header Files\moneta\serialization\rawbin</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <moneta/serialization/rawbin/decoder.hxx>
+#include <moneta/serialization/rawbin/old_rawbin_decoder.hxx>
 #include <moneta/serialization/rawbin/rawbin_io.hxx>
 #include <moneta/serialization/detail/hexdump.hxx>
 #include <moneta/serialization/for_each_member.hxx>
