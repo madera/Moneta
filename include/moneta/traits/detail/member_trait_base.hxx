@@ -1,7 +1,6 @@
 #pragma once
 #include "pure_type.hxx"
-// XXX: Re-evaluate the need for boost::false_type
-#include <boost/type_traits/integral_constant.hpp> // boost::false_type
+#include <boost/type_traits/integral_constant.hpp>
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/fusion/mpl.hpp>
 #include "../member.hxx"
@@ -23,13 +22,13 @@
 		};                                               \
 	}}}
 
-#define MONETA_DEFINE_TRAIT_WITH_GET(trait, type, get_type, get_value) \
-	template <>                                                    \
-	struct moneta::traits::detail::trait<type> {                   \
-		typedef get_type trait_type;                           \
-		static trait_type get() {                              \
-			return get_value;                              \
-		}                                                      \
+#define MONETA_DEFINE_TRAIT_WITH_GET(trait, type, get_type, get_value)  \
+	template <>                                                     \
+	struct moneta::traits::detail::trait<type> : boost::true_type { \
+		typedef get_type trait_type;                            \
+		static trait_type get() {                               \
+			return get_value;                               \
+		}                                                       \
 	};
 
 #define MONETA_DECLARE_ENTITY_TRAIT(trait) \

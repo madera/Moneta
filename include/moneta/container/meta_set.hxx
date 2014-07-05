@@ -1,5 +1,5 @@
 #pragma once
-#include "../pp/detail/has_member_trait.hxx"
+#include "../traits/detail/has_member_trait.hxx"
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/random_access_index.hpp>
 #include <boost/multi_index/member.hpp>

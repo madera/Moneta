@@ -1,5 +1,6 @@
 #pragma once
 #include "detail/member_trait_base.hxx"
+#include "detail/has_member_trait.hxx"
 
 MONETA_DECLARE_TRAIT(fixed_value)
 

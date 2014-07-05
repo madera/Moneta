@@ -5,8 +5,8 @@
 #include "../../traits/fixed_values.hxx"
 #include "../../traits/detail/memptr_hacker.hxx"
 #include "../../traits/is_entity.hxx"
+#include "../../traits/detail/has_member_trait.hxx"
 #include "../../make_entity.hxx"
-#include "../../pp/detail/has_member_trait.hxx"
 
 namespace moneta { namespace serialization { namespace rawbin {
 

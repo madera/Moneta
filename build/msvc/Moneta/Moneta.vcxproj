@@ -97,7 +97,6 @@
     <ClInclude Include="..\..\..\include\moneta\pp\detail\add_parentheses.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\detail\boostx.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\detail\cat_include_name.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\pp\detail\has_member_trait.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\detail\includer.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\detail\kv.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\detail\seq_join.hxx" />
@@ -129,8 +128,10 @@
     <ClInclude Include="..\..\..\include\moneta\sql\traits\table_name.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\blanker.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\deref_if_unary.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\has_member_trait.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\indices_of.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\is_fusion_vector.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\is_unary_vector.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\member_trait_base.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_constructor.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_hacker.hxx" />

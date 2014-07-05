@@ -234,9 +234,6 @@
     <ClInclude Include="..\..\..\include\moneta\pp\detail\boostx.hxx">
       <Filter>Header Files\moneta\pp\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\pp\detail\has_member_trait.hxx">
-      <Filter>Header Files\moneta\pp\detail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\pp\detail\kv.hxx">
       <Filter>Header Files\moneta\pp\detail</Filter>
     </ClInclude>
@@ -347,6 +344,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\serialization\rawbin\old_rawbin_encoder.hxx">
       <Filter>Header Files\moneta\serialization\rawbin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\has_member_trait.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\is_unary_vector.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

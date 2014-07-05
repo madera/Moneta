@@ -1,5 +1,6 @@
 #pragma once
 #include "../serialization/for_each_member.hxx"
+#include "../traits/fixed_values.hxx"
 
 namespace moneta { namespace codec {
 	
@@ -7,6 +8,33 @@ namespace moneta { namespace codec {
 	struct decoder;
 
 	namespace detail {
+
+		template <class Codec, class Member, class Enable = void>
+		struct decode_member {
+			template <class IteratorType>
+			int operator()(typename Member::result_type& value, IteratorType begin, IteratorType end) const {
+				return decoder<Codec, Member::result_type>()(value, begin, end);
+			}
+		};
+
+		template <class Codec, class Member>
+		struct decode_member<
+			Codec,
+			Member,
+			typename boost::enable_if<traits::detail::fixed_value<Member> >::type
+		> {
+			template <class IteratorType>
+			int operator()(typename Member::result_type& value, IteratorType begin, IteratorType end) const {
+				int length = decoder<Codec, Member::result_type>()(value, begin, end);
+				if (length >= 0) {
+					if (value != traits::detail::fixed_value<Member>::get()) {
+						return 0;
+					}
+				}
+
+				return length;
+			}
+		};
 
 		template <class Codec, class Iterator>
 		struct member_decoder	 {
@@ -28,7 +56,7 @@ namespace moneta { namespace codec {
 			template <class Entity, class Member>
 			void operator()(Entity& entity, Member& member) const {
 				if (_state.good) {
-					int result = decoder<Codec, Member::result_type>()(
+					int result = decode_member<Codec, Member>()(
 						member(entity), _state.begin, _state.end
 					);
 

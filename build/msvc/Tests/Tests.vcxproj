@@ -92,7 +92,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\externals\console\include\console\exception.hxx" />
     <ClInclude Include="..\..\..\externals\console\include\console\shell.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\traits\detail\is_unary_vector.hxx" />
     <ClInclude Include="..\..\..\test\moneta\hexdump.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Cat.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\CatDataset.hxx" />
@@ -104,6 +103,7 @@
     <ClInclude Include="..\..\..\test\moneta\model\Person.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\simple\Arithmetics.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\simple\CascadedInts.hxx" />
+    <ClInclude Include="..\..\..\test\moneta\model\simple\FixedThreeInts.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\simple\FourInts.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\simple\ThreeInts.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\simple\TwoInts.hxx" />
@@ -160,12 +160,14 @@
     <ClCompile Include="..\..\..\test\moneta\sql\traits\table_name_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\test_sandbox.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\deref_if_unary_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\traits\detail\has_member_trait_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\indices_of_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\memptr_hacker_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\sub_tie_vector_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\tie_vector_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\empty_pk_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\extract_pk_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\traits\fixed_values_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\is_entity_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\members_of_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\member_names_test.cxx" />

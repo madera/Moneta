@@ -153,9 +153,6 @@
     <ClInclude Include="..\..\..\test\moneta\model\Lizard.hxx">
       <Filter>Header Files\moneta\model</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\traits\detail\is_unary_vector.hxx">
-      <Filter>Source Files\moneta\traits\detail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\test\moneta\model\test_dataset.hxx">
       <Filter>Header Files\moneta\model</Filter>
     </ClInclude>
@@ -178,6 +175,9 @@
       <Filter>Header Files\moneta\model\simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\moneta\model\simple\CascadedInts.hxx">
+      <Filter>Header Files\moneta\model\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\moneta\model\simple\FixedThreeInts.hxx">
       <Filter>Header Files\moneta\model\simple</Filter>
     </ClInclude>
   </ItemGroup>
@@ -364,6 +364,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\codec\decoder_test.cxx">
       <Filter>Source Files\moneta\codec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\fixed_values_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\detail\has_member_trait_test.cxx">
+      <Filter>Source Files\moneta\traits\detail</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

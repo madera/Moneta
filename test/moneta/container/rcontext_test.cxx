@@ -9,7 +9,7 @@
 
 #include <boost/mpl/print.hpp>
 
-static void static_tests() {
+static void static_test() {
 
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
