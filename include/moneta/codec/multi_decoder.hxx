@@ -1,21 +1,24 @@
 #pragma once
 #include <boost/variant.hpp>
+#include <boost/mpl/vector.hpp>
 
 namespace moneta { namespace codec {
 	
 	namespace detail {
 
-		template <class EntityType, class IteratorType>
+		template <class Codec, class Variant, class Iterator>
 		struct attempt_decode {
 
 			struct state {
-				IteratorType& begin;
-				IteratorType& end;
-				EntityType& entity;
-				bool done;
+				Iterator& begin;
+				Iterator& end;
+				Variant& entity;
 
-				state(IteratorType& begin_, IteratorType& end_, EntityType& entity_)
-				 : begin(begin_), end(end_), entity(entity_), done(false) {}
+				bool done;
+				size_t total_read;
+
+				state(Variant& entity_, Iterator& begin_, Iterator& end_)
+				 : entity(entity_), begin(begin_), end(end_), done(false), total_read(0) {}
 			};
 
 			state& _state;
@@ -23,14 +26,15 @@ namespace moneta { namespace codec {
 			attempt_decode(state& state)
 			 : _state(state) {}
 
-			template <class EntityType>
-			void operator()(EntityType& ignored) const {
+			template <class Entity>
+			void operator()(Entity&) const {
 				if (!_state.done) {
-					EntityType entity;
-					int result = rawbin::decoder<EntityType>()(_state.begin, _state.end, entity);
+					Entity entity;
+					const int result = moneta::codec::decode<Codec>(entity, _state.begin, _state.end);
 					if (result > 0) {
-						_state.entity = entity;
 						_state.done = true;
+						_state.entity = entity;
+						_state.total_read = result;
 					}
 				}
 			}
@@ -39,21 +43,24 @@ namespace moneta { namespace codec {
 
 	}
 
-	template <class EntityTypeSequence>
+	template <
+		class Codec,
+		class T0,
+		class T1 = boost::mpl::na, class T2 = boost::mpl::na, class T3 = boost::mpl::na,
+		class T4 = boost::mpl::na, class T5 = boost::mpl::na, class T6 = boost::mpl::na,
+		class T7 = boost::mpl::na, class T8 = boost::mpl::na, class T9 = boost::mpl::na
+	>
 	struct multi_decoder {
-		typedef boost::variant<EntityTypeSequence> variant_type;
+		typedef typename boost::make_variant_over<
+			boost::mpl::vector<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+		>::type variant_type;
 
-		template <class IteratorType>
-		int operator()(IteratorType begin, IteratorType end, variant_type& result) const {
-			detail::multi_decoder_decode::state state(result);
-			detail::multi_decoder_decode decoder(state);
-			boost::mpl::for_each<EntityTypeSequence>(decoder);
-
-			if (state.result == 0) {
-				return state.entity;
-			} else {
-				return state.result;
-			}
+		template <class Iterator>
+		int operator()(variant_type& result, Iterator begin, Iterator end) const {
+			typedef detail::attempt_decode<Codec, variant_type, Iterator> decoder_type;
+			typename decoder_type::state state(result, begin, end);
+			boost::mpl::for_each<typename variant_type::types>(decoder_type(state));
+			return state.total_read;
 		}
 	};
 
