@@ -67,11 +67,16 @@ namespace moneta { namespace codec {
 
 	}
 
-	template <class EntityType, class Operation>
-	void for_each_member(EntityType& entity, Operation operation) {
-		boost::mpl::for_each<typename traits::members<EntityType>::type>(
+	template <class Members, class EntityType, class Operation>
+	void for_some_members(EntityType& entity, Operation operation) {
+		boost::mpl::for_each<Members>(
 			detail::member_operator<EntityType, Operation>(entity, operation)
 		);
+	}
+
+	template <class EntityType, class Operation>
+	void for_each_member(EntityType& entity, Operation operation) {
+		for_some_members<typename traits::members<EntityType>::type>(entity, operation);
 	}
 
 }}

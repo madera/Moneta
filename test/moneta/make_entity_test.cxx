@@ -3,6 +3,7 @@
 #include "model/Person.hxx"
 #include "model/Dog.hxx"
 #include "model/Composite.hxx"
+#include "model/simple/FixedThreeInts.hxx"
 
 BOOST_AUTO_TEST_CASE(make_entity_test) {
 	Person person = moneta::make_entity<Person>();
@@ -27,4 +28,11 @@ BOOST_AUTO_TEST_CASE(make_entity_test) {
 	BOOST_CHECK(composite.Dog.Owner.empty());
 	BOOST_CHECK_EQUAL(composite.Dog.ID, 0);
 	BOOST_CHECK(composite.Dog.Name.empty());
+}
+
+BOOST_AUTO_TEST_CASE(fixed_values_make_entity_test) {
+	FixedThreeInts entity = moneta::make_entity<FixedThreeInts>();
+	BOOST_CHECK_EQUAL(entity.One, 0x11);
+	BOOST_CHECK_EQUAL(entity.Two, 0x22);
+	BOOST_CHECK_EQUAL(entity.Three, 0);
 }
