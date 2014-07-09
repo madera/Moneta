@@ -79,6 +79,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\moneta\codec\debug_dump\debug_dump_encoder.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\encoder.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\decoder.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\for_each_member.hxx" />
@@ -177,6 +178,7 @@
     <None Include="..\..\..\doc\draft.md" />
     <None Include="..\..\..\doc\Filters.md" />
     <None Include="..\..\..\doc\Moneta.md" />
+    <None Include="..\..\..\doc\Operators.md" />
     <None Include="..\..\..\doc\TODO" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

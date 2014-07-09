@@ -35,12 +35,47 @@ MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 	ClientHandshake,
 	((int, Magic   ))
 	((int, Category))
-	((int, Unknown ))
+	((int, SomeVersion))
 	((int, Unknown1))
 )
 
 MONETA_FIXED_VALUE(MONETA_MEMBER(ClientHandshake, int, Magic   ), 'VoEg')
 MONETA_FIXED_VALUE(MONETA_MEMBER(ClientHandshake, int, Category), 0x0010)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace server {
+	struct auth_challenge {
+		int Magic;
+		int Category;
+		int SomeVersion;
+		int Sequence;
+		char Key[16];
+		int Unknown1;
+	};
+}
+
+namespace moneta { namespace traits { namespace detail {
+	template <>
+	struct members_of<server::auth_challenge> : boost::mpl::vector<
+		MONETA_MEMBER(server::auth_challenge, int,      Magic      ),
+		MONETA_MEMBER(server::auth_challenge, int,      Category   ),
+		MONETA_MEMBER(server::auth_challenge, int,      SomeVersion),
+		MONETA_MEMBER(server::auth_challenge, int,      Sequence   ),
+		MONETA_MEMBER(server::auth_challenge, char[16], Key        ),
+		MONETA_MEMBER(server::auth_challenge, int,      Unknown1   )
+	> {};
+}}}
+
+MONETA_MEMBER_NAME(MONETA_MEMBER(server::auth_challenge, int,      Magic      ), Magic   )
+MONETA_MEMBER_NAME(MONETA_MEMBER(server::auth_challenge, int,      Category   ), Category)
+MONETA_MEMBER_NAME(MONETA_MEMBER(server::auth_challenge, int,      SomeVersion), SomeVersion)
+MONETA_MEMBER_NAME(MONETA_MEMBER(server::auth_challenge, int,      Sequence   ), Sequence)
+MONETA_MEMBER_NAME(MONETA_MEMBER(server::auth_challenge, char[16], Key        ), Key     )
+MONETA_MEMBER_NAME(MONETA_MEMBER(server::auth_challenge, int,      Unknown1   ), Unknown1)
+
+ MONETA_FIXED_VALUE(MONETA_MEMBER(server::auth_challenge, int, Magic   ), 'vOeG')
+ MONETA_FIXED_VALUE(MONETA_MEMBER(server::auth_challenge, int, Category), 0x0024)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -119,7 +154,7 @@ private:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		using moneta::codec::rawbin;
-		typedef moneta::codec::multi_decoder<rawbin, ServerHandshake> decoder_type;
+		typedef moneta::codec::multi_decoder<rawbin, ServerHandshake, server::auth_challenge> decoder_type;
 		decoder_type::variant_type entity;
 		decoder_type decoder;
 
@@ -151,13 +186,19 @@ public:
 		std::cout << moneta::serialization::shell::to_line(handshake) << std::endl;
 
 		ClientHandshake response = moneta::make_entity<ClientHandshake>();
-		response.Unknown = 3;
+		response.SomeVersion = 3;
 		_client.sync_send(response);
+	}
+
+	void operator()(const server::auth_challenge& challenge) const {
+		std::cout << ">>> server::auth_challenge" << std::endl;
+		std::cout << moneta::serialization::shell::to_line(challenge) << std::endl;
+
 	}
 };
 
 BOOST_AUTO_TEST_CASE(serial_sandbox) {
 	boost::asio::io_service io_service;
 	client<printer> client("10.0.0.145", 10000, io_service);
-	io_service.run();
+	//io_service.run();
 }

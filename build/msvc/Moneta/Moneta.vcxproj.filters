@@ -82,6 +82,9 @@
     <Filter Include="Header Files\moneta\codec\rawbin">
       <UniqueIdentifier>{b6a002a7-1ba8-466b-b5a5-f4c9d5aae2e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\codec\debug_dump">
+      <UniqueIdentifier>{4a516048-693a-4b44-b172-83caff40765d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -342,6 +345,9 @@
     <ClInclude Include="..\..\..\include\moneta\codec\for_each_member.hxx">
       <Filter>Header Files\moneta\codec</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\codec\debug_dump\debug_dump_encoder.hxx">
+      <Filter>Header Files\moneta\codec\debug_dump</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -365,6 +371,9 @@
       <Filter>Docs</Filter>
     </None>
     <None Include="..\..\..\doc\TODO">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="..\..\..\doc\Operators.md">
       <Filter>Docs</Filter>
     </None>
   </ItemGroup>

@@ -21,7 +21,9 @@ namespace moneta {
 	template <class EntityType>
 	typename traits::tuple<EntityType>::type make_tuple() {
 		traits::tuple<EntityType>::type result;
+
 		// TODO: Add fixed_value assignment here.
+
 		return boost::fusion::transform(result, traits::detail::blanker());
 	}
 
