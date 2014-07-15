@@ -6,19 +6,17 @@ namespace moneta { namespace codec {
 
  	struct debug_dump;
  
-	template <class Member, class MemberPath>
-	struct member_encoder<debug_dump, Member, MemberPath> {
+	template <class Member>
+	struct member_encoder<debug_dump, Member> {
 		typedef typename Member::class_type entity_type;
 		typedef typename Member::result_type value_type;
 
 		template <class Iterator>
 		int operator()(const entity_type& entity, Member member, Iterator begin, Iterator end) const {
 			std::ostringstream oss;
-			oss << boost::mpl::size<MemberPath>::value << ": "
-			    << traits::get_entity_name<entity_type>()
-			    << '.'
-			    << traits::detail::member_name<Member>::get()
-			    << ": "
+			oss //<< boost::mpl::size<Path>::value << ": "
+			    << traits::get_entity_name<entity_type>() << '.'
+			    << traits::detail::member_name<Member>::get() << ": "
 			    << member(entity)
 			;
 

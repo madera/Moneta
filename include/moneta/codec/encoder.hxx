@@ -5,7 +5,7 @@ namespace moneta { namespace codec {
 	
 	namespace detail {
 
-		template <class Codec, class Iterator, class MemberPath>
+		template <class Codec, class Iterator>
 		struct encode_impl {
 			struct state {
 				Iterator& begin;
@@ -27,8 +27,7 @@ namespace moneta { namespace codec {
 				if (_state.good) {
 					typedef member_encoder<
 						Codec,
-						Member,
-						typename boost::mpl::push_back<MemberPath, Member>::type
+						Member
 					> member_encoder_type;
 
 					int result = member_encoder_type()(
@@ -51,7 +50,7 @@ namespace moneta { namespace codec {
 	template <class Codec, class T, class Enable = void>
 	struct encoder;
 
-	template <class Codec, class Member, class MemberPath = boost::mpl::vector0<> >
+	template <class Codec, class Member>
 	struct member_encoder {
 		typedef typename Member::class_type entity_type;
 		typedef typename Member::result_type value_type;
@@ -62,9 +61,9 @@ namespace moneta { namespace codec {
 		}
 	};
 
-	template <class Codec, class Entity, class Iterator, class MemberPath = boost::mpl::vector0<> >
+	template <class Codec, class Entity, class Iterator>
 	int encode(const Entity& entity, Iterator begin, Iterator end) {
-		typedef detail::encode_impl<Codec, Iterator, MemberPath> encoder_type;
+		typedef detail::encode_impl<Codec, Iterator> encoder_type;
 		encoder_type::state state(begin, end);
 		moneta::codec::for_each_member(entity, encoder_type(state));
 		return state.total_written;

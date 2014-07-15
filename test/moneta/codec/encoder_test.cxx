@@ -122,10 +122,8 @@ namespace moneta { namespace codec {
 
 	struct named_test_codec;
 
-	template <class Member, class MemberPath>
-	struct member_encoder<named_test_codec, Member, MemberPath> {
-	//template <class Member>
-	//struct member_encoder<named_test_codec, Member> {
+	template <class Member>
+	struct member_encoder<named_test_codec, Member> {
 		typedef typename Member::class_type entity_type;
 		typedef typename Member::result_type value_type;
 
