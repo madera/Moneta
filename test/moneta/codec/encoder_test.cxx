@@ -5,6 +5,8 @@
 #include "../model/simple/Arithmetics.hxx"
 #include "../model/Cat.hxx"
 
+// TODO: Make more tests for member_encoder.
+
 namespace moneta { namespace codec {
 
 	struct test_codec;
@@ -114,4 +116,70 @@ BOOST_AUTO_TEST_CASE(traversal_encoder_test) {
 
 	const std::string expected = "iSiiS";
 	BOOST_CHECK_EQUAL_COLLECTIONS(buffer, buffer + sizeof(buffer), expected.begin(), expected.end());
+}
+
+namespace moneta { namespace codec {
+
+	struct named_test_codec;
+
+	template <class Member, class MemberPath>
+	struct member_encoder<named_test_codec, Member, MemberPath> {
+	//template <class Member>
+	//struct member_encoder<named_test_codec, Member> {
+		typedef typename Member::class_type entity_type;
+		typedef typename Member::result_type value_type;
+
+		template <class Iterator>
+		int operator()(const entity_type& entity, Member member, Iterator begin, Iterator end) const {
+			Iterator itr = begin;
+
+			std::ostringstream oss;
+			oss << traits::detail::member_name<Member>::get() << ": ";
+
+			std::string& str = oss.str();
+			int size = str.size();
+
+			int available = end - itr;
+			if (available < size) {
+				return available - size;
+			}
+
+			std::copy(str.begin(), str.end(), itr);
+			itr += size;
+
+			int result = encoder<test_codec, value_type>()(member(entity), itr, end);
+			if (result <= 0) {
+				return result;
+			}
+
+			itr += result;
+			
+			if (itr != end) {
+				*itr++ = '\n';
+			} else {
+				return -1; // Need one more...
+			}
+
+			return itr - begin;
+		}
+	};
+
+}}
+
+BOOST_AUTO_TEST_CASE(member_encoder_test) {
+	typedef Arithmetics entity_type;
+
+	const char expected[] = "Bool: A\nChar: A\nShort: A\nInt: i\nLong: A\n";
+	const size_t expected_size = sizeof(expected) - 1; // nul
+
+	char buffer[expected_size];
+	std::fill(buffer, buffer + sizeof(buffer), 0);
+
+	const int result = moneta::codec::encode<moneta::codec::named_test_codec>(
+		entity_type(), buffer, buffer + sizeof(buffer)
+	);
+
+	BOOST_CHECK_EQUAL(result, expected_size);
+
+	BOOST_CHECK_EQUAL_COLLECTIONS(buffer, buffer + sizeof(buffer), expected, expected + expected_size);
 }

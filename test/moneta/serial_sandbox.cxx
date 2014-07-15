@@ -198,7 +198,7 @@ public:
 };
 
 BOOST_AUTO_TEST_CASE(serial_sandbox) {
-	boost::asio::io_service io_service;
-	client<printer> client("10.0.0.145", 10000, io_service);
+	//boost::asio::io_service io_service;
+	//client<printer> client("10.0.0.145", 10000, io_service);
 	//io_service.run();
 }

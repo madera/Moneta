@@ -7,6 +7,8 @@
 #include "../model/simple/CascadedInts.hxx"
 #include "../model/simple/FixedThreeInts.hxx"
 
+// TODO: Make more tests for member_decoder.
+
 namespace moneta { namespace codec {
 
 	struct test_codec;
@@ -110,4 +112,35 @@ BOOST_AUTO_TEST_CASE(simple_fixed_value_decoder_test) {
 		BOOST_CHECK_EQUAL(ints.Two, 0x22);
 		BOOST_CHECK_EQUAL(ints.Three, 0xff);
 	}
+}
+
+static size_t member_decoder_hits = 0;
+
+namespace moneta { namespace codec {
+
+	struct named_test_codec;
+
+	template <class Member>
+	struct member_decoder<named_test_codec, Member> {
+		typedef typename Member::class_type entity_type;
+		typedef typename Member::result_type value_type;
+
+		template <class Iterator>
+		int operator()(entity_type& entity, Member member, Iterator begin, Iterator end) const {
+			++member_decoder_hits;
+			return 1;
+		}
+	};
+
+}}
+
+BOOST_AUTO_TEST_CASE(member_decoder_test) {
+	const size_t member_count = boost::mpl::size <
+		typename moneta::traits::members<Arithmetics>::type
+	> ::value;
+
+	const int result = moneta::codec::decode<moneta::codec::named_test_codec>(Arithmetics(), 0, 0);
+	BOOST_CHECK_EQUAL(result, member_count);
+
+	BOOST_CHECK_EQUAL(member_decoder_hits, member_count);
 }
