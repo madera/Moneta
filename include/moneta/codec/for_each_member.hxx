@@ -8,75 +8,91 @@ namespace moneta { namespace codec {
 
 	namespace detail {
 
-		template <class MaybeEntityType, class Enable = void>
+		template <class MaybeEntity, class Path, class Enable = void>
 		struct apply_operation;
 
-		template <class MemberEntityType>
+		template <class MemberEntity, class Path>
 		struct apply_operation<
-			MemberEntityType,
+			MemberEntity,
+			Path,
 			typename boost::enable_if<
 				traits::is_entity<
-					typename MemberEntityType::result_type
+					typename MemberEntity::result_type
 				>
 			>::type
 		> {
-			template <class Operation, class EntityType>
-			void operator()(Operation operation, EntityType& entity) {
-				for_each_member(MemberEntityType()(entity), operation);
+			template <class Operation, class Entity>
+			void operator()(Operation operation, Entity& entity) {
+				for_each_member<
+					typename MemberEntity::result_type&,
+					Operation,
+					boost::mpl::push_back<Path, MemberEntity>::type
+				>(MemberEntity()(entity), operation);
 			}
 
-			template <class Operation, class EntityType>
-			void operator()(Operation operation, const EntityType& entity) {
-				for_each_member(MemberEntityType()(entity), operation);
+			template <class Operation, class Entity>
+			void operator()(Operation operation, const Entity& entity) {
+				for_each_member<
+					const typename MemberEntity::result_type&,
+					Operation,
+					boost::mpl::push_back<Path, MemberEntity>::type
+				>(MemberEntity()(entity), operation);
 			}
 		};
 
-		template <class NonEntityMemberType>
+		template <class NonEntityMemberType, class Path>
 		struct apply_operation<
 			NonEntityMemberType,
+			Path,
 			typename boost::disable_if<
 				traits::is_entity<
 					typename NonEntityMemberType::result_type
 				>
 			>::type
 		> {
-			template <class Operation, class EntityType>
-			void operator()(Operation operation, EntityType& entity) {
-				operation(entity, NonEntityMemberType());
+			template <class Operation, class Entity>
+			void operator()(Operation operation, Entity& entity) {
+				operation.operator()<
+					Entity&,
+					NonEntityMemberType,
+					Path
+				>(entity, NonEntityMemberType());
 			}
 
-			template <class Operation, class EntityType>
-			void operator()(Operation operation, const EntityType& entity) {
-				operation(entity, NonEntityMemberType());
+			template <class Operation, class Entity>
+			void operator()(Operation operation, const Entity& entity) {
+				operation.operator()<
+					const Entity&,
+					NonEntityMemberType,
+					Path
+				>(entity, NonEntityMemberType());
 			}
 		};
 
-		template <class EntityType, class Operation>
+		template <class Entity, class Operation, class Path>
 		class member_operator {
-			EntityType& _entity;
+			Entity& _entity;
 			Operation _operation;
 		public:
-			member_operator(EntityType& entity, Operation operation)
+			member_operator(Entity& entity, Operation operation)
 			 : _entity(entity), _operation(operation) {}
 
 			template <typename Member>
 			void operator()(Member& member) const {
-				apply_operation<Member>()(_operation, _entity);
+				apply_operation<Member, Path>()(_operation, _entity);
 			}
 		};
 
 	}
 
-	template <class Members, class EntityType, class Operation>
-	void for_some_members(EntityType& entity, Operation operation) {
-		boost::mpl::for_each<Members>(
-			detail::member_operator<EntityType, Operation>(entity, operation)
-		);
+	template <class Members, class Entity, class Operation, class Path = boost::mpl::vector0<> >
+	void for_some_members(Entity& entity, Operation operation) {
+		boost::mpl::for_each<Members>(detail::member_operator<Entity, Operation, Path>(entity, operation));
 	}
 
-	template <class EntityType, class Operation>
-	void for_each_member(EntityType& entity, Operation operation) {
-		for_some_members<typename traits::members<EntityType>::type>(entity, operation);
+	template <class Entity, class Operation, class Path = boost::mpl::vector0<> >
+	void for_each_member(Entity& entity, Operation operation) {
+		for_some_members<typename traits::members<Entity>::type, Entity, Operation, Path>(entity, operation);
 	}
 
 }}

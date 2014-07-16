@@ -10,7 +10,7 @@ struct call_counter {
 	call_counter(size_t& count_)
 	 : count(count_) {}
 
-	template <class EntityType, class Member>
+	template <class EntityType, class Member, class Path>
 	void operator()(EntityType& entity, Member& member) const {
 		++count;
 	}
@@ -70,7 +70,7 @@ struct increment_it<int> {
 };
 
 struct member_incrementor {
-	template <class EntityType, class Member>
+	template <class EntityType, class Member, class Path>
 	void operator()(EntityType& entity, Member& member) const {
 		increment_it<typename Member::result_type>()(member(entity));
 	}
@@ -87,4 +87,31 @@ BOOST_AUTO_TEST_CASE(mutable_for_each_member_test) {
 
 	BOOST_CHECK_EQUAL(person.ID, 346);
 	BOOST_CHECK_EQUAL(person.Fingers, 13);
+}
+
+struct path_tester {
+	std::vector<int>& _output;
+
+	path_tester(std::vector<int>& output)
+	 : _output(output) {}
+
+	template <class EntityType, class Member, class Path>
+	void operator()(EntityType& entity, Member& member) const {
+		_output.push_back(boost::mpl::size<Path>::value);
+	}
+};
+
+BOOST_AUTO_TEST_CASE(path_for_each_member_test) {
+	Cat garfield;
+	garfield.ID = 1;
+	garfield.Name = "Garfield";
+	garfield.Address.ID = 10;
+	garfield.Address.Number = 123;
+	garfield.Address.Street = "Super Street";
+
+	std::vector<int> result;
+	moneta::codec::for_each_member(garfield, path_tester(result));
+
+	const int expected[] = { 0, 0, 1, 1, 1 };
+	BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(), expected, expected + 5);
 }
