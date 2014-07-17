@@ -129,11 +129,13 @@
     <ClInclude Include="..\..\..\include\moneta\traits\detail\deref_if_unary.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\has_member_trait.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\indices_of.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\is_functor_callable.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\is_fusion_vector.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\is_unary_vector.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\member_trait_base.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_constructor.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_hacker.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\pp\is_method_callable_spec.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\pure_type.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_opfx.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_sg.hxx" />

@@ -374,5 +374,8 @@
     <ClCompile Include="..\..\..\test\moneta\codec\debug_dump\debug_dump_encoder_test.cxx">
       <Filter>Source Files\moneta\codec\debug_dump</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\detail\is_functor_callable_test.cxx">
+      <Filter>Source Files\moneta\traits\detail</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

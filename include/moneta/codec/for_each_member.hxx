@@ -52,7 +52,7 @@ namespace moneta { namespace codec {
 		> {
 			template <class Operation, class Entity>
 			void operator()(Operation operation, Entity& entity) {
-				operation.operator()<
+				operation.operator()< // XXX
 					Entity&,
 					NonEntityMemberType,
 					Path
@@ -61,7 +61,7 @@ namespace moneta { namespace codec {
 
 			template <class Operation, class Entity>
 			void operator()(Operation operation, const Entity& entity) {
-				operation.operator()<
+				operation.operator()< // XXX
 					const Entity&,
 					NonEntityMemberType,
 					Path

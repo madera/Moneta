@@ -85,6 +85,9 @@
     <Filter Include="Header Files\moneta\codec\debug_dump">
       <UniqueIdentifier>{4a516048-693a-4b44-b172-83caff40765d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\traits\detail\pp">
+      <UniqueIdentifier>{54312d89-1725-45b2-96ad-83a368086314}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -347,6 +350,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\codec\debug_dump\debug_dump_encoder.hxx">
       <Filter>Header Files\moneta\codec\debug_dump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\pp\is_method_callable_spec.hxx">
+      <Filter>Header Files\moneta\traits\detail\pp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\is_functor_callable.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

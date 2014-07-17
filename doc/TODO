@@ -15,7 +15,10 @@ TODO:
 	* Check const correctness on Codec API.
 	* Either all EntityType or all Entity.
 	* for_each_member should not be in codec.
-
+	* Add support for no-Path-needed for_each_member loops. No penalty should be induced for unused features.
+	  Currently only callables with a default nullptr Path parameter are supported.
+	* Remove static from headers in favor of unnamed namespaces.
+ 
 Current Stack:
 
 	* hash_change_tracker
