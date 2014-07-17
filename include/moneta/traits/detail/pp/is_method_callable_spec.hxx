@@ -30,7 +30,7 @@ namespace {
 		template<typename C, C> struct ChT;
 		template<typename C> static char(&f(ChT<int A::*, &C::IS_METHOD_CALLABLE_FUNCTION>*))[1];
 		template<typename C> static char(&f(...))[2];
-		static bool const value = sizeof(f<B>(0)) == 2;
+		static const bool value = sizeof(f<B>(0)) == 2;
 		typedef ::boost::mpl::bool_<value> type;
 	};
 
@@ -78,7 +78,7 @@ struct IS_METHOD_CALLABLE_NAME {
 	struct impl : ::boost::mpl::false_ {};
 
 	typedef impl<BOOST_PP_CAT(has_member_, IS_METHOD_CALLABLE_NAME) < T > ::value, Signature> type;
-
+	static const bool value = type::value;
 //
 
 #define ENUM_Ts_SPEC(z, n, size) BOOST_PP_CAT(nullref<T,n)>()BOOST_PP_COMMA_IF(BOOST_PP_NOT_EQUAL(n,BOOST_PP_DEC(size)))

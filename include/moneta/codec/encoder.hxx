@@ -23,7 +23,7 @@ namespace moneta { namespace codec {
 			 : _state(state) {}
 
 			template <class Entity, class Member, class Path>
-			void operator()(const Entity& entity, Member& member) const {
+			void operator()(const Entity& entity, Member member, Path path) const {
 				if (_state.good) {
 					typedef member_encoder<
 						Codec,

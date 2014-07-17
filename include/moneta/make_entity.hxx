@@ -11,7 +11,7 @@ namespace moneta {
 
 	namespace detail {
 		struct fixed_value_setter {
-			template <class EntityType, class Member, class Path>
+			template <class EntityType, class Member>
 			void operator()(EntityType& entity, Member& member) const {
 				member(entity) = traits::detail::fixed_value<Member>::get();
 			}

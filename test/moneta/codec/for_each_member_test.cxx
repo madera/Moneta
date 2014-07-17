@@ -10,8 +10,8 @@ struct call_counter {
 	call_counter(size_t& count_)
 	 : count(count_) {}
 
-	template <class EntityType, class Member, class Path>
-	void operator()(EntityType& entity, Member& member) const {
+	template <class Entity, class Member>
+	void operator()(Entity& entity, Member member) const {
 		++count;
 	}
 };
@@ -70,8 +70,8 @@ struct increment_it<int> {
 };
 
 struct member_incrementor {
-	template <class EntityType, class Member, class Path>
-	void operator()(EntityType& entity, Member& member) const {
+	template <class Entity, class Member>
+	void operator()(Entity& entity, Member member) const {
 		increment_it<typename Member::result_type>()(member(entity));
 	}
 };
@@ -95,8 +95,8 @@ struct path_tester {
 	path_tester(std::vector<int>& output)
 	 : _output(output) {}
 
-	template <class EntityType, class Member, class Path>
-	void operator()(EntityType& entity, Member& member) const {
+	template <class Entity, class Member, class Path>
+	void operator()(Entity& entity, Member member, Path path) const {
 		_output.push_back(boost::mpl::size<Path>::value);
 	}
 };

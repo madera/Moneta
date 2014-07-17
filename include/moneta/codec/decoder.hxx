@@ -55,7 +55,7 @@ namespace moneta { namespace codec {
 			 : _state(state) {}
 
 			template <class Entity, class Member, class Path>
-			void operator()(Entity& entity, Member& member) const {
+			void operator()(Entity& entity, Member member, Path path) const {
 				if (!_state.good) {
 					return;
 				}

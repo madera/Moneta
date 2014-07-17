@@ -2,24 +2,54 @@
 #include "../traits/member_names.hxx"
 #include "../traits/detail/memptr_hacker.hxx"
 #include "../traits/is_entity.hxx"
+#include "../traits/detail/is_functor_callable.hxx"
 #include "../make_entity.hxx"
 
 namespace moneta { namespace codec {
 
 	namespace detail {
 
-		template <class MaybeEntity, class Path, class Enable = void>
-		struct apply_operation;
+		template <class Operation, class Entity, class Member, class Path, class Enable = void>
+		struct apply_operation_impl;
 
+		template <class Operation, class Entity, class Member, class Path>
+		struct apply_operation_impl<
+			Operation, Entity, Member, Path,
+			typename boost::enable_if<
+				traits::detail::is_functor_callable<Operation, void(Entity&, Member, Path)>
+			>::type
+		> {
+			void operator()(Operation operation, Entity& entity, Member member) const {
+				operation(entity, member, Path());
+			}
+		};
+
+		template <class Operation, class Entity, class Member, class Path>
+		struct apply_operation_impl<
+			Operation, Entity, Member, Path,
+			typename boost::enable_if<
+				traits::detail::is_functor_callable<Operation, void(Entity&, Member)>
+			>::type
+		> {
+			void operator()(Operation operation, Entity& entity, Member member) const {
+				operation(entity, member);
+			}
+		};
+
+		//
+		// --------------------------------------------------------------------------------------------------
+		//
+
+		template <class MaybeEntity, class Path, class Enable = void>
+		struct recurse_or_call_operation;
+
+		// Specialization for: Recurse
+		//
 		template <class MemberEntity, class Path>
-		struct apply_operation<
+		struct recurse_or_call_operation<
 			MemberEntity,
 			Path,
-			typename boost::enable_if<
-				traits::is_entity<
-					typename MemberEntity::result_type
-				>
-			>::type
+			typename boost::enable_if<traits::is_entity<typename MemberEntity::result_type> >::type
 		> {
 			template <class Operation, class Entity>
 			void operator()(Operation operation, Entity& entity) {
@@ -40,32 +70,27 @@ namespace moneta { namespace codec {
 			}
 		};
 
+		// Specialization for: Operate
+		//
 		template <class NonEntityMemberType, class Path>
-		struct apply_operation<
-			NonEntityMemberType,
-			Path,
-			typename boost::disable_if<
-				traits::is_entity<
-					typename NonEntityMemberType::result_type
-				>
-			>::type
+		struct recurse_or_call_operation<
+			NonEntityMemberType, Path,
+			typename boost::disable_if<traits::is_entity<typename NonEntityMemberType::result_type> >::type
 		> {
 			template <class Operation, class Entity>
 			void operator()(Operation operation, Entity& entity) {
-				operation.operator()< // XXX
-					Entity&,
-					NonEntityMemberType,
-					Path
-				>(entity, NonEntityMemberType());
+				// TODO: Write a clever comment to alert users in case of compile error here.
+				apply_operation_impl<
+					Operation, Entity&, NonEntityMemberType, Path
+				>()(operation, entity, NonEntityMemberType());
 			}
 
 			template <class Operation, class Entity>
 			void operator()(Operation operation, const Entity& entity) {
-				operation.operator()< // XXX
-					const Entity&,
-					NonEntityMemberType,
-					Path
-				>(entity, NonEntityMemberType());
+				// TODO: Write a clever comment to alert users in case of compile error here.
+				apply_operation_impl<
+					Operation, const Entity&, NonEntityMemberType, Path
+				>()(operation, entity, NonEntityMemberType());
 			}
 		};
 
@@ -78,8 +103,8 @@ namespace moneta { namespace codec {
 			 : _entity(entity), _operation(operation) {}
 
 			template <typename Member>
-			void operator()(Member& member) const {
-				apply_operation<Member, Path>()(_operation, _entity);
+			void operator()(Member member) const {
+				recurse_or_call_operation<Member, Path>()(_operation, _entity);
 			}
 		};
 
