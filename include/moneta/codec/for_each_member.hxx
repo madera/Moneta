@@ -9,32 +9,51 @@ namespace moneta { namespace codec {
 
 	namespace detail {
 
-		template <class Operation, class Entity, class Member, class Path, class Enable = void>
-		struct apply_operation_impl;
+		template <class Operation, class Entity, class Member, class Path>
+		typename boost::enable_if<traits::detail::is_functor_callable<Operation, void(Entity&, Member, Path)> >::type
+		apply_operation(Operation& operation, Entity& entity, Member& member, Path& path) {
+			operation(entity, member, Path());
+		}
 
 		template <class Operation, class Entity, class Member, class Path>
-		struct apply_operation_impl<
-			Operation, Entity, Member, Path,
-			typename boost::enable_if<
-				traits::detail::is_functor_callable<Operation, void(Entity&, Member, Path)>
-			>::type
-		> {
-			void operator()(Operation operation, Entity& entity, Member member) const {
-				operation(entity, member, Path());
-			}
-		};
+		typename boost::enable_if<traits::detail::is_functor_callable<Operation, void(Entity&, Member)> >::type
+		apply_operation(Operation& operation, Entity& entity, Member& member, Path& path) {
+			operation(entity, member);
+		}
 
-		template <class Operation, class Entity, class Member, class Path>
-		struct apply_operation_impl<
-			Operation, Entity, Member, Path,
-			typename boost::enable_if<
-				traits::detail::is_functor_callable<Operation, void(Entity&, Member)>
-			>::type
-		> {
-			void operator()(Operation operation, Entity& entity, Member member) const {
-				operation(entity, member);
-			}
-		};
+		//
+		// --------------------------------------------------------------------------------------------------
+		//
+
+		DEFINE_HAS_MEMBER_TRAIT(enter)
+
+		template <class Operation, class FromEntity, class ToEntity, class Member>
+		typename boost::enable_if<has_member_enter<Operation> >::type
+		call_enter_if_defined(Operation& operation, FromEntity& from, ToEntity& to, Member& member) {
+			return operation.enter<FromEntity, ToEntity, Member>(from, to, Member());
+		}
+
+		template <class Operation, class FromEntity, class ToEntity, class Member>
+		typename boost::disable_if<has_member_enter<Operation> >::type
+		call_enter_if_defined(Operation& operation, FromEntity& from, ToEntity& to, Member& member) {
+		}
+
+		//
+		// --------------------------------------------------------------------------------------------------
+		//
+
+		DEFINE_HAS_MEMBER_TRAIT(leave)
+
+		template <class Operation, class FromEntity, class ToEntity, class Member>
+		typename boost::enable_if<has_member_leave<Operation> >::type
+		call_leave_if_defined(Operation& operation, FromEntity& from, ToEntity& to, Member& member) {
+			return operation.leave<FromEntity, ToEntity, Member>(from, to, Member());
+		}
+
+		template <class Operation, class FromEntity, class ToEntity, class Member>
+		typename boost::disable_if<has_member_leave<Operation> >::type
+		call_leave_if_defined(Operation& operation, FromEntity& from, ToEntity& to, Member& member) {
+		}
 
 		//
 		// --------------------------------------------------------------------------------------------------
@@ -53,20 +72,28 @@ namespace moneta { namespace codec {
 		> {
 			template <class Operation, class Entity>
 			void operator()(Operation operation, Entity& entity) {
-				for_each_member<
-					typename MemberEntity::result_type&,
-					Operation,
-					boost::mpl::push_back<Path, MemberEntity>::type
-				>(MemberEntity()(entity), operation);
+				call_enter_if_defined(operation, entity, MemberEntity()(entity), MemberEntity());
+
+				for_each_member_impl(
+					MemberEntity()(entity),
+					operation,
+					boost::mpl::push_back<Path, MemberEntity>::type()
+				);
+
+				call_leave_if_defined(operation, MemberEntity()(entity), entity, MemberEntity());
 			}
 
 			template <class Operation, class Entity>
 			void operator()(Operation operation, const Entity& entity) {
-				for_each_member<
-					const typename MemberEntity::result_type&,
-					Operation,
-					boost::mpl::push_back<Path, MemberEntity>::type
-				>(MemberEntity()(entity), operation);
+				call_enter_if_defined(operation, entity, MemberEntity()(entity), MemberEntity());
+
+				for_each_member_impl(
+					MemberEntity()(entity),
+					operation,
+					boost::mpl::push_back<Path, MemberEntity>::type()
+				);
+
+				call_leave_if_defined(operation, MemberEntity()(entity), entity, MemberEntity());
 			}
 		};
 
@@ -80,17 +107,13 @@ namespace moneta { namespace codec {
 			template <class Operation, class Entity>
 			void operator()(Operation operation, Entity& entity) {
 				// TODO: Write a clever comment to alert users in case of compile error here.
-				apply_operation_impl<
-					Operation, Entity&, NonEntityMemberType, Path
-				>()(operation, entity, NonEntityMemberType());
+				apply_operation(operation, entity, NonEntityMemberType(), Path());
 			}
 
 			template <class Operation, class Entity>
 			void operator()(Operation operation, const Entity& entity) {
 				// TODO: Write a clever comment to alert users in case of compile error here.
-				apply_operation_impl<
-					Operation, const Entity&, NonEntityMemberType, Path
-				>()(operation, entity, NonEntityMemberType());
+				apply_operation(operation, entity, NonEntityMemberType(), Path());
 			}
 		};
 
@@ -108,16 +131,29 @@ namespace moneta { namespace codec {
 			}
 		};
 
+		template <class Members, class Entity, class Operation, class Path = boost::mpl::vector0<> >
+		void for_some_members_impl(Entity& entity, Operation& operation, Path& path = Path()) {
+			boost::mpl::for_each<
+				Members
+			>(detail::member_operator<Entity, Operation, Path>(entity, operation));
+		}
+
+		template <class Entity, class Operation, class Path = boost::mpl::vector0<> >
+		void for_each_member_impl(Entity& entity, Operation& operation, Path& path = Path()) {
+			for_some_members_impl<
+				typename traits::members<Entity>::type, Entity, Operation, Path
+			>(entity, operation);
+		}
 	}
 
-	template <class Members, class Entity, class Operation, class Path = boost::mpl::vector0<> >
-	void for_some_members(Entity& entity, Operation operation) {
-		boost::mpl::for_each<Members>(detail::member_operator<Entity, Operation, Path>(entity, operation));
+	template <class Members, class Entity, class Operation>
+	void for_some_members(Entity& entity, Operation& operation) {
+		detail::for_some_members_impl<Members>(entity, operation);
 	}
 
-	template <class Entity, class Operation, class Path = boost::mpl::vector0<> >
-	void for_each_member(Entity& entity, Operation operation) {
-		for_some_members<typename traits::members<Entity>::type, Entity, Operation, Path>(entity, operation);
+	template <class Entity, class Operation>
+	void for_each_member(Entity& entity, Operation& operation) {
+		detail::for_each_member_impl(entity, operation);
 	}
 
 }}

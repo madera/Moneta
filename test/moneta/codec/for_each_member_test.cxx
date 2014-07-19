@@ -4,6 +4,8 @@
 #include "../model/Person.hxx"
 #include "../model/Cat.hxx"
 
+// TODO: Test this all using const objects.
+
 struct call_counter {
 	size_t& count;
 
@@ -114,4 +116,86 @@ BOOST_AUTO_TEST_CASE(path_for_each_member_test) {
 
 	const int expected[] = { 0, 0, 1, 1, 1 };
 	BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(), expected, expected + 5);
+}
+
+struct enter_tester {
+	std::vector<std::string>& _output;
+
+	enter_tester(std::vector<std::string>& output)
+	 : _output(output) {}
+
+	template <class FromEntity, class ToEntity, class Member>
+	void enter(FromEntity& from, ToEntity& to, Member member) const {
+		std::ostringstream oss;
+		oss << "From " << moneta::traits::get_entity_name<FromEntity>()
+		    << " to "  << moneta::traits::get_entity_name<ToEntity>();
+
+		_output.push_back(oss.str());
+	}
+
+	template <class Entity, class Member, class Path>
+	void operator()(Entity& entity, Member member, Path path) const {
+		_output.push_back(".");
+	}
+};
+
+BOOST_AUTO_TEST_CASE(enter_for_each_member_test) {
+	Cat garfield;
+	garfield.ID = 1;
+	garfield.Name = "Garfield";
+	garfield.Address.ID = 10;
+	garfield.Address.Number = 123;
+	garfield.Address.Street = "Super Street";
+
+	std::vector<std::string> result;
+	moneta::codec::for_each_member(garfield, enter_tester(result));
+
+	BOOST_REQUIRE(result.size() == 6);
+	BOOST_CHECK_EQUAL(result[0], ".");
+	BOOST_CHECK_EQUAL(result[1], ".");
+	BOOST_CHECK_EQUAL(result[2], "From Cat to Address");
+	BOOST_CHECK_EQUAL(result[3], ".");
+	BOOST_CHECK_EQUAL(result[4], ".");
+	BOOST_CHECK_EQUAL(result[5], ".");
+}
+
+struct leave_tester {
+	std::vector<std::string>& _output;
+
+	leave_tester(std::vector<std::string>& output)
+	 : _output(output) {}
+
+	template <class FromEntity, class ToEntity, class Member>
+	void leave(FromEntity& from, ToEntity& to, Member member) const {
+		std::ostringstream oss;
+		oss << "From " << moneta::traits::get_entity_name<FromEntity>()
+		    << " to "  << moneta::traits::get_entity_name<ToEntity>();
+
+		_output.push_back(oss.str());
+	}
+
+	template <class Entity, class Member, class Path>
+	void operator()(Entity& entity, Member member, Path path) const {
+		_output.push_back(".");
+	}
+};
+
+BOOST_AUTO_TEST_CASE(leave_for_each_member_test) {
+	Cat garfield;
+	garfield.ID = 1;
+	garfield.Name = "Garfield";
+	garfield.Address.ID = 10;
+	garfield.Address.Number = 123;
+	garfield.Address.Street = "Super Street";
+
+	std::vector<std::string> result;
+	moneta::codec::for_each_member(garfield, leave_tester(result));
+
+	BOOST_REQUIRE(result.size() == 6);
+	BOOST_CHECK_EQUAL(result[0], ".");
+	BOOST_CHECK_EQUAL(result[1], ".");
+	BOOST_CHECK_EQUAL(result[2], ".");
+	BOOST_CHECK_EQUAL(result[3], ".");
+	BOOST_CHECK_EQUAL(result[4], ".");
+	BOOST_CHECK_EQUAL(result[5], "From Address to Cat");
 }

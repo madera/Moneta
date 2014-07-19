@@ -79,9 +79,6 @@
     <Filter Include="Source Files\moneta\container\detail">
       <UniqueIdentifier>{a9512d70-1394-49fa-b539-fc7d82ea0b3c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\moneta\model">
-      <UniqueIdentifier>{4182a9bd-066d-412c-a372-d7e93847a4ae}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\moneta\serialization">
       <UniqueIdentifier>{b0507f1e-f61f-42bd-8ff2-80a79ea1cf01}</UniqueIdentifier>
     </Filter>
