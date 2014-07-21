@@ -82,19 +82,6 @@ namespace moneta { namespace codec {
 
 				call_leave_if_defined(operation, MemberEntity()(entity), entity, MemberEntity());
 			}
-
-			template <class Operation, class Entity>
-			void operator()(Operation operation, const Entity& entity) {
-				call_enter_if_defined(operation, entity, MemberEntity()(entity), MemberEntity());
-
-				for_each_member_impl(
-					MemberEntity()(entity),
-					operation,
-					boost::mpl::push_back<Path, MemberEntity>::type()
-				);
-
-				call_leave_if_defined(operation, MemberEntity()(entity), entity, MemberEntity());
-			}
 		};
 
 		// Specialization for: Operate
@@ -106,12 +93,6 @@ namespace moneta { namespace codec {
 		> {
 			template <class Operation, class Entity>
 			void operator()(Operation operation, Entity& entity) {
-				// TODO: Write a clever comment to alert users in case of compile error here.
-				apply_operation(operation, entity, NonEntityMemberType(), Path());
-			}
-
-			template <class Operation, class Entity>
-			void operator()(Operation operation, const Entity& entity) {
 				// TODO: Write a clever comment to alert users in case of compile error here.
 				apply_operation(operation, entity, NonEntityMemberType(), Path());
 			}

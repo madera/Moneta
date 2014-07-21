@@ -4,8 +4,6 @@
 #include "../model/Person.hxx"
 #include "../model/Cat.hxx"
 
-// TODO: Test this all using const objects.
-
 struct call_counter {
 	size_t& count;
 
@@ -13,7 +11,7 @@ struct call_counter {
 	 : count(count_) {}
 
 	template <class Entity, class Member>
-	void operator()(Entity& entity, Member member) const {
+	void operator()(const Entity& entity, Member member) const {
 		++count;
 	}
 };
@@ -32,6 +30,13 @@ BOOST_AUTO_TEST_CASE(for_each_member_test) {
 		BOOST_CHECK_EQUAL(count, 4);
 	}
 
+	{
+		const Person& const_person = person;
+		size_t count = 0;
+		moneta::codec::for_each_member(const_person, call_counter(count));
+		BOOST_CHECK_EQUAL(count, 4);
+	}
+
 	Cat cat;
 	cat.ID = 10;
 	cat.Name = "Garfield";
@@ -46,8 +51,8 @@ BOOST_AUTO_TEST_CASE(for_each_member_test) {
 	}
 
 	{
-		size_t count = 0;
 		const Cat& const_cat = cat;
+		size_t count = 0;
 		moneta::codec::for_each_member(const_cat, call_counter(count));
 		BOOST_CHECK_EQUAL(count, 5);
 	}
@@ -111,11 +116,22 @@ BOOST_AUTO_TEST_CASE(path_for_each_member_test) {
 	garfield.Address.Number = 123;
 	garfield.Address.Street = "Super Street";
 
-	std::vector<int> result;
-	moneta::codec::for_each_member(garfield, path_tester(result));
+	{
+		std::vector<int> result;
+		moneta::codec::for_each_member(garfield, path_tester(result));
 
-	const int expected[] = { 0, 0, 1, 1, 1 };
-	BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(), expected, expected + 5);
+		const int expected[] = { 0, 0, 1, 1, 1 };
+		BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(), expected, expected + 5);
+	}
+
+	{
+		const Cat& const_garfield = garfield;
+		std::vector<int> result;
+		moneta::codec::for_each_member(const_garfield, path_tester(result));
+
+		const int expected[] = { 0, 0, 1, 1, 1 };
+		BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(), expected, expected + 5);
+	}
 }
 
 struct enter_tester {
@@ -147,16 +163,32 @@ BOOST_AUTO_TEST_CASE(enter_for_each_member_test) {
 	garfield.Address.Number = 123;
 	garfield.Address.Street = "Super Street";
 
-	std::vector<std::string> result;
-	moneta::codec::for_each_member(garfield, enter_tester(result));
+	{
+		std::vector<std::string> result;
+		moneta::codec::for_each_member(garfield, enter_tester(result));
 
-	BOOST_REQUIRE(result.size() == 6);
-	BOOST_CHECK_EQUAL(result[0], ".");
-	BOOST_CHECK_EQUAL(result[1], ".");
-	BOOST_CHECK_EQUAL(result[2], "From Cat to Address");
-	BOOST_CHECK_EQUAL(result[3], ".");
-	BOOST_CHECK_EQUAL(result[4], ".");
-	BOOST_CHECK_EQUAL(result[5], ".");
+		BOOST_REQUIRE(result.size() == 6);
+		BOOST_CHECK_EQUAL(result[0], ".");
+		BOOST_CHECK_EQUAL(result[1], ".");
+		BOOST_CHECK_EQUAL(result[2], "From Cat to Address");
+		BOOST_CHECK_EQUAL(result[3], ".");
+		BOOST_CHECK_EQUAL(result[4], ".");
+		BOOST_CHECK_EQUAL(result[5], ".");
+	}
+
+	{
+		const Cat& const_garfield = garfield;
+		std::vector<std::string> result;
+		moneta::codec::for_each_member(const_garfield, enter_tester(result));
+
+		BOOST_REQUIRE(result.size() == 6);
+		BOOST_CHECK_EQUAL(result[0], ".");
+		BOOST_CHECK_EQUAL(result[1], ".");
+		BOOST_CHECK_EQUAL(result[2], "From Cat to Address");
+		BOOST_CHECK_EQUAL(result[3], ".");
+		BOOST_CHECK_EQUAL(result[4], ".");
+		BOOST_CHECK_EQUAL(result[5], ".");
+	}
 }
 
 struct leave_tester {
@@ -188,14 +220,30 @@ BOOST_AUTO_TEST_CASE(leave_for_each_member_test) {
 	garfield.Address.Number = 123;
 	garfield.Address.Street = "Super Street";
 
-	std::vector<std::string> result;
-	moneta::codec::for_each_member(garfield, leave_tester(result));
+	{
+		std::vector<std::string> result;
+		moneta::codec::for_each_member(garfield, leave_tester(result));
 
-	BOOST_REQUIRE(result.size() == 6);
-	BOOST_CHECK_EQUAL(result[0], ".");
-	BOOST_CHECK_EQUAL(result[1], ".");
-	BOOST_CHECK_EQUAL(result[2], ".");
-	BOOST_CHECK_EQUAL(result[3], ".");
-	BOOST_CHECK_EQUAL(result[4], ".");
-	BOOST_CHECK_EQUAL(result[5], "From Address to Cat");
+		BOOST_REQUIRE(result.size() == 6);
+		BOOST_CHECK_EQUAL(result[0], ".");
+		BOOST_CHECK_EQUAL(result[1], ".");
+		BOOST_CHECK_EQUAL(result[2], ".");
+		BOOST_CHECK_EQUAL(result[3], ".");
+		BOOST_CHECK_EQUAL(result[4], ".");
+		BOOST_CHECK_EQUAL(result[5], "From Address to Cat");
+	}
+
+	{
+		const Cat& const_garfield = garfield;
+		std::vector<std::string> result;
+		moneta::codec::for_each_member(const_garfield, leave_tester(result));
+
+		BOOST_REQUIRE(result.size() == 6);
+		BOOST_CHECK_EQUAL(result[0], ".");
+		BOOST_CHECK_EQUAL(result[1], ".");
+		BOOST_CHECK_EQUAL(result[2], ".");
+		BOOST_CHECK_EQUAL(result[3], ".");
+		BOOST_CHECK_EQUAL(result[4], ".");
+		BOOST_CHECK_EQUAL(result[5], "From Address to Cat");
+	}
 }
