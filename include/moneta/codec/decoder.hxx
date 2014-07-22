@@ -4,6 +4,20 @@
 
 namespace moneta { namespace codec {
 	
+	template < class Codec, class T, class Enable = void >
+	struct decoder;
+
+	template <class Codec, class Member>
+	struct member_decoder {
+		typedef typename Member::class_type entity_type;
+		typedef typename Member::result_type value_type;
+
+		template <class Iterator>
+		int operator()(entity_type& entity, Member member, Iterator begin, Iterator end) const {
+			return decoder<Codec, value_type>()(member(entity), begin, end);
+		}
+	};
+
 	namespace detail {
 
 		template <class Codec, class Member, class Enable = void>
@@ -75,20 +89,6 @@ namespace moneta { namespace codec {
 		};
 
 	}
-
-	template < class Codec, class T, class Enable = void >
-	struct decoder;
-
-	template <class Codec, class Member>
-	struct member_decoder {
-		typedef typename Member::class_type entity_type;
-		typedef typename Member::result_type value_type;
-
-		template <class Iterator>
-		int operator()(entity_type& entity, Member member, Iterator begin, Iterator end) const {
-			return decoder<Codec, value_type>()(member(entity), begin, end);
-		}
-	};
 
 	template <class Codec, class Entity, class Iterator>
 	int decode(Entity& entity, Iterator begin, Iterator end) {

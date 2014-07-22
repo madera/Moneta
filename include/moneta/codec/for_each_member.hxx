@@ -59,6 +59,7 @@ namespace moneta { namespace codec {
 		// --------------------------------------------------------------------------------------------------
 		//
 
+		// TODO: Could this be a simple function?
 		template <class MaybeEntity, class Path, class Enable = void>
 		struct recurse_or_call_operation;
 
