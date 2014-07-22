@@ -88,6 +88,9 @@
     <Filter Include="Header Files\moneta\traits\detail\pp">
       <UniqueIdentifier>{54312d89-1725-45b2-96ad-83a368086314}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\algorithm">
+      <UniqueIdentifier>{0dd34782-558c-4761-8a85-8a64b8877b7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -345,9 +348,6 @@
     <ClInclude Include="..\..\..\include\moneta\codec\rawbin\rawbin_decoder.hxx">
       <Filter>Header Files\moneta\codec\rawbin</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\codec\for_each_member.hxx">
-      <Filter>Header Files\moneta\codec</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\codec\debug_dump\debug_dump_encoder.hxx">
       <Filter>Header Files\moneta\codec\debug_dump</Filter>
     </ClInclude>
@@ -356,6 +356,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\detail\is_functor_callable.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\algorithm\for_each_member.hxx">
+      <Filter>Header Files\moneta\algorithm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

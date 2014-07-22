@@ -1,5 +1,5 @@
 #pragma once
-#include "for_each_member.hxx"
+#include "../algorithm/for_each_member.hxx"
 
 namespace moneta { namespace codec {
 	
@@ -28,7 +28,7 @@ namespace moneta { namespace codec {
 		>::type
 		apply_encoder(Entity& entity, Member& member, Iterator& begin, Iterator& end) {
 			//BOOST_MPL_ASSERT((boost::is_same<Entity, typename Member::class_type>));
-			return encoder<Codec, typename Member::result_type>()(member(entity), path, begin, end);
+			return encoder<Codec, typename Member::result_type>()(member(entity), begin, end, path);
 		}
 
 		template <class Codec, class Member, class Path, class Entity, class Iterator>
@@ -85,7 +85,7 @@ namespace moneta { namespace codec {
 	int encode(const Entity& entity, Iterator begin, Iterator end) {
 		typedef detail::encode_impl<Codec, Iterator> encoder_type;
 		encoder_type::state state(begin, end);
-		moneta::codec::for_each_member(entity, encoder_type(state));
+		moneta::algorithm::for_each_member(entity, encoder_type(state));
 		return state.total_written;
 	}
 

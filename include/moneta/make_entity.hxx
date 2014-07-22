@@ -4,7 +4,7 @@
 #include "traits/detail/blanker.hxx"
 #include "traits/fixed_values.hxx"
 #include "traits/members.hxx"
-#include "codec/for_each_member.hxx"
+#include "algorithm/for_each_member.hxx"
 #include <boost/fusion/algorithm/transformation/transform.hpp>
 
 namespace moneta {
@@ -32,7 +32,7 @@ namespace moneta {
 		EntityType result;
 		traits::to_tie<EntityType>(result) = make_tuple<EntityType>();
 
-		moneta::codec::for_some_members<
+		moneta::algorithm::for_some_members<
 			typename traits::fixed_value_members<EntityType>::type
 		>(result, detail::fixed_value_setter());
 		

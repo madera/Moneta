@@ -1,5 +1,5 @@
 #pragma once
-#include "for_each_member.hxx"
+#include "../algorithm/for_each_member.hxx"
 #include "../traits/fixed_values.hxx"
 
 namespace moneta { namespace codec {
@@ -93,7 +93,7 @@ namespace moneta { namespace codec {
 	template <class Codec, class Entity, class Iterator>
 	int decode(Entity& entity, Iterator begin, Iterator end) {
 		detail::decode_impl<Codec, Iterator>::state state(begin, end);
-		moneta::codec::for_each_member(entity, detail::decode_impl<Codec, Iterator>(state));
+		moneta::algorithm::for_each_member(entity, detail::decode_impl<Codec, Iterator>(state));
 		return state.total_read;
 	}
 
