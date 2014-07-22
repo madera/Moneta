@@ -103,9 +103,6 @@
     <Filter Include="Source Files\moneta\codec\rawbin">
       <UniqueIdentifier>{1c9c4eac-5cea-4933-8ef3-220ff892f858}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\moneta\codec\debug_dump">
-      <UniqueIdentifier>{d988cf7d-801b-41fb-befb-0d2eebe0e25f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\moneta\algorithm">
       <UniqueIdentifier>{2a419dc2-f280-440e-8d9d-fc0d6ce974a0}</UniqueIdentifier>
     </Filter>
@@ -367,9 +364,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\codec\rawbin\rawbin_decoder_test.cxx">
       <Filter>Source Files\moneta\codec\rawbin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\codec\debug_dump\debug_dump_encoder_test.cxx">
-      <Filter>Source Files\moneta\codec\debug_dump</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\detail\is_functor_callable_test.cxx">
       <Filter>Source Files\moneta\traits\detail</Filter>

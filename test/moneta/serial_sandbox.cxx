@@ -3,6 +3,7 @@
 #include <moneta/serialization/detail/hexdump.hxx>
 #include <moneta/pp/sql_entity.hxx> // XXX: XXX: XXX!!!
 #include <moneta/codec/multi_decoder.hxx>
+#include <moneta/codec/debug_dump/debug_dump_encoder.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -172,8 +173,6 @@ private:
 	}
 };
 
-#include <moneta/serialization/shell/shell_codec.hxx>
-
 class printer : public boost::static_visitor<void> {
 	typedef client<printer> client_type;
 	client_type& _client;
@@ -183,7 +182,7 @@ public:
 
 	void operator()(const ServerHandshake& handshake) const {
 		std::cout << ">>> ServerHandshake" << std::endl;
-		std::cout << moneta::serialization::shell::to_line(handshake) << std::endl;
+		moneta::codec::encode<moneta::codec::debug_dump>(handshake);
 
 		ClientHandshake response = moneta::make_entity<ClientHandshake>();
 		response.SomeVersion = 3;
@@ -192,13 +191,12 @@ public:
 
 	void operator()(const server::auth_challenge& challenge) const {
 		std::cout << ">>> server::auth_challenge" << std::endl;
-		std::cout << moneta::serialization::shell::to_line(challenge) << std::endl;
 
 	}
 };
 
 BOOST_AUTO_TEST_CASE(serial_sandbox) {
-	//boost::asio::io_service io_service;
-	//client<printer> client("10.0.0.145", 10000, io_service);
-	//io_service.run();
+	boost::asio::io_service io_service;
+	client<printer> client("10.0.0.145", 10000, io_service);
+	io_service.run();
 }
