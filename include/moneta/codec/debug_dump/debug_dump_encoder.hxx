@@ -8,6 +8,8 @@ namespace moneta { namespace codec {
  	struct debug_dump;
  
 	namespace detail {
+		// TODO: Continue this when Path-enabled codecs arise.
+
 		//struct path_printer {
 		//	std::ostringstream& oss;
 

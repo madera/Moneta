@@ -1,6 +1,7 @@
 #pragma once
 #include <boost/variant.hpp>
 #include <boost/mpl/vector.hpp>
+#include <boost/mpl/for_each.hpp>
 
 namespace moneta { namespace codec {
 	
