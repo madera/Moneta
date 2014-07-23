@@ -22,13 +22,13 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			traits::detail::is_functor_callable<
 				encoder<Codec, typename Member::result_type>,
-				int (typename Member::result_type, Path, Iterator, Iterator)
+				int (typename Member::result_type, Iterator, Iterator, Path)
 			>,
 			int
 		>::type
 		apply_encoder(Entity& entity, Member& member, Iterator& begin, Iterator& end) {
 			//BOOST_MPL_ASSERT((boost::is_same<Entity, typename Member::class_type>));
-			return encoder<Codec, typename Member::result_type>()(member(entity), begin, end, path);
+			return encoder<Codec, typename Member::result_type>()(member(entity), begin, end, Path());
 		}
 
 		template <class Codec, class Member, class Path, class Entity, class Iterator>

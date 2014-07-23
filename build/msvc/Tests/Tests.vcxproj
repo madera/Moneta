@@ -61,6 +61,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <EnablePREfast>false</EnablePREfast>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,7 +153,6 @@
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_delete_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_list_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\soci_read_test.cxx" />
-    <ClCompile Include="..\..\..\test\moneta\serial_sandbox.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\generators\delete_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\generators\insert_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\sql\generators\select_test.cxx" />

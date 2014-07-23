@@ -1,24 +1,62 @@
 #pragma once
 #include "../encoder.hxx"
 #include <boost/type_traits/is_pod.hpp>
+#include <boost/format.hpp>
 
 namespace moneta { namespace codec {
 
  	struct debug_dump;
  
 	namespace detail {
-		struct printer_path {
-			template <class T>
-			void operator()() const {
-				std::cerr << 'x';
-			}
-		};
+		//struct path_printer {
+		//	std::ostringstream& oss;
 
-		template <class Path>
-		void print_path() {
-			boost::mpl::for_each<Path>(path_printer());
-		}
+		//	path_printer(std::ostringstream& oss_)
+		//	 : oss(oss_) {}
+
+		//	template <class T>
+		//	void operator()(const T x) const {
+		//		oss << 'x';
+		//	}
+		//};
+
+		//template <class Path>
+		//std::string stringize_path() {
+		//	std::ostringstream oss;
+		//	path_printer state(oss);
+		//	boost::mpl::for_each<Path>(state);
+		//	return state.oss.str();
+		//}
 	}
+
+	template <class T>
+	struct encoder<debug_dump, T, typename boost::disable_if<
+		boost::mpl::or_<boost::is_array<T>, boost::is_arithmetic<T> >
+	> > {
+		template <class Path, class Iterator>
+		int operator()(const T value, Iterator begin, Iterator end, Path) const {
+			std::cerr << value << std::endl;
+			return 1;
+		}
+	};
+
+	template <class T>
+	struct encoder<debug_dump, T, typename boost::enable_if<boost::is_arithmetic<T> >::type> {
+		template <class Path, class Iterator>
+		int operator()(const T value, Iterator begin, Iterator end, Path) const {
+			std::cerr << boost::format("0x%|08x| %|10|") % value % value << std::endl;
+			return 1;
+		}
+	};
+
+	template <class T, int N>
+	struct encoder<debug_dump, T[N]> {
+		template <class Path, class Iterator>
+		int operator()(const T value[N], Iterator begin, Iterator end, Path) const {
+			std::cerr << "T[" << std::dec << N << "] (" << sizeof(T)*N << " bytes)" << std::endl;
+			return 1;
+		}
+	};
 
 	template <class Member, class Path>
 	struct member_encoder<debug_dump, Member, Path> {
@@ -27,16 +65,9 @@ namespace moneta { namespace codec {
 
 		template <class Iterator>
 		int operator()(const entity_type& entity, Member& member, Iterator& begin, Iterator& end) const {
-			std::ostringstream oss;
-			
-			print_path<Path>();
-			oss << traits::get_entity_name<entity_type>() << '.'
-			    << traits::detail::member_name<Member>::get() << ": "
-			    << member(entity)
-			;
-
-			std::cerr << oss.str() << std::endl;
-			return oss.str().size();
+			std::cerr << boost::format("%|-20|: ") % traits::detail::member_name<Member>::get();
+			encoder<debug_dump, value_type>()(member(entity), 0, 0, Path());
+			return 1;
 		}
 	};
 

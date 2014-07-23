@@ -341,9 +341,6 @@
     <ClCompile Include="..\..\..\test\moneta\container\meta_set_test.cxx">
       <Filter>Source Files\moneta\container</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\serial_sandbox.cxx">
-      <Filter>Source Files\moneta</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\codec\multi_decoder_test.cxx">
       <Filter>Source Files\moneta\codec</Filter>
     </ClCompile>
