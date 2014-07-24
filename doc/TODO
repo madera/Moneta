@@ -18,7 +18,9 @@ TODO:
 	* Add support for no-Path-needed for_each_member loops. No penalty should be induced for unused features.
 	  Currently only callables with a default nullptr Path parameter are supported.
 	* Remove static from headers in favor of unnamed namespaces.
- 
+	* moneta::make_entity<>() fails with entities containing array types. Fix this!!
+	* Organize PP macros... it's a mess.
+
 Current Stack:
 
 	* hash_change_tracker

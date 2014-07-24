@@ -83,8 +83,8 @@
 	}}} \
 	MONETA_PP_EXPAND_ENTITY_MEMBER_NAMES(entity, members)
 
-#define MONETA_DESCRIBE_ENTITY(entity, members) \
-	MONETA_DESCRIBE_ENTITY_BASE(entity, MONETA_PP_ADD_PARENTHESES_2(members))
+//#define MONETA_DESCRIBE_ENTITY(entity, members) \
+//	MONETA_DESCRIBE_ENTITY_BASE(entity, MONETA_PP_ADD_PARENTHESES_2(members))
 
 //
 // XXX: New interface...
@@ -97,3 +97,9 @@
 		MONETA_PP_DEFINE_MEMBERS(members) \
 	};
 
+#define MONETA_PP_DEFINE_ENTITY_STRUCT_WITH_NAMESPACE(ns_seq, entity, members) \
+	MONETA_PP_NAMESPACE_BEGIN(ns_seq) \
+	struct entity { \
+		MONETA_PP_DEFINE_MEMBERS(members) \
+	}; \
+	MONETA_PP_NAMESPACE_END(ns_seq)

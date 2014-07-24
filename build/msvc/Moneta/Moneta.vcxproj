@@ -76,9 +76,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\..\..\include\moneta\algorithm\for_each_member.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\debug_dump\debug_dump_encoder.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\encoder.hxx" />
@@ -165,14 +162,6 @@
     <ClInclude Include="..\..\..\include\moneta\traits\to_rtuple.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\to_tie.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\tuple.hxx" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\doc\Descriptors.md" />

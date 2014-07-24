@@ -368,5 +368,8 @@
     <ClCompile Include="..\..\..\test\moneta\algorithm\for_each_member_test.cxx">
       <Filter>Source Files\moneta\algorithm</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\pp\pp_test.cxx">
+      <Filter>Source Files\moneta\pp</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

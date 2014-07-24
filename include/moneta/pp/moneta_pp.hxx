@@ -12,6 +12,10 @@
 #define __MONETA_PP_NAMESPACE_END(r, data, t) }
 #define MONETA_PP_NAMESPACE_END(ns_seq) BOOST_PP_SEQ_FOR_EACH(__MONETA_PP_NAMESPACE_END, _, ns_seq)
 
+// Usage: MONETA_PP_NAMESPACE_JOIN((a)(b)(c), ::) --> a::b::c::
+#define __MONETA_PP_NAMESPACE_JOIN(r, data, t) t data
+#define MONETA_PP_NAMESPACE_JOIN(ns_seq, token) BOOST_PP_SEQ_FOR_EACH(__MONETA_PP_NAMESPACE_JOIN, token, ns_seq)
+
 //
 // Accessors
 //
