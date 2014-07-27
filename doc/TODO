@@ -20,6 +20,8 @@ TODO:
 	* Remove static from headers in favor of unnamed namespaces.
 	* moneta::make_entity<>() fails with entities containing array types. Fix this!!
 	* Organize PP macros... it's a mess.
+	* Implement partial entity decoders which can decode after several buffer inputs. State information such as
+	  path (or a hash of it) should be the key to decoding continuation.
 
 Current Stack:
 

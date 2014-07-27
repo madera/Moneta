@@ -36,6 +36,9 @@ namespace moneta { namespace codec {
 						_state.done = true;
 						_state.entity = entity;
 						_state.total_read = result;
+					} else if (result < 0) {
+						_state.done = true;
+						_state.total_read = result;
 					}
 				}
 			}
