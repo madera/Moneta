@@ -1,6 +1,7 @@
 #pragma once
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/seq/elem.hpp>
+#include <boost/preprocessor/stringize.hpp>
 
 #define MONETA_PP_CAT_INCLUDE_NAME_1(SEQ) BOOST_PP_SEQ_ELEM(0, SEQ)
 #define MONETA_PP_CAT_INCLUDE_NAME_2(SEQ) BOOST_PP_CAT(BOOST_PP_CAT(MONETA_PP_CAT_INCLUDE_NAME_1(SEQ),/), BOOST_PP_SEQ_ELEM(1, SEQ))

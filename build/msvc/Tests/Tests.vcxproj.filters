@@ -106,6 +106,9 @@
     <Filter Include="Source Files\moneta\algorithm">
       <UniqueIdentifier>{2a419dc2-f280-440e-8d9d-fc0d6ce974a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\moneta\model">
+      <UniqueIdentifier>{0fc2089a-de7a-4c22-9552-1dcfac8ab129}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -370,6 +373,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\pp\pp_test.cxx">
       <Filter>Source Files\moneta\pp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\model\big_entity_test.cxx">
+      <Filter>Source Files\moneta\model</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

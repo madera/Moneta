@@ -22,6 +22,8 @@ TODO:
 	* Organize PP macros... it's a mess.
 	* Implement partial entity decoders which can decode after several buffer inputs. State information such as
 	  path (or a hash of it) should be the key to decoding continuation.
+	* Consider using Boost ASIO's placeholders elegance for Path-enabled codecs and for_each/some_member traversals.
+	* Test and stress vector limits for entities with several members.
 
 Current Stack:
 
