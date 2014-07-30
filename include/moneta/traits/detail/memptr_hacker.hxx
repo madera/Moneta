@@ -1,5 +1,4 @@
 #pragma once
-#include "../member_pointers.hxx"
 #include <boost/fusion/algorithm/iteration/for_each_fwd.hpp>
 #include <vector>
 
@@ -38,8 +37,13 @@ namespace moneta { namespace traits {
 			}
 
 			template <typename R, class K>
-			void operator()(R K::*x) const {
+			void push_back(R K::*x) const {
 				_vector.push_back(get_memptr_fingerprint<>(x));
+			}
+
+			template <class Member>
+			void operator()(const Member&) const {
+				push_back(Member::get());
 			}
 		};
 
@@ -48,7 +52,7 @@ namespace moneta { namespace traits {
 			static inline const std::vector<member_ptr_interceptor_t>& get() {
 				static std::vector<member_ptr_interceptor_t> result;
 				if (result.empty()) {
-					boost::fusion::for_each(member_pointers<EntityType>::get(), memptr_fingerprinter(result));
+					boost::mpl::for_each<members<EntityType> >(memptr_fingerprinter(result));
 				}
 
 				return result;

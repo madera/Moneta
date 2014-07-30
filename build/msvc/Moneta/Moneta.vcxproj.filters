@@ -115,9 +115,6 @@
     <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_hacker.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\traits\member_pointers.hxx">
-      <Filter>Header Files\moneta\traits</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\member.hxx">
       <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
@@ -167,9 +164,6 @@
       <Filter>Header Files\moneta\serialization\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_opfx.hxx">
-      <Filter>Header Files\moneta\traits\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_sg.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\tie.hxx">
@@ -339,6 +333,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\algorithm\for_each_member.hxx">
       <Filter>Header Files\moneta\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\limits.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

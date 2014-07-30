@@ -120,8 +120,11 @@ namespace moneta { namespace serialization { namespace shell {
 				: _entity(entity), _output(output) {
 			}
 
-			template <typename T>
-			void operator()(T& memptr) const {
+			template <typename Member>
+			void operator()(Member member) const {
+				// XXX: Port to codec spec...
+				auto memptr = Member::get();
+
 				const size_t ordinal = traits::member_ordinal(memptr);
 				const std::string k = traits::get_member_name<EntityType>(ordinal);
 				const std::string v = textonize(memptr, _entity);
@@ -166,10 +169,9 @@ namespace moneta { namespace serialization { namespace shell {
 				std::ostringstream oss;
 				oss << '{';
 
-				boost::fusion::for_each(
-					traits::member_pointers<EntityType>::get(),
-					member_ostreamer<EntityType, std::ostringstream>(entity, oss)
-				);
+				boost::mpl::for_each<
+					traits::members<EntityType>
+				>(member_ostreamer<EntityType, std::ostringstream>(entity, oss));
 
 				oss << '}';
 				return oss.str();

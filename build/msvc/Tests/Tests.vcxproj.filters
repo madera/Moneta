@@ -218,9 +218,6 @@
     <ClCompile Include="..\..\..\test\moneta\traits\detail\memptr_hacker_test.cxx">
       <Filter>Source Files\moneta\traits\detail</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\traits\member_pointers_test.cxx">
-      <Filter>Source Files\moneta\traits</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\members_of_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
