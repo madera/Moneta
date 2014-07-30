@@ -112,9 +112,6 @@
     <ClInclude Include="..\..\..\include\moneta\traits\pk_member_names.hxx">
       <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_hacker.hxx">
-      <Filter>Header Files\moneta\traits\detail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\member.hxx">
       <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>

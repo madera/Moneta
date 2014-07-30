@@ -133,7 +133,6 @@
     <ClInclude Include="..\..\..\include\moneta\traits\detail\limits.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\member_trait_base.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_constructor.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_hacker.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\pp\is_method_callable_spec.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\pure_type.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_opfx.hxx" />

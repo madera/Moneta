@@ -167,7 +167,6 @@
     <ClCompile Include="..\..\..\test\moneta\traits\detail\has_member_trait_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\indices_of_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\is_functor_callable_test.cxx" />
-    <ClCompile Include="..\..\..\test\moneta\traits\detail\memptr_hacker_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\sub_tie_vector_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\detail\tie_vector_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\empty_pk_test.cxx" />

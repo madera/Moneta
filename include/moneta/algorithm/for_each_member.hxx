@@ -1,6 +1,5 @@
 #pragma once
 #include "../traits/member_names.hxx"
-#include "../traits/detail/memptr_hacker.hxx"
 #include "../traits/is_entity.hxx"
 #include "../traits/detail/is_functor_callable.hxx"
 #include "../make_entity.hxx"

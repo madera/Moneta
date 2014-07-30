@@ -2,6 +2,7 @@
 #    ifndef MONETA_INCLUDER_HEADER
 #    define MONETA_INCLUDER_HEADER
 #        include <boost/preprocessor/iteration/iterate.hpp>
+#        include <boost/preprocessor/stringize.hpp>
 #        include <boost/preprocessor/cat.hpp>
 #        include <boost/preprocessor/seq/size.hpp>
 #        define BOOST_PP_ITERATION_LIMITS (0, BOOST_PP_DEC(BOOST_PP_SEQ_SIZE(INCLUDES)))

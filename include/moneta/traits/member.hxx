@@ -3,12 +3,12 @@
 
 namespace moneta { namespace traits {
 
-	template<class Class, typename Type, Type Class::* PtrToMember>
-	struct member : boost::multi_index::member<Class, Type, PtrToMember> {
-		typedef Class class_type;
+	template <class K, typename R, R K::* memptr>
+	struct member : boost::multi_index::member<K, R, memptr> {
+		typedef K class_type;
 
-		static Type Class::* get() {
-			return PtrToMember;
+		static R K::* get() {
+			return memptr;
 		}
 	};
 

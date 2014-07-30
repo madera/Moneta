@@ -12,11 +12,6 @@ namespace moneta { namespace traits {
 
 	MONETA_DEFINE_MEMBER_TRAIT_COLLECTOR(member_name, std::string, get_member_names)
 
-// 	template <class EntityType>
-// 	const std::string get_member_name(const size_t index) {
-// 		return get_member_names<EntityType>()[index];
-// 	}
-
 	// FIXME: O(n): Sloooowwww.
 	template <class EntityType>
 	const size_t get_member_name_index(const std::string& name) {

@@ -135,7 +135,8 @@ namespace moneta { namespace serialization { namespace shell {
 				const char* format_string = (!has_brackets && has_spaces)? "%s='%s'" : "%s=%s";
 				_output << boost::format(format_string) % k % v;
 
-				if (ordinal + 1 != boost::mpl::size<traits::members<EntityType>::type>::value) {
+				size_t xxx = boost::mpl::size<traits::members<EntityType>::type>::value;
+				if (ordinal + 1 != xxx) {
 					_output << ' ';
 				}
 			}

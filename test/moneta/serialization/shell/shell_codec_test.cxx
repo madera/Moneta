@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_CASE(detail_special_split_test) {
 BOOST_AUTO_TEST_CASE(shell_codec_to_line_test) {
 	const Composite composite = make_composite();
 	const std::string line = moneta::serialization::shell::to_line(composite);
-	BOOST_CHECK_EQUAL(line, "{Identifier=2600 Person={ID=123 Name=Somedude Height=1.5 Fingers=10} Dog={Owner=Someowner ID=555 Name=Doggy}}");
+	BOOST_CHECK_EQUAL(line, "{Identifier=2600 Person={ID=123 Name=Somedude Height=1.5 Fingers=10} Dog={Owner=Someowner ID=555 Name=Doggy } }");
 }
 
 BOOST_AUTO_TEST_CASE(shell_codec_from_line_test) {
@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE(shell_codec_from_line_test) {
 	}
 
 	{
-		const char* line = "{Identifier=2600 Person={ID=5 Name=John Height=1.8 Fingers=12} Dog={Owner='Charlie Brown' ID=1 Name=Snoopy}}";
+		const char* line = "{Identifier=2600 Person={ID=5 Name=John Height=1.8 Fingers=12} Dog={Owner='Charlie Brown' ID=1 Name=Snoopy } }";
 		const Composite composite = moneta::serialization::shell::from_line<Composite>(line);
 		BOOST_CHECK_EQUAL(composite.Identifier, 2600);
 
