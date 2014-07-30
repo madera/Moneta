@@ -1,6 +1,8 @@
 #pragma once
 #include "detail/member_trait_base.hxx"
 
+// TODO: RENAME THIS FILE TO SINGULAR FORM
+
 MONETA_DECLARE_MEMBER_TRAIT(member_name)
 
 #define MONETA_MEMBER_NAME(member, name) \
@@ -10,10 +12,10 @@ namespace moneta { namespace traits {
 
 	MONETA_DEFINE_MEMBER_TRAIT_COLLECTOR(member_name, std::string, get_member_names)
 
-	template <class EntityType>
-	const std::string get_member_name(const size_t index) {
-		return get_member_names<EntityType>()[index];
-	}
+// 	template <class EntityType>
+// 	const std::string get_member_name(const size_t index) {
+// 		return get_member_names<EntityType>()[index];
+// 	}
 
 	// FIXME: O(n): Sloooowwww.
 	template <class EntityType>

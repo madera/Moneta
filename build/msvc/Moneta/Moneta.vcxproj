@@ -77,6 +77,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\moneta\algorithm\for_each_member.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\codec\codec_io.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\debug_dump\debug_dump_encoder.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\encoder.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\decoder.hxx" />
@@ -146,6 +147,7 @@
     <ClInclude Include="..\..\..\include\moneta\traits\member.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\members.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\member_names.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\member_ordinal.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\pk_member_names.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\pk_rtie.hxx" />
@@ -170,6 +172,7 @@
     <None Include="..\..\..\doc\Moneta.md" />
     <None Include="..\..\..\doc\Operators.md" />
     <None Include="..\..\..\doc\TODO" />
+    <None Include="..\..\..\doc\Traits.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

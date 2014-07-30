@@ -15,4 +15,4 @@ namespace moneta { namespace traits {
 	struct not_a_member {};
 }}
 
-#define MONETA_MEMBER(k, t, n) moneta::traits::member<k, t, &k::n>
+#define MONETA_MEMBER(k, r, n) moneta::traits::member<k, r, &k::n>

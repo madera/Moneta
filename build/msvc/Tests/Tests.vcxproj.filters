@@ -218,9 +218,6 @@
     <ClCompile Include="..\..\..\test\moneta\traits\detail\memptr_hacker_test.cxx">
       <Filter>Source Files\moneta\traits\detail</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\traits\members_of_test.cxx">
-      <Filter>Source Files\moneta\traits</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\is_entity_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
@@ -373,6 +370,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\model\big_entity_test.cxx">
       <Filter>Source Files\moneta\model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\members_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\traits\member_ordinal_test.cxx">
+      <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

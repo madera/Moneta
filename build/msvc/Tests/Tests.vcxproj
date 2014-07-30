@@ -174,8 +174,9 @@
     <ClCompile Include="..\..\..\test\moneta\traits\extract_pk_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\fixed_values_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\is_entity_test.cxx" />
-    <ClCompile Include="..\..\..\test\moneta\traits\members_of_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\traits\members_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\member_names_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\traits\member_ordinal_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\pk_member_names_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\pk_rtie_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\traits\pk_rtuple_test.cxx" />

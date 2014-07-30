@@ -8,9 +8,6 @@
     <Filter Include="Header Files\moneta">
       <UniqueIdentifier>{3053d546-6687-42c0-b741-70c6061f6123}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Docs">
-      <UniqueIdentifier>{b4a22c72-a3be-4617-b7d2-662e0de13155}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\moneta\traits">
       <UniqueIdentifier>{270a8cce-a8e4-426d-8832-342b71c8b78d}</UniqueIdentifier>
     </Filter>
@@ -79,6 +76,9 @@
     </Filter>
     <Filter Include="Header Files\moneta\algorithm">
       <UniqueIdentifier>{0dd34782-558c-4761-8a85-8a64b8877b7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Docs">
+      <UniqueIdentifier>{b4a22c72-a3be-4617-b7d2-662e0de13155}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -337,6 +337,12 @@
     <ClInclude Include="..\..\..\include\moneta\traits\detail\limits.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\codec\codec_io.hxx">
+      <Filter>Header Files\moneta\codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\member_ordinal.hxx">
+      <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\doc\Descriptors.md">
@@ -358,6 +364,9 @@
       <Filter>Docs</Filter>
     </None>
     <None Include="..\..\..\doc\Operators.md">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="..\..\..\doc\Traits.md">
       <Filter>Docs</Filter>
     </None>
   </ItemGroup>

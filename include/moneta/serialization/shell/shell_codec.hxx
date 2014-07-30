@@ -3,7 +3,7 @@
 #include <boost/fusion/include/at_c.hpp>
 #include "../detail/from_text_impl.hxx"
 #include "../../traits/member_names.hxx"
-#include "../../traits/detail/memptr_hacker.hxx"
+#include "../../traits/member_ordinal.hxx"
 #include "../../traits/is_entity.hxx"
 #include "../../make_entity.hxx"
 #include <vector>
@@ -125,8 +125,8 @@ namespace moneta { namespace serialization { namespace shell {
 				// XXX: Port to codec spec...
 				auto memptr = Member::get();
 
-				const size_t ordinal = traits::member_ordinal(memptr);
-				const std::string k = traits::get_member_name<EntityType>(ordinal);
+				const size_t ordinal = traits::member_ordinal<Member>();
+				const std::string k = traits::detail::member_name<Member>::get();
 				const std::string v = textonize(memptr, _entity);
 				
 				const bool has_spaces = (v.find(' ') != std::string::npos);
