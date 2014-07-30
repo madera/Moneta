@@ -125,7 +125,6 @@ namespace moneta { namespace serialization { namespace shell {
 				// XXX: Port to codec spec...
 				auto memptr = Member::get();
 
-				const size_t ordinal = traits::member_ordinal<Member>();
 				const std::string k = traits::detail::member_name<Member>::get();
 				const std::string v = textonize(memptr, _entity);
 				
