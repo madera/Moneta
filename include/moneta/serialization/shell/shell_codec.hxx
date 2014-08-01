@@ -3,7 +3,6 @@
 #include <boost/fusion/include/at_c.hpp>
 #include "../detail/from_text_impl.hxx"
 #include "../../traits/member_names.hxx"
-#include "../../traits/member_ordinal.hxx"
 #include "../../traits/is_entity.hxx"
 #include "../../make_entity.hxx"
 #include <vector>
@@ -138,7 +137,7 @@ namespace moneta { namespace serialization { namespace shell {
 				const bool last_member = boost::is_same<
 					Member,
 					typename boost::mpl::at<
-						boost::mpl::members,
+						members,
 						boost::mpl::minus<
 							boost::mpl::size<members>,
 							boost::mpl::int_<1>

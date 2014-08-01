@@ -3,10 +3,10 @@
 
 namespace moneta { namespace codec {
 
-	struct rawbin;
+	struct shell;
 
 	template <class T>
-	struct value_decoder<rawbin, T> {
+	struct value_decoder<shell, T> {
 		template <class Iterator>
 		int operator()(T& target, Iterator begin, Iterator end) const {
 			int length = std::distance(begin, end);

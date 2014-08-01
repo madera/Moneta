@@ -4,48 +4,46 @@
 namespace moneta { namespace codec {
 	
 	template <class Codec, class T, class Enable = void>
-	struct encoder;
-
-	// Default implementation.
-	//
-	template <class Codec, class Member, class Path>
-	struct member_encoder {
-		template <class Entity, class Iterator>
-		int operator()(const Entity& entity, Member& member, Iterator& begin, Iterator& end) const {
-			return detail::apply_encoder<Codec, Member, Path>(entity, member, begin, end);
-		}
-	};
+	struct value_encoder;
 
 	namespace detail {
 
+		// Apply value_encoder with Path
+		//
 		template <class Codec, class Member, class Path, class Entity, class Iterator>
 		typename boost::enable_if<
 			traits::detail::is_functor_callable<
-				encoder<Codec, typename Member::result_type>,
+				value_encoder<Codec, typename Member::result_type>,
 				int (typename Member::result_type, Iterator, Iterator, Path)
 			>,
 			int
 		>::type
-		apply_encoder(Entity& entity, Member& member, Iterator& begin, Iterator& end) {
+		apply_value_encoder(Entity& entity, Member& member, Iterator& begin, Iterator& end) {
 			//BOOST_MPL_ASSERT((boost::is_same<Entity, typename Member::class_type>));
-			return encoder<Codec, typename Member::result_type>()(member(entity), begin, end, Path());
+			return value_encoder<Codec, typename Member::result_type>()(member(entity), begin, end, Path());
 		}
 
+		// Apply value_encoder without Path
+		//
 		template <class Codec, class Member, class Path, class Entity, class Iterator>
 		typename boost::enable_if <
 			traits::detail::is_functor_callable<
-				encoder<Codec, typename Member::result_type>,
+				value_encoder<Codec, typename Member::result_type>,
 				int(typename Member::result_type, Iterator, Iterator)
 			>,
 			int
 		>::type
-		apply_encoder(Entity& entity, Member& member, Iterator& begin, Iterator& end) {
+		apply_value_encoder(Entity& entity, Member& member, Iterator& begin, Iterator& end) {
 			//BOOST_MPL_ASSERT((boost::is_same<Entity, typename Member::class_type>));
-			return encoder<Codec, typename Member::result_type>()(member(entity), begin, end);
+			return value_encoder<Codec, typename Member::result_type>()(member(entity), begin, end);
 		}
 
+		// Default entity encoder implementation.
+		//
+		// State is a separate class because operator() must be const.
+		//
 		template <class Codec, class Iterator>
-		struct encode_impl {
+		struct default_entity_encoder {
 			struct state {
 				Iterator begin;
 				Iterator end;
@@ -58,8 +56,17 @@ namespace moneta { namespace codec {
 
 			state& _state;
 
-			encode_impl(state& state)
+			default_entity_encoder(state& state)
 			 : _state(state) {}
+
+			template <class FromEntity, class ToEntity, class Member>
+			void enter(FromEntity& from, ToEntity& to, Member member) const {
+				std::ostringstream oss;
+				oss << "ENTERING From " << traits::get_entity_name<FromEntity>()
+				    << " to "  << traits::get_entity_name<ToEntity>();
+
+				std::cerr << oss.str() << std::endl;
+			}
 
 			template <class Entity, class Member, class Path>
 			void operator()(Entity& entity, Member& member, Path& path) const {
@@ -77,16 +84,41 @@ namespace moneta { namespace codec {
 					}
 				}
 			}
+
+			template <class FromEntity, class ToEntity, class Member>
+			void leave(FromEntity& from, ToEntity& to, Member member) const {
+				std::ostringstream oss;
+				oss << "LEAVING " << moneta::traits::get_entity_name<FromEntity>()
+				    << " back to "  << moneta::traits::get_entity_name<ToEntity>();
+
+				std::cerr << oss.str() << std::endl;
+			}
 		};
 
 	}
 
+	template <class Codec, class Member, class Path>
+	struct member_encoder {
+		template <class Entity, class Iterator>
+		int operator()(const Entity& entity, Member& member, Iterator& begin, Iterator& end) const {
+			return detail::apply_value_encoder<Codec, Member, Path>(entity, member, begin, end);
+		}
+	};
+
+	template <class Codec, class Entity, class Enable = void>
+	struct entity_encoder {
+		template <class Entity, class Iterator>
+		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+			typedef detail::default_entity_encoder<Codec, Iterator> encoder_type;
+			encoder_type::state state(begin, end);
+			moneta::algorithm::for_each_member(entity, encoder_type(state));
+			return state.total_written;
+		}
+	};
+
 	template <class Codec, class Entity, class Iterator>
 	int encode(const Entity& entity, Iterator begin, Iterator end) {
-		typedef detail::encode_impl<Codec, Iterator> encoder_type;
-		encoder_type::state state(begin, end);
-		moneta::algorithm::for_each_member(entity, encoder_type(state));
-		return state.total_written;
+		return entity_encoder<Codec, Entity>()(entity, begin, end);
 	}
 
 }}

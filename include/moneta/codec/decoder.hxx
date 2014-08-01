@@ -5,7 +5,7 @@
 namespace moneta { namespace codec {
 	
 	template < class Codec, class T, class Enable = void >
-	struct decoder;
+	struct value_decoder;
 
 	template <class Codec, class Member>
 	struct member_decoder {
@@ -14,7 +14,7 @@ namespace moneta { namespace codec {
 
 		template <class Iterator>
 		int operator()(entity_type& entity, Member member, Iterator begin, Iterator end) const {
-			return decoder<Codec, value_type>()(member(entity), begin, end);
+			return value_decoder<Codec, value_type>()(member(entity), begin, end);
 		}
 	};
 

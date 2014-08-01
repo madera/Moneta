@@ -12,7 +12,7 @@ namespace moneta { namespace codec {
 	struct test_codec;
 
 	template <class T>
-	struct encoder<test_codec, T, typename boost::disable_if<boost::is_arithmetic<T> >::type> {
+	struct value_encoder<test_codec, T, typename boost::disable_if<boost::is_arithmetic<T> >::type> {
 		template <class Iterator>
 		int operator()(const T& value, Iterator begin, Iterator end) const {
 			if (begin == end) {
@@ -25,7 +25,7 @@ namespace moneta { namespace codec {
 	};
 
 	template <class T>
-	struct encoder<test_codec, T, typename boost::enable_if<boost::is_arithmetic<T> >::type> {
+	struct value_encoder<test_codec, T, typename boost::enable_if<boost::is_arithmetic<T> >::type> {
 		template <class Iterator>
 		int operator()(const T& value, Iterator begin, Iterator end) const {
 			if (begin == end) {
@@ -38,7 +38,7 @@ namespace moneta { namespace codec {
 	};
 
 	template <>
-	struct encoder<test_codec, int> {
+	struct value_encoder<test_codec, int> {
 		template <class Iterator>
 		int operator()(const int value, Iterator begin, Iterator end) const {
 			if (begin == end) {
@@ -51,7 +51,7 @@ namespace moneta { namespace codec {
 	};
 
 	template <>
-	struct encoder<test_codec, std::string> {
+	struct value_encoder<test_codec, std::string> {
 		template <class Iterator>
 		int operator()(const std::string& value, Iterator begin, Iterator end) const {
 			if (begin == end) {
@@ -145,7 +145,7 @@ namespace moneta { namespace codec {
 			std::copy(str.begin(), str.end(), itr);
 			itr += size;
 
-			int result = encoder<test_codec, value_type>()(member(entity), itr, end);
+			int result = value_encoder<test_codec, value_type>()(member(entity), itr, end);
 			if (result <= 0) {
 				return result;
 			}
@@ -175,6 +175,68 @@ BOOST_AUTO_TEST_CASE(member_encoder_test) {
 
 	const int result = moneta::codec::encode<moneta::codec::named_test_codec>(
 		entity_type(), buffer, buffer + sizeof(buffer)
+	);
+
+	BOOST_CHECK_EQUAL(result, expected_size);
+
+	BOOST_CHECK_EQUAL_COLLECTIONS(buffer, buffer + sizeof(buffer), expected, expected + expected_size);
+}
+
+namespace moneta { namespace codec {
+
+	struct entity_encoder_test_codec;
+
+	template <class T>
+	struct value_encoder<entity_encoder_test_codec, T, typename boost::disable_if<moneta::traits::is_entity<T> >::type
+	> {
+
+		template <class Iterator>
+		int operator()(const T& value, Iterator& begin, Iterator& end) const {
+			if (begin == end) {
+				return -1;
+			}
+
+			*begin = 'V';
+			return 1;
+		}
+
+	};
+
+	template <class Entity>
+	struct entity_encoder<entity_encoder_test_codec, Entity,
+			      typename boost::disable_if<boost::is_same<Entity, Cat> >::type
+	> {
+
+		template <class Iterator>
+		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+			*begin++ = '#';
+			return 1;
+		}
+
+	};
+
+	template <>
+	struct entity_encoder<entity_encoder_test_codec, Address> {
+
+		template <class Iterator>
+		int operator()(const Address& entity, Iterator& begin, Iterator& end) const {
+			*begin++ = 'A';
+			return 1;
+		}
+
+	};
+
+}}
+
+BOOST_AUTO_TEST_CASE(entity_encoder_test) {
+	const char expected[] = "Bool: A\nChar: A\nShort: A\nInt: i\nLong: A\n";
+	const size_t expected_size = sizeof(expected) - 1; // nul
+
+	char buffer[expected_size];
+	std::fill(buffer, buffer + sizeof(buffer), 0);
+
+	const int result = moneta::codec::encode<moneta::codec::entity_encoder_test_codec>(
+		Cat(), buffer, buffer + sizeof(buffer)
 	);
 
 	BOOST_CHECK_EQUAL(result, expected_size);

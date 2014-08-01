@@ -32,7 +32,7 @@ namespace moneta { namespace codec {
 	}
 
 	template <class T>
-	struct encoder<debug_dump, T, typename boost::disable_if<
+	struct value_encoder<debug_dump, T, typename boost::disable_if<
 		boost::mpl::or_<boost::is_array<T>, boost::is_arithmetic<T> >
 	> > {
 		template <class Path, class Iterator>
@@ -43,7 +43,7 @@ namespace moneta { namespace codec {
 	};
 
 	template <class T>
-	struct encoder<debug_dump, T, typename boost::enable_if<boost::is_arithmetic<T> >::type> {
+	struct value_encoder<debug_dump, T, typename boost::enable_if<boost::is_arithmetic<T> >::type> {
 		template <class Path, class Iterator>
 		int operator()(const T value, Iterator begin, Iterator end, Path) const {
 			std::cerr << boost::format("0x%|08x| %|10|") % value % value << std::endl;
@@ -52,7 +52,7 @@ namespace moneta { namespace codec {
 	};
 
 	template <class T, int N>
-	struct encoder<debug_dump, T[N]> {
+	struct value_encoder<debug_dump, T[N]> {
 		template <class Path, class Iterator>
 		int operator()(const T value[N], Iterator begin, Iterator end, Path) const {
 			std::cerr << "T[" << std::dec << N << "] (" << sizeof(T)*N << " bytes)" << std::endl;
@@ -68,7 +68,7 @@ namespace moneta { namespace codec {
 		template <class Iterator>
 		int operator()(const entity_type& entity, Member& member, Iterator& begin, Iterator& end) const {
 			std::cerr << boost::format("%|-20|: ") % traits::detail::member_name<Member>::get();
-			encoder<debug_dump, value_type>()(member(entity), 0, 0, Path());
+			value_encoder<debug_dump, value_type>()(member(entity), 0, 0, Path());
 			return 1;
 		}
 	};

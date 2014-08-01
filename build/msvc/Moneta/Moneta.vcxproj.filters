@@ -80,6 +80,9 @@
     <Filter Include="Docs">
       <UniqueIdentifier>{b4a22c72-a3be-4617-b7d2-662e0de13155}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\codec\shell">
+      <UniqueIdentifier>{30e416e9-9506-438d-8582-fc36ed5e4e64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\moneta\traits\to_tie.hxx">
@@ -337,8 +340,11 @@
     <ClInclude Include="..\..\..\include\moneta\codec\codec_io.hxx">
       <Filter>Header Files\moneta\codec</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\traits\member_ordinal.hxx">
-      <Filter>Header Files\moneta\traits</Filter>
+    <ClInclude Include="..\..\..\include\moneta\codec\shell\shell_decoder.hxx">
+      <Filter>Header Files\moneta\codec\shell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\codec\shell\shell_encoder.hxx">
+      <Filter>Header Files\moneta\codec\shell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -364,6 +370,9 @@
       <Filter>Docs</Filter>
     </None>
     <None Include="..\..\..\doc\Traits.md">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="..\..\..\doc\Codecs.md">
       <Filter>Docs</Filter>
     </None>
   </ItemGroup>

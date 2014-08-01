@@ -14,7 +14,7 @@ namespace moneta { namespace codec {
 	struct test_codec;
 
 	template <class T>
-	struct decoder<test_codec, T> {
+	struct value_decoder<test_codec, T> {
 		template <class Iterator>
 		int operator()(T& target, Iterator begin, Iterator end) const {
 			if (begin == end) {

@@ -84,6 +84,8 @@
     <ClInclude Include="..\..\..\include\moneta\codec\multi_decoder.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\rawbin\rawbin_decoder.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\rawbin\rawbin_encoder.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\codec\shell\shell_decoder.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\codec\shell\shell_encoder.hxx" />
     <ClInclude Include="..\..\..\include\moneta\container\change_trackers\bitset_change_tracker.hxx" />
     <ClInclude Include="..\..\..\include\moneta\container\change_trackers\hash_change_tracker.hxx" />
     <ClInclude Include="..\..\..\include\moneta\container\data_trackers\pk_tracker.hxx" />
@@ -146,7 +148,6 @@
     <ClInclude Include="..\..\..\include\moneta\traits\member.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\members.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\member_names.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\traits\member_ordinal.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\pk_member_names.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\pk_rtie.hxx" />
@@ -164,6 +165,7 @@
     <ClInclude Include="..\..\..\include\moneta\traits\tuple.hxx" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\doc\Codecs.md" />
     <None Include="..\..\..\doc\Descriptors.md" />
     <None Include="..\..\..\doc\DevLog.md" />
     <None Include="..\..\..\doc\draft.md" />

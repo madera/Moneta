@@ -109,6 +109,9 @@
     <Filter Include="Source Files\moneta\model">
       <UniqueIdentifier>{0fc2089a-de7a-4c22-9552-1dcfac8ab129}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\moneta\codec\shell">
+      <UniqueIdentifier>{aedd7128-4ebb-4ff8-b8c8-e4b003010942}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -371,8 +374,11 @@
     <ClCompile Include="..\..\..\test\moneta\traits\members_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\traits\member_ordinal_test.cxx">
-      <Filter>Source Files\moneta\traits</Filter>
+    <ClCompile Include="..\..\..\test\moneta\codec\shell\shell_decoder_test.cxx">
+      <Filter>Source Files\moneta\codec\shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\codec\shell\shell_encoder_test.cxx">
+      <Filter>Source Files\moneta\codec\shell</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
