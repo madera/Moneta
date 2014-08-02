@@ -8,27 +8,28 @@ namespace moneta { namespace codec {
  	struct debug_dump;
  
 	namespace detail {
-		// TODO: Continue this when Path-enabled codecs arise.
+		struct path_printer {
+			std::ostringstream& oss;
 
-		//struct path_printer {
-		//	std::ostringstream& oss;
+			path_printer(std::ostringstream& oss_)
+			 : oss(oss_) {}
 
-		//	path_printer(std::ostringstream& oss_)
-		//	 : oss(oss_) {}
+			template <class Member>
+			void operator()(Member&) const {
+				oss << '/'
+				    << moneta::traits::get_entity_name<typename Member::class_type>()
+				    << "::"
+				    << moneta::traits::detail::member_name<Member>::get();
+			}
+		};
 
-		//	template <class T>
-		//	void operator()(const T x) const {
-		//		oss << 'x';
-		//	}
-		//};
-
-		//template <class Path>
-		//std::string stringize_path() {
-		//	std::ostringstream oss;
-		//	path_printer state(oss);
-		//	boost::mpl::for_each<Path>(state);
-		//	return state.oss.str();
-		//}
+		template <class Path>
+		std::string str_path() {
+			std::ostringstream oss;
+			path_printer state(oss);
+			boost::mpl::for_each<Path>(state);
+			return state.oss.str();
+		}
 	}
 
 	template <class T>

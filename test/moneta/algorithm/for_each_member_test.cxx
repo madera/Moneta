@@ -140,13 +140,9 @@ struct enter_tester {
 	enter_tester(std::vector<std::string>& output)
 	 : _output(output) {}
 
-	template <class FromEntity, class ToEntity, class Member>
-	void enter(FromEntity& from, ToEntity& to, Member member) const {
-		std::ostringstream oss;
-		oss << "From " << moneta::traits::get_entity_name<FromEntity>()
-		    << " to "  << moneta::traits::get_entity_name<ToEntity>();
-
-		_output.push_back(oss.str());
+	template <class Entity, class Path>
+	void enter(Entity& entity) const {
+		_output.push_back(std::string("e:") + moneta::traits::get_entity_name<Entity>());
 	}
 
 	template <class Entity, class Member, class Path>
@@ -167,13 +163,14 @@ BOOST_AUTO_TEST_CASE(enter_for_each_member_test) {
 		std::vector<std::string> result;
 		moneta::algorithm::for_each_member(garfield, enter_tester(result));
 
-		BOOST_REQUIRE(result.size() == 6);
-		BOOST_CHECK_EQUAL(result[0], ".");
+		BOOST_REQUIRE(result.size() == 7);
+		BOOST_CHECK_EQUAL(result[0], "e:Cat");
 		BOOST_CHECK_EQUAL(result[1], ".");
-		BOOST_CHECK_EQUAL(result[2], "From Cat to Address");
-		BOOST_CHECK_EQUAL(result[3], ".");
+		BOOST_CHECK_EQUAL(result[2], ".");
+		BOOST_CHECK_EQUAL(result[3], "e:Address");
 		BOOST_CHECK_EQUAL(result[4], ".");
 		BOOST_CHECK_EQUAL(result[5], ".");
+		BOOST_CHECK_EQUAL(result[6], ".");
 	}
 
 	{
@@ -181,13 +178,14 @@ BOOST_AUTO_TEST_CASE(enter_for_each_member_test) {
 		std::vector<std::string> result;
 		moneta::algorithm::for_each_member(const_garfield, enter_tester(result));
 
-		BOOST_REQUIRE(result.size() == 6);
-		BOOST_CHECK_EQUAL(result[0], ".");
+		BOOST_REQUIRE(result.size() == 7);
+		BOOST_CHECK_EQUAL(result[0], "e:Cat");
 		BOOST_CHECK_EQUAL(result[1], ".");
-		BOOST_CHECK_EQUAL(result[2], "From Cat to Address");
-		BOOST_CHECK_EQUAL(result[3], ".");
+		BOOST_CHECK_EQUAL(result[2], ".");
+		BOOST_CHECK_EQUAL(result[3], "e:Address");
 		BOOST_CHECK_EQUAL(result[4], ".");
 		BOOST_CHECK_EQUAL(result[5], ".");
+		BOOST_CHECK_EQUAL(result[6], ".");
 	}
 }
 
@@ -197,18 +195,14 @@ struct leave_tester {
 	leave_tester(std::vector<std::string>& output)
 	 : _output(output) {}
 
-	template <class FromEntity, class ToEntity, class Member>
-	void leave(FromEntity& from, ToEntity& to, Member member) const {
-		std::ostringstream oss;
-		oss << "From " << moneta::traits::get_entity_name<FromEntity>()
-		    << " to "  << moneta::traits::get_entity_name<ToEntity>();
-
-		_output.push_back(oss.str());
-	}
-
 	template <class Entity, class Member, class Path>
 	void operator()(Entity& entity, Member member, Path path) const {
 		_output.push_back(".");
+	}
+
+	template <class Entity, class Path>
+	void leave(Entity& entity) const {
+		_output.push_back(std::string("l:") + moneta::traits::get_entity_name<Entity>());
 	}
 };
 
@@ -224,13 +218,14 @@ BOOST_AUTO_TEST_CASE(leave_for_each_member_test) {
 		std::vector<std::string> result;
 		moneta::algorithm::for_each_member(garfield, leave_tester(result));
 
-		BOOST_REQUIRE(result.size() == 6);
+		BOOST_REQUIRE(result.size() == 7);
 		BOOST_CHECK_EQUAL(result[0], ".");
 		BOOST_CHECK_EQUAL(result[1], ".");
 		BOOST_CHECK_EQUAL(result[2], ".");
 		BOOST_CHECK_EQUAL(result[3], ".");
 		BOOST_CHECK_EQUAL(result[4], ".");
-		BOOST_CHECK_EQUAL(result[5], "From Address to Cat");
+		BOOST_CHECK_EQUAL(result[5], "l:Address");
+		BOOST_CHECK_EQUAL(result[6], "l:Cat");
 	}
 
 	{
@@ -238,12 +233,108 @@ BOOST_AUTO_TEST_CASE(leave_for_each_member_test) {
 		std::vector<std::string> result;
 		moneta::algorithm::for_each_member(const_garfield, leave_tester(result));
 
-		BOOST_REQUIRE(result.size() == 6);
+		BOOST_REQUIRE(result.size() == 7);
 		BOOST_CHECK_EQUAL(result[0], ".");
 		BOOST_CHECK_EQUAL(result[1], ".");
 		BOOST_CHECK_EQUAL(result[2], ".");
 		BOOST_CHECK_EQUAL(result[3], ".");
 		BOOST_CHECK_EQUAL(result[4], ".");
-		BOOST_CHECK_EQUAL(result[5], "From Address to Cat");
+		BOOST_CHECK_EQUAL(result[5], "l:Address");
+		BOOST_CHECK_EQUAL(result[6], "l:Cat");
+	}
+}
+
+struct traversal_tester {
+	std::vector<std::string>& _output;
+
+	traversal_tester(std::vector<std::string>& output)
+	 : _output(output) {}
+
+	template <class Entity, class Path>
+	void enter(Entity& entity) const {
+		_output.push_back(std::string("e:") + moneta::traits::get_entity_name<Entity>());
+	}
+
+	template <class Entity, class Member, class Path>
+	void operator()(Entity& entity, Member member, Path path) const {
+		_output.push_back(std::string("m:") + moneta::traits::detail::member_name<Member>::get());
+	}
+
+	template <class Entity, class Path>
+	void leave(Entity& entity) const {
+		_output.push_back(std::string("l:") + moneta::traits::get_entity_name<Entity>());
+	}
+};
+
+MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+	E,
+	((int, m))
+	((int, n))
+)
+
+MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+	D,
+	((int, l))
+	((E  , e))
+)
+
+MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+	C,
+	((int, j))
+	((int, k))
+)
+
+MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+	B,
+	((C,   c))
+	((int, i))
+	((D  , d))
+)
+
+MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+	A,
+	((int, f))
+	((int, g))
+	((B,   b))
+	((int, h))
+)
+
+// Test tree:
+//
+//     A________
+//    / \ \     \
+//   f  g  B__   h
+//        / \ \
+//       C  i  D
+//     / |    / \
+//    j  k   l   E
+//              / \
+//             m   n
+//
+
+BOOST_AUTO_TEST_CASE(traversal_for_each_member_test) {
+	
+	A x;
+
+	const char* expected[] = {
+		"e:A", "m:f", "m:g", "e:B", "e:C", "m:j", "m:k", "l:C", "m:i", "e:D",
+		"m:l", "e:E", "m:m", "m:n", "l:E", "l:D", "l:B", "m:h", "l:A"
+	};
+
+	{
+		std::vector<std::string> result;
+		moneta::algorithm::for_each_member(x, traversal_tester(result));
+
+		BOOST_REQUIRE(result.size() == 19);
+		BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(), expected, expected + 19);
+	}
+
+	{
+		const A& const_x = x;
+		std::vector<std::string> result;
+		moneta::algorithm::for_each_member(const_x, traversal_tester(result));
+
+		BOOST_REQUIRE(result.size() == 19);
+		BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(), expected, expected + 19);
 	}
 }

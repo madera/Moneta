@@ -59,13 +59,9 @@ namespace moneta { namespace codec {
 			default_entity_encoder(state& state)
 			 : _state(state) {}
 
-			template <class FromEntity, class ToEntity, class Member>
-			void enter(FromEntity& from, ToEntity& to, Member member) const {
-				std::ostringstream oss;
-				oss << "ENTERING From " << traits::get_entity_name<FromEntity>()
-				    << " to "  << traits::get_entity_name<ToEntity>();
-
-				std::cerr << oss.str() << std::endl;
+			template <class Entity, class Path>
+			void enter(Entity& entity) const {
+				std::cerr << "e:" << moneta::traits::get_entity_name<Entity>() << std::endl;
 			}
 
 			template <class Entity, class Member, class Path>
@@ -85,13 +81,9 @@ namespace moneta { namespace codec {
 				}
 			}
 
-			template <class FromEntity, class ToEntity, class Member>
-			void leave(FromEntity& from, ToEntity& to, Member member) const {
-				std::ostringstream oss;
-				oss << "LEAVING " << moneta::traits::get_entity_name<FromEntity>()
-				    << " back to "  << moneta::traits::get_entity_name<ToEntity>();
-
-				std::cerr << oss.str() << std::endl;
+			template <class Entity, class Path>
+			void leave(Entity& entity) const {
+				std::cerr << "l:" << moneta::traits::get_entity_name<Entity>() << std::endl;
 			}
 		};
 

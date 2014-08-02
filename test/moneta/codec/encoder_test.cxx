@@ -79,7 +79,7 @@ BOOST_AUTO_TEST_CASE(insufficient_buffer_encoder_test) {
 	BOOST_CHECK_EQUAL(result, -1);
 }
 
-BOOST_AUTO_TEST_CASE(simple_encoder_test) {
+BOOST_AUTO_TEST_CASE(value_encoder_only_encoder_test) {
 	typedef Arithmetics entity_type;
 
 	const size_t member_count = boost::mpl::size<
@@ -99,7 +99,7 @@ BOOST_AUTO_TEST_CASE(simple_encoder_test) {
 	BOOST_CHECK_EQUAL_COLLECTIONS(buffer, buffer + sizeof(buffer), expected.begin(), expected.end());
 }
 
-BOOST_AUTO_TEST_CASE(traversal_encoder_test) {
+BOOST_AUTO_TEST_CASE(simple_traversal_encoder_test) {
 	const size_t member_count =
 		boost::mpl::size<typename moneta::traits::members<Cat    >::type>::value -1 +
 		boost::mpl::size<typename moneta::traits::members<Address>::type>::value
@@ -228,18 +228,18 @@ namespace moneta { namespace codec {
 
 }}
 
-BOOST_AUTO_TEST_CASE(entity_encoder_test) {
-	const char expected[] = "Bool: A\nChar: A\nShort: A\nInt: i\nLong: A\n";
-	const size_t expected_size = sizeof(expected) - 1; // nul
-
-	char buffer[expected_size];
-	std::fill(buffer, buffer + sizeof(buffer), 0);
-
-	const int result = moneta::codec::encode<moneta::codec::entity_encoder_test_codec>(
-		Cat(), buffer, buffer + sizeof(buffer)
-	);
-
-	BOOST_CHECK_EQUAL(result, expected_size);
-
-	BOOST_CHECK_EQUAL_COLLECTIONS(buffer, buffer + sizeof(buffer), expected, expected + expected_size);
-}
+//BOOST_AUTO_TEST_CASE(entity_encoder_test) {
+//	const char expected[] = "Bool: A\nChar: A\nShort: A\nInt: i\nLong: A\n";
+//	const size_t expected_size = sizeof(expected) - 1; // nul
+//
+//	char buffer[expected_size];
+//	std::fill(buffer, buffer + sizeof(buffer), 0);
+//
+//	const int result = moneta::codec::encode<moneta::codec::entity_encoder_test_codec>(
+//		Cat(), buffer, buffer + sizeof(buffer)
+//	);
+//
+//	BOOST_CHECK_EQUAL(result, expected_size);
+//
+//	BOOST_CHECK_EQUAL_COLLECTIONS(buffer, buffer + sizeof(buffer), expected, expected + expected_size);
+//}
