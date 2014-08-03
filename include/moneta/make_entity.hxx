@@ -11,9 +11,9 @@ namespace moneta {
 
 	namespace detail {
 		struct fixed_value_setter {
-			template <class EntityType, class Member>
-			void operator()(EntityType& entity, Member& member) const {
-				member(entity) = traits::detail::fixed_value<Member>::get();
+			template <class EntityType, class Member, class Path>
+			void operator()(EntityType& entity) const {
+				Member()(entity) = traits::detail::fixed_value<Member>::get();
 			}
 		};
 	}
@@ -22,7 +22,7 @@ namespace moneta {
 	typename traits::tuple<EntityType>::type make_tuple() {
 		traits::tuple<EntityType>::type result;
 
-		// TODO: Add fixed_value assignment here.
+		// TODO: Add fixed_value assignment for tuples here.
 
 		return boost::fusion::transform(result, traits::detail::blanker());
 	}

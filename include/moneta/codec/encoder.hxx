@@ -61,14 +61,14 @@ namespace moneta { namespace codec {
 
 			template <class Entity, class Path>
 			void enter(Entity& entity) const {
-				std::cerr << "e:" << moneta::traits::get_entity_name<Entity>() << std::endl;
+				//std::cerr << "e:" << moneta::traits::get_entity_name<Entity>() << std::endl;
 			}
 
 			template <class Entity, class Member, class Path>
-			void operator()(Entity& entity, Member& member, Path& path) const {
+			void operator()(Entity& entity) const {
 				if (_state.good) {
 					int result = member_encoder<Codec, Member, Path>()(
-						entity, member, _state.begin, _state.end
+						entity, Member(), _state.begin, _state.end
 					);
 
 					if (result > 0) {
@@ -83,13 +83,13 @@ namespace moneta { namespace codec {
 
 			template <class Entity, class Path>
 			void leave(Entity& entity) const {
-				std::cerr << "l:" << moneta::traits::get_entity_name<Entity>() << std::endl;
+				//std::cerr << "l:" << moneta::traits::get_entity_name<Entity>() << std::endl;
 			}
 		};
 
 	}
 
-	template <class Codec, class Member, class Path>
+	template <class Codec, class Member, class Path, class Enable = void>
 	struct member_encoder {
 		template <class Entity, class Iterator>
 		int operator()(const Entity& entity, Member& member, Iterator& begin, Iterator& end) const {

@@ -4,14 +4,46 @@
 #include "../model/Person.hxx"
 #include "../model/Cat.hxx"
 
+// static size_t free_count = 0;
+// 
+// template <class Entity, class Member, class Path>
+// void free_counter(Entity& entity) {
+// 	++free_count;
+// 	std::cerr << "sadjhfjkadsfhjkadshfjkas" << std::endl;
+// }
+// 
+// BOOST_AUTO_TEST_CASE(free_function_for_each_member_test) {
+// 
+// 	Cat cat;
+// 	cat.ID = 10;
+// 	cat.Name = "Garfield";
+// 	cat.Address.ID = 20;
+// 	cat.Address.Number = 200;
+// 	cat.Address.Street = "St. Street";
+// 
+// 	{
+// 		free_count = 0;
+// 		moneta::algorithm::for_each_member(cat, free_counter);
+// 		BOOST_CHECK_EQUAL(free_count, 5);
+// 	}
+// 
+// 	{
+// 		free_count = 0;
+// 		const Cat& const_cat = cat;
+// 		moneta::algorithm::for_each_member(cat, free_counter);
+// 		BOOST_CHECK_EQUAL(free_count, 5);
+// 	}
+// 
+// }
+
 struct call_counter {
 	size_t& count;
 
 	call_counter(size_t& count_)
 	 : count(count_) {}
 
-	template <class Entity, class Member>
-	void operator()(const Entity& entity, Member member) const {
+	template <class Entity, class Member, class Path>
+	void operator()(const Entity& entity) const {
 		++count;
 	}
 };
@@ -77,9 +109,9 @@ struct increment_it<int> {
 };
 
 struct member_incrementor {
-	template <class Entity, class Member>
-	void operator()(Entity& entity, Member member) const {
-		increment_it<typename Member::result_type>()(member(entity));
+	template <class Entity, class Member, class Path>
+	void operator()(Entity& entity) const {
+		increment_it<typename Member::result_type>()(Member()(entity));
 	}
 };
 
@@ -103,7 +135,7 @@ struct path_tester {
 	 : _output(output) {}
 
 	template <class Entity, class Member, class Path>
-	void operator()(Entity& entity, Member member, Path path) const {
+	void operator()(Entity& entity) const {
 		_output.push_back(boost::mpl::size<Path>::value);
 	}
 };
@@ -146,7 +178,7 @@ struct enter_tester {
 	}
 
 	template <class Entity, class Member, class Path>
-	void operator()(Entity& entity, Member member, Path path) const {
+	void operator()(Entity& entity) const {
 		_output.push_back(".");
 	}
 };
@@ -196,7 +228,7 @@ struct leave_tester {
 	 : _output(output) {}
 
 	template <class Entity, class Member, class Path>
-	void operator()(Entity& entity, Member member, Path path) const {
+	void operator()(Entity& entity) const {
 		_output.push_back(".");
 	}
 
@@ -256,7 +288,7 @@ struct traversal_tester {
 	}
 
 	template <class Entity, class Member, class Path>
-	void operator()(Entity& entity, Member member, Path path) const {
+	void operator()(Entity& entity) const {
 		_output.push_back(std::string("m:") + moneta::traits::detail::member_name<Member>::get());
 	}
 

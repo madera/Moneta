@@ -50,55 +50,49 @@ namespace moneta { namespace algorithm {
 		// --------------------------------------------------------------------------------------------------
 		//
 
-		template <class Operation, class Entity, class Member, class Path>
-		typename boost::enable_if<traits::detail::is_functor_callable<Operation, void(Entity&, Member, Path)> >::type
-		apply_operation(Operation& operation, Entity& entity, Member& member, Path& path) {
-			operation(entity, member, Path());
-		}
-
-		template <class Operation, class Entity, class Member, class Path>
-		typename boost::enable_if<traits::detail::is_functor_callable<Operation, void(Entity&, Member)> >::type
-		apply_operation(Operation& operation, Entity& entity, Member& member, Path& path) {
-			operation(entity, member);
-		}
-
-		//
-		// --------------------------------------------------------------------------------------------------
-		//
-
 		// TODO: Could this be a simple function?
 		template <class MaybeEntity, class Path, class Enable = void>
 		struct recurse_or_call_operation;
 
 		// Specialization for: Recurse
 		//
-		template <class MemberEntity, class Path>
+		template <class Member, class Path>
 		struct recurse_or_call_operation<
-			MemberEntity,
+			Member,
 			Path,
-			typename boost::enable_if<traits::is_entity<typename MemberEntity::result_type> >::type
+			typename boost::enable_if<
+				traits::is_entity<
+					typename Member::result_type
+				>
+			>::type
 		> {
 			template <class Operation, class Entity>
 			void operator()(Operation& operation, Entity& entity) {
 				for_each_member_impl(
-					MemberEntity()(entity),
+					Member()(entity),
 					operation,
-					boost::mpl::push_back<Path, MemberEntity>::type()
+					boost::mpl::push_back<Path, Member>::type()
 				);
 			}
 		};
 
 		// Specialization for: Operate
 		//
-		template <class NonEntityMemberType, class Path>
+		template <class Member, class Path>
 		struct recurse_or_call_operation<
-			NonEntityMemberType, Path,
-			typename boost::disable_if<traits::is_entity<typename NonEntityMemberType::result_type> >::type
+			Member, Path,
+			typename boost::disable_if<
+				traits::is_entity<
+					typename Member::result_type
+				>
+			>::type
 		> {
 			template <class Operation, class Entity>
 			void operator()(Operation& operation, Entity& entity) {
 				// TODO: Write a clever comment to alert users in case of compile error here.
-				apply_operation(operation, entity, NonEntityMemberType(), Path());
+
+				// FIXME: Encapsulate this call so it works with free functions et al.
+				operation.operator()<Entity, Member, Path>(entity);
 			}
 		};
 

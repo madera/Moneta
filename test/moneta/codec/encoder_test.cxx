@@ -187,59 +187,50 @@ namespace moneta { namespace codec {
 	struct entity_encoder_test_codec;
 
 	template <class T>
-	struct value_encoder<entity_encoder_test_codec, T, typename boost::disable_if<moneta::traits::is_entity<T> >::type
+	struct value_encoder<
+		entity_encoder_test_codec,
+		T,
+		typename boost::disable_if<
+			moneta::traits::is_entity<T>
+		>::type
 	> {
-
 		template <class Iterator>
 		int operator()(const T& value, Iterator& begin, Iterator& end) const {
 			if (begin == end) {
 				return -1;
 			}
 
+			std::cerr << "--> " << typeid(T).name() << std::endl;
 			*begin = 'V';
 			return 1;
 		}
-
 	};
 
-	template <class Entity>
-	struct entity_encoder<entity_encoder_test_codec, Entity,
-			      typename boost::disable_if<boost::is_same<Entity, Cat> >::type
-	> {
+	template <class Member, class Path>
+	struct member_encoder<entity_encoder_test_codec, Member, Path> {
+		typedef typename Member::class_type entity_type;
+		typedef typename Member::result_type value_type;
 
 		template <class Iterator>
-		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+		int operator()(const entity_type& entity, Member& member, Iterator& begin, Iterator& end) const {
 			*begin++ = '#';
 			return 1;
 		}
-
 	};
-
-	template <>
-	struct entity_encoder<entity_encoder_test_codec, Address> {
-
-		template <class Iterator>
-		int operator()(const Address& entity, Iterator& begin, Iterator& end) const {
-			*begin++ = 'A';
-			return 1;
-		}
-
-	};
-
 }}
 
-//BOOST_AUTO_TEST_CASE(entity_encoder_test) {
-//	const char expected[] = "Bool: A\nChar: A\nShort: A\nInt: i\nLong: A\n";
-//	const size_t expected_size = sizeof(expected) - 1; // nul
-//
-//	char buffer[expected_size];
-//	std::fill(buffer, buffer + sizeof(buffer), 0);
-//
-//	const int result = moneta::codec::encode<moneta::codec::entity_encoder_test_codec>(
-//		Cat(), buffer, buffer + sizeof(buffer)
-//	);
-//
-//	BOOST_CHECK_EQUAL(result, expected_size);
-//
-//	BOOST_CHECK_EQUAL_COLLECTIONS(buffer, buffer + sizeof(buffer), expected, expected + expected_size);
-//}
+BOOST_AUTO_TEST_CASE(entity_encoder_test) {
+	const char expected[] = "Bool: A\nChar: A\nShort: A\nInt: i\nLong: A\n";
+	const size_t expected_size = sizeof(expected) - 1; // nul
+
+	char buffer[expected_size];
+	std::fill(buffer, buffer + sizeof(buffer), 0);
+
+	const int result = moneta::codec::encode<moneta::codec::entity_encoder_test_codec>(
+		Cat(), buffer, buffer + sizeof(buffer)
+	);
+
+	BOOST_CHECK_EQUAL(result, expected_size);
+
+	BOOST_CHECK_EQUAL_COLLECTIONS(buffer, buffer + sizeof(buffer), expected, expected + expected_size);
+}

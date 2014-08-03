@@ -69,13 +69,13 @@ namespace moneta { namespace codec {
 			 : _state(state) {}
 
 			template <class Entity, class Member, class Path>
-			void operator()(Entity& entity, Member member, Path path) const {
+			void operator()(Entity& entity) const {
 				if (!_state.good) {
 					return;
 				}
 
 				int result = basic_member_decoder<Codec, Member>()(
-					entity, member, _state.begin, _state.end
+					entity, Member(), _state.begin, _state.end
 				);
 
 				if (result > 0) {
