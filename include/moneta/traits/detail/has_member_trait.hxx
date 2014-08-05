@@ -1,6 +1,6 @@
 #pragma once
 
-// TODO: Substitute with Boost's recent solution.
+// TODO: Substitute with Boost's recent solution: Boost TTI.
 #define DEFINE_HAS_MEMBER_TRAIT(name) \
 template<class T> \
 struct has_member_##name { \

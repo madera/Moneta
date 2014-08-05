@@ -4,37 +4,39 @@
 #include "../model/Person.hxx"
 #include "../model/Cat.hxx"
 
-// static size_t free_count = 0;
-// 
-// template <class Entity, class Member, class Path>
-// void free_counter(Entity& entity) {
-// 	++free_count;
-// 	std::cerr << "sadjhfjkadsfhjkadshfjkas" << std::endl;
-// }
-// 
-// BOOST_AUTO_TEST_CASE(free_function_for_each_member_test) {
-// 
-// 	Cat cat;
-// 	cat.ID = 10;
-// 	cat.Name = "Garfield";
-// 	cat.Address.ID = 20;
-// 	cat.Address.Number = 200;
-// 	cat.Address.Street = "St. Street";
-// 
-// 	{
-// 		free_count = 0;
-// 		moneta::algorithm::for_each_member(cat, free_counter);
-// 		BOOST_CHECK_EQUAL(free_count, 5);
-// 	}
-// 
-// 	{
-// 		free_count = 0;
-// 		const Cat& const_cat = cat;
-// 		moneta::algorithm::for_each_member(cat, free_counter);
-// 		BOOST_CHECK_EQUAL(free_count, 5);
-// 	}
-// 
-// }
+// TODO: Continue support for free function operations.
+//
+//static size_t free_count = 0;
+//
+//template <class Entity, class Member, class Path>
+//void free_counter(Entity& entity) {
+//	++free_count;
+//	std::cerr << "sadjhfjkadsfhjkadshfjkas" << std::endl;
+//}
+//
+//BOOST_AUTO_TEST_CASE(free_function_for_each_member_test) {
+//
+//	Cat cat;
+//	cat.ID = 10;
+//	cat.Name = "Garfield";
+//	cat.Address.ID = 20;
+//	cat.Address.Number = 200;
+//	cat.Address.Street = "St. Street";
+//
+//	{
+//		free_count = 0;
+//		moneta::algorithm::for_each_member(cat, free_counter);
+//		BOOST_CHECK_EQUAL(free_count, 5);
+//	}
+//
+//	{
+//		free_count = 0;
+//		const Cat& const_cat = cat;
+//		moneta::algorithm::for_each_member(cat, free_counter);
+//		BOOST_CHECK_EQUAL(free_count, 5);
+//	}
+//
+//}
 
 struct call_counter {
 	size_t& count;

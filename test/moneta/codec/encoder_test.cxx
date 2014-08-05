@@ -168,7 +168,7 @@ BOOST_AUTO_TEST_CASE(member_encoder_test) {
 	typedef Arithmetics entity_type;
 
 	const char expected[] = "Bool: A\nChar: A\nShort: A\nInt: i\nLong: A\n";
-	const size_t expected_size = sizeof(expected) - 1; // nul
+	const size_t expected_size = sizeof(expected) - 1; // Minus null char.
 
 	char buffer[expected_size];
 	std::fill(buffer, buffer + sizeof(buffer), 0);

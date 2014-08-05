@@ -6,6 +6,14 @@ namespace moneta { namespace codec {
 	template <class Codec, class T, class Enable = void>
 	struct value_encoder;
 
+	template <class Codec, class Member, class Path, class Enable = void>
+	struct member_encoder {
+		template <class Entity, class Iterator>
+		int operator()(const Entity& entity, Member& member, Iterator& begin, Iterator& end) const {
+			return detail::apply_value_encoder<Codec, Member, Path>(entity, member, begin, end);
+		}
+	};
+
 	namespace detail {
 
 		// Apply value_encoder with Path
@@ -88,14 +96,6 @@ namespace moneta { namespace codec {
 		};
 
 	}
-
-	template <class Codec, class Member, class Path, class Enable = void>
-	struct member_encoder {
-		template <class Entity, class Iterator>
-		int operator()(const Entity& entity, Member& member, Iterator& begin, Iterator& end) const {
-			return detail::apply_value_encoder<Codec, Member, Path>(entity, member, begin, end);
-		}
-	};
 
 	template <class Codec, class Entity, class Enable = void>
 	struct entity_encoder {

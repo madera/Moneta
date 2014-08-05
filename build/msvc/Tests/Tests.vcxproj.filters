@@ -380,5 +380,8 @@
     <ClCompile Include="..\..\..\test\moneta\codec\shell\shell_encoder_test.cxx">
       <Filter>Source Files\moneta\codec\shell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\algorithm\traverse_test.cxx">
+      <Filter>Source Files\moneta\algorithm</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
