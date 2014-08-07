@@ -24,6 +24,7 @@ TODO:
 	  path (or a hash of it) should be the key to decoding continuation.
 	* Consider using Boost ASIO's placeholders elegance for Path-enabled codecs and for_each/some_member traversals.
 	* Test and stress vector limits for entities with several members.
+	* Reimplement for_each_member using traverse(), which does the job nicely.
 
 Current Stack:
 

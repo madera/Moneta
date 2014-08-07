@@ -2,36 +2,12 @@
 #include "../encoder.hxx"
 #include <boost/type_traits/is_pod.hpp>
 #include <boost/format.hpp>
+#include "stringize_path.hxx"
 
 namespace moneta { namespace codec {
 
  	struct debug_dump;
  
-	namespace detail {
-		struct path_printer {
-			std::ostringstream& oss;
-
-			path_printer(std::ostringstream& oss_)
-			 : oss(oss_) {}
-
-			template <class Member>
-			void operator()(Member&) const {
-				oss << '/'
-				    << moneta::traits::get_entity_name<typename Member::class_type>()
-				    << "::"
-				    << moneta::traits::detail::member_name<Member>::get();
-			}
-		};
-
-		template <class Path>
-		std::string str_path() {
-			std::ostringstream oss;
-			path_printer state(oss);
-			boost::mpl::for_each<Path>(state);
-			return state.oss.str();
-		}
-	}
-
 	template <class T>
 	struct value_encoder<debug_dump, T, typename boost::disable_if<
 		boost::mpl::or_<boost::is_array<T>, boost::is_arithmetic<T> >

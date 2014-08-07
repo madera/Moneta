@@ -80,6 +80,7 @@
     <ClInclude Include="..\..\..\include\moneta\algorithm\traverse.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\codec_io.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\debug_dump\debug_dump_encoder.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\codec\debug_dump\stringize_path.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\encoder.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\decoder.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\multi_decoder.hxx" />
