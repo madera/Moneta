@@ -50,7 +50,7 @@ struct traits {
 	typedef leave_traverse_test leave;
 };
 
-BOOST_AUTO_TEST_CASE(simple_traverse_test) {
+BOOST_AUTO_TEST_CASE(stateless_traverse_test) {
 	Cat cat;
 	moneta::algorithm::traverse<traits>(cat);
 
@@ -159,4 +159,76 @@ BOOST_AUTO_TEST_CASE(traversal_traverse_test) {
 		BOOST_REQUIRE(lines.size() == 19);
 		BOOST_CHECK_EQUAL_COLLECTIONS(lines.begin(), lines.end(), expected, expected + 19);
 	}
+}
+
+
+
+struct enter_stateful_traverse_test {
+	template <class Entity, class Path>
+	void operator()(Entity&) const {
+		std::string tmp = "e:" + moneta::traits::get_entity_name<Entity>();
+		const std::string path = moneta::codec::detail::stringize_path<Path>();
+		tmp += (path.empty()? "" : "," + path);
+		lines.push_back(tmp);
+	}
+};
+
+struct entity_stateful_traverse_test {
+	template <class Entity>
+	void operator()(Entity&) const {
+		lines.push_back("custom entity:" << typeid(Entity).name());
+	}
+};
+
+struct member_stateful_traverse_test {
+	template <class Entity, class Member, class Path>
+	void operator()(Entity& entity) const {
+		std::string tmp = "m:" + moneta::traits::detail::member_name<Member>::get();
+		const std::string path = moneta::codec::detail::stringize_path<Path>();
+		tmp += (path.empty()? "" : "," + path);
+		lines.push_back(tmp);
+	}
+};
+
+struct leave_stateful_traverse_test {
+	template <class Entity, class Path>
+	void operator()(Entity&) const {
+		std::string tmp = "l:" + moneta::traits::get_entity_name<Entity>();
+		const std::string path = moneta::codec::detail::stringize_path<Path>();
+		tmp += (path.empty()? "" : "," + path);
+		lines.push_back(tmp);
+	}
+};
+
+struct stateful_traits {
+	typedef enter_stateful_traverse_test enter;
+	//typedef entity_stateful_traverse_test entity;
+	typedef member_stateful_traverse_test member;
+	typedef leave_stateful_traverse_test leave;
+};
+
+struct state {
+	int foo;
+};
+
+BOOST_AUTO_TEST_CASE(stateful_traverse_test) {
+	lines.clear();
+
+	Cat cat;
+	moneta::algorithm::stateful_traverse<stateful_traits>(cat, state());
+
+	const char* expected[] = {
+		"e:Cat",
+		"m:ID",
+		"m:Name",
+		"e:Address,/Cat::Address",
+		"m:ID,/Cat::Address",
+		"m:Number,/Cat::Address",
+		"m:Street,/Cat::Address",
+		"l:Address,/Cat::Address",
+		"l:Cat"
+	};
+
+	BOOST_REQUIRE(lines.size() == 9);
+	BOOST_CHECK_EQUAL_COLLECTIONS(lines.begin(), lines.end(), expected, expected + 9);
 }
