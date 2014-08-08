@@ -18,13 +18,13 @@ namespace moneta { namespace codec { namespace detail {
 	};
 
 	template <class Path>
-	typename boost::enable_if<boost::is_same<Path, void>, std::string>::type
+	typename boost::disable_if<boost::mpl::is_sequence<Path>, std::string>::type
 	stringize_path() {
-		return "<void>";
+		return "<no_path>";
 	}
 
 	template <class Path>
-	typename boost::disable_if<boost::is_same<Path, void>, std::string>::type
+	typename boost::enable_if<boost::mpl::is_sequence<Path>, std::string>::type
 	stringize_path() {
 		std::ostringstream oss;
 		path_printer state(oss);

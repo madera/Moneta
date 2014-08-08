@@ -52,7 +52,7 @@ struct traits {
 
 BOOST_AUTO_TEST_CASE(simple_traverse_test) {
 	Cat cat;
-	moneta::algorithm::traverse_with_path<traits>(cat);
+	moneta::algorithm::traverse<traits>(cat);
 
 	const char* expected[] = {
 		"e:Cat",
@@ -144,19 +144,19 @@ BOOST_AUTO_TEST_CASE(traversal_traverse_test) {
 
 	{
 		lines.clear();
-		moneta::algorithm::traverse_with_path<traits>(x);
+		moneta::algorithm::traverse<traits>(x);
 
 		BOOST_REQUIRE(lines.size() == 19);
 		BOOST_CHECK_EQUAL_COLLECTIONS(lines.begin(), lines.end(), expected, expected + 19);
 	}
 
-	//{
-	//	const A& const_x = x;
-	//	
-	//	lines.clear();
-	//	moneta::algorithm::traverse_with_path<traits>(const_x);
+	{
+		const A& const_x = x;
+		
+		lines.clear();
+		moneta::algorithm::traverse<traits>(const_x);
 
-	//	BOOST_REQUIRE(lines.size() == 19);
-	//	BOOST_CHECK_EQUAL_COLLECTIONS(lines.begin(), lines.end(), expected, expected + 19);
-	//}
+		BOOST_REQUIRE(lines.size() == 19);
+		BOOST_CHECK_EQUAL_COLLECTIONS(lines.begin(), lines.end(), expected, expected + 19);
+	}
 }

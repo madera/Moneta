@@ -46,20 +46,20 @@ namespace moneta { namespace algorithm {
 
 		DEFINE_HAS_MEMBER_TRAIT(member)
 
-		template <class Traits, class Path, class Member>
+		template <class Traits, class Path, class Member, class Entity>
 		typename boost::enable_if<has_member_member<Traits> >::type
-		call_member_if_defined(typename Member::class_type& entity) {
+		call_member_if_defined(Entity& entity) {
 			// XXX: Free functions as well, dammit...
 			typename Traits::member().operator()<
-				typename Member::class_type,
+				Entity,
 				Member,
 				Path
 			>(entity);
 		}
 
-		template <class Traits, class Path, class Member>
+		template <class Traits, class Path, class Member, class Entity>
 		typename boost::disable_if<has_member_member<Traits> >::type
-		call_member_if_defined(typename Member::class_type& entity) {
+		call_member_if_defined(Entity& entity) {
 		}
 
 		// --------------------------------------------------------------------------------------------------
@@ -82,26 +82,26 @@ namespace moneta { namespace algorithm {
 
 		// --------------------------------------------------------------------------------------------------
 
-		template <class Traits, class Path, class Member>
-		typename boost::enable_if<traits::is_entity<typename Member::result_type> >::type
-		call_member_or_recurse(typename Member::class_type& entity) {
-			typedef typename boost::mpl::if_<
-				boost::is_same<Path, void>,
-				void,
-				boost::mpl::push_back<
-					Path,
-					Member
-				>::type
-			>::type path_type;
+		template <class Path, class Member, class Enable = void>
+		struct add_path : boost::mpl::identity<void> {};
 
-			traverse<Traits, typename Member::result_type, path_type>(
-				Member()(entity)
-			);
+		template <class Path, class Member>
+		struct add_path<
+			Path, Member,
+			typename boost::enable_if<typename boost::mpl::is_sequence<Path>::type>::type
+		> : boost::mpl::push_back<Path, Member> {};
+
+		// --------------------------------------------------------------------------------------------------
+
+		template <class Traits, class Path, class Member, class Entity>
+		typename boost::enable_if<traits::is_entity<typename Member::result_type> >::type
+		call_member_or_recurse(Entity& entity) {
+			traverse<Traits, add_path<Path, Member>::type>(Member()(entity));
 		}
 
-		template <class Traits, class Path, class Member>
+		template <class Traits, class Path, class Member, class Entity>
 		typename boost::disable_if<traits::is_entity<typename Member::result_type> >::type
-		call_member_or_recurse(typename Member::class_type& entity) {
+		call_member_or_recurse(Entity& entity) {
 			call_member_if_defined<Traits, Path, Member>(entity);
 		}
 
@@ -122,16 +122,11 @@ namespace moneta { namespace algorithm {
 
 	}
 
-	template <class Traits, class Entity, class Path = void>
+	template <class Traits, class Path = boost::mpl::vector0<>, class Entity = void>
 	void traverse(Entity& entity) {
 		detail::call_enter_if_defined<Traits, Path>(entity);
 		detail::call_entity_if_defined_or_iterate_members<Traits, Path>(entity);
 		detail::call_leave_if_defined<Traits, Path>(entity);
-	}
-
-	template <class Traits, class Entity, class Path = void>
-	void traverse_with_path(Entity& entity) {
-		traverse<Traits, Entity, boost::mpl::vector0<> >(entity);
 	}
 
 }}
