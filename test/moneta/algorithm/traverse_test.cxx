@@ -4,71 +4,43 @@
 #include "../model/Cat.hxx"
 #include <iostream>
 
-std::vector<std::string> lines;
+struct test_state {
+	std::vector<std::string> lines;
+	size_t enter_count;
 
-struct enter_traverse_test {
-	template <class Entity, class Path>
-	void operator()(Entity&) const {
+	test_state()
+	 : enter_count(0) {}
+};
+
+struct enter_traverse_test: moneta::algorithm::traverse_enter {
+	template <class Path, class Entity>
+	void operator()(Entity&, test_state& state) const {
 		std::string tmp = "e:" + moneta::traits::get_entity_name<Entity>();
 		const std::string path = moneta::codec::detail::stringize_path<Path>();
 		tmp += (path.empty()? "" : "," + path);
-		lines.push_back(tmp);
+		state.lines.push_back(tmp);
 	}
 };
 
-struct entity_traverse_test {
-	template <class Entity>
-	void operator()(Entity&) const {
-		lines.push_back("custom entity:" << typeid(Entity).name());
-	}
-};
-
-struct member_traverse_test {
-	template <class Entity, class Member, class Path>
-	void operator()(Entity& entity) const {
+struct member_traverse_test: moneta::algorithm::traverse_member {
+	template <class Path, class Member, class Entity>
+	void operator()(Entity&, test_state& state) const {
 		std::string tmp = "m:" + moneta::traits::detail::member_name<Member>::get();
 		const std::string path = moneta::codec::detail::stringize_path<Path>();
 		tmp += (path.empty()? "" : "," + path);
-		lines.push_back(tmp);
+		state.lines.push_back(tmp);
 	}
 };
 
-struct leave_traverse_test {
-	template <class Entity, class Path>
-	void operator()(Entity&) const {
+struct leave_traverse_test: moneta::algorithm::traverse_leave {
+	template <class Path, class Entity>
+	void operator()(Entity&, test_state& state) const {
 		std::string tmp = "l:" + moneta::traits::get_entity_name<Entity>();
 		const std::string path = moneta::codec::detail::stringize_path<Path>();
 		tmp += (path.empty()? "" : "," + path);
-		lines.push_back(tmp);
+		state.lines.push_back(tmp);
 	}
 };
-
-struct traits {
-	typedef enter_traverse_test enter;
-	//typedef entity_traverse_test entity;
-	typedef member_traverse_test member;
-	typedef leave_traverse_test leave;
-};
-
-BOOST_AUTO_TEST_CASE(stateless_traverse_test) {
-	Cat cat;
-	moneta::algorithm::traverse<traits>(cat);
-
-	const char* expected[] = {
-		"e:Cat",
-		"m:ID",
-		"m:Name",
-		"e:Address,/Cat::Address",
-		"m:ID,/Cat::Address",
-		"m:Number,/Cat::Address",
-		"m:Street,/Cat::Address",
-		"l:Address,/Cat::Address",
-		"l:Cat"
-	};
-
-	BOOST_REQUIRE(lines.size() == 9);
-	BOOST_CHECK_EQUAL_COLLECTIONS(lines.begin(), lines.end(), expected, expected + 9);
-}
 
 MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 	E,
@@ -143,79 +115,49 @@ BOOST_AUTO_TEST_CASE(traversal_traverse_test) {
 	};
 
 	{
-		lines.clear();
-		moneta::algorithm::traverse<traits>(x);
+		test_state state;
 
-		BOOST_REQUIRE(lines.size() == 19);
-		BOOST_CHECK_EQUAL_COLLECTIONS(lines.begin(), lines.end(), expected, expected + 19);
+		moneta::algorithm::traverse<
+			boost::mpl::vector<
+				enter_traverse_test,
+				member_traverse_test,
+				leave_traverse_test
+			>
+		>(x, state);
+
+		BOOST_REQUIRE(state.lines.size() == 19);
+		BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + 19);
 	}
 
 	{
+		test_state state;
 		const A& const_x = x;
 		
-		lines.clear();
-		moneta::algorithm::traverse<traits>(const_x);
+		moneta::algorithm::traverse<
+			boost::mpl::vector<
+				enter_traverse_test,
+				member_traverse_test,
+				leave_traverse_test
+			>
+		>(const_x, state);
 
-		BOOST_REQUIRE(lines.size() == 19);
-		BOOST_CHECK_EQUAL_COLLECTIONS(lines.begin(), lines.end(), expected, expected + 19);
+		BOOST_REQUIRE(state.lines.size() == 19);
+		BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + 19);
 	}
 }
 
-
-
-struct enter_stateful_traverse_test {
-	template <class Entity, class Path>
-	void operator()(Entity&) const {
-		std::string tmp = "e:" + moneta::traits::get_entity_name<Entity>();
-		const std::string path = moneta::codec::detail::stringize_path<Path>();
-		tmp += (path.empty()? "" : "," + path);
-		lines.push_back(tmp);
-	}
-};
-
-struct entity_stateful_traverse_test {
-	template <class Entity>
-	void operator()(Entity&) const {
-		lines.push_back("custom entity:" << typeid(Entity).name());
-	}
-};
-
-struct member_stateful_traverse_test {
-	template <class Entity, class Member, class Path>
-	void operator()(Entity& entity) const {
-		std::string tmp = "m:" + moneta::traits::detail::member_name<Member>::get();
-		const std::string path = moneta::codec::detail::stringize_path<Path>();
-		tmp += (path.empty()? "" : "," + path);
-		lines.push_back(tmp);
-	}
-};
-
-struct leave_stateful_traverse_test {
-	template <class Entity, class Path>
-	void operator()(Entity&) const {
-		std::string tmp = "l:" + moneta::traits::get_entity_name<Entity>();
-		const std::string path = moneta::codec::detail::stringize_path<Path>();
-		tmp += (path.empty()? "" : "," + path);
-		lines.push_back(tmp);
-	}
-};
-
-struct stateful_traits {
-	typedef enter_stateful_traverse_test enter;
-	//typedef entity_stateful_traverse_test entity;
-	typedef member_stateful_traverse_test member;
-	typedef leave_stateful_traverse_test leave;
-};
-
-struct state {
-	int foo;
-};
-
 BOOST_AUTO_TEST_CASE(stateful_traverse_test) {
-	lines.clear();
 
 	Cat cat;
-	moneta::algorithm::stateful_traverse<stateful_traits>(cat, state());
+	test_state state;
+
+	moneta::algorithm::traverse<
+		boost::mpl::vector<
+			enter_traverse_test,
+			member_traverse_test,
+			leave_traverse_test
+		>
+	>(cat, state);
 
 	const char* expected[] = {
 		"e:Cat",
@@ -229,6 +171,6 @@ BOOST_AUTO_TEST_CASE(stateful_traverse_test) {
 		"l:Cat"
 	};
 
-	BOOST_REQUIRE(lines.size() == 9);
-	BOOST_CHECK_EQUAL_COLLECTIONS(lines.begin(), lines.end(), expected, expected + 9);
+	BOOST_REQUIRE(state.lines.size() == 9);
+	BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + 9);
 }

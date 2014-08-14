@@ -234,3 +234,26 @@ BOOST_AUTO_TEST_CASE(entity_encoder_test) {
 
 	//BOOST_CHECK_EQUAL_COLLECTIONS(buffer, buffer + sizeof(buffer), expected, expected + expected_size);
 }
+
+
+BOOST_AUTO_TEST_CASE(simple_traversal_encoder_test2) {
+	const size_t member_count =
+		boost::mpl::size<typename moneta::traits::members<Cat    >::type>::value -1 +
+		boost::mpl::size<typename moneta::traits::members<Address>::type>::value
+	;
+
+	char buffer[member_count];
+	std::fill(buffer, buffer + sizeof(buffer), 0);
+
+	const int result = moneta::codec::encode<moneta::codec::test_codec>(
+		Cat(), buffer, buffer + sizeof(buffer)
+	);
+
+	int x = 0;
+
+
+	//BOOST_CHECK_EQUAL(result, member_count);
+
+	//const std::string expected = "iSiiS";
+	//BOOST_CHECK_EQUAL_COLLECTIONS(buffer, buffer + sizeof(buffer), expected.begin(), expected.end());
+}
