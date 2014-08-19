@@ -83,6 +83,12 @@
     <Filter Include="Header Files\moneta\codec\shell">
       <UniqueIdentifier>{30e416e9-9506-438d-8582-fc36ed5e4e64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\codec\xml">
+      <UniqueIdentifier>{754ff398-fb71-488e-8e82-24763cd03634}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\moneta\codec\xml\traits">
+      <UniqueIdentifier>{8a462cf0-3b4a-49b4-95d0-eeaeb0086d81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\moneta\traits\to_tie.hxx">
@@ -351,6 +357,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\codec\debug_dump\stringize_path.hxx">
       <Filter>Header Files\moneta\codec\debug_dump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\codec\xml\xml_encoder.hxx">
+      <Filter>Header Files\moneta\codec\xml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\codec\xml\traits\xml_traits.hxx">
+      <Filter>Header Files\moneta\codec\xml\traits</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

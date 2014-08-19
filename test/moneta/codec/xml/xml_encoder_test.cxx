@@ -1,11 +1,14 @@
 #include "stdafx.h"
-#include <moneta/codec/shell/shell_encoder.hxx>
+#include <moneta/codec/xml/xml_encoder.hxx>
 #include "../../model/Person.hxx"
 #include "../../model/Dog.hxx"
 #include "../../model/Composite.hxx"
 
 #include <moneta/serialization/detail/hexdump.hxx>
 #include <moneta/serialization/iostream.hxx>
+
+MONETA_XML_ATTIBUTE(Composite, MONETA_MEMBER(Composite, int, Identifier))
+MONETA_XML_ATTIBUTE(Person, MONETA_MEMBER(Person, int, ID))
 
 static Composite make_composite() {
 	Composite composite;

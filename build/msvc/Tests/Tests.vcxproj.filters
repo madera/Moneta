@@ -112,6 +112,9 @@
     <Filter Include="Source Files\moneta\codec\shell">
       <UniqueIdentifier>{aedd7128-4ebb-4ff8-b8c8-e4b003010942}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\moneta\codec\xml">
+      <UniqueIdentifier>{061b3157-a25a-4fa6-aa3a-cfbde92cda83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -185,6 +188,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\codec\rawbin.hxx">
       <Filter>Source Files\moneta\codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\moneta\model\LettersTree.hxx">
+      <Filter>Header Files\moneta\model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -382,6 +388,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\algorithm\traverse_test.cxx">
       <Filter>Source Files\moneta\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\codec\xml\xml_encoder_test.cxx">
+      <Filter>Source Files\moneta\codec\xml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\codec\xml\xml_traits_test.cxx">
+      <Filter>Source Files\moneta\codec\xml</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

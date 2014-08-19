@@ -97,6 +97,7 @@
     <ClInclude Include="..\..\..\test\moneta\hexdump.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Cat.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\CatDataset.hxx" />
+    <ClInclude Include="..\..\..\test\moneta\model\LettersTree.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Lizard.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Composite.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Dog.hxx" />
@@ -135,6 +136,8 @@
     <ClCompile Include="..\..\..\test\moneta\codec\rawbin\rawbin_encoder_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\codec\shell\shell_decoder_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\codec\shell\shell_encoder_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\codec\xml\xml_encoder_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\codec\xml\xml_traits_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\container\change_trackers\bitset_change_tracker_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\container\change_trackers\hash_change_tracker_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\container\load_trackers\bitset_load_tracker_test.cxx" />

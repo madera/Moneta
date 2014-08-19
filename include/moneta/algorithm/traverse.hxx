@@ -93,13 +93,14 @@ namespace moneta { namespace algorithm {
 			}
 		};
 
+		struct no_state {};
 	}
 
 	struct traverse_enter {};
 	struct traverse_member {};
 	struct traverse_leave {};
 
-	template <class Actions, class Path = boost::mpl::vector0<>, class Entity = void, class State = void>
+	template <class Actions, class Path = boost::mpl::vector0<>, class Entity = void, class State = detail::no_state>
 	void traverse(Entity& entity, State& state = State()) {
 		// Enter actions
 		//

@@ -5,8 +5,6 @@
 #include "../model/simple/Arithmetics.hxx"
 #include "../model/Cat.hxx"
 
-// TODO: Make more tests for member_encoder.
-
 namespace moneta { namespace codec {
 
 	struct test_codec;
@@ -124,11 +122,10 @@ namespace moneta { namespace codec {
 
 	template <class Member, class Path>
 	struct member_encoder<named_test_codec, Member, Path> {
-		typedef typename Member::class_type entity_type;
-		typedef typename Member::result_type value_type;
+		template <class Entity, class Iterator>
+		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+			typedef typename Member::result_type value_type;
 
-		template <class Iterator>
-		int operator()(const entity_type& entity, Member& member, Iterator& begin, Iterator& end) const {
 			Iterator itr = begin;
 
 			std::ostringstream oss;
@@ -145,7 +142,7 @@ namespace moneta { namespace codec {
 			std::copy(str.begin(), str.end(), itr);
 			itr += size;
 
-			int result = value_encoder<test_codec, value_type>()(member(entity), itr, end);
+			int result = value_encoder<test_codec, value_type>()(Member()(entity), itr, end);
 			if (result <= 0) {
 				return result;
 			}
@@ -208,15 +205,44 @@ namespace moneta { namespace codec {
 
 	template <class Member, class Path>
 	struct member_encoder<entity_encoder_test_codec, Member, Path> {
-		typedef typename Member::class_type entity_type;
-		typedef typename Member::result_type value_type;
-
-		template <class Iterator>
-		int operator()(const entity_type& entity, Member& member, Iterator& begin, Iterator& end) const {
-			*begin++ = '#';
+		template <class Entity, class Iterator>
+		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+			*begin = '#';
 			return 1;
 		}
 	};
+
+	template <class T>
+	struct value_encoder<entity_encoder_test_codec, T> {
+		template <class Iterator>
+		int operator()(const T& value, Iterator& begin, Iterator& end) const {
+			if (begin == end) {
+				return -1;
+			}
+
+			*begin = 'V';
+			return 1;
+		}
+	};
+
+	template <class Path, class Entity>
+	struct enter_entity<entity_encoder_test_codec, Path, Entity> {
+		template <class Iterator>
+		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+			std::cerr << "Entering: " << moneta::traits::get_entity_name<Entity>() << std::endl;
+			return 0;
+		}
+	};
+
+	template <class Path, class Entity>
+	struct leave_entity<entity_encoder_test_codec, Path, Entity> {
+		template <class Iterator>
+		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+			std::cerr << "Leaving: " << moneta::traits::get_entity_name<Entity>() << std::endl;
+			return 0;
+		}
+	};
+
 }}
 
 BOOST_AUTO_TEST_CASE(entity_encoder_test) {
@@ -245,7 +271,7 @@ BOOST_AUTO_TEST_CASE(simple_traversal_encoder_test2) {
 	char buffer[member_count];
 	std::fill(buffer, buffer + sizeof(buffer), 0);
 
-	const int result = moneta::codec::encode<moneta::codec::test_codec>(
+	const int result = moneta::codec::encode<moneta::codec::entity_encoder_test_codec>(
 		Cat(), buffer, buffer + sizeof(buffer)
 	);
 

@@ -1,30 +1,49 @@
 #pragma once
 #include "../encoder.hxx"
-#include <boost/type_traits/is_pod.hpp>
+//#include "traits/xml_traits.hxx"
+
+template <int Size> struct tabs;
+template <> struct tabs<0> { static char* get() { return ""; } };
+template <> struct tabs<1> { static char* get() { return "\t"; } };
+template <> struct tabs<2> { static char* get() { return "\t\t"; } };
+template <> struct tabs<3> { static char* get() { return "\t\t\t"; } };
+template <> struct tabs<4> { static char* get() { return "\t\t\t\t"; } };
 
 namespace moneta { namespace codec {
 
  	struct shell;
- 
+
+	template <class Path, class Entity>
+	struct enter_entity<shell, Path, Entity> {
+		template <class Iterator>
+		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+			detail::before_enter<Path>();
+
+			std::cerr << tabs<boost::mpl::size<Path>::value>::get()
+				  << '<' << moneta::traits::get_entity_name<Entity>();
+			return 0;
+		}
+	};
+
 	template <class Member, class Path>
 	struct member_encoder<shell, Member, Path> {
-		typedef typename Member::class_type entity_type;
-		typedef typename Member::result_type value_type;
-
-		template <class FromEntity, class ToEntity, class Member>
-		void leave(FromEntity& from, ToEntity& to, Member member) const {
-			std::ostringstream oss;
-			oss << "From " << moneta::traits::get_entity_name<FromEntity>()
-			    << " to "  << moneta::traits::get_entity_name<ToEntity>();
-
-			_output.push_back(oss.str());
-		}
-
-		template <class Iterator>
-		int operator()(const entity_type& entity, Member& member, Iterator& begin, Iterator& end) const {
-			std::cerr << boost::format("%|-20|: ") % traits::detail::member_name<Member>::get();
-			//value_encoder<shell, value_type>()(member(entity), 0, 0, Path());
+		template <class Entity, class Iterator>
+		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+			std::cerr << ' ' << traits::detail::member_name<Member>::get()
+				  << "=\"" << Member()(entity) << "\"";
 			return 1;
+		}
+	};
+
+	//
+
+	template <class Path, class Entity>
+	struct leave_entity<shell, Path, Entity> {
+		template <class Iterator>
+		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+			std::cerr << '\n' << tabs<boost::mpl::size<Path>::value>::get()
+				  << "</" << moneta::traits::get_entity_name<Entity>() << '>' << std::endl;
+			return 0;
 		}
 	};
 

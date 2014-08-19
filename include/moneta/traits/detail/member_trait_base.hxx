@@ -33,6 +33,16 @@
 		}                                                       \
 	};
 
+#define MONETA_DEFINE_TRAIT(trait, type, result_type, get_value)        \
+	template <>                                                     \
+	struct moneta::traits::detail::trait<type> : boost::true_type { \
+		typedef result_type trait_type;                         \
+	};
+
+#define MONETA_DEFINE_FLAG_TRAIT(trait, type)                             \
+	template <>                                                       \
+	struct moneta::traits::detail::trait<type> : boost::true_type {};
+
 #define MONETA_DECLARE_ENTITY_TRAIT(trait) \
 	MONETA_DECLARE_TRAIT(trait)
 

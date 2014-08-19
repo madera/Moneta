@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include <moneta/algorithm/traverse.hxx>
 #include <moneta/codec/debug_dump/stringize_path.hxx>
-#include "../model/Cat.hxx"
 #include <iostream>
+#include "../model/Cat.hxx"
+#include "../model/LettersTree.hxx"
 
 struct test_state {
 	std::vector<std::string> lines;
@@ -12,7 +13,7 @@ struct test_state {
 	 : enter_count(0) {}
 };
 
-struct enter_traverse_test: moneta::algorithm::traverse_enter {
+struct enter_traverse_test : moneta::algorithm::traverse_enter {
 	template <class Path, class Entity>
 	void operator()(Entity&, test_state& state) const {
 		std::string tmp = "e:" + moneta::traits::get_entity_name<Entity>();
@@ -22,7 +23,7 @@ struct enter_traverse_test: moneta::algorithm::traverse_enter {
 	}
 };
 
-struct member_traverse_test: moneta::algorithm::traverse_member {
+struct member_traverse_test : moneta::algorithm::traverse_member {
 	template <class Path, class Member, class Entity>
 	void operator()(Entity&, test_state& state) const {
 		std::string tmp = "m:" + moneta::traits::detail::member_name<Member>::get();
@@ -32,7 +33,7 @@ struct member_traverse_test: moneta::algorithm::traverse_member {
 	}
 };
 
-struct leave_traverse_test: moneta::algorithm::traverse_leave {
+struct leave_traverse_test : moneta::algorithm::traverse_leave {
 	template <class Path, class Entity>
 	void operator()(Entity&, test_state& state) const {
 		std::string tmp = "l:" + moneta::traits::get_entity_name<Entity>();
@@ -41,52 +42,6 @@ struct leave_traverse_test: moneta::algorithm::traverse_leave {
 		state.lines.push_back(tmp);
 	}
 };
-
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
-	E,
-	((int, m))
-	((int, n))
-)
-
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
-	D,
-	((int, l))
-	((E  , e))
-)
-
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
-	C,
-	((int, j))
-	((int, k))
-)
-
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
-	B,
-	((C,   c))
-	((int, i))
-	((D  , d))
-)
-
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
-	A,
-	((int, f))
-	((int, g))
-	((B,   b))
-	((int, h))
-)
-
-// Test tree:
-//
-//     A________
-//    / \ \     \
-//   f  g  B__   h
-//        / \ \
-//       C  i  D
-//     / |    / \
-//    j  k   l   E
-//              / \
-//             m   n
-//
 
 BOOST_AUTO_TEST_CASE(traversal_traverse_test) {
 	

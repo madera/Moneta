@@ -1,109 +1,140 @@
 #pragma once
 #include "../algorithm/for_each_member.hxx"
+#include "../algorithm/traverse.hxx"
 
 namespace moneta { namespace codec {
-	
-	template <class Codec, class T, class Enable = void>
-	struct value_encoder;
+
+	template <class Codec, class Path, class Entity, class Enable = void>
+	struct enter_entity {};
 
 	template <class Codec, class Member, class Path, class Enable = void>
 	struct member_encoder {
 		template <class Entity, class Iterator>
-		int operator()(const Entity& entity, Member& member, Iterator& begin, Iterator& end) const {
-			return detail::apply_value_encoder<Codec, Member, Path>(entity, member, begin, end);
+		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+			return value_encoder<
+				Codec, typename Member::result_type
+			>()(Member()(entity), begin, end);
 		}
 	};
 
-	namespace detail {
+	template <class Codec, class T, class Enable = void>
+	struct value_encoder;
 
-		// Apply value_encoder with Path
-		//
-		template <class Codec, class Member, class Path, class Entity, class Iterator>
-		typename boost::enable_if<
-			traits::detail::is_functor_callable<
-				value_encoder<Codec, typename Member::result_type>,
-				int (typename Member::result_type, Iterator, Iterator, Path)
-			>,
-			int
-		>::type
-		apply_value_encoder(Entity& entity, Member& member, Iterator& begin, Iterator& end) {
-			//BOOST_MPL_ASSERT((boost::is_same<Entity, typename Member::class_type>));
-			return value_encoder<Codec, typename Member::result_type>()(member(entity), begin, end, Path());
+	template <class Codec, class Path, class Entity, class Enable = void>
+	struct leave_entity {};
+
+
+
+	template <class Iterator>
+	struct encoder_state {
+		typedef Iterator iterator_type;
+
+		Iterator& begin;
+		Iterator& end;
+		size_t total_written;
+		bool good;
+
+		encoder_state(Iterator& begin_, Iterator& end_)
+		 : begin(begin_), end(end_), total_written(0), good(true) {
 		}
+	};
 
-		// Apply value_encoder without Path
-		//
-		template <class Codec, class Member, class Path, class Entity, class Iterator>
-		typename boost::enable_if <
-			traits::detail::is_functor_callable<
-				value_encoder<Codec, typename Member::result_type>,
-				int(typename Member::result_type, Iterator, Iterator)
-			>,
-			int
-		>::type
-		apply_value_encoder(Entity& entity, Member& member, Iterator& begin, Iterator& end) {
-			//BOOST_MPL_ASSERT((boost::is_same<Entity, typename Member::class_type>));
-			return value_encoder<Codec, typename Member::result_type>()(member(entity), begin, end);
-		}
+	// MEQUEDE: make codec::enter_entity, leave_entity.
 
-		// Default entity encoder implementation.
-		//
-		// State is a separate class because operator() must be const.
-		//
-		template <class Codec, class Iterator>
-		struct default_entity_encoder {
-			struct state {
-				Iterator begin;
-				Iterator end;
-				size_t total_written;
-				bool good;
+	template <class Codec, class Path, class Entity, class State>
+	typename boost::enable_if<
+		traits::detail::is_functor_callable<
+			enter_entity<Codec, Path, Entity>,
+			void(Entity, typename State::iterator_type, typename State::iterator_type)
+		>
+	>::type
+	attempt_enter(Entity& entity, State& state) {
+		enter_entity<Codec, Path, Entity>()(entity, state.begin, state.end);
+	}
 
-				state(Iterator begin_, Iterator end_)
-				 : begin(begin_), end(end_), total_written(0), good(true) {}
-			};
+	template <class Codec, class Path, class Entity, class State>
+	typename boost::disable_if<
+		traits::detail::is_functor_callable<
+			enter_entity<Codec, Path, Entity>,
+			void(Entity, typename State::iterator_type, typename State::iterator_type)
+		>
+	>::type
+	attempt_enter(Entity& entity, State& state) {
+	}
 
-			state& _state;
+	template <class Codec, class Path, class Entity, class State>
+	typename boost::enable_if<
+		traits::detail::is_functor_callable<
+			leave_entity<Codec, Path, Entity>,
+			void(Entity, typename State::iterator_type, typename State::iterator_type)
+		>
+	>::type
+	attempt_leave(Entity& entity, State& state) {
+		leave_entity<Codec, Path, Entity>()(entity, state.begin, state.end);
+	}
 
-			default_entity_encoder(state& state)
-			 : _state(state) {}
+	template <class Codec, class Path, class Entity, class State>
+	typename boost::disable_if<
+		traits::detail::is_functor_callable<
+			leave_entity<Codec, Path, Entity>,
+			void(Entity, typename State::iterator_type, typename State::iterator_type)
+		>
+	>::type
+	attempt_leave(Entity& entity, State& state) {
+	}
 
-			template <class Entity, class Path>
-			void enter(Entity& entity) const {
-				//std::cerr << "e:" << moneta::traits::get_entity_name<Entity>() << std::endl;
-			}
-
-			template <class Entity, class Member, class Path>
-			void operator()(Entity& entity) const {
-				if (_state.good) {
-					int result = member_encoder<Codec, Member, Path>()(
-						entity, Member(), _state.begin, _state.end
-					);
-
-					if (result > 0) {
-						_state.begin += result;
-						_state.total_written += result;
-					} else {
-						_state.good = false;
-						_state.total_written = result;
-					}
-				}
-			}
-
-			template <class Entity, class Path>
-			void leave(Entity& entity) const {
-				//std::cerr << "l:" << moneta::traits::get_entity_name<Entity>() << std::endl;
+	namespace handlers {
+		template <class Codec>
+		struct enter : moneta::algorithm::traverse_enter {
+			template <class Path, class Entity, class State>
+			void operator()(Entity& entity, State& state) const {
+				attempt_enter<Codec, Path>(entity, state);
 			}
 		};
 
+		template <class Codec>
+		struct member : moneta::algorithm::traverse_member {
+			template <class Path, class Member, class Entity, class State>
+			void operator()(Entity& entity, State& state) const {
+				if (state.good) {
+					int result = member_encoder<Codec, Member, Path>()(
+						entity, state.begin, state.end
+					);
+
+					if (result > 0) {
+						state.begin += result;
+						state.total_written += result;
+					} else {
+						state.good = false;
+						state.total_written = result;
+					}
+				}
+			}
+		};
+
+		template <class Codec>
+		struct leave : moneta::algorithm::traverse_leave {
+			template <class Path, class Entity, class State>
+			void operator()(Entity& entity, State& state) const {
+				attempt_leave<Codec, Path>(entity, state);
+			}
+		};
 	}
 
 	template <class Codec, class Entity, class Enable = void>
 	struct entity_encoder {
 		template <class Entity, class Iterator>
 		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
-			typedef detail::default_entity_encoder<Codec, Iterator> encoder_type;
-			encoder_type::state state(begin, end);
-			moneta::algorithm::for_each_member(entity, encoder_type(state));
+			encoder_state<Iterator> state(begin, end);
+
+			moneta::algorithm::traverse<
+				boost::mpl::vector3<
+					handlers::enter<Codec>,
+					handlers::member<Codec>,
+					handlers::leave<Codec>
+				>
+			>(entity, state);
+
 			return state.total_written;
 		}
 	};
@@ -112,5 +143,4 @@ namespace moneta { namespace codec {
 	int encode(const Entity& entity, Iterator begin, Iterator end) {
 		return entity_encoder<Codec, Entity>()(entity, begin, end);
 	}
-
 }}
