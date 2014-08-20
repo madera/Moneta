@@ -7,7 +7,7 @@ namespace moneta { namespace traits {
 
 	template <class EntityType>
 	struct is_entity : boost::mpl::not_<
-		typename boost::is_same<typename members<EntityType>::type, boost::false_type>
+		boost::is_same<typename members<EntityType>::type, boost::false_type>
 	> {};
 
 }}

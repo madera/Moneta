@@ -20,15 +20,15 @@ static Composite make_composite() {
 	return composite;
 }
 
-BOOST_AUTO_TEST_CASE(xml_encoder_test_1) {
+BOOST_AUTO_TEST_CASE(shell_encoder_test_1) {
 	const Composite composite = make_composite();
 	
 	char buffer[1024];
 	memset(buffer, 0, sizeof(buffer));
 
-std::cerr << std::endl;
+	std::cerr << std::endl;
 
-	moneta::codec::encode<moneta::codec::xml>(composite, buffer, buffer + sizeof(buffer));
+	moneta::codec::encode<moneta::codec::shell>(composite, buffer, buffer + sizeof(buffer));
 
-	//BOOST_CHECK_EQUAL(line, "{Identifier=2600 Person={ID=123 Name=Somedude Height=1.5 Fingers=10} Dog={Owner=Someowner ID=555 Name=Doggy}}");
+	//"{Identifier=2600 Person={ID=123 Name=Somedude Height=1.5 Fingers=10} Dog={Owner=Someowner ID=555 Name=Doggy}}"
 }
