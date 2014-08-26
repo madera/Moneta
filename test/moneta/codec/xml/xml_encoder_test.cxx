@@ -10,6 +10,10 @@
 MONETA_XML_ATTIBUTE(Composite, MONETA_MEMBER(Composite, int, Identifier))
 MONETA_XML_ATTIBUTE(Person, MONETA_MEMBER(Person, int, ID))
 
+MONETA_XML_ATTIBUTE(Dog, MONETA_MEMBER(Dog, std::string, Owner))
+MONETA_XML_ATTIBUTE(Dog, MONETA_MEMBER(Dog, int        , ID   ))
+//MONETA_XML_ATTIBUTE(Dog, MONETA_MEMBER(Dog, std::string, Name ))
+
 static Composite make_composite() {
 	Composite composite;
 	composite.Identifier = 2600;
@@ -27,9 +31,7 @@ BOOST_AUTO_TEST_CASE(xml_encoder_test_1) {
 	const Composite composite = make_composite();
 	
 	char buffer[1024];
-	memset(buffer, 0, sizeof(buffer));
-
-std::cerr << std::endl;
+	std::fill(std::begin(buffer), std::end(buffer), 0x55);
 
 	moneta::codec::encode<moneta::codec::xml>(composite, buffer, buffer + sizeof(buffer));
 

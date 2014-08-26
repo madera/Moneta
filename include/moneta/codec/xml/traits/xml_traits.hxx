@@ -9,12 +9,20 @@ MONETA_DECLARE_TRAIT(xml_attribute)
 
 namespace moneta { namespace codec { namespace detail {
 
+	template <class Member>
+	struct is_xml_attribute : traits::detail::xml_attribute<Member> {};
+
+	template <class Member>
+	struct is_xml_element : boost::mpl::not_<traits::detail::xml_attribute<Member> > {};
+
+	//
+
 	template <class Entity>
-	struct has_xml_attribute : boost::mpl::not_<
+	struct has_xml_attributes : boost::mpl::not_<
 		boost::is_same<
 			typename boost::mpl::find_if<
 				typename traits::members<Entity>::type,
-				traits::detail::xml_attribute<boost::mpl::_1>
+				is_xml_attribute<boost::mpl::_1>
 			>::type,
 			typename boost::mpl::end<
 				typename traits::members<Entity>::type
@@ -22,23 +30,65 @@ namespace moneta { namespace codec { namespace detail {
 		>
 	> {};
 
+	template <class Entity>
+	struct xml_attribute_members : boost::mpl::copy_if<
+		typename traits::members<Entity>::type,
+		is_xml_attribute<boost::mpl::_1>,
+		boost::mpl::back_inserter<boost::mpl::vector0<> >
+	> {};
+
 	template <class Member>
-	struct is_first_xml_attribute : boost::mpl::if_<
-		traits::detail::xml_attribute<typename Member>,
-		boost::true_type,
-		boost::false_type
+	struct is_first_xml_attribute_member : boost::is_same<
+		typename boost::mpl::front<
+			typename xml_attribute_members<typename Member::class_type>::type
+		>::type,
+		Member
+	> {};
+
+	template <class Member>
+	struct is_last_xml_attribute_member : boost::is_same<
+		typename boost::mpl::back<
+			typename xml_attribute_members<typename Member::class_type>::type
+		>::type,
+		Member
+	> {};
+
+	//
+
+	template <class Entity>
+	struct has_xml_elements : boost::mpl::not_<
+		boost::is_same<
+			typename boost::mpl::find_if<
+				typename traits::members<Entity>::type,
+				is_xml_element<boost::mpl::_1>
+			>::type,
+			typename boost::mpl::end<
+				typename traits::members<Entity>::type
+			>::type
+		>
 	> {};
 
 	template <class Entity>
-	struct is_last_xml_attribute {
-	};
+	struct xml_element_members : boost::mpl::copy_if<
+		typename traits::members<Entity>::type,
+		is_xml_element<boost::mpl::_1>,
+		boost::mpl::back_inserter<boost::mpl::vector0<> >
+	> {};
 
-	template <class Entity>
-	struct is_first_xml_element {
-	};
+	template <class Member>
+	struct is_first_xml_element_member : boost::is_same<
+		typename boost::mpl::front<
+			typename xml_element_members<typename Member::class_type>::type
+		>::type,
+		Member
+	> {};
 
-	template <class Entity>
-	struct is_last_xml_element {
-	};
+	template <class Member>
+	struct is_last_xml_element_member : boost::is_same<
+		typename boost::mpl::back<
+			typename xml_element_members<typename Member::class_type>::type
+		>::type,
+		Member
+	> {};
 
 }}}

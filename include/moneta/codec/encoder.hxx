@@ -29,10 +29,11 @@ namespace moneta { namespace codec {
 	struct encoder_state {
 		typedef Iterator iterator_type;
 
+		bool good;
+		size_t total_written;
+
 		Iterator& begin;
 		Iterator& end;
-		size_t total_written;
-		bool good;
 
 		encoder_state(Iterator& begin_, Iterator& end_)
 		 : begin(begin_), end(end_), total_written(0), good(true) {

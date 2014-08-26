@@ -1,141 +1,242 @@
 #pragma once
 #include "../encoder.hxx"
+#include "../codec_io.hxx"
 #include "traits/xml_traits.hxx"
-
-template <int Size> struct tabs;
-template <> struct tabs<0> { static char* get() { return ""; } };
-template <> struct tabs<1> { static char* get() { return "\t"; } };
-template <> struct tabs<2> { static char* get() { return "\t\t"; } };
-template <> struct tabs<3> { static char* get() { return "\t\t\t"; } };
-template <> struct tabs<4> { static char* get() { return "\t\t\t\t"; } };
-
-template <class Member>
-struct get_class {
-	typedef typename Member::class_type type;
-};
 
 namespace moneta { namespace codec {
 
  	struct xml;
 
 	namespace detail {
-		template <class Entity>
-		typename boost::enable_if<has_xml_attribute<Entity> >::type
-		close_previous_tag() {
-			std::cerr << '>' << std::endl;
-		}
+
+		// XXX: This is a serious candidate for a library facility.
+		//
+		//	Motivation: encoding members should be fairly common.
+		//
+		template <class Entity, class Iterator>
+		struct encode_attribute_kv {
+
+			struct state {
+				const Entity& entity;
+
+				Iterator begin;
+				Iterator end;
+
+				size_t total_written;
+				bool good;
+
+				state(const Entity& entity_, Iterator begin_, Iterator end_)
+				 : entity(entity_), begin(begin_), end(end_), total_written(0), good(true) {}
+			};	
+
+			state& _state;
+
+			encode_attribute_kv(state& state)
+			 : _state(state) {}
+
+			template <class Member>
+			void operator()(Member&) const {
+				if (_state.good) {
+					std::ostringstream oss;
+					oss << Member()(_state.entity);
+					const std::string XXX_hack = oss.str();
+
+					int result = moneta::codec::detail::make_ostringstream(_state.begin, _state.end)
+						<< ' ' << traits::detail::member_name<Member>::get()
+						<< "=\"" << XXX_hack << '"' // XXX
+					;
+
+					if (result > 0) {
+						_state.begin += result;
+						_state.total_written += result;
+					} else  if (result < 0) {
+						_state.good = false;
+						_state.total_written = result;
+					}
+				}
+			}
+		};
 
 		template <class Entity>
-		typename boost::disable_if<has_xml_attribute<Entity> >::type
-		close_previous_tag() {
-		}
+		struct attribute_encoder {
+			const Entity& _entity;
 
-		template <class Path>
-		typename boost::enable_if<boost::mpl::empty<Path> >::type
-		before_enter() {
-		}
+			attribute_encoder(const Entity& entity)
+			 : _entity(entity) {}
 
-		template <class Path>
-		typename boost::disable_if<boost::mpl::empty<Path> >::type
-		before_enter() {
-			close_previous_tag<typename get_class<typename boost::mpl::back<Path>::type>::type>();
-		}
+			template <class Iterator>
+			int operator()(Iterator begin, Iterator end) const {
+				encode_attribute_kv<Entity, Iterator>::state state(_entity, begin, end);
+
+				boost::mpl::for_each<
+					typename detail::xml_attribute_members<Entity>::type
+				>(encode_attribute_kv<Entity, Iterator>(state));
+
+				return state.total_written;
+			}
+		};
 	}
 
-// 	namespace detail {
-// 		template <class Entity>
-// 		typename boost::enable_if<has_xml_attribute<Entity> >::type
-// 		close_previous_tag() {
-// 			std::cerr << '>' << std::endl;
-// 		}
-// 
-// 		template <class Entity>
-// 		typename boost::disable_if<has_xml_attribute<Entity> >::type
-// 		close_previous_tag() {
-// 		}
-// 
-// 		template <class Path, class Entity>
-// 		typename boost::enable_if<boost::mpl::empty<Path> >::type
-// 		before_member() {
-// 		}
-// 
-// 		template <class Path, class Entity>
-// 		typename boost::disable_if<boost::mpl::empty<Path> >::type
-// 		before_member() {
-// 			close_previous_tag<typename get_class<typename boost::mpl::back<Path>::type>::type>();
-// 		}
-// 	}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//
+// enter
+//
+//	has_xml_attributes	has_xml_elements	output
+//	
+//		0			0		<element />
+//		0			1		<element>
+//		1			0		<element a0="v0" a1="v1" />
+//		1			1		<element a0="v0" a1="v1">
+//
 
 	template <class Path, class Entity>
-	struct enter_entity<xml, Path, Entity, typename boost::enable_if<detail::has_xml_attribute<Entity> >::type > {
+	struct enter_entity<xml, Path, Entity, typename boost::enable_if<
+		boost::mpl::and_<
+			boost::mpl::not_<detail::has_xml_attributes<Entity> >,
+			boost::mpl::not_<detail::has_xml_elements<Entity> >
+		>
+	>::type> {
 		template <class Iterator>
 		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
-			detail::before_enter<Path>();
-
-			std::cerr << tabs<boost::mpl::size<Path>::value>::get()
-				  << '<' << moneta::traits::get_entity_name<Entity>();
-			return 0;
+			return moneta::codec::detail::make_ostringstream(std::begin(buffer), std::end(buffer))
+				<< detail::tabs<boost::mpl::size<Path>::value>::get()
+				<< '<' << moneta::traits::get_entity_name<Entity>() << " />\n"
+			;
 		}
 	};
 
 	template <class Path, class Entity>
-	struct enter_entity<xml, Path, Entity, typename boost::disable_if<detail::has_xml_attribute<Entity> >::type > {
+	struct enter_entity<xml, Path, Entity, typename boost::enable_if<
+		boost::mpl::and_<
+			boost::mpl::not_<detail::has_xml_attributes<Entity> >,
+			detail::has_xml_elements<Entity>
+		>
+	>::type> {
 		template <class Iterator>
 		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
-			detail::before_enter<Path>();
-			
-			std::cerr << tabs<boost::mpl::size<Path>::value>::get()
-				  << '<' << moneta::traits::get_entity_name<Entity>() << '>' << std::endl;
-			return 0;
+			return moneta::codec::detail::make_ostringstream(begin, end)
+				<< detail::tabs<boost::mpl::size<Path>::value>::get()
+				<< '<' << moneta::traits::get_entity_name<Entity>() << ">\n"
+			;
 		}
 	};
 
-	//
+	template <class Path, class Entity>
+	struct enter_entity<xml, Path, Entity, typename boost::enable_if<
+		boost::mpl::and_<
+			detail::has_xml_attributes<Entity>,
+			boost::mpl::not_<detail::has_xml_elements<Entity> >
+		>
+	>::type> {
+		template <class Iterator>
+		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+			return moneta::codec::detail::make_ostringstream(begin, end)
+				<< detail::tabs<boost::mpl::size<Path>::value>::get()
+				<< '<' << moneta::traits::get_entity_name<Entity>()
+				<< detail::attribute_encoder<Entity>(entity)
+				<< " />\n"
+			;
+		}
+	};
+
+	template <class Path, class Entity>
+	struct enter_entity<xml, Path, Entity, typename boost::enable_if<
+		boost::mpl::and_<
+			detail::has_xml_attributes<Entity>,
+			detail::has_xml_elements<Entity>
+		>
+	>::type> {
+		template <class Iterator>
+		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+			return moneta::codec::detail::make_ostringstream(begin, end)
+				<< detail::tabs<boost::mpl::size<Path>::value>::get()
+				<< '<' << moneta::traits::get_entity_name<Entity>()
+				<< detail::attribute_encoder<Entity>(entity)
+				<< ">\n"
+			;
+		}
+	};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	template <class Member, class Path>
-	struct member_encoder<xml, Member, Path, typename boost::enable_if<traits::detail::xml_attribute<Member> >::type> {
+	struct member_encoder<xml, Member, Path, typename boost::enable_if<detail::is_xml_attribute<Member> >::type> {
 		template <class Entity, class Iterator>
 		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
-			std::cerr << ' ' << traits::detail::member_name<Member>::get()
-				  << "=\"" << Member()(entity) << "\"";
-			return 1;
+			// Nothing to do here. Attributes have been taken care of already.
+			return 1; // XXX
 		}
 	};
 
 	template <class Member, class Path>
-	struct member_encoder<xml, Member, Path, typename boost::disable_if<traits::detail::xml_attribute<Member> >::type> {
+	struct member_encoder<xml, Member, Path, typename boost::enable_if<detail::is_xml_element<Member> >::type> {
 		template <class Entity, class Iterator>
 		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
-			//detail::before_member<Path, typename Member::class_name>();
-			std::cerr << std::endl;
+			std::ostringstream oss;
+			oss << Member()(entity);
+			const std::string XXX_hack = oss.str();
 
-			std::cerr << tabs<boost::mpl::size<Path>::value + 1>::get()
-				  << '<' << traits::detail::member_name<Member>::get() << '>'
-				  << Member()(entity)
-				  << "</" << traits::detail::member_name<Member>::get() << '>';
-			return 1;
+			return moneta::codec::detail::make_ostringstream(begin, end)
+				<< '<' << traits::detail::member_name<Member>::get() << '>'
+				<< XXX_hack // XXX
+				<< "</" << traits::detail::member_name<Member>::get() << '>'
+				<< '\n'
+			;
 		}
 	};
 
-	//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//
+// leave
+//
+//	has_xml_attributes	has_xml_elements	output
+//	
+//		0			0		(nothing)
+//		0			1		</element>
+//		1			0		(nothing)
+//		1			1		</element>
+//
 
 	template <class Path, class Entity>
-	struct leave_entity<xml, Path, Entity, typename boost::enable_if<detail::has_xml_attribute<Entity> >::type> {
+	struct leave_entity<xml, Path, Entity, typename boost::enable_if<
+		boost::mpl::or_<
+			boost::mpl::and_<
+				boost::mpl::not_<detail::has_xml_attributes<Entity> >,
+				boost::mpl::not_<detail::has_xml_elements<Entity> >
+			>,
+			boost::mpl::and_<
+				detail::has_xml_attributes<Entity>,
+				boost::mpl::not_<detail::has_xml_elements<Entity> >
+			>
+		>
+	>::type> {
 		template <class Iterator>
 		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
-			std::cerr << '\n' << tabs<boost::mpl::size<Path>::value>::get()
-				  << "</" << moneta::traits::get_entity_name<Entity>() << '>' << std::endl;
-			return 0;
+			return 1; // XXX
 		}
 	};
 
 	template <class Path, class Entity>
-	struct leave_entity<xml, Path, Entity, typename boost::disable_if<detail::has_xml_attribute<Entity> >::type> {
+	struct leave_entity<xml, Path, Entity, typename boost::enable_if<
+		boost::mpl::or_<
+			boost::mpl::and_<
+				boost::mpl::not_<detail::has_xml_attributes<Entity> >,
+				detail::has_xml_elements<Entity>
+			>,
+			boost::mpl::and_<
+				detail::has_xml_attributes<Entity>,
+				detail::has_xml_elements<Entity>
+			>
+		>
+	>::type> {
 		template <class Iterator>
 		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
-			std::cerr << tabs<boost::mpl::size<Path>::value>::get()
-				  << "</" << moneta::traits::get_entity_name<Entity>() << '>' << std::endl;
-			return 0;
+			return moneta::codec::detail::make_ostringstream(begin, end)
+				<< detail::tabs<boost::mpl::size<Path>::value>::get()
+				<< "</" << moneta::traits::get_entity_name<Entity>() << ">\n"
+			;
 		}
 	};
 

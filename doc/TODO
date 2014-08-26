@@ -27,6 +27,7 @@ TODO:
 	* Reimplement for_each_member using traverse(), which does the job nicely.
 	* Implement traverse() without state explicitly.
 	* Implement traverse() with tag dispatching algorithms instead of a big traits class.
+	* Eliminate Iterator& on codec code.
 
 Current Stack:
 

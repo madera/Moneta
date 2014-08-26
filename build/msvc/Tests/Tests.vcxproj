@@ -129,6 +129,7 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\algorithm\for_each_member_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\algorithm\traverse_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\codec\codec_io_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\codec\decoder_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\codec\encoder_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\codec\multi_decoder_test.cxx" />
