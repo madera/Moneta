@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <moneta/codec/encoder.hxx>
 #include <moneta/serialization/detail/hexdump.hxx>
+#include "../model/tree/A.hxx"
 #include "../model/simple/ThreeInts.hxx"
 #include "../model/simple/Arithmetics.hxx"
 #include "../model/Cat.hxx"
@@ -198,7 +199,7 @@ namespace moneta { namespace codec {
 			}
 
 			std::cerr << "--> " << typeid(T).name() << std::endl;
-			*begin = 'V';
+			*begin = 'v';
 			return 1;
 		}
 	};
@@ -207,7 +208,7 @@ namespace moneta { namespace codec {
 	struct member_encoder<entity_encoder_test_codec, Member, Path> {
 		template <class Entity, class Iterator>
 		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
-			*begin = '#';
+			*begin = 'm';
 			return 1;
 		}
 	};
@@ -229,8 +230,12 @@ namespace moneta { namespace codec {
 	struct enter_entity<entity_encoder_test_codec, Path, Entity> {
 		template <class Iterator>
 		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
-			std::cerr << "Entering: " << moneta::traits::get_entity_name<Entity>() << std::endl;
-			return 0;
+			if (begin == end) {
+				return -1;
+			}
+
+			*begin = 'E';
+			return 1;
 		}
 	};
 
@@ -238,48 +243,41 @@ namespace moneta { namespace codec {
 	struct leave_entity<entity_encoder_test_codec, Path, Entity> {
 		template <class Iterator>
 		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
-			std::cerr << "Leaving: " << moneta::traits::get_entity_name<Entity>() << std::endl;
-			return 0;
+			if (begin == end) {
+				return -1;
+			}
+
+			*begin = 'L';
+			return 1;
 		}
 	};
 
 }}
 
 BOOST_AUTO_TEST_CASE(entity_encoder_test) {
-	const char expected[] = "Bool: A\nChar: A\nShort: A\nInt: i\nLong: A\n";
-	const size_t expected_size = sizeof(expected) - 1; // nul
-
-	char buffer[expected_size];
+	char buffer[1024];
 	std::fill(buffer, buffer + sizeof(buffer), 0);
 
 	const int result = moneta::codec::encode<moneta::codec::entity_encoder_test_codec>(
 		Cat(), buffer, buffer + sizeof(buffer)
 	);
 
-	//BOOST_CHECK_EQUAL(result, expected_size);
+	const std::string expected = "EmmEmmmLL";
 
-	//BOOST_CHECK_EQUAL_COLLECTIONS(buffer, buffer + sizeof(buffer), expected, expected + expected_size);
+	BOOST_CHECK_EQUAL(result, expected.size());
+	BOOST_CHECK_EQUAL(expected, buffer);
 }
 
-
 BOOST_AUTO_TEST_CASE(simple_traversal_encoder_test2) {
-	const size_t member_count =
-		boost::mpl::size<typename moneta::traits::members<Cat    >::type>::value -1 +
-		boost::mpl::size<typename moneta::traits::members<Address>::type>::value
-	;
-
-	char buffer[member_count];
+	char buffer[1024];
 	std::fill(buffer, buffer + sizeof(buffer), 0);
 
 	const int result = moneta::codec::encode<moneta::codec::entity_encoder_test_codec>(
-		Cat(), buffer, buffer + sizeof(buffer)
+		A(), buffer, buffer + sizeof(buffer)
 	);
 
-	int x = 0;
+	const std::string expected = "EmmEEmmLmEmEmmLLLmL";
 
-
-	//BOOST_CHECK_EQUAL(result, member_count);
-
-	//const std::string expected = "iSiiS";
-	//BOOST_CHECK_EQUAL_COLLECTIONS(buffer, buffer + sizeof(buffer), expected.begin(), expected.end());
+	BOOST_CHECK_EQUAL(result, expected.size());
+	BOOST_CHECK_EQUAL(expected, buffer);
 }

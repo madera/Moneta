@@ -28,6 +28,7 @@ TODO:
 	* Implement traverse() without state explicitly.
 	* Implement traverse() with tag dispatching algorithms instead of a big traits class.
 	* Eliminate Iterator& on codec code.
+	* Move big_entity_test.cxx somewhere out of the model definitions.
 
 Current Stack:
 

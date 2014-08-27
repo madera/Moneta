@@ -115,6 +115,9 @@
     <Filter Include="Source Files\moneta\codec\xml">
       <UniqueIdentifier>{061b3157-a25a-4fa6-aa3a-cfbde92cda83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\model\tree">
+      <UniqueIdentifier>{e0c1ea01-6bae-4662-a5a1-44149043120f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -189,8 +192,8 @@
     <ClInclude Include="..\..\..\include\moneta\codec\rawbin.hxx">
       <Filter>Source Files\moneta\codec</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\moneta\model\LettersTree.hxx">
-      <Filter>Header Files\moneta\model</Filter>
+    <ClInclude Include="..\..\..\test\moneta\model\tree\A.hxx">
+      <Filter>Header Files\moneta\model\tree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

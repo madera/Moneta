@@ -97,7 +97,6 @@
     <ClInclude Include="..\..\..\test\moneta\hexdump.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Cat.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\CatDataset.hxx" />
-    <ClInclude Include="..\..\..\test\moneta\model\LettersTree.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Lizard.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Composite.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Dog.hxx" />
@@ -111,6 +110,7 @@
     <ClInclude Include="..\..\..\test\moneta\model\simple\ThreeInts.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\simple\TwoInts.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\test_dataset.hxx" />
+    <ClInclude Include="..\..\..\test\moneta\model\tree\A.hxx" />
     <ClInclude Include="..\..\..\test\moneta\pp\detail\includer_test_header.hxx" />
     <ClInclude Include="..\..\..\test\moneta\serialization\soci\detail\soci_fixture.hxx" />
     <ClInclude Include="stdafx.h" />

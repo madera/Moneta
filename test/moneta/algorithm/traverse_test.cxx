@@ -3,7 +3,7 @@
 #include <moneta/codec/debug_dump/stringize_path.hxx>
 #include <iostream>
 #include "../model/Cat.hxx"
-#include "../model/LettersTree.hxx"
+#include "../model/tree/A.hxx"
 
 struct test_state {
 	std::vector<std::string> lines;

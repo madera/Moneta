@@ -3,7 +3,7 @@
 #include "../../model/Person.hxx"
 #include "../../model/Dog.hxx"
 #include "../../model/Composite.hxx"
-#include "../../model/LettersTree.hxx"
+#include "../../model/tree/A.hxx"
 
 #include <moneta/serialization/detail/hexdump.hxx>
 #include <moneta/serialization/iostream.hxx>
@@ -13,7 +13,6 @@ MONETA_XML_ATTIBUTE(Person, MONETA_MEMBER(Person, int, ID))
 
 MONETA_XML_ATTIBUTE(Dog, MONETA_MEMBER(Dog, std::string, Owner))
 MONETA_XML_ATTIBUTE(Dog, MONETA_MEMBER(Dog, int        , ID   ))
-//MONETA_XML_ATTIBUTE(Dog, MONETA_MEMBER(Dog, std::string, Name ))
 
 static Composite make_composite() {
 	Composite composite;
@@ -28,7 +27,7 @@ static Composite make_composite() {
 	return composite;
 }
 
-BOOST_AUTO_TEST_CASE(xml_encoder_test_1) {
+BOOST_AUTO_TEST_CASE(composite_encode_xml_encoder_test) {
 	static const std::string expected =
 		"<Composite Identifier=\"2600\">\n"
 		"\t<Person ID=\"123\">\n"
@@ -61,7 +60,7 @@ MONETA_XML_ATTIBUTE(E, MONETA_MEMBER(D, int, l))
 MONETA_XML_ATTIBUTE(E, MONETA_MEMBER(E, int, m))
 MONETA_XML_ATTIBUTE(E, MONETA_MEMBER(E, int, n))
 
-BOOST_AUTO_TEST_CASE(xml_traits_test_TEMPORARY) {
+BOOST_AUTO_TEST_CASE(tree_encode_xml_encoder_test) {
 	static const std::string expected =
 		"<A f=\"0\" g=\"0\" h=\"0\">\n"
 		"\t<B>\n"

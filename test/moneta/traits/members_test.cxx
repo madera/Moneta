@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "../model/Person.hxx"
-#include "../model/LettersTree.hxx"
+#include "../model/tree/A.hxx"
 #include <boost/mpl/at.hpp>
 
 #include <boost/mpl/print.hpp>

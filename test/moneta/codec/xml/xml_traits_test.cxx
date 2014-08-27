@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include <moneta/codec/xml/xml_encoder.hxx>
-#include "../../model/LettersTree.hxx"
+#include "../../model/tree/A.hxx"
 
 // Test tree:
 //
