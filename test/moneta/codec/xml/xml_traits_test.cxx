@@ -24,8 +24,6 @@ MONETA_XML_ATTIBUTE(E, MONETA_MEMBER(D, int, l))
 MONETA_XML_ATTIBUTE(E, MONETA_MEMBER(E, int, m))
 MONETA_XML_ATTIBUTE(E, MONETA_MEMBER(E, int, n))
 
-#include <boost/mpl/print.hpp>
-
 static void static_test() {
 	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_xml_attribute<MONETA_MEMBER(A, int, f)>));
 	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_xml_attribute<MONETA_MEMBER(A, int, g)>));
@@ -77,11 +75,4 @@ static void static_test() {
 
 	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_last_xml_element_member<MONETA_MEMBER(C, int, j)>));
 	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_last_xml_element_member<MONETA_MEMBER(C, int, k)>));
-}
-
-BOOST_AUTO_TEST_CASE(xml_traits_test_TEMPORARY) {
-	char buffer[256];
-	std::fill(std::begin(buffer), std::end(buffer), 0x55);
-
-	moneta::codec::encode<moneta::codec::xml>(A(), std::begin(buffer), std::end(buffer));
 }

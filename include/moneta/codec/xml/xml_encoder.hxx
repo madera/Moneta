@@ -37,13 +37,9 @@ namespace moneta { namespace codec {
 			template <class Member>
 			void operator()(Member&) const {
 				if (_state.good) {
-					std::ostringstream oss;
-					oss << Member()(_state.entity);
-					const std::string XXX_hack = oss.str();
-
 					int result = moneta::codec::detail::make_ostringstream(_state.begin, _state.end)
 						<< ' ' << traits::detail::member_name<Member>::get()
-						<< "=\"" << XXX_hack << '"' // XXX
+						<< "=\"" << Member()(_state.entity) << '"'
 					;
 
 					if (result > 0) {
@@ -98,7 +94,7 @@ namespace moneta { namespace codec {
 		>
 	>::type> {
 		template <class Iterator>
-		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			return moneta::codec::detail::make_ostringstream(std::begin(buffer), std::end(buffer))
 				<< detail::tabs<boost::mpl::size<Path>::value>::get()
 				<< '<' << moneta::traits::get_entity_name<Entity>() << " />\n"
@@ -114,7 +110,7 @@ namespace moneta { namespace codec {
 		>
 	>::type> {
 		template <class Iterator>
-		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			return moneta::codec::detail::make_ostringstream(begin, end)
 				<< detail::tabs<boost::mpl::size<Path>::value>::get()
 				<< '<' << moneta::traits::get_entity_name<Entity>() << ">\n"
@@ -130,7 +126,7 @@ namespace moneta { namespace codec {
 		>
 	>::type> {
 		template <class Iterator>
-		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			return moneta::codec::detail::make_ostringstream(begin, end)
 				<< detail::tabs<boost::mpl::size<Path>::value>::get()
 				<< '<' << moneta::traits::get_entity_name<Entity>()
@@ -148,7 +144,7 @@ namespace moneta { namespace codec {
 		>
 	>::type> {
 		template <class Iterator>
-		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			return moneta::codec::detail::make_ostringstream(begin, end)
 				<< detail::tabs<boost::mpl::size<Path>::value>::get()
 				<< '<' << moneta::traits::get_entity_name<Entity>()
@@ -163,23 +159,20 @@ namespace moneta { namespace codec {
 	template <class Member, class Path>
 	struct member_encoder<xml, Member, Path, typename boost::enable_if<detail::is_xml_attribute<Member> >::type> {
 		template <class Entity, class Iterator>
-		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			// Nothing to do here. Attributes have been taken care of already.
-			return 1; // XXX
+			return 0;
 		}
 	};
 
 	template <class Member, class Path>
 	struct member_encoder<xml, Member, Path, typename boost::enable_if<detail::is_xml_element<Member> >::type> {
 		template <class Entity, class Iterator>
-		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
-			std::ostringstream oss;
-			oss << Member()(entity);
-			const std::string XXX_hack = oss.str();
-
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			return moneta::codec::detail::make_ostringstream(begin, end)
+				<< detail::tabs<boost::mpl::size<Path>::value + 1>::get()
 				<< '<' << traits::detail::member_name<Member>::get() << '>'
-				<< XXX_hack // XXX
+				<< Member()(entity)
 				<< "</" << traits::detail::member_name<Member>::get() << '>'
 				<< '\n'
 			;
@@ -213,8 +206,8 @@ namespace moneta { namespace codec {
 		>
 	>::type> {
 		template <class Iterator>
-		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
-			return 1; // XXX
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
+			return 0;
 		}
 	};
 
@@ -232,7 +225,7 @@ namespace moneta { namespace codec {
 		>
 	>::type> {
 		template <class Iterator>
-		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			return moneta::codec::detail::make_ostringstream(begin, end)
 				<< detail::tabs<boost::mpl::size<Path>::value>::get()
 				<< "</" << moneta::traits::get_entity_name<Entity>() << ">\n"

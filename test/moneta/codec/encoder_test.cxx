@@ -123,7 +123,7 @@ namespace moneta { namespace codec {
 	template <class Member, class Path>
 	struct member_encoder<named_test_codec, Member, Path> {
 		template <class Entity, class Iterator>
-		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			typedef typename Member::result_type value_type;
 
 			Iterator itr = begin;
@@ -192,7 +192,7 @@ namespace moneta { namespace codec {
 		>::type
 	> {
 		template <class Iterator>
-		int operator()(const T& value, Iterator& begin, Iterator& end) const {
+		int operator()(const T& value, Iterator begin, Iterator end) const {
 			if (begin == end) {
 				return -1;
 			}
@@ -206,7 +206,7 @@ namespace moneta { namespace codec {
 	template <class Member, class Path>
 	struct member_encoder<entity_encoder_test_codec, Member, Path> {
 		template <class Entity, class Iterator>
-		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			*begin = '#';
 			return 1;
 		}
@@ -215,7 +215,7 @@ namespace moneta { namespace codec {
 	template <class T>
 	struct value_encoder<entity_encoder_test_codec, T> {
 		template <class Iterator>
-		int operator()(const T& value, Iterator& begin, Iterator& end) const {
+		int operator()(const T& value, Iterator begin, Iterator end) const {
 			if (begin == end) {
 				return -1;
 			}
@@ -228,7 +228,7 @@ namespace moneta { namespace codec {
 	template <class Path, class Entity>
 	struct enter_entity<entity_encoder_test_codec, Path, Entity> {
 		template <class Iterator>
-		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			std::cerr << "Entering: " << moneta::traits::get_entity_name<Entity>() << std::endl;
 			return 0;
 		}
@@ -237,7 +237,7 @@ namespace moneta { namespace codec {
 	template <class Path, class Entity>
 	struct leave_entity<entity_encoder_test_codec, Path, Entity> {
 		template <class Iterator>
-		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			std::cerr << "Leaving: " << moneta::traits::get_entity_name<Entity>() << std::endl;
 			return 0;
 		}

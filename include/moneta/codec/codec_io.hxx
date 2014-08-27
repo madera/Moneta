@@ -1,6 +1,6 @@
 #pragma once
-//#include "../traits/detail/is_functor_callable.hxx"
 #include <boost/function.hpp>
+#include <boost/lexical_cast.hpp>
 
 namespace moneta { namespace codec {
 
@@ -67,6 +67,7 @@ namespace moneta { namespace codec {
 					if (result > 0) {
 						_begin += result;
 						_total_written += result;
+					} else if (result == 0) {
 					} else if (result < 0) {
 						_good = false;
 						_total_written = result;
@@ -84,6 +85,7 @@ namespace moneta { namespace codec {
 					if (result > 0) {
 						_begin += result;
 						_total_written += result;
+					} else if (result == 0) {
 					} else if (result < 0) {
 						_good = false;
 						_total_written = result;
@@ -113,12 +115,20 @@ namespace moneta { namespace codec {
 					if (result > 0) {
 						_begin += result;
 						_total_written += result;
+					} else if (result == 0) {
 					} else if (result < 0) {
 						_good = false;
 						_total_written = result;
 					}
 				}
 
+				return *this;
+			}
+
+			template <class T>
+			typename boost::enable_if<boost::is_pod<T>, this_type&>::type
+			operator<<(const T& value) {
+				*this << boost::lexical_cast<std::string>(value);
 				return *this;
 			}
 

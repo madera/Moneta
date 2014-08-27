@@ -16,7 +16,7 @@ namespace moneta { namespace codec {
 	template <class Path, class Entity>
 	struct enter_entity<shell, Path, Entity> {
 		template <class Iterator>
-		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			std::cerr << moneta::traits::get_entity_name<Entity>() << "={";
 			return 0;
 		}
@@ -25,7 +25,7 @@ namespace moneta { namespace codec {
 	template <class Member, class Path>
 	struct member_encoder<shell, Member, Path> {
 		template <class Entity, class Iterator>
-		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			std::cerr << ' ' << traits::detail::member_name<Member>::get() << "=\"" << Member()(entity) << "\"";
 			return 1;
 		}
@@ -36,7 +36,7 @@ namespace moneta { namespace codec {
 	template <class Path, class Entity>
 	struct leave_entity<shell, Path, Entity> {
 		template <class Iterator>
-		int operator()(const Entity& entity, Iterator& begin, Iterator& end) const {
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			std::cerr << '}' << std::endl;
 			return 0;
 		}
