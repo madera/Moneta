@@ -22,12 +22,6 @@
     <Filter Include="Header Files\externals\sqlite3">
       <UniqueIdentifier>{1b0a044b-c424-4f38-8d0c-fa8db2f69bef}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\3rdparty">
-      <UniqueIdentifier>{023af1f2-4b9a-4c91-9eff-4533ab6d83ec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\3rdparty\sqlite3">
-      <UniqueIdentifier>{5abbe6a5-a714-4063-bea0-28fb91e0b518}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\moneta">
       <UniqueIdentifier>{12b19f94-f5ee-4956-a824-009142ce7815}</UniqueIdentifier>
     </Filter>
@@ -121,6 +115,12 @@
     <Filter Include="Source Files\moneta\lexical\detail">
       <UniqueIdentifier>{dfd96934-b491-4c82-9832-84977cb77640}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\3rd-party">
+      <UniqueIdentifier>{023af1f2-4b9a-4c91-9eff-4533ab6d83ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3rd-party\sqlite3">
+      <UniqueIdentifier>{5abbe6a5-a714-4063-bea0-28fb91e0b518}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -202,9 +202,6 @@
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\3rdparty\sqlite3\src\sqlite3.c">
-      <Filter>Source Files\3rdparty\sqlite3</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\interactive_shell_test.cxx">
       <Filter>Source Files\moneta</Filter>
@@ -406,6 +403,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\lexical\detail\from_text_impl_test.cxx">
       <Filter>Source Files\moneta\lexical\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\3rd-party\sqlite3\src\sqlite3.c">
+      <Filter>Source Files\3rd-party\sqlite3</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

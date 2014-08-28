@@ -1,4 +1,5 @@
 TODO:
+	* Move 3rd-party into the test directory. It's the only code using it.
 	* Check for proper const and non const ties, tuples et al.
 	* Refactor eager templates in favor of transform_view and other lazy elements.
 	* Refactor sepacons in favor of standard fusion fused.
