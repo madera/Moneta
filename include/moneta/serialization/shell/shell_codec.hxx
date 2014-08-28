@@ -1,7 +1,7 @@
 #pragma once
 #include <boost/format.hpp>
 #include <boost/fusion/include/at_c.hpp>
-#include "../detail/from_text_impl.hxx"
+#include "../../lexical/detail/from_text_impl.hxx"
 #include "../../traits/member_names.hxx"
 #include "../../traits/is_entity.hxx"
 #include "../../make_entity.hxx"
@@ -110,12 +110,12 @@ namespace moneta { namespace serialization { namespace shell {
 		// Encoder
 		//
 
-		template <class EntityType, class OstreamType = std::basic_ostream<char> >
+		template <class Entity, class OstreamType = std::basic_ostream<char> >
 		class member_ostreamer {
-			const EntityType& _entity;
+			const Entity& _entity;
 			OstreamType& _output;
 		public:
-			member_ostreamer(const EntityType& entity, OstreamType& output = std::cout)
+			member_ostreamer(const Entity& entity, OstreamType& output = std::cout)
 				: _entity(entity), _output(output) {
 			}
 
@@ -133,7 +133,7 @@ namespace moneta { namespace serialization { namespace shell {
 				const char* format_string = (!has_brackets && has_spaces)? "%s='%s'" : "%s=%s";
 				_output << boost::format(format_string) % k % v;
 
-				typedef typename traits::members<EntityType>::type members;
+				typedef typename traits::members<Entity>::type members;
 				const bool last_member = boost::is_same<
 					Member,
 					typename boost::mpl::at<
@@ -151,37 +151,37 @@ namespace moneta { namespace serialization { namespace shell {
 			}
 		};
 
-		template <class EntityType, class Enable = void>
+		template <class Entity, class Enable = void>
 		struct textonator;
 
-		template <class NonEntityType>
+		template <class NonEntity>
 		struct textonator<
-			NonEntityType,
+			NonEntity,
 			typename boost::enable_if<
-				boost::mpl::not_<traits::is_entity<NonEntityType> >
+				boost::mpl::not_<traits::is_entity<NonEntity> >
 			>::type
 		> {
-			const std::string operator()(const NonEntityType& value) {
+			const std::string operator()(const NonEntity& value) {
 				// FIXME: This is awful... we should use our own serializer.
 				// TODO: Rethink IO strategy.
 				return boost::lexical_cast<std::string>(value);
 			}
 		};
 
-		template<class EntityType>
+		template<class Entity>
 		struct textonator<
-			EntityType,
+			Entity,
 			typename boost::enable_if<
-				traits::is_entity<EntityType>
+				traits::is_entity<Entity>
 			>::type
 		> {
-			const std::string operator()(const EntityType& entity) {
+			const std::string operator()(const Entity& entity) {
 				std::ostringstream oss;
 				oss << '{';
 
 				boost::mpl::for_each<
-					traits::members<EntityType>
-				>(member_ostreamer<EntityType, std::ostringstream>(entity, oss));
+					traits::members<Entity>
+				>(member_ostreamer<Entity, std::ostringstream>(entity, oss));
 
 				oss << '}';
 				return oss.str();
@@ -195,28 +195,28 @@ namespace moneta { namespace serialization { namespace shell {
 
 	} // namespace detail
 
-	template <class EntityType>
-	EntityType from_kv(std::map<std::string, std::string>& kv, EntityType& result = make_entity<EntityType>()) {
-		serialization::detail::from_text_impl<EntityType> text_assigner;
+	template <class Entity>
+	Entity from_kv(std::map<std::string, std::string>& kv, Entity& result = make_entity<Entity>()) {
+		serialization::detail::from_text_impl<Entity> text_assigner;
 		for (const auto& pair : kv) {
 			const std::string& key = pair.first;
 			const std::string& value = pair.second;
 
-			const size_t index = moneta::traits::get_member_name_index<EntityType>(key.c_str());
+			const size_t index = moneta::traits::get_member_name_index<Entity>(key.c_str());
 			text_assigner(result, index, value);
 		}
 
 		return result;
 	}
 
-	template <class EntityType>
-	EntityType from_line(const std::string& line, EntityType& result = make_entity<EntityType>()) {
-		return from_kv<EntityType>(detail::line_to_kv(line), result);
+	template <class Entity>
+	Entity from_line(const std::string& line, Entity& result = make_entity<Entity>()) {
+		return from_kv<Entity>(detail::line_to_kv(line), result);
 	}
 
-	template <typename EntityType>
-	const std::string to_line(const EntityType& entity) {
-		return detail::textonator<EntityType>()(entity);
+	template <typename Entity>
+	const std::string to_line(const Entity& entity) {
+		return detail::textonator<Entity>()(entity);
 	}
 
 }}}

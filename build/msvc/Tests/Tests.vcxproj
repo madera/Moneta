@@ -146,6 +146,8 @@
     <ClCompile Include="..\..\..\test\moneta\container\rcontext_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\container\rtuple_set_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\interactive_shell_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\lexical\detail\from_text_impl_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\lexical\set_value_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\make_entity_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\model\big_entity_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\pp\detail\cat_include_name_test.cxx" />
@@ -155,7 +157,6 @@
     <ClCompile Include="..\..\..\test\moneta\pp\pp_test.cxx">
       <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\serialization\detail\from_text_impl_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\iostream_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\shell\shell_codec_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\serialization\soci\detail\soci_fixture.cxx" />

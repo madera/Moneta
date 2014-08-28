@@ -89,6 +89,12 @@
     <Filter Include="Header Files\moneta\codec\xml\traits">
       <UniqueIdentifier>{8a462cf0-3b4a-49b4-95d0-eeaeb0086d81}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\lexical">
+      <UniqueIdentifier>{0877b019-7531-4ffc-b941-8f2966c2514f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\moneta\lexical\detail">
+      <UniqueIdentifier>{8bff35f2-4a7b-47f4-bcac-d4753a447225}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\moneta\traits\to_tie.hxx">
@@ -165,9 +171,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\serialization\shell\shell_codec.hxx">
       <Filter>Header Files\moneta\serialization\shell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\serialization\detail\from_text_impl.hxx">
-      <Filter>Header Files\moneta\serialization\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_opfx.hxx">
       <Filter>Header Files\moneta\traits\detail</Filter>
@@ -363,6 +366,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\codec\xml\traits\xml_traits.hxx">
       <Filter>Header Files\moneta\codec\xml\traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\lexical\set_value.hxx">
+      <Filter>Header Files\moneta\lexical</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\lexical\detail\from_text_impl.hxx">
+      <Filter>Header Files\moneta\lexical\detail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

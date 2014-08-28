@@ -34,7 +34,7 @@ namespace moneta { namespace serialization { namespace detail {
 		}
 	};
 
-	// TODO: Loop automatically here.
+	// XXX: Loop automatically here.
 	PP_DEFINE_IMPL(1)
 	PP_DEFINE_IMPL(2)
 	PP_DEFINE_IMPL(3)

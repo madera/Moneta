@@ -1,6 +1,8 @@
 #pragma once
 #include <boost/mpl/at.hpp>
 
+// XXX: Boost.PPize this.
+
 namespace moneta { namespace traits { namespace detail {
 
 	template <class R, class MemPtrs, class ClassType, int Size>

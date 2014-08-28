@@ -82,9 +82,6 @@
     <Filter Include="Source Files\moneta\serialization">
       <UniqueIdentifier>{b0507f1e-f61f-42bd-8ff2-80a79ea1cf01}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\moneta\serialization\detail">
-      <UniqueIdentifier>{a749a435-60b6-40f4-b0e1-59b6d0c859e2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\moneta\serialization\shell">
       <UniqueIdentifier>{7f1aa187-06c2-43ca-b725-df33acb3ced4}</UniqueIdentifier>
     </Filter>
@@ -117,6 +114,12 @@
     </Filter>
     <Filter Include="Header Files\moneta\model\tree">
       <UniqueIdentifier>{e0c1ea01-6bae-4662-a5a1-44149043120f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moneta\lexical">
+      <UniqueIdentifier>{f60c41ef-594f-4f7e-921a-7fb0c2f8ee4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moneta\lexical\detail">
+      <UniqueIdentifier>{dfd96934-b491-4c82-9832-84977cb77640}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -253,9 +256,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\sql\generators\delete_test.cxx">
       <Filter>Source Files\moneta\sql\generators</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\serialization\detail\from_text_impl_test.cxx">
-      <Filter>Source Files\moneta\serialization\detail</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\serialization\shell\shell_codec_test.cxx">
       <Filter>Source Files\moneta\serialization\shell</Filter>
@@ -400,6 +400,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\codec\codec_io_test.cxx">
       <Filter>Source Files\moneta\codec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\lexical\set_value_test.cxx">
+      <Filter>Source Files\moneta\lexical</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\lexical\detail\from_text_impl_test.cxx">
+      <Filter>Source Files\moneta\lexical\detail</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

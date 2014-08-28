@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <moneta/serialization/detail/from_text_impl.hxx>
+#include <moneta/lexical/detail/from_text_impl.hxx>
 #include <boost/test/floating_point_comparison.hpp>
 
 #include "../../model/Person.hxx"
