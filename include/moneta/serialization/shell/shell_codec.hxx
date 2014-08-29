@@ -106,93 +106,6 @@ namespace moneta { namespace serialization { namespace shell {
 			return result;
 		}
 
-		//
-		// Encoder
-		//
-
-		template <class Entity, class OstreamType = std::basic_ostream<char> >
-		class member_ostreamer {
-			const Entity& _entity;
-			OstreamType& _output;
-		public:
-			member_ostreamer(const Entity& entity, OstreamType& output = std::cout)
-				: _entity(entity), _output(output) {
-			}
-
-			template <typename Member>
-			void operator()(Member member) const {
-				// XXX: Port to codec spec...
-				auto memptr = Member::get();
-
-				const std::string k = traits::detail::member_name<Member>::get();
-				const std::string v = textonize(memptr, _entity);
-				
-				const bool has_spaces = (v.find(' ') != std::string::npos);
-				const bool has_brackets = !v.empty() && v[0] == '{';
-
-				const char* format_string = (!has_brackets && has_spaces)? "%s='%s'" : "%s=%s";
-				_output << boost::format(format_string) % k % v;
-
-				typedef typename traits::members<Entity>::type members;
-				const bool last_member = boost::is_same<
-					Member,
-					typename boost::mpl::at<
-						members,
-						boost::mpl::minus<
-							boost::mpl::size<members>,
-							boost::mpl::int_<1>
-						>
-					>::type
-				>::value;
-
-				if (!last_member) {
-					_output << ' ';
-				}
-			}
-		}; 
-
-		template <class Entity, class Enable = void>
-		struct textonator;
-
-		template <class NonEntity>
-		struct textonator<
-			NonEntity,
-			typename boost::enable_if<
-				boost::mpl::not_<traits::is_entity<NonEntity> >
-			>::type
-		> {
-			const std::string operator()(const NonEntity& value) {
-				// FIXME: This is awful... we should use our own serializer.
-				// TODO: Rethink IO strategy.
-				return boost::lexical_cast<std::string>(value);
-			}
-		};
-
-		template<class Entity>
-		struct textonator<
-			Entity,
-			typename boost::enable_if<
-				traits::is_entity<Entity>
-			>::type
-		> {
-			const std::string operator()(const Entity& entity) {
-				std::ostringstream oss;
-				oss << '{';
-
-				boost::mpl::for_each<
-					traits::members<Entity>
-				>(member_ostreamer<Entity, std::ostringstream>(entity, oss));
-
-				oss << '}';
-				return oss.str();
-			}
-		};
-
-		template <typename T, class K>
-		const std::string textonize(T K::* memptr, const K& x) {
-			return textonator<T>()(x.*memptr);
-		}
-
 		template <class Entity>
 		Entity from_kv(std::map<std::string, std::string>& kv, Entity& result = make_entity<Entity>()) {
 			serialization::detail::from_text_impl<Entity> text_assigner;
@@ -212,11 +125,6 @@ namespace moneta { namespace serialization { namespace shell {
 	template <class Entity>
 	Entity from_line(const std::string& line, Entity& result = make_entity<Entity>()) {
 		return detail::from_kv<Entity>(detail::line_to_kv(line), result);
-	}
-
-	template <typename Entity>
-	const std::string to_line(const Entity& entity) {
-		return detail::textonator<Entity>()(entity);
 	}
 
 }}}

@@ -87,7 +87,7 @@ namespace moneta { namespace codec {
 //
 
 	template <class Path, class Entity>
-	struct enter_entity<xml, Path, Entity, typename boost::enable_if<
+	struct enter_entity_encoder<xml, Path, Entity, typename boost::enable_if<
 		boost::mpl::and_<
 			boost::mpl::not_<detail::has_xml_attributes<Entity> >,
 			boost::mpl::not_<detail::has_xml_elements<Entity> >
@@ -103,7 +103,7 @@ namespace moneta { namespace codec {
 	};
 
 	template <class Path, class Entity>
-	struct enter_entity<xml, Path, Entity, typename boost::enable_if<
+	struct enter_entity_encoder<xml, Path, Entity, typename boost::enable_if<
 		boost::mpl::and_<
 			boost::mpl::not_<detail::has_xml_attributes<Entity> >,
 			detail::has_xml_elements<Entity>
@@ -119,7 +119,7 @@ namespace moneta { namespace codec {
 	};
 
 	template <class Path, class Entity>
-	struct enter_entity<xml, Path, Entity, typename boost::enable_if<
+	struct enter_entity_encoder<xml, Path, Entity, typename boost::enable_if<
 		boost::mpl::and_<
 			detail::has_xml_attributes<Entity>,
 			boost::mpl::not_<detail::has_xml_elements<Entity> >
@@ -137,7 +137,7 @@ namespace moneta { namespace codec {
 	};
 
 	template <class Path, class Entity>
-	struct enter_entity<xml, Path, Entity, typename boost::enable_if<
+	struct enter_entity_encoder<xml, Path, Entity, typename boost::enable_if<
 		boost::mpl::and_<
 			detail::has_xml_attributes<Entity>,
 			detail::has_xml_elements<Entity>
@@ -193,7 +193,7 @@ namespace moneta { namespace codec {
 //
 
 	template <class Path, class Entity>
-	struct leave_entity<xml, Path, Entity, typename boost::enable_if<
+	struct leave_entity_encoder<xml, Path, Entity, typename boost::enable_if<
 		boost::mpl::or_<
 			boost::mpl::and_<
 				boost::mpl::not_<detail::has_xml_attributes<Entity> >,
@@ -212,7 +212,7 @@ namespace moneta { namespace codec {
 	};
 
 	template <class Path, class Entity>
-	struct leave_entity<xml, Path, Entity, typename boost::enable_if<
+	struct leave_entity_encoder<xml, Path, Entity, typename boost::enable_if<
 		boost::mpl::or_<
 			boost::mpl::and_<
 				boost::mpl::not_<detail::has_xml_attributes<Entity> >,

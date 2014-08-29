@@ -5,7 +5,7 @@
 namespace moneta { namespace codec {
 
 	template <class Codec, class Path, class Entity, class Enable = void>
-	struct enter_entity {};
+	struct enter_entity_encoder {};
 
 	template <class Codec, class Member, class Path, class Enable = void>
 	struct member_encoder {
@@ -21,7 +21,7 @@ namespace moneta { namespace codec {
 	struct value_encoder;
 
 	template <class Codec, class Path, class Entity, class Enable = void>
-	struct leave_entity {};
+	struct leave_entity_encoder {};
 
 	//
 
@@ -45,19 +45,19 @@ namespace moneta { namespace codec {
 	template <class Codec, class Path, class Entity, class State>
 	typename boost::enable_if<
 		traits::detail::is_functor_callable<
-			enter_entity<Codec, Path, Entity>,
+			enter_entity_encoder<Codec, Path, Entity>,
 			void(Entity, typename State::iterator_type, typename State::iterator_type)
 		>,
 		int
 	>::type
 	attempt_enter(Entity& entity, State& state) {
-		return enter_entity<Codec, Path, Entity>()(entity, state.begin, state.end);
+		return enter_entity_encoder<Codec, Path, Entity>()(entity, state.begin, state.end);
 	}
 
 	template <class Codec, class Path, class Entity, class State>
 	typename boost::disable_if<
 		traits::detail::is_functor_callable<
-			enter_entity<Codec, Path, Entity>,
+			enter_entity_encoder<Codec, Path, Entity>,
 			void(Entity, typename State::iterator_type, typename State::iterator_type)
 		>,
 		int
@@ -69,19 +69,19 @@ namespace moneta { namespace codec {
 	template <class Codec, class Path, class Entity, class State>
 	typename boost::enable_if<
 		traits::detail::is_functor_callable<
-			leave_entity<Codec, Path, Entity>,
+			leave_entity_encoder<Codec, Path, Entity>,
 			void(Entity, typename State::iterator_type, typename State::iterator_type)
 		>,
 		int
 	>::type
 	attempt_leave(Entity& entity, State& state) {
-		return leave_entity<Codec, Path, Entity>()(entity, state.begin, state.end);
+		return leave_entity_encoder<Codec, Path, Entity>()(entity, state.begin, state.end);
 	}
 
 	template <class Codec, class Path, class Entity, class State>
 	typename boost::disable_if<
 		traits::detail::is_functor_callable<
-			leave_entity<Codec, Path, Entity>,
+			leave_entity_encoder<Codec, Path, Entity>,
 			void(Entity, typename State::iterator_type, typename State::iterator_type)
 		>,
 		int

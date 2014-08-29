@@ -227,7 +227,7 @@ namespace moneta { namespace codec {
 	};
 
 	template <class Path, class Entity>
-	struct enter_entity<entity_encoder_test_codec, Path, Entity> {
+	struct enter_entity_encoder<entity_encoder_test_codec, Path, Entity> {
 		template <class Iterator>
 		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			if (begin == end) {
@@ -240,7 +240,7 @@ namespace moneta { namespace codec {
 	};
 
 	template <class Path, class Entity>
-	struct leave_entity<entity_encoder_test_codec, Path, Entity> {
+	struct leave_entity_encoder<entity_encoder_test_codec, Path, Entity> {
 		template <class Iterator>
 		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			if (begin == end) {

@@ -7,7 +7,7 @@ namespace moneta { namespace codec {
  	struct shell;
 
 	template <class Path, class Entity>
-	struct enter_entity<shell, Path, Entity, typename boost::enable_if<
+	struct enter_entity_encoder<shell, Path, Entity, typename boost::enable_if<
 		boost::mpl::empty<Path>
 	>::type> {
 		template <class Iterator>
@@ -19,7 +19,7 @@ namespace moneta { namespace codec {
 	};
 
 	template <class Path, class Entity>
-	struct enter_entity<shell, Path, Entity, typename boost::disable_if<
+	struct enter_entity_encoder<shell, Path, Entity, typename boost::disable_if<
 		boost::mpl::empty<Path>
 	>::type> {
 		template <class Iterator>
@@ -59,7 +59,7 @@ namespace moneta { namespace codec {
 	//
 
 	template <class Path, class Entity>
-	struct leave_entity<shell, Path, Entity> {
+	struct leave_entity_encoder<shell, Path, Entity> {
 		template <class Iterator>
 		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			return moneta::codec::detail::make_ostringstream(begin, end)
