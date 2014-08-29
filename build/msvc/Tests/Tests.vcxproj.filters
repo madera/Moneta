@@ -257,9 +257,6 @@
     <ClCompile Include="..\..\..\test\moneta\serialization\shell\shell_codec_test.cxx">
       <Filter>Source Files\moneta\serialization\shell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\serialization\iostream_test.cxx">
-      <Filter>Source Files\moneta\serialization</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\tie_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>

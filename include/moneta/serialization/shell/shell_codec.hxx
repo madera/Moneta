@@ -149,7 +149,7 @@ namespace moneta { namespace serialization { namespace shell {
 					_output << ' ';
 				}
 			}
-		};
+		}; 
 
 		template <class Entity, class Enable = void>
 		struct textonator;

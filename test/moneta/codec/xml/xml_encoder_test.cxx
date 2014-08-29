@@ -4,9 +4,7 @@
 #include "../../model/Dog.hxx"
 #include "../../model/Composite.hxx"
 #include "../../model/tree/A.hxx"
-
 #include <moneta/serialization/detail/hexdump.hxx>
-#include <moneta/serialization/iostream.hxx>
 
 MONETA_XML_ATTIBUTE(Composite, MONETA_MEMBER(Composite, int, Identifier))
 MONETA_XML_ATTIBUTE(Person, MONETA_MEMBER(Person, int, ID))
