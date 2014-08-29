@@ -1,11 +1,12 @@
 TODO:
-	* Move 3rd-party into the test directory. It's the only code using it.
+	* Move 3rd-party into the test directory. It's the only code using it. Maybe move it to externals.
+	  Also, externals is a good candidate for a rename into external for GitHub's linguist.
 	* Check for proper const and non const ties, tuples et al.
 	* Refactor eager templates in favor of transform_view and other lazy elements.
-	* Refactor sepacons in favor of standard fusion fused.
-	* On MSVC, definition macros are making Intellisense nauseous.
-	* Rethink strategy about to_rtuple functions. Maybe on to_tie variants should exist.
 	* Refactor to get more out of the mpl.
+	* Refactor sepacons in favor of standard fusion fused.
+	* On MSVC, definition macros are making Intellisense nauseous. UPDATE: Do we still need these?
+	* Rethink strategy about to_rtuple functions. Maybe on to_tie variants should exist.
 	* Add support for multiple index specifications on meta_set components.
 	* Create more meta_set tests. Elaborate and stress.
 	* Optimize find by member.
@@ -14,8 +15,7 @@ TODO:
 	* Move has_member_trait.hxx to a proper place.
 	* Rethink about test entity names and using their traits in naming. It's a mess right now.
 	* Check const correctness on Codec API.
-	* Either all EntityType or all Entity.
-	* for_each_member should not be in codec.
+	* Either all EntityType or all Entity. UPDATE: Continue renaming EntityType to Entity.
 	* Add support for no-Path-needed for_each_member loops. No penalty should be induced for unused features.
 	  Currently only callables with a default nullptr Path parameter are supported.
 	* Remove static from headers in favor of unnamed namespaces.

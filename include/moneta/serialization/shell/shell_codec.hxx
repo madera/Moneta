@@ -193,25 +193,25 @@ namespace moneta { namespace serialization { namespace shell {
 			return textonator<T>()(x.*memptr);
 		}
 
+		template <class Entity>
+		Entity from_kv(std::map<std::string, std::string>& kv, Entity& result = make_entity<Entity>()) {
+			serialization::detail::from_text_impl<Entity> text_assigner;
+			for (const auto& pair : kv) {
+				const std::string& key = pair.first;
+				const std::string& value = pair.second;
+
+				const size_t index = moneta::traits::get_member_name_index<Entity>(key.c_str());
+				text_assigner(result, index, value);
+			}
+
+			return result;
+		}
+
 	} // namespace detail
 
 	template <class Entity>
-	Entity from_kv(std::map<std::string, std::string>& kv, Entity& result = make_entity<Entity>()) {
-		serialization::detail::from_text_impl<Entity> text_assigner;
-		for (const auto& pair : kv) {
-			const std::string& key = pair.first;
-			const std::string& value = pair.second;
-
-			const size_t index = moneta::traits::get_member_name_index<Entity>(key.c_str());
-			text_assigner(result, index, value);
-		}
-
-		return result;
-	}
-
-	template <class Entity>
 	Entity from_line(const std::string& line, Entity& result = make_entity<Entity>()) {
-		return from_kv<Entity>(detail::line_to_kv(line), result);
+		return detail::from_kv<Entity>(detail::line_to_kv(line), result);
 	}
 
 	template <typename Entity>

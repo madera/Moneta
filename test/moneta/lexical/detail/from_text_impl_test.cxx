@@ -5,6 +5,8 @@
 #include "../../model/Person.hxx"
 #include "../../model/Dog.hxx"
 
+// XXX: This should be more thoroughly tested.
+
 BOOST_AUTO_TEST_CASE(from_text_impl_test) {
 	moneta::serialization::detail::from_text_impl<Person> text_assigner;
 
