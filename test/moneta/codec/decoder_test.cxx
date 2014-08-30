@@ -120,13 +120,10 @@ namespace moneta { namespace codec {
 
 	struct named_test_codec;
 
-	template <class Member>
-	struct member_decoder<named_test_codec, Member> {
-		typedef typename Member::class_type entity_type;
-		typedef typename Member::result_type value_type;
-
-		template <class Iterator>
-		int operator()(entity_type& entity, Member member, Iterator begin, Iterator end) const {
+	template <class Member, class Path>
+	struct member_decoder<named_test_codec, Member, Path> {
+		template <class Entity, class Iterator>
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
 			++member_decoder_hits;
 			return 1;
 		}
