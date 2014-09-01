@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_CASE(traversal_decoder_test) {
 		boost::mpl::size<typename moneta::traits::members<CascadedInts>::type>::value - 2 +
 		boost::mpl::size<typename moneta::traits::members<TwoInts     >::type>::value     +
 		boost::mpl::size<typename moneta::traits::members<FourInts    >::type>::value
-		;
+	;
 
 	char buffer[member_count] = {
 		0x22, 0x22, 0x44, 0x44, 0x44, 0x44

@@ -1,6 +1,5 @@
 // TODO: Boost.PP this file.
 #pragma once
-#include "../../traits/detail/limits.hxx"
 #include "../../traits/members.hxx"
 #include <boost/lexical_cast.hpp>
 #include <boost/mpl/size.hpp>

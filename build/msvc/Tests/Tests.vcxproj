@@ -147,6 +147,7 @@
     <ClCompile Include="..\..\..\test\moneta\container\rtuple_set_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\interactive_shell_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\lexical\detail\from_text_impl_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\lexical\dispatch_member_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\lexical\set_value_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\make_entity_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\model\big_entity_test.cxx" />

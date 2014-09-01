@@ -95,6 +95,9 @@
     <Filter Include="Header Files\moneta\lexical\detail">
       <UniqueIdentifier>{8bff35f2-4a7b-47f4-bcac-d4753a447225}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\limits">
+      <UniqueIdentifier>{227121be-5320-4309-b79d-3595365c6235}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\moneta\traits\to_tie.hxx">
@@ -372,6 +375,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\lexical\detail\from_text_impl.hxx">
       <Filter>Header Files\moneta\lexical\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\lexical\dispatch_member.hxx">
+      <Filter>Header Files\moneta\lexical</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\limits\member.hxx">
+      <Filter>Header Files\moneta\limits</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -18,45 +18,39 @@ static Composite make_composite() {
 	composite.Dog.Name = "Doggy";
 	return composite;
 }
-//
-//BOOST_AUTO_TEST_CASE(detail_special_split_test) {
-//	using moneta::serialization::shell::detail::special_split;
-//		
-//	{
-//		std::vector<std::string> v = special_split("{a=1 b=2 c=3}");
-//		BOOST_REQUIRE_EQUAL(v.size(), 3);
-//		BOOST_CHECK_EQUAL(v[0], "a=1");
-//		BOOST_CHECK_EQUAL(v[1], "b=2");
-//		BOOST_CHECK_EQUAL(v[2], "c=3");
-//	}
-//
-//	{
-//		std::vector<std::string> v = special_split("{x={a=1 b=2 c=3}}");
-//		BOOST_REQUIRE_EQUAL(v.size(), 1);
-//		BOOST_CHECK_EQUAL(v[0], "x={a=1 b=2 c=3}");
-//	}
-//
-//	{
-//		std::vector<std::string> v = special_split("{a=\"r s t\" b='t u v' c=\"{'a'}\"}");
-//		BOOST_REQUIRE_EQUAL(v.size(), 3);
-//		BOOST_CHECK_EQUAL(v[0], "a=r s t");
-//		BOOST_CHECK_EQUAL(v[1], "b=t u v");
-//		BOOST_CHECK_EQUAL(v[2], "c={'a'}");
-//	}
-//
-//	{
-//		std::vector<std::string> v = special_split("{Dog={Name='Sam Doe'}}");
-//		BOOST_REQUIRE_EQUAL(v.size(), 1);
-//		BOOST_CHECK_EQUAL(v[0], "Dog={Name='Sam Doe'}");
-//	}
-//}
-//
-//BOOST_AUTO_TEST_CASE(shell_codec_to_line_test) {
-//	const Composite composite = make_composite();
-//	const std::string line = moneta::serialization::shell::to_line(composite);
-//	BOOST_CHECK_EQUAL(line, "{Identifier=2600 Person={ID=123 Name=Somedude Height=1.5 Fingers=10} Dog={Owner=Someowner ID=555 Name=Doggy}}");
-//}
-//
+
+BOOST_AUTO_TEST_CASE(detail_special_split_test) {
+	using moneta::serialization::shell::detail::special_split;
+		
+	{
+		std::vector<std::string> v = special_split("{a=1 b=2 c=3}");
+		BOOST_REQUIRE_EQUAL(v.size(), 3);
+		BOOST_CHECK_EQUAL(v[0], "a=1");
+		BOOST_CHECK_EQUAL(v[1], "b=2");
+		BOOST_CHECK_EQUAL(v[2], "c=3");
+	}
+
+	{
+		std::vector<std::string> v = special_split("{x={a=1 b=2 c=3}}");
+		BOOST_REQUIRE_EQUAL(v.size(), 1);
+		BOOST_CHECK_EQUAL(v[0], "x={a=1 b=2 c=3}");
+	}
+
+	{
+		std::vector<std::string> v = special_split("{a=\"r s t\" b='t u v' c=\"{'a'}\"}");
+		BOOST_REQUIRE_EQUAL(v.size(), 3);
+		BOOST_CHECK_EQUAL(v[0], "a=r s t");
+		BOOST_CHECK_EQUAL(v[1], "b=t u v");
+		BOOST_CHECK_EQUAL(v[2], "c={'a'}");
+	}
+
+	{
+		std::vector<std::string> v = special_split("{Dog={Name='Sam Doe'}}");
+		BOOST_REQUIRE_EQUAL(v.size(), 1);
+		BOOST_CHECK_EQUAL(v[0], "Dog={Name='Sam Doe'}");
+	}
+}
+
 //BOOST_AUTO_TEST_CASE(shell_codec_from_line_test) {
 //	{
 //		const char* line = "{ID=1 Name=John Height=1.80 Fingers=10}";
@@ -87,9 +81,28 @@ static Composite make_composite() {
 //		BOOST_CHECK_EQUAL(composite.Dog.Owner, "Charlie Brown");
 //		BOOST_CHECK_EQUAL(composite.Dog.ID, 1);
 //		BOOST_CHECK_EQUAL(composite.Dog.Name, "Snoopy");
-//
-//		// Roundtrip
-//		const std::string serialized = moneta::serialization::shell::to_line(composite);
-//		BOOST_CHECK_EQUAL(serialized, line);
 //	}
 //}
+
+template <class Entity, int Size = boost::mpl::size<traits::members<Entity>::type>::value>
+struct set_value_impl;
+
+template <class Entity>
+struct set_value_impl<Entity, 0> {
+	template <class Entity>
+	void operator()(Entity& result, const size_t index, const std::string& value) const {
+	}
+};
+
+template <class Entity>
+struct set_value_impl<Entity, 1> {
+	template <class Entity>
+	void operator()(Entity& result, const size_t index, const std::string& value) const {
+		using boost::mpl::at_c;
+		if (false) {
+		} else if (index == 0) {
+			typedef typename at_c<typename traits::members<Entity>::type, n>::type member_type;
+			member_type()(result) = boost::lexical_cast<typename member_type::result_type>(value);
+		}
+	}
+};

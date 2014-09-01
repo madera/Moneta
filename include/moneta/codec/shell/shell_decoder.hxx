@@ -1,22 +1,20 @@
 #pragma once
 #include "../decoder.hxx"
+#include "../../serialization/shell/shell_codec.hxx"
 
 namespace moneta { namespace codec {
 
 	struct shell;
 
-	template <class T>
-	struct value_decoder<shell, T> {
-		template <class Iterator>
-		int operator()(T& target, Iterator begin, Iterator end) const {
-			int length = std::distance(begin, end);
-			if (length < sizeof(T)) {
-				return length - sizeof(T);
-			}
-
-			std::copy(begin, begin + sizeof(T), reinterpret_cast<char*>(&target));
-			return sizeof(T);
+	template <class Entity>
+	struct entity_decoder<shell, Entity> {
+		
+		template <class Entity, class Iterator>
+		int operator()(Entity& entity, Iterator begin, Iterator end) const {
+			entity = moneta::serialization::shell::from_line<Person>(std::string(begin, end));
+			return 1;
 		}
+
 	};
 
 }}

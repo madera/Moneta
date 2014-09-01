@@ -5,13 +5,11 @@
 
 namespace moneta { namespace codec {
 
+	template <class Codec, class Entity, class Enable = void>
+	struct entity_decoder;
+
 	template <class Codec, class Path, class Entity, class Enable = void>
 	struct enter_entity_decoder {};
-
-	// This as well:
-	//
-	//template <class Codec, class Entity, class Enable = void>
-	//struct entity_decoder;
 
 	template <class Codec, class Member, class Path, class Enable = void>
 	struct member_decoder {
@@ -183,7 +181,7 @@ namespace moneta { namespace codec {
 
 	}
 
-	template <class Codec, class Entity, class Enable = void>
+	template <class Codec, class Entity, class Enable>
 	struct entity_decoder {
 		template <class Entity, class Iterator>
 		int operator()(Entity& entity, Iterator begin, Iterator end) const {

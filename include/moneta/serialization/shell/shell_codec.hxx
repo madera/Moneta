@@ -1,3 +1,5 @@
+// XXX: Move this file into shell codec.
+
 #pragma once
 #include <boost/format.hpp>
 #include <boost/fusion/include/at_c.hpp>

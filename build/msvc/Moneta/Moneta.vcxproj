@@ -99,7 +99,9 @@
     <ClInclude Include="..\..\..\include\moneta\container\rcontext.hxx" />
     <ClInclude Include="..\..\..\include\moneta\container\rtuple_set.hxx" />
     <ClInclude Include="..\..\..\include\moneta\lexical\detail\from_text_impl.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\lexical\dispatch_member.hxx" />
     <ClInclude Include="..\..\..\include\moneta\lexical\set_value.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\limits\member.hxx" />
     <ClInclude Include="..\..\..\include\moneta\make_entity.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\apply_spec.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\core.hxx" />

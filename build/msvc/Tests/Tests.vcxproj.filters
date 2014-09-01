@@ -404,5 +404,8 @@
     <ClCompile Include="..\..\..\3rd-party\sqlite3\src\sqlite3.c">
       <Filter>Source Files\3rd-party\sqlite3</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\lexical\dispatch_member_test.cxx">
+      <Filter>Source Files\moneta\lexical</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
