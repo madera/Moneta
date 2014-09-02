@@ -144,8 +144,8 @@ namespace moneta { namespace codec {
 		
 		template <class Entity, class Iterator>
 		int operator()(Entity& entity, Iterator begin, Iterator end) const {
-			entity = shell_detail::from_line<Person>(std::string(begin, end));
-			return 1;
+			entity = shell_detail::from_line<Entity>(std::string(begin, end));
+			return end - begin; // XXX: FIXME: This is bad.
 		}
 
 	};
