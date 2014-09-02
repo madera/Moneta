@@ -98,6 +98,9 @@
     <Filter Include="Header Files\moneta\limits">
       <UniqueIdentifier>{227121be-5320-4309-b79d-3595365c6235}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\moneta\_aux">
+      <UniqueIdentifier>{6a4af094-5452-4ae6-a186-457ff0ef2c06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\moneta\traits\to_tie.hxx">
@@ -346,9 +349,6 @@
     <ClInclude Include="..\..\..\include\moneta\algorithm\for_each_member.hxx">
       <Filter>Header Files\moneta\algorithm</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\traits\detail\limits.hxx">
-      <Filter>Header Files\moneta\traits\detail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\codec\codec_io.hxx">
       <Filter>Header Files\moneta\codec</Filter>
     </ClInclude>
@@ -381,6 +381,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\limits\member.hxx">
       <Filter>Header Files\moneta\limits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\mplx.hxx">
+      <Filter>Header Files\moneta\traits\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\_aux\mplx_at_c.hxx">
+      <Filter>Header Files\moneta\_aux</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

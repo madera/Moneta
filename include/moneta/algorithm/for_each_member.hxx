@@ -97,11 +97,11 @@ namespace moneta { namespace algorithm {
 		};
 
 		template <class Entity, class Operation, class Path>
-		class member_operator_old {
+		class do_member_operator {
 			Entity& _entity;
 			Operation& _operation;
 		public:
-			member_operator_old(Entity& entity, Operation& operation)
+			do_member_operator(Entity& entity, Operation& operation)
 			 : _entity(entity), _operation(operation) {}
 
 			template <typename Member>
@@ -116,7 +116,7 @@ namespace moneta { namespace algorithm {
 
 			boost::mpl::for_each<
 				Members
-			>(detail::member_operator_old<Entity, Operation, Path>(entity, operation));
+			>(detail::do_member_operator<Entity, Operation, Path>(entity, operation));
 
 			call_leave_if_defined<Path>(operation, entity);
 		}

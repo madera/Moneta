@@ -83,26 +83,3 @@ BOOST_AUTO_TEST_CASE(detail_special_split_test) {
 //		BOOST_CHECK_EQUAL(composite.Dog.Name, "Snoopy");
 //	}
 //}
-
-template <class Entity, int Size = boost::mpl::size<traits::members<Entity>::type>::value>
-struct set_value_impl;
-
-template <class Entity>
-struct set_value_impl<Entity, 0> {
-	template <class Entity>
-	void operator()(Entity& result, const size_t index, const std::string& value) const {
-	}
-};
-
-template <class Entity>
-struct set_value_impl<Entity, 1> {
-	template <class Entity>
-	void operator()(Entity& result, const size_t index, const std::string& value) const {
-		using boost::mpl::at_c;
-		if (false) {
-		} else if (index == 0) {
-			typedef typename at_c<typename traits::members<Entity>::type, n>::type member_type;
-			member_type()(result) = boost::lexical_cast<typename member_type::result_type>(value);
-		}
-	}
-};

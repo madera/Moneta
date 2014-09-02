@@ -139,9 +139,9 @@
     <ClInclude Include="..\..\..\include\moneta\traits\detail\is_functor_callable.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\is_fusion_vector.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\is_unary_vector.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\traits\detail\limits.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\member_trait_base.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_constructor.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\mplx.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\pp\is_method_callable_spec.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\pure_type.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_opfx.hxx" />
@@ -170,6 +170,7 @@
     <ClInclude Include="..\..\..\include\moneta\traits\to_rtuple.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\to_tie.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\tuple.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\_aux\mplx_at_c.hxx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\doc\Codecs.md" />

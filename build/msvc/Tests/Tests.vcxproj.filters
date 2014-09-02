@@ -121,6 +121,9 @@
     <Filter Include="Source Files\3rd-party\sqlite3">
       <UniqueIdentifier>{5abbe6a5-a714-4063-bea0-28fb91e0b518}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\moneta\_aux">
+      <UniqueIdentifier>{63697ac1-53c3-4de1-8447-502529d98ef7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -406,6 +409,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\lexical\dispatch_member_test.cxx">
       <Filter>Source Files\moneta\lexical</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\_aux\mplx_at_c_test.cxx">
+      <Filter>Source Files\moneta\_aux</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
