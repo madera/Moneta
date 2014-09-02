@@ -98,7 +98,6 @@
     <ClInclude Include="..\..\..\include\moneta\container\meta_set.hxx" />
     <ClInclude Include="..\..\..\include\moneta\container\rcontext.hxx" />
     <ClInclude Include="..\..\..\include\moneta\container\rtuple_set.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\lexical\detail\from_text_impl.hxx" />
     <ClInclude Include="..\..\..\include\moneta\lexical\dispatch_member.hxx" />
     <ClInclude Include="..\..\..\include\moneta\lexical\set_value.hxx" />
     <ClInclude Include="..\..\..\include\moneta\limits\member.hxx" />
@@ -117,7 +116,6 @@
     <ClInclude Include="..\..\..\include\moneta\pp\specs\struct_spec.hxx" />
     <ClInclude Include="..\..\..\include\moneta\pp\sql_entity.hxx" />
     <ClInclude Include="..\..\..\include\moneta\serialization\detail\hexdump.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\serialization\shell\shell_codec.hxx" />
     <ClInclude Include="..\..\..\include\moneta\serialization\soci\detail\soci_includes.hxx" />
     <ClInclude Include="..\..\..\include\moneta\serialization\soci\detail\soci_xlate_read.hxx" />
     <ClInclude Include="..\..\..\include\moneta\serialization\soci\soci_count.hxx" />

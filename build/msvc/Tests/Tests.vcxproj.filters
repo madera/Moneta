@@ -76,9 +76,6 @@
     <Filter Include="Source Files\moneta\serialization">
       <UniqueIdentifier>{b0507f1e-f61f-42bd-8ff2-80a79ea1cf01}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\moneta\serialization\shell">
-      <UniqueIdentifier>{7f1aa187-06c2-43ca-b725-df33acb3ced4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\moneta\serialization\soci">
       <UniqueIdentifier>{fce37c24-b88a-463e-9c28-092980c716ad}</UniqueIdentifier>
     </Filter>
@@ -257,9 +254,6 @@
     <ClCompile Include="..\..\..\test\moneta\sql\generators\delete_test.cxx">
       <Filter>Source Files\moneta\sql\generators</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\serialization\shell\shell_codec_test.cxx">
-      <Filter>Source Files\moneta\serialization\shell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\traits\tie_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
@@ -400,9 +394,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\lexical\set_value_test.cxx">
       <Filter>Source Files\moneta\lexical</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\lexical\detail\from_text_impl_test.cxx">
-      <Filter>Source Files\moneta\lexical\detail</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\3rd-party\sqlite3\src\sqlite3.c">
       <Filter>Source Files\3rd-party\sqlite3</Filter>
