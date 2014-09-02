@@ -2,6 +2,7 @@
 #include <moneta/make_entity.hxx>
 #include <moneta/lexical/set_value.hxx>
 #include "../model/Person.hxx"
+#include "../model/Cat.hxx"
 
 BOOST_AUTO_TEST_CASE(set_value_by_name_test) {
 	Person person = moneta::make_entity<Person>();
@@ -41,18 +42,24 @@ BOOST_AUTO_TEST_CASE(set_value_by_ordinal_test) {
 	BOOST_CHECK_EQUAL(person.Fingers, 100);
 }
 
-BOOST_AUTO_TEST_CASE(set_value_by_member_test) {
-	Person person = moneta::make_entity<Person>();
-	BOOST_CHECK_EQUAL(person.Name, "");
-	BOOST_CHECK_EQUAL(person.Fingers, 0);
-	BOOST_CHECK_EQUAL(person.Height, 0.0);
+BOOST_AUTO_TEST_CASE(illegal_set_value_test) {
+	Cat cat = moneta::make_entity<Cat>();
 
-	moneta::lexical::set_value<MONETA_MEMBER(Person, std::string, Name)>(person, "Charlie Brown");
-	BOOST_CHECK_EQUAL(person.Name, "Charlie Brown");
+	moneta::lexical::set_value(cat, 0, "123");
+	BOOST_CHECK_EQUAL(cat.ID, 123);
 
-	moneta::lexical::set_value<MONETA_MEMBER(Person, double, Height)>(person, "1.80");
-	BOOST_CHECK_EQUAL(person.Height, 1.80);
+	moneta::lexical::set_value(cat, 1, "Garfield");
+	BOOST_CHECK_EQUAL(cat.Name, "Garfield");
 
-	moneta::lexical::set_value<MONETA_MEMBER(Person, int, Fingers)>(person, "10");
-	BOOST_CHECK_EQUAL(person.Fingers, 10);
+	/* Test set_value() on an Entity member */ {
+		int id = cat.Address.ID;
+		int number = cat.Address.Number;
+		std::string street = cat.Address.Street;
+
+		moneta::lexical::set_value(cat, 2, "Ignored");
+
+		BOOST_CHECK_EQUAL(cat.Address.ID, id);
+		BOOST_CHECK_EQUAL(cat.Address.Number, number);
+		BOOST_CHECK_EQUAL(cat.Address.Street, street);
+	}
 }

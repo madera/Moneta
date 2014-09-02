@@ -172,9 +172,6 @@
     <ClInclude Include="..\..\..\include\moneta\sql\generators\delete.hxx">
       <Filter>Header Files\moneta\sql\generators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\serialization\iostream.hxx">
-      <Filter>Header Files\moneta\serialization</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\serialization\shell\shell_codec.hxx">
       <Filter>Header Files\moneta\serialization\shell</Filter>
     </ClInclude>

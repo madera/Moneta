@@ -51,35 +51,35 @@ BOOST_AUTO_TEST_CASE(detail_special_split_test) {
 	}
 }
 
-//BOOST_AUTO_TEST_CASE(shell_codec_from_line_test) {
-//	{
-//		const char* line = "{ID=1 Name=John Height=1.80 Fingers=10}";
-//		const Person person = moneta::serialization::shell::from_line<Person>(line);
-//		BOOST_CHECK_EQUAL(person.ID, 1);
-//		BOOST_CHECK_EQUAL(person.Name, "John");
-//		BOOST_CHECK_EQUAL(person.Fingers, 10);
-//	}
-//
-//	{
-//		const char* line = "{Owner=Charlie ID=150 Name=Snoopy}";
-//		const Dog dog = moneta::serialization::shell::from_line<Dog>(line);
-//		BOOST_CHECK_EQUAL(dog.Owner, "Charlie");
-//		BOOST_CHECK_EQUAL(dog.ID, 150);
-//		BOOST_CHECK_EQUAL(dog.Name, "Snoopy");
-//	}
-//
-//	{
-//		const char* line = "{Identifier=2600 Person={ID=5 Name=John Height=1.8 Fingers=12} Dog={Owner='Charlie Brown' ID=1 Name=Snoopy}}";
-//		const Composite composite = moneta::serialization::shell::from_line<Composite>(line);
-//		BOOST_CHECK_EQUAL(composite.Identifier, 2600);
-//
-//		BOOST_CHECK_EQUAL(composite.Person.ID, 5);
-//		BOOST_CHECK_EQUAL(composite.Person.Name, "John");
-//		BOOST_CHECK_CLOSE(composite.Person.Height, 1.80, 0.1);
-//		BOOST_CHECK_EQUAL(composite.Person.Fingers, 12);
-//
-//		BOOST_CHECK_EQUAL(composite.Dog.Owner, "Charlie Brown");
-//		BOOST_CHECK_EQUAL(composite.Dog.ID, 1);
-//		BOOST_CHECK_EQUAL(composite.Dog.Name, "Snoopy");
-//	}
-//}
+BOOST_AUTO_TEST_CASE(shell_codec_from_line_test) {
+	{
+		const char* line = "{ID=1 Name=John Height=1.80 Fingers=10}";
+		const Person person = moneta::serialization::shell::from_line<Person>(line);
+		BOOST_CHECK_EQUAL(person.ID, 1);
+		BOOST_CHECK_EQUAL(person.Name, "John");
+		BOOST_CHECK_EQUAL(person.Fingers, 10);
+	}
+
+	//{
+	//	const char* line = "{Owner=Charlie ID=150 Name=Snoopy}";
+	//	const Dog dog = moneta::serialization::shell::from_line<Dog>(line);
+	//	BOOST_CHECK_EQUAL(dog.Owner, "Charlie");
+	//	BOOST_CHECK_EQUAL(dog.ID, 150);
+	//	BOOST_CHECK_EQUAL(dog.Name, "Snoopy");
+	//}
+
+	//{
+	//	const char* line = "{Identifier=2600 Person={ID=5 Name=John Height=1.8 Fingers=12} Dog={Owner='Charlie Brown' ID=1 Name=Snoopy}}";
+	//	const Composite composite = moneta::serialization::shell::from_line<Composite>(line);
+	//	BOOST_CHECK_EQUAL(composite.Identifier, 2600);
+
+	//	BOOST_CHECK_EQUAL(composite.Person.ID, 5);
+	//	BOOST_CHECK_EQUAL(composite.Person.Name, "John");
+	//	BOOST_CHECK_CLOSE(composite.Person.Height, 1.80, 0.1);
+	//	BOOST_CHECK_EQUAL(composite.Person.Fingers, 12);
+
+	//	BOOST_CHECK_EQUAL(composite.Dog.Owner, "Charlie Brown");
+	//	BOOST_CHECK_EQUAL(composite.Dog.ID, 1);
+	//	BOOST_CHECK_EQUAL(composite.Dog.Name, "Snoopy");
+	//}
+}

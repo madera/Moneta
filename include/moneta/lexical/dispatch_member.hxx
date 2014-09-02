@@ -11,4 +11,9 @@ namespace moneta { namespace lexical {
 		mplx::at_c<typename moneta::traits::members<Entity>::type>(ordinal, operation);
 	}
 
+	template <class Entity, class Operation>
+	void dispatch_member(const int ordinal, Operation& operation) {
+		mplx::at_c<typename moneta::traits::members<Entity>::type>(ordinal, operation);
+	}
+
 }}
