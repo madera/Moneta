@@ -23,32 +23,13 @@ BOOST_AUTO_TEST_CASE(set_value_by_name_test) {
 	BOOST_CHECK_EQUAL(person.Fingers, 100);
 }
 
-BOOST_AUTO_TEST_CASE(set_value_by_ordinal_test) {
-	Person person = moneta::make_entity<Person>();
-	BOOST_CHECK_EQUAL(person.Name, "");
-	BOOST_CHECK_EQUAL(person.Fingers, 0);
-	BOOST_CHECK_EQUAL(person.Height, 0.0);
-
-	moneta::lexical::set_value(person, 0, "123");
-	BOOST_CHECK_EQUAL(person.ID, 123);
-	
-	moneta::lexical::set_value(person, 1, "Somebody");
-	BOOST_CHECK_EQUAL(person.Name, "Somebody");
-	
-	moneta::lexical::set_value(person, 2, "1.80");
-	BOOST_CHECK_CLOSE(person.Height, 1.80, 0.1);
-
-	moneta::lexical::set_value(person, 3, "100");
-	BOOST_CHECK_EQUAL(person.Fingers, 100);
-}
-
 BOOST_AUTO_TEST_CASE(illegal_set_value_test) {
 	Cat cat = moneta::make_entity<Cat>();
 
-	moneta::lexical::set_value(cat, 0, "123");
+	moneta::lexical::set_value(cat, "ID", "123");
 	BOOST_CHECK_EQUAL(cat.ID, 123);
 
-	moneta::lexical::set_value(cat, 1, "Garfield");
+	moneta::lexical::set_value(cat, "Name", "Garfield");
 	BOOST_CHECK_EQUAL(cat.Name, "Garfield");
 
 	/* Test set_value() on an Entity member */ {
@@ -56,7 +37,7 @@ BOOST_AUTO_TEST_CASE(illegal_set_value_test) {
 		int number = cat.Address.Number;
 		std::string street = cat.Address.Street;
 
-		moneta::lexical::set_value(cat, 2, "Ignored");
+		moneta::lexical::set_value(cat, "Address", "Ignored");
 
 		BOOST_CHECK_EQUAL(cat.Address.ID, id);
 		BOOST_CHECK_EQUAL(cat.Address.Number, number);
