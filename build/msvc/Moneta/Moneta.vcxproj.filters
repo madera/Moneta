@@ -89,9 +89,6 @@
     <Filter Include="Header Files\moneta\lexical">
       <UniqueIdentifier>{0877b019-7531-4ffc-b941-8f2966c2514f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\moneta\lexical\detail">
-      <UniqueIdentifier>{8bff35f2-4a7b-47f4-bcac-d4753a447225}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\moneta\limits">
       <UniqueIdentifier>{227121be-5320-4309-b79d-3595365c6235}</UniqueIdentifier>
     </Filter>
@@ -375,6 +372,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\_aux\mplx_at_c.hxx">
       <Filter>Header Files\moneta\_aux</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\lexical\dispatch_entity.hxx">
+      <Filter>Header Files\moneta\lexical</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

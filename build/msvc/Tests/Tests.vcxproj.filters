@@ -109,9 +109,6 @@
     <Filter Include="Source Files\moneta\lexical">
       <UniqueIdentifier>{f60c41ef-594f-4f7e-921a-7fb0c2f8ee4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\moneta\lexical\detail">
-      <UniqueIdentifier>{dfd96934-b491-4c82-9832-84977cb77640}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\3rd-party">
       <UniqueIdentifier>{023af1f2-4b9a-4c91-9eff-4533ab6d83ec}</UniqueIdentifier>
     </Filter>
@@ -403,6 +400,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\test\moneta\_aux\mplx_at_c_test.cxx">
       <Filter>Source Files\moneta\_aux</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\lexical\dispatch_entity_test.cxx">
+      <Filter>Source Files\moneta\lexical</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

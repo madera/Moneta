@@ -1,5 +1,6 @@
 #pragma once
 #include "../decoder.hxx"
+#include "../../lexical/dispatch_entity.hxx"
 #include "../../lexical/dispatch_member.hxx"
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/trim.hpp>
@@ -134,7 +135,7 @@ namespace moneta { namespace codec {
 		Entity from_line(const std::string& line, Entity& result = make_entity<Entity>()) {
 			return from_kv<Entity>(line_to_kv(line), result);
 		}
-	
+
 	}
 
 	struct shell;
@@ -149,5 +150,52 @@ namespace moneta { namespace codec {
 		}
 
 	};
+
+	//
+	// TODO: Make this standard API. Everyone needs an unknown decoder!!
+	//
+
+	//
+	// From this point on: decode_unkwnown() logic.
+	//
+
+	namespace detail {
+	
+		template <class Codec, class Operation, class Iterator>
+		struct decoder_dispatcher {
+			Operation& _operation;
+			Iterator& _begin;
+			Iterator& _end;
+
+			decoder_dispatcher(Operation& operation, Iterator& begin, Iterator& end)
+			 : _operation(operation), _begin(begin), _end(end) {}
+
+			template <class Entity>
+			void operator()() const {
+				Entity entity;
+				const int result = moneta::codec::decode<Codec>(entity, _begin, _end);
+				// FIXME: What do we do with result? Check it better...
+				if (result > 0) {
+					_operation.operator()(entity);
+				}
+			}
+		};
+
+	}
+
+	template <class Codec, class Entities, class Operation, class Iterator>
+	void decode_unknown(Operation& operation, Iterator begin, Iterator end) {
+		Iterator pivot = std::find(begin, end, '=');
+		if (pivot == end) {
+			return;
+		}
+		
+		std::string key(begin, pivot);
+		boost::trim(key);
+
+		moneta::lexical::dispatch_entity<Entities>(
+			key, detail::decoder_dispatcher<Codec, Operation, Iterator>(operation, pivot + 1, end)
+		);
+	}
 
 }}

@@ -203,4 +203,5 @@ namespace moneta { namespace codec {
 	int decode(Entity& entity, Iterator begin, Iterator end) {
 		return entity_decoder<Codec, Entity>()(entity, begin, end);
 	}
+
 }}

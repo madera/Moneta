@@ -21,7 +21,7 @@ TODO:
 	* Remove static from headers in favor of unnamed namespaces.
 	* moneta::make_entity<>() fails with entities containing array types. Fix this!!
 	* Organize PP macros... it's a mess.
-	* Implement partial entity decoders which can decode after several buffer inputs. State information such as
+	* HOT! Implement partial entity decoders which can decode after several buffer inputs. State information such as
 	  path (or a hash of it) should be the key to decoding continuation.
 	* Consider using Boost ASIO's placeholders elegance for Path-enabled codecs and for_each/some_member traversals.
 	* Test and stress vector limits for entities with several members.
@@ -30,6 +30,10 @@ TODO:
 	* Implement traverse() with tag dispatching algorithms instead of a big traits class.
 	* Eliminate Iterator& on codec code.
 	* Move big_entity_test.cxx somewhere out of the model definitions.
+	* Check if metaprogramming loops are testing against a done flag to optimize exit.
+
+Codec:
+	* A visitor-based dispatcher seems appropriate. For now, only shell codec has it (with an initiator).
 
 Current Stack:
 
