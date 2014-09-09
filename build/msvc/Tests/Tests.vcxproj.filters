@@ -401,7 +401,10 @@
     <ClCompile Include="..\..\..\test\moneta\_aux\mplx_at_c_test.cxx">
       <Filter>Source Files\moneta\_aux</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\moneta\lexical\dispatch_entity_test.cxx">
+    <ClCompile Include="..\..\..\test\moneta\algorithm\dispatch_entity_test.cxx">
+      <Filter>Source Files\moneta\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\lexical\lexical_dispatch_entity_test.cxx">
       <Filter>Source Files\moneta\lexical</Filter>
     </ClCompile>
   </ItemGroup>

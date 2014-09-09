@@ -76,6 +76,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\moneta\algorithm\dispatch_entity.hxx" />
     <ClInclude Include="..\..\..\include\moneta\algorithm\for_each_member.hxx" />
     <ClInclude Include="..\..\..\include\moneta\algorithm\traverse.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\codec_io.hxx" />

@@ -373,6 +373,9 @@
     <ClInclude Include="..\..\..\include\moneta\_aux\mplx_at_c.hxx">
       <Filter>Header Files\moneta\_aux</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\algorithm\dispatch_entity.hxx">
+      <Filter>Header Files\moneta\algorithm</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\moneta\lexical\dispatch_entity.hxx">
       <Filter>Header Files\moneta\lexical</Filter>
     </ClInclude>

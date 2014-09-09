@@ -36,3 +36,10 @@ BOOST_AUTO_TEST_CASE(fixed_values_make_entity_test) {
 	BOOST_CHECK_EQUAL(entity.Two, 0x22);
 	BOOST_CHECK_EQUAL(entity.Three, 0);
 }
+
+BOOST_AUTO_TEST_CASE(const_make_entity_test) {
+	FixedThreeInts entity = moneta::make_entity<const FixedThreeInts>();
+	BOOST_CHECK_EQUAL(entity.One, 0x11);
+	BOOST_CHECK_EQUAL(entity.Two, 0x22);
+	BOOST_CHECK_EQUAL(entity.Three, 0);
+}

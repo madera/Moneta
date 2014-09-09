@@ -154,6 +154,8 @@ namespace moneta { namespace codec {
 	//
 	// TODO: Make this standard API. Everyone needs an unknown decoder!!
 	//
+	// Continue refactoring when XML decoder resumes development.
+	//
 
 	//
 	// From this point on: decode_unkwnown() logic.
@@ -172,7 +174,7 @@ namespace moneta { namespace codec {
 
 			template <class Entity>
 			void operator()() const {
-				Entity entity;
+				Entity entity = moneta::make_entity<Entity>();
 				const int result = moneta::codec::decode<Codec>(entity, _begin, _end);
 				// FIXME: What do we do with result? Check it better...
 				if (result > 0) {

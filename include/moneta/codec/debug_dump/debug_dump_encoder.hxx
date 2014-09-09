@@ -37,15 +37,24 @@ namespace moneta { namespace codec {
 		}
 	};
 
+	template <>
+	struct value_encoder<debug_dump, std::string> {
+		template <class Path, class Iterator>
+		int operator()(const std::string& value, Iterator begin, Iterator end, Path) const {
+			std::cerr << value << std::endl;
+			return 1;
+		}
+	};
+
 	template <class Member, class Path>
 	struct member_encoder<debug_dump, Member, Path> {
-		typedef typename Member::class_type entity_type;
-		typedef typename Member::result_type value_type;
+		template <class Entity, class Iterator>
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
+			std::cerr << boost::format("%|-20| %|-20|: ")
+				     % detail::stringize_path<Path>() % traits::detail::member_name<Member>::get();
 
-		template <class Iterator>
-		int operator()(const entity_type& entity, Member& member, Iterator begin, Iterator end) const {
-			std::cerr << boost::format("%|-20|: ") % traits::detail::member_name<Member>::get();
-			value_encoder<debug_dump, value_type>()(member(entity), 0, 0, Path());
+			value_encoder<debug_dump, typename Member::result_type>()(Member()(entity), 0, 0, Path());
+			
 			return 1;
 		}
 	};

@@ -27,16 +27,17 @@ namespace moneta {
 		return boost::fusion::transform(result, traits::detail::blanker());
 	}
 
-	template <class EntityType>
-	EntityType make_entity() {
-		EntityType result;
-		traits::to_tie<EntityType>(result) = make_tuple<EntityType>();
+	template <class Entity>
+	typename traits::pure_type<Entity>::type make_entity() {
+		typedef typename traits::pure_type<Entity>::type result_type;
+
+		result_type result;
+		traits::to_tie<result_type>(result) = make_tuple<result_type>();
 
 		moneta::algorithm::for_some_members<
-			typename traits::fixed_value_members<EntityType>::type
+			typename traits::fixed_value_members<result_type>::type
 		>(result, detail::fixed_value_setter());
 		
 		return result;
 	}
-
 }

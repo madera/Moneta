@@ -1,5 +1,6 @@
 #pragma once
 #include "detail/member_trait_base.hxx"
+#include <boost/assert.hpp>
 
 // TODO: RENAME THIS FILE TO SINGULAR FORM
 
@@ -20,7 +21,7 @@ namespace moneta { namespace traits {
 
 		std::vector<std::string>::const_iterator itr = std::find(data.begin(), data.end(), name);
 		if (itr == data.end()) {
-			assert(false);
+			BOOST_ASSERT(false);
 			return -1;
 		}
 

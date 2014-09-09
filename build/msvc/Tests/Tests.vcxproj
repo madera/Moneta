@@ -127,6 +127,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\algorithm\dispatch_entity_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\algorithm\for_each_member_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\algorithm\traverse_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\codec\codec_io_test.cxx" />
@@ -146,7 +147,7 @@
     <ClCompile Include="..\..\..\test\moneta\container\rcontext_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\container\rtuple_set_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\interactive_shell_test.cxx" />
-    <ClCompile Include="..\..\..\test\moneta\lexical\dispatch_entity_test.cxx" />
+    <ClCompile Include="..\..\..\test\moneta\lexical\lexical_dispatch_entity_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\lexical\dispatch_member_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\lexical\set_value_test.cxx" />
     <ClCompile Include="..\..\..\test\moneta\make_entity_test.cxx" />

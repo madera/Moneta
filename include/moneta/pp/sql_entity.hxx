@@ -47,13 +47,13 @@
 	MONETA_DESCRIBE_SQL_ENTITY(entity, table, members)
 
 #define MONETA_DESCRIBE_ENTITY(entity, members) \
-	MONETA_DESCRIBE_ENTITY_BASE(entity, members) \
-	MONETA_ENTITY_NAME(entity, entity)
+	MONETA_DESCRIBE_ENTITY_BASE(entity,members) \
+	MONETA_ENTITY_NAME(entity,entity)
 
 #define MONETA_DEFINE_AND_DESCRIBE_ENTITY(entity, members) \
 	MONETA_PP_DEFINE_ENTITY_STRUCT(entity, members) \
 	MONETA_DESCRIBE_ENTITY(entity, members)
 
-#define MONETA_DEFINE_AND_DESCRIBE_ENTITY_WITH_NAMESPACE(ns_seq, entity, members) \
-	MONETA_PP_DEFINE_ENTITY_STRUCT_WITH_NAMESPACE(ns_seq, entity, members) \
-	MONETA_DESCRIBE_ENTITY(MONETA_PP_NAMESPACE_JOIN(ns_seq, ::) entity, members)
+#define MONETA_DEFINE_AND_DESCRIBE_ENTITY_WITH_NAMESPACE(ns_seq,entity,members) \
+	MONETA_PP_DEFINE_ENTITY_STRUCT_WITH_NAMESPACE(ns_seq,entity,members) \
+	MONETA_DESCRIBE_ENTITY(MONETA_PP_NAMESPACE_JOIN(ns_seq,::)entity,members)
