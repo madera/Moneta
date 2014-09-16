@@ -19,10 +19,16 @@
 
 #define MONETA_DECLARE_TRAIT(trait)                              \
 	namespace moneta { namespace traits { namespace detail { \
-		template <class EntityType>                      \
+		template <class T>                               \
 		struct trait : boost::false_type {               \
 		};                                               \
 	}}}
+
+#define MONETA_DEFINE_TRAIT(trait, type, result_type)        \
+	template <>                                                     \
+	struct moneta::traits::detail::trait<type> : boost::true_type { \
+		typedef result_type trait_type;                         \
+	};
 
 #define MONETA_DEFINE_TRAIT_WITH_GET(trait, type, get_type, get_value)  \
 	template <>                                                     \
@@ -31,12 +37,6 @@
 		static trait_type get() {                               \
 			return get_value;                               \
 		}                                                       \
-	};
-
-#define MONETA_DEFINE_TRAIT(trait, type, result_type, get_value)        \
-	template <>                                                     \
-	struct moneta::traits::detail::trait<type> : boost::true_type { \
-		typedef result_type trait_type;                         \
 	};
 
 #define MONETA_DEFINE_FLAG_TRAIT(trait, type)                             \
@@ -64,6 +64,7 @@
 	}
 
 // XXX: Remove const on return value.
+// XXX: Does this need 'EntityType'?
 #define MONETA_DEFINE_MEMBER_SEQUENCE_TRAIT_COLLECTOR(trait, type, name, members) \
 	template <class EntityType>                                               \
 	const std::vector<type> name() {                                          \

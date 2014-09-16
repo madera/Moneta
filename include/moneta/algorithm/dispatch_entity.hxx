@@ -40,7 +40,6 @@ namespace moneta { namespace algorithm {
 		BOOST_MPL_ASSERT((boost::mpl::is_sequence<Entities>));
 
 		typedef detail::dispatch_entity_impl<Visitor, Predicate> operation;
-		
 		operation::state state(visitor, predicate);
 		boost::mpl::for_each<Entities>(operation(state));
 	}

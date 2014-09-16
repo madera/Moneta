@@ -89,6 +89,7 @@
     <ClInclude Include="..\..\..\include\moneta\codec\rawbin\rawbin_encoder.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\shell\shell_decoder.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\shell\shell_encoder.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\codec\typecode.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\xml\traits\xml_traits.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\xml\xml_encoder.hxx" />
     <ClInclude Include="..\..\..\include\moneta\container\change_trackers\bitset_change_tracker.hxx" />

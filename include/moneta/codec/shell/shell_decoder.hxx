@@ -200,4 +200,54 @@ namespace moneta { namespace codec {
 		);
 	}
 
+
+
+
+
+	//namespace detail {
+	//	template <class Visitor, class Iterator>
+	//	struct decode_and_dispatch {
+
+	//		decode_and_dispatch(Visitor& visitor, Iterator begin, Iterator end)
+	//			: {}
+
+	//		template <class Entity>
+	//		int operator()() const {
+	//			Entity entity;
+	//			result = moneta::decode<Codec>(entity, begin, end);
+	//			if (result > 0) {
+	//				_visitor(entity);
+	//			}
+
+	//			return result;
+	//		}
+
+	//	};
+	//}
+
+	//struct entity_type_is {
+	//	std::string _name;
+	//
+	//	entity_name_is(const std::string& name)
+	//	 : _name(name) {}
+
+	//	template <class Entity>
+	//	bool operator()() const {
+	//		return _name == moneta::traits::detail::entity_name<Entity>::get();
+	//	}
+	//};
+
+	//template <class Codec>	
+	//struct deducing_entity_decoder {
+
+	//	template <class Visitor, class Iterator>
+	//	int operator()(Visitor& visitor, Iterator begin, Iterator end) const {			
+	//		return moneta::algorithm::dispatch_entity<entities>(
+	//			decode_and_dispatch(visitor, begin, end),
+	//			entity_type_is(read_type_tag<Codec>(begin, end))
+	//		);
+	//	}
+	//	
+	//};
+
 }}

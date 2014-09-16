@@ -379,6 +379,9 @@
     <ClInclude Include="..\..\..\include\moneta\lexical\dispatch_entity.hxx">
       <Filter>Header Files\moneta\lexical</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\codec\typecode.hxx">
+      <Filter>Header Files\moneta\codec</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\doc\Descriptors.md">
