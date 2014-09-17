@@ -1,4 +1,5 @@
 #pragma once
+#include "typecode.hxx"
 #include "../algorithm/for_each_member.hxx"
 #include "../algorithm/traverse.hxx"
 #include "../traits/fixed_values.hxx"
@@ -202,6 +203,70 @@ namespace moneta { namespace codec {
 	template <class Codec, class Entity, class Iterator>
 	int decode(Entity& entity, Iterator begin, Iterator end) {
 		return entity_decoder<Codec, Entity>()(entity, begin, end);
+	}
+
+}}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#include "typecode.hxx"
+
+namespace moneta { namespace codec {
+
+	namespace detail {
+
+		template <class Visitor, class Iterator>
+		struct decode_and_dispatch {
+			size_t result;
+
+			decode_and_dispatch(Visitor& visitor, Iterator begin, Iterator end)
+			 : result(0) {}
+
+			template <class Entity>
+			int operator()() const {
+				Entity entity = moneta::make_entity<Entity>();
+				result = moneta::decode<Codec>(entity, begin, end);
+				if (result > 0) {
+					_visitor(entity);
+				}
+
+				return result;
+			}
+
+		};
+
+		template <class Codec>
+		struct entity_type_is {
+			typedef typename moneta::codec::detail::typecode_type<Codec>::type typecode_type;
+			typecode_type _code;
+	
+			entity_type_is(const typecode_type& code)
+			 : _code(code) {}
+
+			template <class Entity>
+			bool operator()() const {
+				return _code == moneta::codec::detail::typecode<Codec, Entity>::get();
+			}
+		};
+
+	}
+
+	template <class Codec, class Entities>	
+	struct deducing_entity_decoder {
+
+		template <class Visitor, class Iterator>
+		int operator()(Visitor& visitor, Iterator begin, Iterator end) const {		
+			return moneta::algorithm::dispatch_entity<Entities>(
+				detail::decode_and_dispatch<Visitor, Iterator>(visitor, begin, end),
+				entity_type_is(read_typecode<Codec>(begin, end))
+			).result;
+		}
+		
+	};
+
+	template <class Codec, class Entities, class Visitor, class Iterator>
+	int decode_unknown(Visitor& visitor, Iterator begin, Iterator end) {
+		return deducing_entity_decoder<Codec, Entities>()(visitor, begin, end);
 	}
 
 }}

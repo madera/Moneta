@@ -1,6 +1,27 @@
 #pragma once
 #include "../traits/detail/member_trait_base.hxx"
 
+#define MONETA_CODEC_DECLARE(name)           \
+	namespace moneta { namespace codec { \
+		struct name;                 \
+	}}
+
+#define MONETA_CODEC_TYPECODE(codec_, entity, value)                               \
+	namespace moneta { namespace codec { namespace detail {                    \
+		template <>                                                        \
+		struct typecode<codec_, entity> {                                  \
+			static detail::typecode_type<codec_, entity>::type get() { \
+				return value;                                      \
+			}                                                          \
+		};                                                                 \
+	}}}
+
+#define MONETA_CODEC_TYPECODE_TYPE(codec_, type)                                      \
+	namespace moneta { namespace codec { namespace detail {                       \
+		template <class Entity>                                               \
+		struct typecode_type<codec_, Entity> : boost::mpl::identity<type> {}; \
+	}}}
+
 namespace moneta { namespace codec {
 
 	namespace detail {

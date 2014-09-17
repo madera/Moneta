@@ -93,7 +93,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\externals\console\include\console\exception.hxx" />
     <ClInclude Include="..\..\..\externals\console\include\console\shell.hxx" />
-    <ClInclude Include="..\..\..\include\moneta\codec\rawbin.hxx" />
     <ClInclude Include="..\..\..\test\moneta\hexdump.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\Cat.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\CatDataset.hxx" />

@@ -189,9 +189,6 @@
     <ClInclude Include="..\..\..\test\moneta\model\simple\FixedThreeInts.hxx">
       <Filter>Header Files\moneta\model\simple</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\moneta\codec\rawbin.hxx">
-      <Filter>Source Files\moneta\codec</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\test\moneta\model\tree\A.hxx">
       <Filter>Header Files\moneta\model\tree</Filter>
     </ClInclude>

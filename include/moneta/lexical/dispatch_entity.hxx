@@ -20,8 +20,8 @@ namespace moneta { namespace lexical {
 	}
 
 	template <class Entities, class Visitor>
-	void dispatch_entity(const std::string& name, Visitor& visitor) {
-		algorithm::dispatch_entity<Entities>(visitor, detail::entity_name_is(name));
+	Visitor& dispatch_entity(const std::string& name, Visitor& visitor) {
+		return algorithm::dispatch_entity<Entities>(visitor, detail::entity_name_is(name));
 	}
 
 }}

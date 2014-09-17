@@ -151,6 +151,10 @@ namespace moneta { namespace codec {
 
 	};
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	//
 	// TODO: Make this standard API. Everyone needs an unknown decoder!!
 	//
@@ -161,23 +165,29 @@ namespace moneta { namespace codec {
 	// From this point on: decode_unkwnown() logic.
 	//
 
+	// XXX: Continue this refactoring!! Full decode() specs must be followed.
+	// Continue refactoring **when XML decoder** resumes development.
+
 	namespace detail {
 	
+		// Deprecated!!
+		//
 		template <class Codec, class Operation, class Iterator>
 		struct decoder_dispatcher {
 			Operation& _operation;
 			Iterator& _begin;
 			Iterator& _end;
+			int& _result;
 
-			decoder_dispatcher(Operation& operation, Iterator& begin, Iterator& end)
-			 : _operation(operation), _begin(begin), _end(end) {}
+			decoder_dispatcher(Operation& operation, Iterator& begin, Iterator& end, int& result)
+			 : _operation(operation), _begin(begin), _end(end), _result(result) {}
 
 			template <class Entity>
 			void operator()() const {
 				Entity entity = moneta::make_entity<Entity>();
-				const int result = moneta::codec::decode<Codec>(entity, _begin, _end);
+				_result = moneta::codec::decode<Codec>(entity, _begin, _end);
 				// FIXME: What do we do with result? Check it better...
-				if (result > 0) {
+				if (_result > 0) {
 					_operation.operator()(entity);
 				}
 			}
@@ -185,69 +195,27 @@ namespace moneta { namespace codec {
 
 	}
 
-	template <class Codec, class Entities, class Operation, class Iterator>
-	void decode_unknown(Operation& operation, Iterator begin, Iterator end) {
-		Iterator pivot = std::find(begin, end, '=');
-		if (pivot == end) {
-			return;
+	template <class Entities>	
+	struct deducing_entity_decoder<shell, Entities> {
+
+		template <class Visitor, class Iterator>
+		int operator()(Visitor& visitor, Iterator begin, Iterator end) const {		
+			Iterator pivot = std::find(begin, end, '=');
+			if (pivot == end) {
+				return -2; // Need at least two more bytes (one for =, one for data).
+			}
+		
+			std::string key(begin, pivot);
+			boost::trim(key);
+
+			int result;
+			moneta::lexical::dispatch_entity<Entities>(
+				key, detail::decoder_dispatcher<shell, Visitor, Iterator>(visitor, pivot + 1, end, result)
+			);
+
+			return result;
 		}
 		
-		std::string key(begin, pivot);
-		boost::trim(key);
-
-		moneta::lexical::dispatch_entity<Entities>(
-			key, detail::decoder_dispatcher<Codec, Operation, Iterator>(operation, pivot + 1, end)
-		);
-	}
-
-
-
-
-
-	//namespace detail {
-	//	template <class Visitor, class Iterator>
-	//	struct decode_and_dispatch {
-
-	//		decode_and_dispatch(Visitor& visitor, Iterator begin, Iterator end)
-	//			: {}
-
-	//		template <class Entity>
-	//		int operator()() const {
-	//			Entity entity;
-	//			result = moneta::decode<Codec>(entity, begin, end);
-	//			if (result > 0) {
-	//				_visitor(entity);
-	//			}
-
-	//			return result;
-	//		}
-
-	//	};
-	//}
-
-	//struct entity_type_is {
-	//	std::string _name;
-	//
-	//	entity_name_is(const std::string& name)
-	//	 : _name(name) {}
-
-	//	template <class Entity>
-	//	bool operator()() const {
-	//		return _name == moneta::traits::detail::entity_name<Entity>::get();
-	//	}
-	//};
-
-	//template <class Codec>	
-	//struct deducing_entity_decoder {
-
-	//	template <class Visitor, class Iterator>
-	//	int operator()(Visitor& visitor, Iterator begin, Iterator end) const {			
-	//		return moneta::algorithm::dispatch_entity<entities>(
-	//			decode_and_dispatch(visitor, begin, end),
-	//			entity_type_is(read_type_tag<Codec>(begin, end))
-	//		);
-	//	}
-	//	
-	//};
+	};
 
 }}

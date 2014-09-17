@@ -141,3 +141,19 @@ BOOST_AUTO_TEST_CASE(member_decoder_test) {
 
 	BOOST_CHECK_EQUAL(member_decoder_hits, member_count);
 }
+
+#include "../model/tree/A.hxx"
+
+MONETA_CODEC_DECLARE(dummy_codec)
+using moneta::codec::dummy_codec;
+
+MONETA_CODEC_TYPECODE_TYPE(dummy_codec, int)
+MONETA_CODEC_TYPECODE(dummy_codec, A, 10)
+MONETA_CODEC_TYPECODE(dummy_codec, B, 12)
+MONETA_CODEC_TYPECODE(dummy_codec, C, 14)
+MONETA_CODEC_TYPECODE(dummy_codec, D, 16)
+MONETA_CODEC_TYPECODE(dummy_codec, E, 18)
+
+BOOST_AUTO_TEST_CASE(decode_unknown_test) {
+
+}
