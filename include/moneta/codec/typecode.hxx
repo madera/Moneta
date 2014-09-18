@@ -6,27 +6,27 @@
 		struct name;                 \
 	}}
 
-#define MONETA_CODEC_TYPECODE(codec_, entity, value)                               \
-	namespace moneta { namespace codec { namespace detail {                    \
-		template <>                                                        \
-		struct typecode<codec_, entity> {                                  \
-			static detail::typecode_type<codec_, entity>::type get() { \
-				return value;                                      \
-			}                                                          \
-		};                                                                 \
+#define MONETA_CODEC_TYPECODE(codec_, entity, value)                       \
+	namespace moneta { namespace codec { namespace detail {            \
+		template <>                                                \
+		struct typecode<codec_, entity> {                          \
+			static detail::typecode_type<codec_>::type get() { \
+				return value;                              \
+			}                                                  \
+		};                                                         \
 	}}}
 
-#define MONETA_CODEC_TYPECODE_TYPE(codec_, type)                                      \
-	namespace moneta { namespace codec { namespace detail {                       \
-		template <class Entity>                                               \
-		struct typecode_type<codec_, Entity> : boost::mpl::identity<type> {}; \
+#define MONETA_CODEC_TYPECODE_TYPE(codec_, type)                              \
+	namespace moneta { namespace codec { namespace detail {               \
+		template <>                                                   \
+		struct typecode_type<codec_> : boost::mpl::identity<type> {}; \
 	}}}
 
 namespace moneta { namespace codec {
 
 	namespace detail {
 	
-		template <class Codec, class Entity = void>
+		template <class Codec>
 		struct typecode_type : boost::false_type {};
 
 		template <class Codec, class Entity>
