@@ -38,15 +38,13 @@ BOOST_AUTO_TEST_CASE(read_typecode_test) {
 
 	result = moneta::codec::read_typecode<moneta::codec::dummy_codec>(code, p, std::end(buffer));
 	BOOST_REQUIRE_GT(result, 0);
-	p += result;
-	++p;
+	p += result; ++p;
 	BOOST_CHECK_EQUAL(result, 1);
 	BOOST_CHECK_EQUAL(code, 0x0a);
 
 	result = moneta::codec::read_typecode<moneta::codec::dummy_codec>(code, p, std::end(buffer));
 	BOOST_REQUIRE_GT(result, 0);
-	p += result;
-	++p;
+	p += result; ++p;
 	BOOST_CHECK_EQUAL(result, 1);
 	BOOST_CHECK_EQUAL(code, 0x0b);
 }

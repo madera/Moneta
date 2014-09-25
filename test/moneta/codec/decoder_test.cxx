@@ -142,6 +142,12 @@ BOOST_AUTO_TEST_CASE(member_decoder_test) {
 	BOOST_CHECK_EQUAL(member_decoder_hits, member_count);
 }
 
+//
+// decode_unknown tests
+//
+// MAYBE: Move to its own test file?
+//
+
 #include "../model/tree/A.hxx"
 
 MONETA_CODEC_DECLARE(dummy_codec)
@@ -155,5 +161,5 @@ MONETA_CODEC_TYPECODE(dummy_codec, D, 16)
 MONETA_CODEC_TYPECODE(dummy_codec, E, 18)
 
 BOOST_AUTO_TEST_CASE(decode_unknown_test) {
-
+	// MEQUEDE: Test this shit!
 }
