@@ -154,12 +154,49 @@ MONETA_CODEC_DECLARE(dummy_codec)
 using moneta::codec::dummy_codec;
 
 MONETA_CODEC_TYPECODE_TYPE(dummy_codec, int)
-MONETA_CODEC_TYPECODE(dummy_codec, A, 10)
-MONETA_CODEC_TYPECODE(dummy_codec, B, 12)
-MONETA_CODEC_TYPECODE(dummy_codec, C, 14)
-MONETA_CODEC_TYPECODE(dummy_codec, D, 16)
-MONETA_CODEC_TYPECODE(dummy_codec, E, 18)
+MONETA_CODEC_TYPECODE(dummy_codec, A, 'a')
+MONETA_CODEC_TYPECODE(dummy_codec, B, 'b')
+MONETA_CODEC_TYPECODE(dummy_codec, C, 'c')
+MONETA_CODEC_TYPECODE(dummy_codec, D, 'd')
+MONETA_CODEC_TYPECODE(dummy_codec, E, 'e')
+
+namespace moneta { namespace codec {
+
+	template <>
+	struct typecode_reader<dummy_codec> {
+		template <class Iterator>
+		int operator()(int& code, Iterator begin, Iterator end) const {
+			code = *begin;
+			return 1;
+		}
+	};
+
+	template <class Entity>
+	struct entity_decoder<dummy_codec, Entity> {
+
+		template <class Iterator>
+		int operator()(Entity& entity, Iterator begin, Iterator end) const {
+			// Don't inject anything into the entity.
+			return 1;
+		}
+
+	};
+
+}}
+
+struct entity_counter {
+	template <class Entity>
+	void operator()(Entity& entity) const {
+		int x = 0;
+	}
+};
 
 BOOST_AUTO_TEST_CASE(decode_unknown_test) {
-	// MEQUEDE: Test this shit!
+	const std::string data = "a1b2c3";
+
+	entity_counter counter;
+	moneta::codec::decode_unknown<
+		moneta::codec::dummy_codec,
+		boost::mpl::vector<A, B, C, D, E>
+	>(counter, data.begin(), data.end());
 }

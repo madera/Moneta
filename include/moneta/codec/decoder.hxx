@@ -2,6 +2,7 @@
 #include "typecode.hxx"
 #include "../algorithm/for_each_member.hxx"
 #include "../algorithm/traverse.hxx"
+#include "../algorithm/dispatch_entity.hxx"
 #include "../traits/fixed_values.hxx"
 
 namespace moneta { namespace codec {
@@ -208,6 +209,8 @@ namespace moneta { namespace codec {
 }}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Decode Unknown                                                                                                  ////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "typecode.hxx"
 
@@ -215,17 +218,21 @@ namespace moneta { namespace codec {
 
 	namespace detail {
 
-		template <class Visitor, class Iterator>
+		template <class Codec, class Visitor, class Iterator>
 		struct decode_and_dispatch {
 			size_t result;
+			
+			Visitor& _visitor;
+			const Iterator _begin;
+			const Iterator _end;
 
 			decode_and_dispatch(Visitor& visitor, Iterator begin, Iterator end)
-			 : result(0) {}
+			 : result(0), _visitor(visitor), _begin(begin), _end(end) {}
 
 			template <class Entity>
-			int operator()() const {
+			int operator()() {
 				Entity entity = moneta::make_entity<Entity>();
-				result = moneta::decode<Codec>(entity, begin, end);
+				result = moneta::codec::decode<Codec>(entity, _begin, _end);
 				if (result > 0) {
 					_visitor(entity);
 				}
@@ -255,10 +262,16 @@ namespace moneta { namespace codec {
 	struct deducing_entity_decoder {
 
 		template <class Visitor, class Iterator>
-		int operator()(Visitor& visitor, Iterator begin, Iterator end) const {		
+		int operator()(Visitor& visitor, Iterator begin, Iterator end) const {
+			typename codec::detail::typecode_type<Codec>::type typecode;
+			const int result = read_typecode<Codec>(typecode, begin, end);
+			if (result <= 0) {
+				return result;
+			}
+			
 			return moneta::algorithm::dispatch_entity<Entities>(
-				detail::decode_and_dispatch<Visitor, Iterator>(visitor, begin, end),
-				entity_type_is(read_typecode<Codec>(begin, end))
+				detail::decode_and_dispatch<Codec, Visitor, Iterator>(visitor, begin, end),
+				detail::entity_type_is<Codec>(typecode)
 			).result;
 		}
 		
