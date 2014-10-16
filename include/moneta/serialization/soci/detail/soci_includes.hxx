@@ -1,6 +1,6 @@
 #pragma once
 #include <soci/soci.h>
-#include <soci/backends/sqlite3/soci-sqlite3.h>
+#include <soci/sqlite3/soci-sqlite3.h>
 #include <soci/boost-fusion.h>
 #include <soci/boost-gregorian-date.h>
 #include <soci/boost-optional.h>
