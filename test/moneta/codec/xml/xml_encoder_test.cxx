@@ -82,3 +82,70 @@ BOOST_AUTO_TEST_CASE(tree_encode_xml_encoder_test) {
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(buffer, expected);
 }
+
+//
+// Test - Next Generation stuff.
+//
+
+typedef std::vector<std::string> str_vec_t;
+//typedef std::string str_vec_t;
+
+struct CountryWithStringStates {
+	std::string              Name;
+	str_vec_t States;
+};
+
+MONETA_DESCRIBE_SQL_ENTITY(
+	CountryWithStringStates, COUNTRY_WITH_STRING_STATES,
+	((std::string,              Name,   COUNTRY_NAME  ))
+	((str_vec_t, States, COUNTRY_STATES))
+)
+
+BOOST_MPL_ASSERT((
+	moneta::codec::detail::is_xml_element<
+		MONETA_MEMBER(CountryWithStringStates, str_vec_t, States)
+	>
+));
+
+BOOST_MPL_ASSERT_NOT((
+	moneta::codec::detail::is_xml_attribute<
+		MONETA_MEMBER(CountryWithStringStates, str_vec_t, States)
+	>
+));
+
+BOOST_AUTO_TEST_CASE(country_with_string_states_encode_xml_encoder_test) {
+
+	typedef MONETA_MEMBER(CountryWithStringStates, str_vec_t, States) member_t;
+
+	moneta::traits::detail::member_name<member_t>::get();
+
+	CountryWithStringStates cwss;
+	member_t m;
+
+	std::vector<std::string> sv;
+	sv.push_back("...");
+	m(cwss) = sv;
+
+	static const std::string expected =
+		"<A f=\"0\" g=\"0\" h=\"0\">\n"
+		"\t<B>\n"
+		"\t\t<C>\n"
+		"\t\t\t<j>0</j>\n"
+		"\t\t\t<k>0</k>\n"
+		"\t\t</C>\n"
+		"\t\t<i>0</i>\n"
+		"\t\t<D l=\"0\">\n"
+		"\t\t\t<E m=\"0\" n=\"0\" />\n"
+		"\t\t</D>\n"
+		"\t</B>\n"
+		"</A>\n"
+	;
+	
+	char buffer[256];
+	std::fill(std::begin(buffer), std::end(buffer), 0);
+
+	int result = moneta::codec::encode<moneta::codec::xml>(cwss, std::begin(buffer), std::end(buffer));
+
+	//BOOST_CHECK_EQUAL(result, expected.size());
+	//BOOST_CHECK_EQUAL(buffer, expected);
+}

@@ -5,6 +5,7 @@
 #include "../../model/Composite.hxx"
 #include "../../model/tree/A.hxx"
 #include <moneta/serialization/detail/hexdump.hxx>
+#include <moneta/make_entity.hxx>
 
 static Composite make_composite() {
 	Composite composite;

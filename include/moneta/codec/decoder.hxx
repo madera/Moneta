@@ -1,9 +1,9 @@
 #pragma once
 #include "typecode.hxx"
-#include "../algorithm/for_each_member.hxx"
 #include "../algorithm/traverse.hxx"
 #include "../algorithm/dispatch_entity.hxx"
 #include "../traits/fixed_values.hxx"
+#include "../make_entity.hxx"
 
 namespace moneta { namespace codec {
 
@@ -280,6 +280,25 @@ namespace moneta { namespace codec {
 	template <class Codec, class Entities, class Visitor, class Iterator>
 	int decode_unknown(Visitor& visitor, Iterator begin, Iterator end) {
 		return deducing_entity_decoder<Codec, Entities>()(visitor, begin, end);
+	}
+
+	template <class Codec, class Entities, class Visitor, class Iterator>
+	int decode_unknowns(Visitor& visitor, Iterator begin, Iterator end) {
+		Iterator begin_ = begin;
+		Iterator end_ = end;
+
+		int total_consumed = 0;
+
+		int result;
+		do {
+			result = deducing_entity_decoder<Codec, Entities>()(visitor, begin_, end_);
+			if (result > 0) {
+				begin_ += result;
+				total_consumed += result;
+			}
+		} while (result > 0);
+
+		return total_consumed;
 	}
 
 }}

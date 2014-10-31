@@ -1,5 +1,4 @@
 #pragma once
-#include "../algorithm/for_each_member.hxx"
 #include "../algorithm/traverse.hxx"
 
 namespace moneta { namespace codec {

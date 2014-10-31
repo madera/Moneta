@@ -4,6 +4,8 @@
 #include "../traits/detail/is_functor_callable.hxx"
 #include "../make_entity.hxx"
 
+// TODO: Document that this function should be called for_each_non_entity_member. Or find a better name for it.
+
 namespace moneta { namespace algorithm {
 
 	namespace detail {

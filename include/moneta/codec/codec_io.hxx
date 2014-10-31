@@ -125,6 +125,21 @@ namespace moneta { namespace codec {
 				return *this;
 			}
 
+			this_type& operator<<(const std::vector<std::string>& string_vector) {
+				std::vector<std::string>::const_iterator itr = string_vector.begin();
+				for (; itr != string_vector.end(); ++itr) {
+					if (_good) {
+						*this << *itr;
+
+						if (itr + 1 != string_vector.end()) {
+							*this << ',';
+						}
+					}
+				}
+
+				return *this;
+			}
+
 			template <class T>
 			typename boost::enable_if<boost::is_pod<T>, this_type&>::type
 			operator<<(const T& value) {

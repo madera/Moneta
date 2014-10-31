@@ -166,6 +166,10 @@ namespace moneta { namespace codec {
 	struct typecode_reader<dummy_codec> {
 		template <class Iterator>
 		int operator()(int& code, Iterator begin, Iterator end) const {
+			if (std::distance(begin, end) < 1) {
+				return -1;
+			}
+
 			code = *begin;
 			return 1;
 		}
@@ -176,27 +180,41 @@ namespace moneta { namespace codec {
 
 		template <class Iterator>
 		int operator()(Entity& entity, Iterator begin, Iterator end) const {
-			// Don't inject anything into the entity.
-			return 1;
+			// Dumb decoder. We just *say* we consumed 2 bytes (typecode + data).
+			// But actually, we don't.
+			return 2;
 		}
 
 	};
 
 }}
 
-struct entity_counter {
+struct entity_lister {
+	std::ostringstream& _output;
+	
+	entity_lister(std::ostringstream& output)
+	 : _output(output) {}
+
 	template <class Entity>
 	void operator()(Entity& entity) const {
-		int x = 0;
+		_output << moneta::traits::detail::entity_name<Entity>::get();
 	}
 };
 
 BOOST_AUTO_TEST_CASE(decode_unknown_test) {
 	const std::string data = "a1b2c3";
 
-	entity_counter counter;
-	moneta::codec::decode_unknown<
+	std::ostringstream oss;
+	entity_lister counter(oss);
+
+	auto begin = data.begin();
+	auto end = data.end();
+
+	const int result = moneta::codec::decode_unknowns<
 		moneta::codec::dummy_codec,
 		boost::mpl::vector<A, B, C, D, E>
-	>(counter, data.begin(), data.end());
+	>(counter, begin, end);
+
+	// Check that three entities were extracted.
+	BOOST_CHECK_EQUAL(oss.str(), "ABC");
 }

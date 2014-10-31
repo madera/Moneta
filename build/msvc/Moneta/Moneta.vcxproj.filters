@@ -382,6 +382,9 @@
     <ClInclude Include="..\..\..\include\moneta\codec\typecode.hxx">
       <Filter>Header Files\moneta\codec</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\is_container.hxx">
+      <Filter>Header Files\moneta\traits</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\doc\Descriptors.md">
@@ -411,5 +414,10 @@
     <None Include="..\..\..\doc\Codecs.md">
       <Filter>Docs</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\doc\entity_container_thoughts.txt">
+      <Filter>Docs</Filter>
+    </Text>
   </ItemGroup>
 </Project>

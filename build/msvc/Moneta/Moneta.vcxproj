@@ -154,6 +154,7 @@
     <ClInclude Include="..\..\..\include\moneta\traits\entity_name.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\extract_pk.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\fixed_values.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\is_container.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\is_entity.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\member.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\members.hxx" />
@@ -185,6 +186,9 @@
     <None Include="..\..\..\doc\Operators.md" />
     <None Include="..\..\..\doc\TODO" />
     <None Include="..\..\..\doc\Traits.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\doc\entity_container_thoughts.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
