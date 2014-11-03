@@ -1,6 +1,7 @@
 #pragma once
 #include "../traits/member_names.hxx"
 #include "../traits/is_entity.hxx"
+#include "../traits/is_container.hxx"
 #include "../traits/detail/is_functor_callable.hxx"
 #include "../traits/detail/has_member_trait.hxx"
 #include <boost/mpl/copy_if.hpp>
@@ -65,18 +66,102 @@ namespace moneta { namespace algorithm {
 			}
 		};
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		//
+		// Entity result_type
+		//
 		template <class Actions, class Path, class Member, class Entity, class State>
-		typename boost::enable_if<traits::is_entity<typename Member::result_type> >::type
-		call_member_or_recurse(Entity& entity, State& state) {
+		typename boost::enable_if<
+			boost::mpl::and_<
+				boost::mpl::not_<traits::is_container<typename Member::result_type> >,
+				traits::is_entity<typename Member::result_type>
+			>
+		>::type
+		process(Entity& entity, State& state) {
 			traverse<Actions, add_path<Path, Member>::type>(Member()(entity), state);
 		}
 
+		//
+		// Non-Entity result_type
+		//
 		template <class Actions, class Path, class Member, class Entity, class State>
-		typename boost::disable_if<traits::is_entity<typename Member::result_type> >::type
-		call_member_or_recurse(Entity& entity, State& state) {
+		typename boost::enable_if<
+			boost::mpl::and_<
+				boost::mpl::not_<traits::is_container<typename Member::result_type> >,
+				boost::mpl::not_<traits::is_entity<typename Member::result_type> >
+			>
+		>::type
+		process(Entity& entity, State& state) {
 			boost::mpl::for_each<
 				typename detail::actions_of<Actions, traverse_member>::type
 			>(detail::member_action<Entity, Path, State, Member>(entity, state));
+		}
+
+		//
+		// Container of Entity values
+		//
+		template <class Actions, class Path, class Member, class Entity, class State>
+		typename boost::enable_if<
+			boost::mpl::and_<
+				traits::is_container<typename Member::result_type>,
+				traits::is_entity<typename Member::result_type::value_type>
+			>
+		>::type
+		process(Entity& entity, State& state) {
+			typedef typename Member::result_type container_type;
+			typedef typename container_type::value_type value_type;
+
+			// Enter actions
+			//
+			boost::mpl::for_each<
+				typename detail::actions_of<Actions, traverse_enter_container>::type
+			>(detail::enter_or_leave_action<Entity, Path, State>(entity, state));
+
+			// Members
+			//
+			for (value_type& entity_value : Member()(entity)) {
+				traverse<Actions, add_path<Path, Member>::type>(entity_value, state);
+			}
+
+			// Leave actions
+			//
+			boost::mpl::for_each<
+				typename detail::actions_of<Actions, traverse_leave_container>::type
+			>(detail::enter_or_leave_action<Entity, Path, State>(entity, state));
+		}
+
+		//
+		// Container of Non-Entity values
+		//
+		template <class Actions, class Path, class Member, class Entity, class State>
+		typename boost::enable_if<
+			boost::mpl::and_<
+				traits::is_container<typename Member::result_type>,
+				boost::mpl::not_<typename traits::is_entity<typename Member::result_type::value_type> >
+			>
+		>::type
+		process(Entity& entity, State& state) {
+			typedef typename Member::result_type container_type;
+			typedef typename container_type::value_type value_type;
+
+			// Enter actions
+			//
+			boost::mpl::for_each<
+				typename detail::actions_of<Actions, traverse_enter_container>::type
+			>(detail::enter_or_leave_action<Entity, Path, State>(entity, state));
+
+			// Members
+			//
+	//		boost::mpl::for_each<typename traits::members<Entity>::type>(
+	//			detail::member_operator<Actions, Entity, Path, State>(entity, state)
+	//		);
+
+			// Leave actions
+			//
+			boost::mpl::for_each<
+				typename detail::actions_of<Actions, traverse_leave_container>::type
+			>(detail::enter_or_leave_action<Entity, Path, State>(entity, state));
 		}
 
 		template <class Actions, class Entity, class Path, class State>
@@ -89,7 +174,7 @@ namespace moneta { namespace algorithm {
 
 			template <typename Member>
 			void operator()(Member&) const {
-				call_member_or_recurse<Actions, Path, Member>(_entity, _state);
+				process<Actions, Path, Member>(_entity, _state);
 			}
 		};
 
@@ -99,6 +184,10 @@ namespace moneta { namespace algorithm {
 	struct traverse_enter {};
 	struct traverse_member {};
 	struct traverse_leave {};
+
+	struct traverse_enter_container {};
+	struct traverse_container_member {};
+	struct traverse_leave_container {};
 
 	template <class Actions, class Path = boost::mpl::vector0<>, class Entity = void, class State = detail::no_state>
 	void traverse(Entity& entity, State& state = State()) {

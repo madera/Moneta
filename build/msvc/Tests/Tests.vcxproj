@@ -108,6 +108,7 @@
     <ClInclude Include="..\..\..\test\moneta\model\simple\FourInts.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\simple\ThreeInts.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\simple\TwoInts.hxx" />
+    <ClInclude Include="..\..\..\test\moneta\model\SportsTeam.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\test_dataset.hxx" />
     <ClInclude Include="..\..\..\test\moneta\model\tree\A.hxx" />
     <ClInclude Include="..\..\..\test\moneta\pp\detail\includer_test_header.hxx" />

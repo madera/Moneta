@@ -113,39 +113,39 @@ BOOST_MPL_ASSERT_NOT((
 	>
 ));
 
-BOOST_AUTO_TEST_CASE(country_with_string_states_encode_xml_encoder_test) {
-
-	typedef MONETA_MEMBER(CountryWithStringStates, str_vec_t, States) member_t;
-
-	moneta::traits::detail::member_name<member_t>::get();
-
-	CountryWithStringStates cwss;
-	member_t m;
-
-	std::vector<std::string> sv;
-	sv.push_back("...");
-	m(cwss) = sv;
-
-	static const std::string expected =
-		"<A f=\"0\" g=\"0\" h=\"0\">\n"
-		"\t<B>\n"
-		"\t\t<C>\n"
-		"\t\t\t<j>0</j>\n"
-		"\t\t\t<k>0</k>\n"
-		"\t\t</C>\n"
-		"\t\t<i>0</i>\n"
-		"\t\t<D l=\"0\">\n"
-		"\t\t\t<E m=\"0\" n=\"0\" />\n"
-		"\t\t</D>\n"
-		"\t</B>\n"
-		"</A>\n"
-	;
-	
-	char buffer[256];
-	std::fill(std::begin(buffer), std::end(buffer), 0);
-
-	int result = moneta::codec::encode<moneta::codec::xml>(cwss, std::begin(buffer), std::end(buffer));
-
-	//BOOST_CHECK_EQUAL(result, expected.size());
-	//BOOST_CHECK_EQUAL(buffer, expected);
-}
+//BOOST_AUTO_TEST_CASE(country_with_string_states_encode_xml_encoder_test) {
+//
+//	typedef MONETA_MEMBER(CountryWithStringStates, str_vec_t, States) member_t;
+//
+//	moneta::traits::detail::member_name<member_t>::get();
+//
+//	CountryWithStringStates cwss;
+//	member_t m;
+//
+//	std::vector<std::string> sv;
+//	sv.push_back("...");
+//	m(cwss) = sv;
+//
+//	static const std::string expected =
+//		"<A f=\"0\" g=\"0\" h=\"0\">\n"
+//		"\t<B>\n"
+//		"\t\t<C>\n"
+//		"\t\t\t<j>0</j>\n"
+//		"\t\t\t<k>0</k>\n"
+//		"\t\t</C>\n"
+//		"\t\t<i>0</i>\n"
+//		"\t\t<D l=\"0\">\n"
+//		"\t\t\t<E m=\"0\" n=\"0\" />\n"
+//		"\t\t</D>\n"
+//		"\t</B>\n"
+//		"</A>\n"
+//	;
+//	
+//	char buffer[256];
+//	std::fill(std::begin(buffer), std::end(buffer), 0);
+//
+//	int result = moneta::codec::encode<moneta::codec::xml>(cwss, std::begin(buffer), std::end(buffer));
+//
+//	//BOOST_CHECK_EQUAL(result, expected.size());
+//	//BOOST_CHECK_EQUAL(buffer, expected);
+//}

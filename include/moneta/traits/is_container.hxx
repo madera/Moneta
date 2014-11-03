@@ -8,7 +8,15 @@
 #include <boost/spirit/home/support/container.hpp>
 
 namespace moneta { namespace traits {
+	
+	template <typename T>
+	struct is_container : boost::spirit::traits::is_container<T> {};
 
-	using boost::spirit::traits::is_container;
+	//
+	// For our purposes, std::string is NOT a container.
+	// This differs with the Boost Spirit definition.
+	//
+	template <>
+	struct is_container<std::string> : boost::false_type {};
 
 }}

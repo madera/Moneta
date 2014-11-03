@@ -101,6 +101,8 @@ BOOST_AUTO_TEST_CASE(traversal_traverse_test) {
 	}
 }
 
+// XXX: TODO: FIXME: Stateless test!! (It's broken, BTW).
+
 BOOST_AUTO_TEST_CASE(stateful_traverse_test) {
 
 	Cat cat;
@@ -128,4 +130,100 @@ BOOST_AUTO_TEST_CASE(stateful_traverse_test) {
 
 	BOOST_REQUIRE(state.lines.size() == 9);
 	BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + 9);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// FROM THIS POINT ON: New container tests.
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+struct enter_container_traverse_test : moneta::algorithm::traverse_enter_container {
+	template <class Path, class Entity>
+	void operator()(Entity&, test_state& state) const {
+		std::string tmp = "ec:" + moneta::traits::get_entity_name<Entity>();
+		const std::string path = moneta::codec::detail::stringize_path<Path>();
+		tmp += (path.empty()? "" : "," + path);
+		state.lines.push_back(tmp);
+	}
+};
+
+struct container_member_traverse_test : moneta::algorithm::traverse_container_member {
+	template <class Path, class Member, class Entity>
+	void operator()(Entity&, test_state& state) const {
+		std::string tmp = "cm:" + moneta::traits::detail::member_name<Member>::get();
+		const std::string path = moneta::codec::detail::stringize_path<Path>();
+		tmp += (path.empty()? "" : "," + path);
+		state.lines.push_back(tmp);
+	}
+};
+
+struct leave_container_traverse_test : moneta::algorithm::traverse_leave_container {
+	template <class Path, class Entity>
+	void operator()(Entity&, test_state& state) const {
+		std::string tmp = "lc:" + moneta::traits::get_entity_name<Entity>();
+		const std::string path = moneta::codec::detail::stringize_path<Path>();
+		tmp += (path.empty()? "" : "," + path);
+		state.lines.push_back(tmp);
+	}
+};
+
+
+#include "../model/SportsTeam.hxx"
+
+BOOST_AUTO_TEST_CASE(with_container_members_traverse_test) {
+
+	Person jordan;
+	jordan.Name = "Michael Jordan";
+	jordan.Height = 2.00;
+	
+	Person johnson;
+	johnson.Name = "Magic Johnson";
+	johnson.Height = 2.10;
+
+	SportsTeam team;
+	team.Players.push_back(jordan);
+	team.Players.push_back(johnson);
+
+	test_state state;
+
+	moneta::algorithm::traverse<
+		boost::mpl::vector<
+			enter_traverse_test,
+			member_traverse_test,
+			leave_traverse_test,
+
+			enter_container_traverse_test,
+			container_member_traverse_test,
+			leave_container_traverse_test
+		>
+	>(team, state);
+
+	const char* expected[] = {
+		"e:SportsTeam",
+			"m:Name",
+			"ec:Players,/SportsTeam::Players",
+				"cv:Michael Jordan",
+				"cv:Magic Johnson",
+			"lc:Players,/SportsTeam::Players",
+		"l:SportsTeam"
+	};
+
+	const char* expected2[] = {
+		"e:SportsTeam",
+			"m:Name",
+			"ec:Players,/SportsTeam::Players",
+				"e:Person,/SportsTeam::Players::Person",
+					"m:ID,/SportsTeam::Players::Person",
+					"m:Name,/SportsTeam::Players::Person",
+					"m:Height,/SportsTeam::Players::Person",
+					"m:Fingers,/SportsTeam::Players::Person",
+				"l:Person,/SportsTeam::Players::Person",
+			"lc:Players,/SportsTeam::Players",
+		"l:SportsTeam"
+	};
+
+
+//	BOOST_REQUIRE(state.lines.size() == 9);
+//	BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + 9);
 }
