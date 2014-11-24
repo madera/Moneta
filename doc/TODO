@@ -1,4 +1,5 @@
 TODO:
+	* ENFORCE C++03 !!
 	* Move 3rd-party into the test directory. It's the only code using it. Maybe move it to externals.
 	  Also, externals is a good candidate for a rename into external for GitHub's linguist.
 	* Check for proper const and non const ties, tuples et al.
@@ -35,6 +36,7 @@ TODO:
 	* Separate decode() from decode_unknown().
 	* Document codec specs. Encoding, decoding, typecode_type, fixed_values, etc etc etc.
 	* Implement header optimization for end-users.
+	* Add State parameter for codec::encode() and codec::decode().
 
 Codec:
 	* A visitor-based dispatcher seems appropriate. For now, only shell codec has it (with an initiator).

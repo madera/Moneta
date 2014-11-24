@@ -20,7 +20,7 @@ struct enter_traverse_test : moneta::algorithm::traverse_enter {
 		const std::string path = moneta::codec::detail::stringize_path<Path>();
 		tmp += (path.empty()? "" : "," + path);
 		state.lines.push_back(tmp);
-	}
+	}	
 };
 
 struct member_traverse_test : moneta::algorithm::traverse_member {
@@ -101,9 +101,58 @@ BOOST_AUTO_TEST_CASE(traversal_traverse_test) {
 	}
 }
 
-//
-// XXX: TODO: FIXME: Stateless test!! (It's broken, BTW).
-//
+///////////
+size_t stateless_enter_traverse_test__count;
+size_t stateless_member_traverse_test__count;
+size_t stateless_leave_traverse_test__count;
+
+struct stateless_enter_traverse_test : moneta::algorithm::traverse_enter {
+	template <class Path, class Entity>
+	void operator()(Entity&) const {
+		++stateless_enter_traverse_test__count;
+	}
+};
+
+struct stateless_member_traverse_test : moneta::algorithm::traverse_member {
+	template <class Path, class Member, class Entity>
+	void operator()(Entity&) const {
+		++stateless_member_traverse_test__count;
+	}
+};
+
+struct stateless_leave_traverse_test : moneta::algorithm::traverse_leave {
+	template <class Path, class Entity>
+	void operator()(Entity&) const {
+		++stateless_leave_traverse_test__count;
+	}
+};
+///////////
+
+BOOST_AUTO_TEST_CASE(stateless_traverse_test) {
+	{
+		A x;
+
+		moneta::algorithm::traverse<
+			boost::mpl::vector<
+				stateless_enter_traverse_test,
+				stateless_member_traverse_test,
+				stateless_leave_traverse_test
+			>
+		>(x);
+	}
+
+	{
+		const A x;
+		
+		moneta::algorithm::traverse<
+			boost::mpl::vector<
+				//enter_traverse_test,
+				//member_traverse_test,
+				//leave_traverse_test
+			>
+		>(x);
+	}
+}
 
 BOOST_AUTO_TEST_CASE(stateful_traverse_test) {
 
@@ -140,8 +189,6 @@ BOOST_AUTO_TEST_CASE(stateful_traverse_test) {
 // Container traversal tests.
 //
 
-
-
 struct enter_container_traverse_test : moneta::algorithm::traverse_enter_container {
 	template <class Member, class Path, class Entity>
 	void operator()(Entity&, test_state& state) const {
@@ -153,7 +200,7 @@ struct enter_container_traverse_test : moneta::algorithm::traverse_enter_contain
 };
 
 struct container_member_traverse_test : moneta::algorithm::traverse_container_member {
-	template <class Path, class Member, class Entity>
+	template <class Member, class Path, class Entity>
 	void operator()(Entity& entity, test_state& state) const {
 		std::string tmp = "cm:" + moneta::traits::detail::member_name<Member>::get();
 		const std::string path = moneta::codec::detail::stringize_path<Path>();

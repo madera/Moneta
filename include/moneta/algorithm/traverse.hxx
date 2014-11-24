@@ -50,8 +50,6 @@ namespace moneta { namespace algorithm {
 			}
 		};
 
-		//
-
 		template <class Entity, class Path, class Member, class State>
 		class container_enter_or_leave_action {
 			Entity& _entity;
@@ -65,8 +63,6 @@ namespace moneta { namespace algorithm {
 				typename Action().operator()<Member, Path>(_entity, _state);
 			}
 		};
-
-		//
 
 		template <class Entity, class Path, class State, class Member>
 		class member_action {
@@ -82,7 +78,35 @@ namespace moneta { namespace algorithm {
 			}
 		};
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//
+
+		template <class Actions, class Entity, class Path, class State>
+		class member_operator {
+			Entity& _entity;
+			State& _state;
+		public:
+			member_operator(Entity& entity, State& state)
+			 : _entity(entity), _state(state) {}
+
+			template <typename Member>
+			void operator()(Member&) const {
+				process<Actions, Path, Member>(_entity, _state);
+			}
+		};
+
+		template <class Entity, class Path, class Member, class State>
+		class container_member_operator {
+			Entity& _entity;
+			State& _state;
+		public:
+			container_member_operator(Entity& entity, State& state)
+			 : _entity(entity), _state(state) {}
+
+			template <typename Action>
+			void operator()(Action&) const {
+				typename Action().operator()<Member, Path>(_entity, _state);
+			}
+		};
 
 		//
 		// Entity result_type
@@ -138,7 +162,7 @@ namespace moneta { namespace algorithm {
 
 			// Members
 			//
-			for (value_type& entity_value : Member()(entity)) {
+			for (auto& entity_value : Member()(entity)) { // XXX: FIXME: Must be C++03!!
 				traverse<Actions, new_path>(entity_value, state);
 			}
 
@@ -183,34 +207,6 @@ namespace moneta { namespace algorithm {
 				typename detail::actions_of<Actions, traverse_leave_container>::type
 			>(detail::container_enter_or_leave_action<Entity, new_path, Member, State>(entity, state));
 		}
-
-		template <class Actions, class Entity, class Path, class State>
-		class member_operator {
-			Entity& _entity;
-			State& _state;
-		public:
-			member_operator(Entity& entity, State& state)
-			 : _entity(entity), _state(state) {}
-
-			template <typename Member>
-			void operator()(Member&) const {
-				process<Actions, Path, Member>(_entity, _state);
-			}
-		};
-
-		template <class Entity, class Path, class Member, class State>
-		class container_member_operator {
-			Entity& _entity;
-			State& _state;
-		public:
-			container_member_operator(Entity& entity, State& state)
-			 : _entity(entity), _state(state) {}
-
-			template <typename Action>
-			void operator()(Action&) const {
-				typename Action().operator()<Path, Member>(_entity, _state);
-			}
-		};
 
 		struct no_state {};
 	}

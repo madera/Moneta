@@ -179,6 +179,39 @@ namespace moneta { namespace codec {
 		}
 	};
 
+	//////////////
+
+	template <>
+	struct enter_container<xml> {
+		//template <class Entity, class Iterator>
+		//int operator()(const Entity& entity, Iterator begin, Iterator end) const {
+		//	auto& output = moneta::codec::detail::make_ostringstream(begin, end);
+		//	output  << detail::tabs<boost::mpl::size<Path>::value>::get()
+		//		<< '<' << traits::detail::member_name<Member>::get() << '>' << '\n';
+		//	return output;
+		//}
+	};
+
+	template <class Member, class Path>
+	struct container_member_encoder<xml, Member, Path> {
+		template <class Entity, class Iterator>
+		int operator()(const Entity& entity, Iterator begin, Iterator end) const {
+			auto& output = moneta::codec::detail::make_ostringstream(begin, end);
+			output  << detail::tabs<boost::mpl::size<Path>::value>::get()
+				<< '<' << traits::detail::member_name<Member>::get() << '>' << '\n';
+	
+			const std::string& tag_name = traits::detail::xml_container_member_element_name<Member>::get();
+			for (const auto& x : Member()(entity)) {
+				output << detail::tabs<boost::mpl::size<Path>::value + 1>::get()
+				       << '<' << tag_name << '>' << x << '<' << '/' << tag_name << '>' << '\n';
+			}
+
+			output  << detail::tabs<boost::mpl::size<Path>::value>::get()
+				<< "</" << traits::detail::member_name<Member>::get() << '>' << '\n';
+			return output;
+		}
+	};
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //

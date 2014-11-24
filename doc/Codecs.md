@@ -51,7 +51,6 @@ This is the default sequence of an encode<>() call:
     * member_encoder<Codec, Entity>
       * value_encoder<Codec, T>.
     * leave_entity_encoder<Codec, E  T>.
-ity>
 
 You may specialize any of these classes at will. Just remember that the other calls won't be made and chaining will need to be continued manually if wanted.
 
