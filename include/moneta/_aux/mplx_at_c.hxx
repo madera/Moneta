@@ -1,6 +1,6 @@
 #pragma once
 
-// MEQUEDE: This preprocessed version should be faster (theoretically) but it needs to be proven in a lab first.
+// MEQUEDE: This preprocessed version should be faster (theoretically) but it needs to be proven in lab first.
 //
 // For now, only the iterative version will be used (costs O(n) every call).
 //

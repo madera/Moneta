@@ -1,4 +1,5 @@
 #pragma once
+#include <boost/type_traits/add_reference.hpp> // XXX: Check the necessity of this...
 
 namespace moneta { namespace traits { namespace detail {
 

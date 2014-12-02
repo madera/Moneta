@@ -413,5 +413,11 @@
     <ClCompile Include="..\..\..\test\moneta\traits\is_container_test.cxx">
       <Filter>Source Files\moneta\traits</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\algorithm\traverse_ng_test.cxx">
+      <Filter>Source Files\moneta\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\moneta\_aux\mplx_flatten.cxx">
+      <Filter>Source Files\moneta\_aux</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -385,6 +385,12 @@
     <ClInclude Include="..\..\..\include\moneta\traits\is_container.hxx">
       <Filter>Header Files\moneta\traits</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\algorithm\traverse_ng.hxx">
+      <Filter>Header Files\moneta\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\_aux\mplx_flatten.hxx">
+      <Filter>Header Files\moneta\_aux</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\doc\Descriptors.md">

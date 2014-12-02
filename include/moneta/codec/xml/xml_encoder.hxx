@@ -181,16 +181,16 @@ namespace moneta { namespace codec {
 
 	//////////////
 
-	template <>
-	struct enter_container<xml> {
-		//template <class Entity, class Iterator>
-		//int operator()(const Entity& entity, Iterator begin, Iterator end) const {
-		//	auto& output = moneta::codec::detail::make_ostringstream(begin, end);
-		//	output  << detail::tabs<boost::mpl::size<Path>::value>::get()
-		//		<< '<' << traits::detail::member_name<Member>::get() << '>' << '\n';
-		//	return output;
-		//}
-	};
+	//template <>
+	//struct enter_container<xml> {
+	//	//template <class Entity, class Iterator>
+	//	//int operator()(const Entity& entity, Iterator begin, Iterator end) const {
+	//	//	auto& output = moneta::codec::detail::make_ostringstream(begin, end);
+	//	//	output  << detail::tabs<boost::mpl::size<Path>::value>::get()
+	//	//		<< '<' << traits::detail::member_name<Member>::get() << '>' << '\n';
+	//	//	return output;
+	//	//}
+	//};
 
 	template <class Member, class Path>
 	struct container_member_encoder<xml, Member, Path> {

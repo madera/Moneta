@@ -37,6 +37,8 @@ TODO:
 	* Document codec specs. Encoding, decoding, typecode_type, fixed_values, etc etc etc.
 	* Implement header optimization for end-users.
 	* Add State parameter for codec::encode() and codec::decode().
+	* Make better use of test PCH. Most of the MPL could be inserted.
+	* Watch out for #include <boost/mpl/print.hpp>
 
 Codec:
 	* A visitor-based dispatcher seems appropriate. For now, only shell codec has it (with an initiator).

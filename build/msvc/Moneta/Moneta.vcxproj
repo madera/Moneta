@@ -82,6 +82,7 @@
     <ClInclude Include="..\..\..\include\moneta\algorithm\dispatch_entity.hxx" />
     <ClInclude Include="..\..\..\include\moneta\algorithm\for_each_member.hxx" />
     <ClInclude Include="..\..\..\include\moneta\algorithm\traverse.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\algorithm\traverse_ng.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\codec_io.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\debug_dump\debug_dump_encoder.hxx" />
     <ClInclude Include="..\..\..\include\moneta\codec\debug_dump\stringize_path.hxx" />
@@ -175,6 +176,7 @@
     <ClInclude Include="..\..\..\include\moneta\traits\to_tie.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\tuple.hxx" />
     <ClInclude Include="..\..\..\include\moneta\_aux\mplx_at_c.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\_aux\mplx_flatten.hxx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\doc\Codecs.md" />

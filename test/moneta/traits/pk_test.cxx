@@ -88,6 +88,8 @@ static void static_test() {
 	));
 }
 
+// TODO: Check this comment below.
+//
 // Commented since extract_pk could be embedded into pk() as a simplifier.
 // It's future is TBD.
 //BOOST_AUTO_TEST_CASE(pk_extraction_test) {
