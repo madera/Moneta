@@ -7,28 +7,28 @@ namespace moneta { namespace traits {
 
 	namespace detail {
 		namespace mpl {
-			template <class EntityType>
+			template <class Entity>
 			struct pk_tie : boost::mpl::transform<
-				typename pk<EntityType>::type,
+				typename pk<Entity>::type,
 				boost::add_reference<boost::mpl::_>
 			> {};
 		}
 
 		namespace fusion {
-			template <class EntityType>
+			template <class Entity>
 			struct pk_tie : boost::fusion::result_of::as_vector<
-				typename mpl::pk_tie<EntityType>::type
+				typename mpl::pk_tie<Entity>::type
 			> {};
 		}
 
-		template <class EntityType>
+		template <class Entity>
 		struct entity_pk_tie : detail::deref_if_unary<
-			typename detail::fusion::pk_tie<EntityType>::type
+			typename detail::fusion::pk_tie<Entity>::type
 		> {};
 
 	}
 
-	template <class EntityType, class Enable = void>
+	template <class Entity, class Enable = void>
 	struct pk_tie;
 
 	template <class NonEntityType>
@@ -45,18 +45,18 @@ namespace moneta { namespace traits {
 		}
 	};
 
-	template <class EntityType>
+	template <class Entity>
 	struct pk_tie<
-		EntityType,
-		typename boost::enable_if<moneta::traits::is_entity<EntityType> >::type
+		Entity,
+		typename boost::enable_if<moneta::traits::is_entity<Entity> >::type
 	> {
-		typedef typename moneta::traits::detail::entity_pk_tie<EntityType>::type type;
+		typedef typename moneta::traits::detail::entity_pk_tie<Entity>::type type;
 		
-		typename type operator()(EntityType& entity) {
+		typename type operator()(Entity& entity) {
 			return moneta::traits::detail::sepacon_opfx<
-				moneta::traits::pk_members<EntityType>::type,
+				moneta::traits::pk_members<Entity>::type,
 				type,
-				EntityType&
+				Entity&
 			>()(entity);
 		}
 	};

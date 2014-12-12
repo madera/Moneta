@@ -31,17 +31,17 @@ namespace moneta { namespace container {
 	namespace mi = boost::multi_index;
 
 	template <
-		class EntityType,
-		class LoadTracker = /*null_load_tracker<EntityType>,*/ bitset_load_tracker<EntityType>,
-		class ChangeTracker = /*null_change_tracker<EntityType>*/ hash_change_tracker<EntityType>
+		class Entity,
+		class LoadTracker = /*null_load_tracker<Entity>,*/ bitset_load_tracker<Entity>,
+		class ChangeTracker = /*null_change_tracker<Entity>*/ hash_change_tracker<Entity>
 	>
 	class rtuple_set { // : boost::noncopyable {
 
 		// We don't support entities with no PKs (yet).
-		BOOST_MPL_ASSERT((moneta::traits::has_pk<EntityType>));
+		BOOST_MPL_ASSERT((moneta::traits::has_pk<Entity>));
 
 		// XXX: Temporary... just for now.
-		BOOST_MPL_ASSERT_NOT((boost::is_const<EntityType>));
+		BOOST_MPL_ASSERT_NOT((boost::is_const<Entity>));
 
 		// TODO: Make this intelligent.
 		enum {
@@ -51,7 +51,7 @@ namespace moneta { namespace container {
 		};
 
 		typedef typename traits::pk_rtuple<
-			EntityType
+			Entity
 		>::type pk_rtuple_type;
 		
 		typedef typename boost::call_traits<
@@ -59,7 +59,7 @@ namespace moneta { namespace container {
 		>::param_type pk_rtuple_param_type;
 
 		typedef typename traits::rtuple<
-			EntityType
+			Entity
 		>::type rtuple_type;
 
 		typedef traits::detail::sub_tie_vector<
@@ -83,7 +83,7 @@ namespace moneta { namespace container {
 			 : LoadTracker(all_loaded),
 			   ChangeTracker(rtuple),
 			   flags(0),
-			   pk(traits::to_pk_rtuple<EntityType>(rtuple)),
+			   pk(traits::to_pk_rtuple<Entity>(rtuple)),
 			   data(rtuple) {
 				if (newcomer) {
 					flags |= NEWCOMER_FLAG;
@@ -161,14 +161,14 @@ namespace moneta { namespace container {
 		}
 
 		void replace(const rtuple_type& rtuple) {
-			auto itr = _container.get<by_hash>().find(traits::to_pk_rtuple<EntityType>(rtuple));
+			auto itr = _container.get<by_hash>().find(traits::to_pk_rtuple<Entity>(rtuple));
 			if (itr != _container.get<by_hash>().end()) {
 				_container.get<by_hash>().replace(itr, entry(rtuple));
 			}
 		}
 
 		void erase(const rtuple_type& rtuple) {
-			erase(traits::to_pk_rtuple<EntityType>(rtuple));
+			erase(traits::to_pk_rtuple<Entity>(rtuple));
 		}
 
 		void erase(const pk_rtuple_type pk) {

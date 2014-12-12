@@ -4,17 +4,17 @@
 
 namespace moneta { namespace serialization { namespace soci {
 
-	template <class EntityType, class OutputIteratorType>
+	template <class Entity, class OutputIteratorType>
 	const size_t soci_list(::soci::session& session, OutputIteratorType& output) {
-		typedef traits::rtuple<EntityType>::type rtuple_type;
+		typedef traits::rtuple<Entity>::type rtuple_type;
 		::soci::rowset<rtuple_type> rows = (
-			session.prepare << sql::generators::select_all_from_table<EntityType>()
+			session.prepare << sql::generators::select_all_from_table<Entity>()
 		);
 	
 		size_t count = 0;
 		for (::soci::rowset<rtuple_type>::const_iterator itr = rows.begin();
 			itr != rows.end(); ++itr) {
-			EntityType newcomer = detail::soci_xlate_read<EntityType>(session, *itr);
+			Entity newcomer = detail::soci_xlate_read<Entity>(session, *itr);
 			*output++ = newcomer;
 			++count;
 		}

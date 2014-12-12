@@ -121,10 +121,10 @@ namespace moneta { namespace container {
 			>::type {
 				entry() {}
 
-				template <class EntityType>
-				entry(EntityType& entity) {
+				template <class Entity>
+				entry(Entity& entity) {
 					boost::mpl::for_each<entries_type>(
-						sliced_constructor<entry, EntityType>(*this, entity)
+						sliced_constructor<entry, Entity>(*this, entity)
 					);
 				}
 

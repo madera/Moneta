@@ -5,23 +5,23 @@
 namespace moneta { namespace traits {
 
 	namespace detail {
-		template <class EntityType>
+		template <class Entity>
 		struct tie_maker {
-			typename tie<EntityType>::type
-			operator()(EntityType& entity) {
+			typename tie<Entity>::type
+			operator()(Entity& entity) {
 				return sepacon_opfx<
-					members<EntityType>::type,
-					typename tie<EntityType>::type,
-					EntityType&
+					typename members<Entity>::type,
+					typename tie<Entity>::type,
+					Entity&
 				>()(entity);
 			}
 		};
 	}
 
-	template <class EntityType>
-	typename tie<EntityType>::type
-	to_tie(EntityType& x) {
-		return detail::tie_maker<EntityType>()(x);
+	template <class Entity>
+	typename tie<Entity>::type
+	to_tie(Entity& x) {
+		return detail::tie_maker<Entity>()(x);
 	}
 
 }}

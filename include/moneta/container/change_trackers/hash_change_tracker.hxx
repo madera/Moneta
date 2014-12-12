@@ -28,13 +28,13 @@ std::basic_ostream<T, U>& operator<<(std::basic_ostream<T, U>& output, const boo
 
 namespace moneta { namespace container {
 
-	template <class EntityType>
+	template <class Entity>
 	struct hash_change_tracker {
 
 		typedef boost::array<
 			size_t,
 			boost::mpl::size<
-				typename traits::rtuple<EntityType>::type
+				typename traits::rtuple<Entity>::type
 			>::value
 		> state_type;
 
@@ -75,8 +75,8 @@ namespace moneta { namespace container {
 			}
 		};
 
-		//template <class EntityType>
-		//typename state_type hash_entity(const EntityType& entity) {
+		//template <class Entity>
+		//typename state_type hash_entity(const Entity& entity) {
 		//	state_type result;
 
 		//	boost::fusion::copy(
@@ -98,7 +98,7 @@ namespace moneta { namespace container {
 		}
 	public:
 		state_type change_state;
-		typedef typename traits::rtuple<EntityType>::type tuple_type;
+		typedef typename traits::rtuple<Entity>::type tuple_type;
 	public:
 		hash_change_tracker() {
 			change_state.assign(0);
@@ -128,7 +128,7 @@ namespace moneta { namespace container {
 			}
 		};
 
-		template <class Master, class EntityType>
+		template <class Master, class Entity>
 		struct hash_change_tracker_impl {
 			typedef hash_change_tracker_impl this_type;
 
@@ -136,14 +136,14 @@ namespace moneta { namespace container {
 				typedef boost::array<
 					size_t,
 					boost::mpl::size<
-						typename traits::rtuple<EntityType>::type
+						typename traits::rtuple<Entity>::type
 					>::value
 				> state_type;
 
 				state_type hash;
 
 				entry() {}
-				entry(const EntityType& entity) { update(entity); }
+				entry(const Entity& entity) { update(entity); }
 
 				std::string to_string() const {
 					std::ostringstream oss;
@@ -159,12 +159,12 @@ namespace moneta { namespace container {
 					return oss.str();
 				}
 
-				void update(const EntityType& entity) {
-					EntityType tmp = entity; // XXX: HACK: Until const tie is done.
+				void update(const Entity& entity) {
+					Entity tmp = entity; // XXX: HACK: Until const tie is done.
 					update(moneta::traits::to_tie(tmp));
 				}
 
-				void update(const typename moneta::traits::tie<EntityType>::type& tie) {
+				void update(const typename moneta::traits::tie<Entity>::type& tie) {
 					boost::fusion::copy(
 						boost::fusion::transform(tie, std_hasher()),
 						hash
@@ -179,9 +179,9 @@ namespace moneta { namespace container {
 	
 	} // namespace detail
 
-	template <class EntityType>
+	template <class Entity>
 	struct hash_change_tracker2 : boost::mpl::lambda<
-		detail::hash_change_tracker_impl<boost::mpl::_1, EntityType>
+		detail::hash_change_tracker_impl<boost::mpl::_1, Entity>
 	>::type {};
 
 }}

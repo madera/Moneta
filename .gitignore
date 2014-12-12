@@ -192,3 +192,6 @@ install_manifest.txt
 # Mac
 .DS_Store
 
+# Misc
+*.dll
+

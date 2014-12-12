@@ -14,12 +14,12 @@
 
 
 	template <
-		class EntityType,
-		class LoadTracker = bitset_load_tracker<EntityType>,
-		class ChangeTracker = hash_change_tracker<EntityType> // = { copy, hash, bitfield }
+		class Entity,
+		class LoadTracker = bitset_load_tracker<Entity>,
+		class ChangeTracker = hash_change_tracker<Entity> // = { copy, hash, bitfield }
 	>
 	struct entity_container {
-		typedef db_tuple<EntityType>::type tuple_type;
+		typedef db_tuple<Entity>::type tuple_type;
 		
 		struct entry : StateTracker {
 			int status;
@@ -30,8 +30,8 @@
 			StateTracker::revert();
 		}
 
-		void update(const EntityType& entity) {
-			pk<const EntityType> pk(entity);
+		void update(const Entity& entity) {
+			pk<const Entity> pk(entity);
 			entry_itr = get_entry(pk);
 			assert(entry_itr != end());
 
@@ -116,8 +116,8 @@
 __F__   _______PK_________   _____________________DATA________________   ____LT___   __________________CT_____________________
 int32 | <std::string, int> | <std::string, int, std::string, int, int> | bitset<5> | <std::string, int, std::string, int, int>
 
-template <class EntityType>
-void fx(const EntityType& entity) {
+template <class Entity>
+void fx(const Entity& entity) {
 	given an rtuple<T>, find it by pk_tuple (<std::string, int>)
 }
 	

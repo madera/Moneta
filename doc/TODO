@@ -15,7 +15,6 @@ TODO:
 	* Move has_member_trait.hxx to a proper place.
 	* Rethink about test entity names and using their traits in naming. It's a mess right now.
 	* Check const correctness on Codec API.
-	* Either all EntityType or all Entity. UPDATE: Continue renaming EntityType to Entity.
 	* Add support for no-Path-needed for_each_member loops. No penalty should be induced for unused features.
 	  Currently only callables with a default nullptr Path parameter are supported.
 	* Remove static from headers in favor of unnamed namespaces.

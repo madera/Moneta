@@ -8,7 +8,7 @@ namespace moneta { namespace traits {
 		member_name,
 		std::string,
 		get_pk_member_names, 
-		pk_members<EntityType>::type
+		pk_members<Entity>::type
 	)
 
 }}

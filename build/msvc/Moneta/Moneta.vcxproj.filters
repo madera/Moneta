@@ -391,6 +391,12 @@
     <ClInclude Include="..\..\..\include\moneta\_aux\mplx_flatten.hxx">
       <Filter>Header Files\moneta\_aux</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\pp\is_method_callable_spec_old.hxx">
+      <Filter>Header Files\moneta\traits\detail\pp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\moneta\_aux\mplx_nullref.hxx">
+      <Filter>Header Files\moneta\_aux</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\doc\Descriptors.md">

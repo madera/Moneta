@@ -7,7 +7,7 @@
 struct Cat {
 	int ID;
 	std::string Name;
-	Address Address;
+	::Address Address;
 };
 
 //((int,         ID,      CAT_ID,     MONETA_PRIMARY_KEY))

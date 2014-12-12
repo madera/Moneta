@@ -9,22 +9,22 @@ namespace moneta { namespace container {
 
 	namespace detail {
 
-		template <class Master, class EntityType>
+		template <class Master, class Entity>
 		struct pk_tracker_impl {
 			typedef pk_tracker_impl this_type;
 
 			typedef typename boost::call_traits<
-				typename moneta::traits::pk<EntityType>::type
+				typename moneta::traits::pk<Entity>::type
 			>::param_type param_type;
 
 			struct entry {
-				typedef typename moneta::traits::pk<EntityType>::type state_type;
+				typedef typename moneta::traits::pk<Entity>::type state_type;
 				state_type pk;
 
 				entry() {}
 
 				// XXX: Add non-const too.
-				entry(const EntityType& entity) {
+				entry(const Entity& entity) {
 					pk = moneta::traits::extract_pk(entity);
 				}
 
@@ -89,9 +89,9 @@ namespace moneta { namespace container {
 	
 	} // namespace detail
 
-	template <class EntityType>
+	template <class Entity>
 	struct pk_tracker : boost::mpl::lambda<
-		detail::pk_tracker_impl<boost::mpl::_1, EntityType>
+		detail::pk_tracker_impl<boost::mpl::_1, Entity>
 	>::type {};
 
 }}

@@ -13,14 +13,14 @@ namespace moneta { namespace container {
 
 	namespace detail {
 
-		template <class Master, class EntityType>
+		template <class Master, class Entity>
 		struct bitset_load_tracker_impl {
 			typedef bitset_load_tracker_impl this_type;
 
 			struct entry {
 				typedef typename std::bitset<
 					boost::mpl::size<
-						typename moneta::traits::rtuple<EntityType>::type
+						typename moneta::traits::rtuple<Entity>::type
 					>::value
 				> state_type;
 
@@ -29,7 +29,7 @@ namespace moneta { namespace container {
 				entry() {
 				}
 
-				entry(const EntityType& entity) {
+				entry(const Entity& entity) {
 				}
 
 				std::string to_string() const {
@@ -48,11 +48,11 @@ namespace moneta { namespace container {
 
 	}
 
-	template <class EntityType>
+	template <class Entity>
 	struct bitset_load_tracker {
 		typedef typename std::bitset<
 			boost::mpl::size<
-				typename moneta::traits::rtuple<EntityType>::type
+				typename moneta::traits::rtuple<Entity>::type
 			>::value
 		> state_type;
 
@@ -78,9 +78,9 @@ namespace moneta { namespace container {
 		}
 	};
 
-	template <class EntityType>
+	template <class Entity>
 	struct bitset_load_tracker2 : boost::mpl::lambda<
-		detail::bitset_load_tracker_impl<boost::mpl::_1, EntityType>
+		detail::bitset_load_tracker_impl<boost::mpl::_1, Entity>
 	>::type {};
 
 }}

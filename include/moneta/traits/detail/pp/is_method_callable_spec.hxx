@@ -1,107 +1,249 @@
-// WARNING: No guardians!
-//
-// ==========================================================================
-// === WARNING: C++03 Limitation: Doesn't work for zero argument methods! ===
-// ==========================================================================
-//
-// Input macros:
-//
-//	IS_METHOD_CALLABLE_NAME
-//	IS_METHOD_CALLABLE_FUNCTION
-//	IS_METHOD_CALLABLE_ARITY (default 10)
-//
-// Based on http://www.rsdn.ru/forum/cpp/2759773.1
-//
-
-#ifndef IS_METHOD_CALLABLE_ARITY
-#define IS_METHOD_CALLABLE_ARITY 10
-#endif
-
-#include <boost/preprocessor/comparison/equal.hpp>
-#include <boost/type_traits/add_reference.hpp>
-#include <boost/mpl/if.hpp>
+#pragma once
 #include <boost/mpl/bool.hpp>
 
-namespace {
-	template<class T>
-	struct BOOST_PP_CAT(has_member_, IS_METHOD_CALLABLE_NAME) { // XXX: Use pre-existing.
-		struct A { int IS_METHOD_CALLABLE_FUNCTION; };
-		struct B : T, A {};
-		template<typename C, C> struct ChT;
-		template<typename C> static char(&f(ChT<int A::*, &C::IS_METHOD_CALLABLE_FUNCTION>*))[1];
-		template<typename C> static char(&f(...))[2];
-		static const bool value = sizeof(f<B>(0)) == 2;
-		typedef ::boost::mpl::bool_<value> type;
-	};
+// TODO: Clean this up, MPLize and PPize it and create fork on GitHub to give back to the community.
+// From: https://github.com/jaredhoberock/is_call_possible
+// With inspiration from: Roman Perepelitsa
 
-	template <typename T> class dummy {};
-	template <typename T, typename U> const U& operator,(const U&, dummy<T>);
-	template <typename T, typename U>       U& operator,(U&, dummy<T>);
+// inspired by Roman Perepelitsa's presentation from comp.lang.c++.moderated
+// based on the implementation here: http://www.rsdn.ru/forum/cpp/2759773.1.aspx
 
-	template <class T>
-	T& nullref() {
-		return *((T*) 0);
-	}
-}
+namespace is_call_possible_detail {
+	template<typename T> struct add_reference     { typedef T& type; };
+	template<typename T> struct add_reference<T&> { typedef T& type; };
+} // end is_call_possible_detail
 
-template <typename T, typename Signature>
-struct IS_METHOD_CALLABLE_NAME {
-	class yes {};
-	class no { yes m[2]; };
-
-	template <typename U, typename Result>
-	struct deducer {
-		static yes fx(Result);
-		static no fx(dummy<T>);
-		static no fx(...);
-		static no fx(no);
-	};
-
-	template <typename U>
-	struct deducer<U, void> {
-		static yes fx(...);
-		static no fx(no);
-	};
-
-	struct derived : public T {
-		using T::IS_METHOD_CALLABLE_FUNCTION;
-		no IS_METHOD_CALLABLE_FUNCTION(...) const;
-	};
-
-	typedef typename ::boost::mpl::if_<
-		::boost::is_const<T>,
-		::boost::add_const<derived>,
-		derived
-	>::type derived_type;
-
-	template <bool Good, typename F>
-	struct impl : ::boost::mpl::false_ {};
-
-	typedef impl<BOOST_PP_CAT(has_member_, IS_METHOD_CALLABLE_NAME) < T > ::value, Signature> type;
-	static const bool value = type::value;
-//
-
-#define ENUM_Ts_SPEC(z, n, size) BOOST_PP_CAT(nullref<T,n)>()BOOST_PP_COMMA_IF(BOOST_PP_NOT_EQUAL(n,BOOST_PP_DEC(size)))
-#define ENUM_Ts(n) BOOST_PP_REPEAT(n, ENUM_Ts_SPEC, n)
-
-#define DEFINE_IMPL_WITH_ARGS(n) \
-	template <typename Result, BOOST_PP_ENUM_PARAMS(n, typename T)> \
-	struct impl<true, Result(BOOST_PP_ENUM_PARAMS(n, T))> : ::boost::mpl::bool_< \
-		sizeof(deducer<T, Result>::fx(( \
-			nullref<derived_type>().IS_METHOD_CALLABLE_FUNCTION(ENUM_Ts(n)), nullref<dummy<T> >())) \
-		) == sizeof(yes) \
-	> {};													
-
-#define IMPL_SPEC(z, n, data) DEFINE_IMPL_WITH_ARGS(BOOST_PP_INC(n))
-BOOST_PP_REPEAT(IS_METHOD_CALLABLE_ARITY, IMPL_SPEC, _)
-#undef IMPL_SPEC
-
-#undef DEFINE_IMPL_WITH_ARGS
-
-#undef ENUM_Ts
-#undef ENUM_Ts_SPEC
+#define DEFINE_HAS_MEMBER_FUNCTION(trait_name, member_function_name)                                         \
+                                                                                                             \
+template<typename T, typename Signature>                                                                     \
+class trait_name;                                                                                            \
+                                                                                                             \
+template<typename T, typename Result>                                                                        \
+class trait_name<T, Result(void)>                                                                            \
+{                                                                                                            \
+   class yes { char m; };                                                                                    \
+   class no { yes m[2]; };                                                                                   \
+   struct base_mixin                                                                                         \
+   {                                                                                                         \
+     Result member_function_name();                                                                          \
+   };                                                                                                        \
+   struct base : public T, public base_mixin {};                                                             \
+   template <typename U, U t>  class helper{};                                                               \
+   template <typename U>                                                                                     \
+   static no deduce(U*, helper<Result (base_mixin::*)(), &U::member_function_name>* = 0);                    \
+   static yes deduce(...);                                                                                   \
+public:                                                                                                      \
+   static const bool value = sizeof(yes) == sizeof(deduce(static_cast<base*>(0)));                           \
+   static const boost::mpl::bool_<value> type;                                                               \
+};                                                                                                           \
+                                                                                                             \
+template<typename T, typename Result, typename Arg>                                                          \
+class trait_name<T, Result(Arg)>                                                                             \
+{                                                                                                            \
+   class yes { char m; };                                                                                    \
+   class no { yes m[2]; };                                                                                   \
+   struct base_mixin                                                                                         \
+   {                                                                                                         \
+     Result member_function_name(Arg);                                                                       \
+   };                                                                                                        \
+   struct base : public T, public base_mixin {};                                                             \
+   template <typename U, U t>  class helper{};                                                               \
+   template <typename U>                                                                                     \
+   static no deduce(U*, helper<Result (base_mixin::*)(Arg), &U::member_function_name>* = 0);                 \
+   static yes deduce(...);                                                                                   \
+public:                                                                                                      \
+   static const bool value = sizeof(yes) == sizeof(deduce(static_cast<base*>(0)));                           \
+   static const boost::mpl::bool_<value> type;                                                               \
+};                                                                                                           \
+                                                                                                             \
+template<typename T, typename Result, typename Arg1, typename Arg2>                                          \
+class trait_name<T, Result(Arg1,Arg2)>                                                                       \
+{                                                                                                            \
+   class yes { char m; };                                                                                    \
+   class no { yes m[2]; };                                                                                   \
+   struct base_mixin                                                                                         \
+   {                                                                                                         \
+     Result member_function_name(Arg1,Arg2);                                                                 \
+   };                                                                                                        \
+   struct base : public T, public base_mixin {};                                                             \
+   template <typename U, U t>  class helper{};                                                               \
+   template <typename U>                                                                                     \
+   static no deduce(U*, helper<Result (base_mixin::*)(Arg1,Arg2), &U::member_function_name>* = 0);           \
+   static yes deduce(...);                                                                                   \
+public:                                                                                                      \
+   static const bool value = sizeof(yes) == sizeof(deduce(static_cast<base*>(0)));                           \
+   static const boost::mpl::bool_<value> type;                                                               \
+};                                                                                                           \
+                                                                                                             \
+template<typename T, typename Result, typename Arg1, typename Arg2, typename Arg3>                           \
+class trait_name<T, Result(Arg1,Arg2,Arg3)>                                                                  \
+{                                                                                                            \
+   class yes { char m; };                                                                                    \
+   class no { yes m[2]; };                                                                                   \
+   struct base_mixin                                                                                         \
+   {                                                                                                         \
+     Result member_function_name(Arg1,Arg2,Arg3);                                                            \
+   };                                                                                                        \
+   struct base : public T, public base_mixin {};                                                             \
+   template <typename U, U t>  class helper{};                                                               \
+   template <typename U>                                                                                     \
+   static no deduce(U*, helper<Result (base_mixin::*)(Arg1,Arg2,Arg3), &U::member_function_name>* = 0);      \
+   static yes deduce(...);                                                                                   \
+public:                                                                                                      \
+   static const bool value = sizeof(yes) == sizeof(deduce(static_cast<base*>(0)));                           \
+   static const boost::mpl::bool_<value> type;                                                               \
+};                                                                                                           \
+                                                                                                             \
+template<typename T, typename Result, typename Arg1, typename Arg2, typename Arg3, typename Arg4>            \
+class trait_name<T, Result(Arg1,Arg2,Arg3,Arg4)>                                                             \
+{                                                                                                            \
+   class yes { char m; };                                                                                    \
+   class no { yes m[2]; };                                                                                   \
+   struct base_mixin                                                                                         \
+   {                                                                                                         \
+     Result member_function_name(Arg1,Arg2,Arg3,Arg4);                                                       \
+   };                                                                                                        \
+   struct base : public T, public base_mixin {};                                                             \
+   template <typename U, U t>  class helper{};                                                               \
+   template <typename U>                                                                                     \
+   static no deduce(U*, helper<Result (base_mixin::*)(Arg1,Arg2,Arg3,Arg4), &U::member_function_name>* = 0); \
+   static yes deduce(...);                                                                                   \
+public:                                                                                                      \
+   static const bool value = sizeof(yes) == sizeof(deduce(static_cast<base*>(0)));                           \
+   static const boost::mpl::bool_<value> type;                                                               \
 };
 
-#undef IS_METHOD_CALLABLE_FUNCTION
-#undef IS_METHOD_CALLABLE_NAME
-#undef IS_METHOD_CALLABLE_ARITY
+namespace is_call_possible_detail { 
+   template <typename T>
+   class void_exp_result {}; 
+
+   template <typename T, typename U> 
+   U const& operator,(U const&, void_exp_result<T>); 
+
+   template <typename T, typename U> 
+   U& operator,(U&, void_exp_result<T>); 
+
+   template <typename src_type, typename dest_type> 
+   struct clone_constness { typedef dest_type type; }; 
+
+   template <typename src_type, typename dest_type> 
+   struct clone_constness<const src_type, dest_type> { 
+     typedef const dest_type type; 
+   }; 
+} 
+
+#define DEFINE_IS_CALL_POSSIBLE(trait_name, member_function_name)                                                       \
+namespace moneta { namespace traits { namespace detail {                                                                \
+namespace trait_name##_detail                                                                                           \
+{                                                                                                                       \
+DEFINE_HAS_MEMBER_FUNCTION(has_member, member_function_name)                                                            \
+}                                                                                                                       \
+                                                                                                                        \
+template <typename T, typename Signature>                                                                               \
+struct trait_name                                                                                                       \
+{                                                                                                                       \
+  private:                                                                                                              \
+   class yes {};                                                                                                        \
+   class no { yes m[2]; };                                                                                              \
+   struct derived : public T                                                                                            \
+   {                                                                                                                    \
+     using T::member_function_name;                                                                                     \
+     no member_function_name(...) const;                                                                                \
+   };                                                                                                                   \
+                                                                                                                        \
+   typedef typename is_call_possible_detail::clone_constness<T, derived>::type derived_type;                            \
+                                                                                                                        \
+   template <typename U, typename Result>                                                                               \
+   struct return_value_check                                                                                            \
+   {                                                                                                                    \
+     static yes deduce(Result);                                                                                         \
+     static no deduce(...);                                                                                             \
+     static no deduce(no);                                                                                              \
+     static no deduce(is_call_possible_detail::void_exp_result<T>);                                                     \
+   };                                                                                                                   \
+                                                                                                                        \
+   template <typename U>                                                                                                \
+   struct return_value_check<U, void>                                                                                   \
+   {                                                                                                                    \
+     static yes deduce(...);                                                                                            \
+     static no deduce(no);                                                                                              \
+   };                                                                                                                   \
+                                                                                                                        \
+   template <bool has_the_member_of_interest, typename F>                                                               \
+   struct impl                                                                                                          \
+   {                                                                                                                    \
+     static const bool value = false;                                                                                   \
+     typedef boost::mpl::bool_<value> type;                                                                        \
+   };                                                                                                                   \
+                                                                                                                        \
+   template <typename Result, typename Arg>                                                                             \
+   struct impl<true, Result(Arg)>                                                                                       \
+   {                                                                                                                    \
+     static typename is_call_possible_detail::add_reference<derived_type>::type test_me;                                \
+     static typename is_call_possible_detail::add_reference<Arg>::type          arg;                                    \
+                                                                                                                        \
+     static const bool value =                                                                                          \
+       sizeof(                                                                                                          \
+            return_value_check<T, Result>::deduce(                                                                      \
+             (test_me.member_function_name(arg), is_call_possible_detail::void_exp_result<T>())                         \
+                         )                                                                                              \
+            ) == sizeof(yes);                                                                                           \
+     typedef boost::mpl::bool_<value> type;                                                                        \
+   };                                                                                                                   \
+                                                                                                                        \
+   template <typename Result, typename Arg1, typename Arg2>                                                             \
+   struct impl<true, Result(Arg1,Arg2)>                                                                                 \
+   {                                                                                                                    \
+     static typename is_call_possible_detail::add_reference<derived_type>::type test_me;                                \
+     static typename is_call_possible_detail::add_reference<Arg1>::type         arg1;                                   \
+     static typename is_call_possible_detail::add_reference<Arg2>::type         arg2;                                   \
+                                                                                                                        \
+     static const bool value =                                                                                          \
+       sizeof(                                                                                                          \
+            return_value_check<T, Result>::deduce(                                                                      \
+             (test_me.member_function_name(arg1,arg2), is_call_possible_detail::void_exp_result<T>())                   \
+                         )                                                                                              \
+            ) == sizeof(yes);                                                                                           \
+     typedef boost::mpl::bool_<value> type;                                                                        \
+   };                                                                                                                   \
+                                                                                                                        \
+   template <typename Result, typename Arg1, typename Arg2, typename Arg3>                                              \
+   struct impl<true, Result(Arg1,Arg2,Arg3)>                                                                            \
+   {                                                                                                                    \
+     static typename is_call_possible_detail::add_reference<derived_type>::type test_me;                                \
+     static typename is_call_possible_detail::add_reference<Arg1>::type         arg1;                                   \
+     static typename is_call_possible_detail::add_reference<Arg2>::type         arg2;                                   \
+     static typename is_call_possible_detail::add_reference<Arg3>::type         arg3;                                   \
+                                                                                                                        \
+     static const bool value =                                                                                          \
+       sizeof(                                                                                                          \
+            return_value_check<T, Result>::deduce(                                                                      \
+             (test_me.member_function_name(arg1,arg2,arg3), is_call_possible_detail::void_exp_result<T>())              \
+                         )                                                                                              \
+            ) == sizeof(yes);                                                                                           \
+     typedef boost::mpl::bool_<value> type;                                                                        \
+   };                                                                                                                   \
+                                                                                                                        \
+   template <typename Result, typename Arg1, typename Arg2, typename Arg3, typename Arg4>                               \
+   struct impl<true, Result(Arg1,Arg2,Arg3,Arg4)>                                                                       \
+   {                                                                                                                    \
+     static typename is_call_possible_detail::add_reference<derived_type>::type test_me;                                \
+     static typename is_call_possible_detail::add_reference<Arg1>::type         arg1;                                   \
+     static typename is_call_possible_detail::add_reference<Arg2>::type         arg2;                                   \
+     static typename is_call_possible_detail::add_reference<Arg3>::type         arg3;                                   \
+     static typename is_call_possible_detail::add_reference<Arg4>::type         arg4;                                   \
+                                                                                                                        \
+     static const bool value =                                                                                          \
+       sizeof(                                                                                                          \
+            return_value_check<T, Result>::deduce(                                                                      \
+             (test_me.member_function_name(arg1,arg2,arg3,arg4), is_call_possible_detail::void_exp_result<T>())         \
+                         )                                                                                              \
+            ) == sizeof(yes);                                                                                           \
+     typedef boost::mpl::bool_<value> type;                                                                        \
+   };                                                                                                                   \
+                                                                                                                        \
+  public:                                                                                                               \
+    static const bool value = impl<trait_name##_detail::has_member<T,Signature>::value, Signature>::value;              \
+    typedef boost::mpl::bool_<value> type;                                                                        \
+};                                                                                                                      \
+}}}

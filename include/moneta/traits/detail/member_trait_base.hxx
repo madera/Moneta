@@ -7,6 +7,10 @@
 #include <string>
 #include <vector>
 
+
+#include <boost/preprocessor/tuple/rem.hpp>
+#include <boost/preprocessor/tuple/size.hpp>
+
 //
 // Types of Traits:
 //
@@ -24,20 +28,22 @@
 		};                                               \
 	}}}
 
-#define MONETA_DEFINE_TRAIT(trait, type, result_type)        \
+#define MONETA_DEFINE_TRAIT(trait, type, result_type)                   \
 	template <>                                                     \
 	struct moneta::traits::detail::trait<type> : boost::true_type { \
 		typedef result_type trait_type;                         \
 	};
 
-#define MONETA_DEFINE_TRAIT_WITH_GET(trait, type, get_type, get_value)  \
+#define MONETA_DEFINE_TRAIT_WITH_GET(trait, type, get_type, get_value) \
+	namespace moneta { namespace traits { namespace detail { \
 	template <>                                                     \
-	struct moneta::traits::detail::trait<type> : boost::true_type { \
+	struct trait<BOOST_PP_TUPLE_REM(BOOST_PP_TUPLE_SIZE(type)) type> : boost::true_type { \
 		typedef get_type trait_type;                            \
 		static trait_type get() {                               \
 			return get_value;                               \
 		}                                                       \
-	};
+	}; \
+	}}}
 
 #define MONETA_DEFINE_FLAG_TRAIT(trait, type)                             \
 	template <>                                                       \
@@ -52,21 +58,21 @@
 
 
 // TODO: Add a nice assert to capture non-registered entities early.
-#define MONETA_DEFINE_ENTITY_TRAIT_GETTER(trait, name)               \
-	template <class EntityType>                                  \
-	const typename moneta::traits::detail::trait<                \
-		typename moneta::traits::pure_type<EntityType>::type \
-	>::trait_type                                                \
-	name() {                                                     \
-		return moneta::traits::detail::trait<                \
-			moneta::traits::pure_type<EntityType>::type  \
-		>::get();                                            \
+#define MONETA_DEFINE_ENTITY_TRAIT_GETTER(trait, name)                   \
+	template <class Entity>                                          \
+	const typename moneta::traits::detail::trait<                    \
+		typename moneta::traits::pure_type<Entity>::type         \
+	>::trait_type                                                    \
+	name() {                                                         \
+		return moneta::traits::detail::trait<                    \
+			typename moneta::traits::pure_type<Entity>::type \
+		>::get();                                                \
 	}
 
 // XXX: Remove const on return value.
-// XXX: Does this need 'EntityType'?
+// XXX: Does this need 'Entity'?
 #define MONETA_DEFINE_MEMBER_SEQUENCE_TRAIT_COLLECTOR(trait, type, name, members) \
-	template <class EntityType>                                               \
+	template <class Entity>                                                   \
 	const std::vector<type> name() {                                          \
 		return moneta::traits::detail::get_member_traits_with_get<        \
 			moneta::traits::detail::trait,                            \
@@ -75,7 +81,7 @@
 	}
 
 #define MONETA_DEFINE_MEMBER_TRAIT_COLLECTOR(trait, trait_type, name) \
-	MONETA_DEFINE_MEMBER_SEQUENCE_TRAIT_COLLECTOR(trait, trait_type, name, moneta::traits::members<EntityType>::type)
+	MONETA_DEFINE_MEMBER_SEQUENCE_TRAIT_COLLECTOR(trait, trait_type, name, moneta::traits::members<Entity>::type)
 
 namespace moneta { namespace traits { namespace detail {
 
@@ -116,7 +122,7 @@ namespace moneta { namespace traits { namespace detail {
 	std::vector<std::string> get_member_traits_with_get() {
 		std::vector<std::string> result;
 		boost::fusion::for_each(
-			typename MemberPointersSequence(),
+			MemberPointersSequence(),
 			detail::trait_back_inserter<MemberTraitWithGet>(result)
 		);
 

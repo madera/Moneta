@@ -9,18 +9,18 @@
 
 namespace moneta { namespace sql { namespace generators {
 
-	template <class EntityType>
+	template <class Entity>
 	const std::string delete_from_table() {
 		std::ostringstream oss;
-		oss << "DELETE FROM " << traits::get_table_name<EntityType>();
+		oss << "DELETE FROM " << traits::get_table_name<Entity>();
 		return oss.str();
 	}
 
-	template <class EntityType>
+	template <class Entity>
 	const std::string delete_from_table_where_pk() {
 		std::ostringstream oss;
-		oss << delete_from_table<EntityType>()
-		    << "\n WHERE " << detail::generate_filter_parameters<EntityType>();
+		oss << delete_from_table<Entity>()
+		    << "\n WHERE " << detail::generate_filter_parameters<Entity>();
 		return oss.str();
 	}
 

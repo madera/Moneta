@@ -17,9 +17,9 @@ namespace moneta { namespace sql { namespace generators { namespace detail {
 	//	return result;
 	//}
 	
-	template <class EntityType>
+	template <class Entity>
 	const std::string generate_filter_parameters() {
-		const std::vector<std::string> fields = moneta::sql::traits::get_pk_field_names<EntityType>();
+		const std::vector<std::string> fields = moneta::sql::traits::get_pk_field_names<Entity>();
 		
 		std::ostringstream oss;
 		for (size_t i=0; i < fields.size(); ++i) {
@@ -33,9 +33,9 @@ namespace moneta { namespace sql { namespace generators { namespace detail {
 	}
 
 	// TODO: Rename this to something appropriate.
-	template <class EntityType>
+	template <class Entity>
 	const std::string generate_parameters(const std::string& separator = ", ") {
-		const std::vector<std::string> fields = moneta::sql::traits::get_field_names<EntityType>();
+		const std::vector<std::string> fields = moneta::sql::traits::get_field_names<Entity>();
 		
 		std::ostringstream oss;
 		for (size_t i=0; i < fields.size(); ++i) {

@@ -9,29 +9,29 @@
 
 namespace moneta { namespace traits {
 
-	template <class EntityType>
+	template <class Entity>
 	typename boost::enable_if<
-		detail::is_fusion_vector<typename pk<EntityType>::type>,
-		typename pk<EntityType>::type
+		detail::is_fusion_vector<typename pk<Entity>::type>,
+		typename pk<Entity>::type
 	>::type
 	empty_pk() {
-		typename pk<EntityType>::type result;
+		typename pk<Entity>::type result;
 		return boost::fusion::transform(result, detail::blanker());
 	}
 
-	template <class EntityType>
+	template <class Entity>
 	typename boost::enable_if<
-		boost::mpl::not_<detail::is_fusion_vector<typename pk_tie<EntityType>::type> >,
-		typename pk<EntityType>::type
+		boost::mpl::not_<detail::is_fusion_vector<typename pk_tie<Entity>::type> >,
+		typename pk<Entity>::type
 	>::type
 	empty_pk() {
-		typename traits::pk<EntityType>::type result{};
+		typename traits::pk<Entity>::type result{};
 		return result;
 	}
 
-	template <class EntityType>
-	const bool has_empty_pk(const EntityType& entity) {
-		return traits::extract_pk<EntityType>(entity) == empty_pk<EntityType>();
+	template <class Entity>
+	const bool has_empty_pk(const Entity& entity) {
+		return traits::extract_pk<Entity>(entity) == empty_pk<Entity>();
 	}
 
 }}

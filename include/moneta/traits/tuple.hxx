@@ -14,12 +14,12 @@ namespace moneta { namespace traits {
 
 	namespace detail {
 
-		template <class EntityType>
+		template <class Entity>
 		struct get_result_type {
 			template <typename T>
 			struct apply {
 				typedef typename boost::mpl::if_<
-					boost::is_const<EntityType>,
+					boost::is_const<Entity>,
 					typename boost::add_const<
 						typename T::result_type
 					>::type,
@@ -30,18 +30,18 @@ namespace moneta { namespace traits {
 
 		namespace mpl {
 
-			template <class EntityType>
+			template <class Entity>
 			struct vector : boost::mpl::transform<
-				typename members<EntityType>::type,
-				get_result_type<EntityType>
+				typename members<Entity>::type,
+				get_result_type<Entity>
 			> {};
 
 		}
 	}
 
-	template <class EntityType>
+	template <class Entity>
 	struct tuple : boost::fusion::result_of::as_vector<
-		typename detail::mpl::vector<EntityType>::type
+		typename detail::mpl::vector<Entity>::type
 	> {};
 
 }}

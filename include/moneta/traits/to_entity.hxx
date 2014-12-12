@@ -3,9 +3,9 @@
 
 namespace moneta { namespace traits {
 
-	template <class EntityType, class TupleType>
-	EntityType to_entity(const TupleType& tuple) {
-		EntityType entity;
+	template <class Entity, class TupleType>
+	Entity to_entity(const TupleType& tuple) {
+		Entity entity;
 		to_tie(entity) = tuple;
 		return entity;
 	}

@@ -11,14 +11,14 @@ namespace moneta { namespace traits {
 
 	namespace detail {
 
-		template <class EntityType>
+		template <class Entity>
 		struct rtie_maker {
-			typename rtie<EntityType>::type
-			operator()(EntityType& entity) {
+			typename rtie<Entity>::type
+			operator()(Entity& entity) {
 				return moneta::traits::detail::sepacon_opfx<
-					moneta::traits::members<EntityType>::type,
-					typename rtie<EntityType>::type,
-					EntityType&,
+					moneta::traits::members<Entity>::type,
+					typename rtie<Entity>::type,
+					Entity&,
 					moneta::traits::get_pk_tie_functor
 				>()(entity);
 			}
@@ -26,10 +26,10 @@ namespace moneta { namespace traits {
 
 	}
 
-	template <class EntityType>
-	typename rtie<EntityType>::type
-	to_rtie(EntityType& x) {
-		return detail::rtie_maker<EntityType>()(x);
+	template <class Entity>
+	typename rtie<Entity>::type
+	to_rtie(Entity& x) {
+		return detail::rtie_maker<Entity>()(x);
 	}
 
 }}

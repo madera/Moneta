@@ -9,19 +9,19 @@
 
 namespace moneta { namespace sql { namespace generators {
 
-	template <class EntityType>
+	template <class Entity>
 	const std::string select_all_from_table() {
 		std::ostringstream oss;
-		oss << "SELECT " << boost::join(traits::get_field_names<EntityType>(), ", ") << '\n'
-		    << "  FROM " << traits::get_table_name<EntityType>();
+		oss << "SELECT " << boost::join(traits::get_field_names<Entity>(), ", ") << '\n'
+		    << "  FROM " << traits::get_table_name<Entity>();
 		return oss.str();
 	}
 
-	template <class EntityType>
+	template <class Entity>
 	const std::string select_all_from_table_where_pk() {
 		std::ostringstream oss;
-		oss << select_all_from_table<EntityType>()
-		    << "\n WHERE " << detail::generate_filter_parameters<EntityType>();
+		oss << select_all_from_table<Entity>()
+		    << "\n WHERE " << detail::generate_filter_parameters<Entity>();
 		return oss.str();
 	}
 

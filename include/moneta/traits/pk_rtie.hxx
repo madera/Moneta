@@ -3,11 +3,11 @@
 
 namespace moneta { namespace traits {
 
-	template <class EntityType>
+	template <class Entity>
 	struct pk_rtie : moneta::traits::detail::deref_if_unary<
 		typename boost::fusion::result_of::as_vector<
 			typename boost::mpl::transform<
-				typename moneta::traits::detail::mpl::pk_tie<EntityType>::type,
+				typename moneta::traits::detail::mpl::pk_tie<Entity>::type,
 				moneta::traits::pk_tie<boost::mpl::_1>
 			>::type
 		>::type

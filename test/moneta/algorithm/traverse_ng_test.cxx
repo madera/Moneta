@@ -317,10 +317,10 @@ BOOST_AUTO_TEST_CASE(with_container_members_traverse_test) {
 	reset_counters();
 
 	test_state state;
-	traverse_type()(SportsTeam(), state);
-	BOOST_CHECK_EQUAL(g_enter_count, 1 * 3);
-	BOOST_CHECK_EQUAL(g_member_count, 1 * 3);
-	BOOST_CHECK_EQUAL(g_leave_count, 1 * 3);
+	traverse_type()(team, state);
+	BOOST_CHECK_EQUAL(g_enter_count, 3 * 3);
+	BOOST_CHECK_EQUAL(g_member_count, 9 * 3);
+	BOOST_CHECK_EQUAL(g_leave_count, 3 * 3);
 	BOOST_CHECK_EQUAL(g_enter_container_count, 2 * 3);
 	BOOST_CHECK_EQUAL(g_container_member_count, 1 * 3);
 	BOOST_CHECK_EQUAL(g_leave_container_count, 2 * 3);
@@ -360,8 +360,6 @@ BOOST_AUTO_TEST_CASE(with_container_members_traverse_test) {
 BOOST_AUTO_TEST_CASE(traverse_test) {
 	using namespace moneta::algorithm;
 	
-	A x;
-
 	const char* expected[] = {
 		"e:A",
 		"m:f",
@@ -420,17 +418,22 @@ BOOST_AUTO_TEST_CASE(traverse_test) {
 	{
 		test_state state;
 
-		traverse_type()(x, state);
+		A a;
+
+		traverse_type traverser;
+		traverser(a, state);
 
 		BOOST_REQUIRE(state.lines.size() == 19);
 		BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + 19);
 	}
 
 	{
-		test_state state;
-		const A& const_x = x;
-		
-		traverse_type()(const_x, state);
+		test_state state;		
+		traverse_type traverser;
+
+		A a;
+		const A& ca = a;
+		traverser(ca, state);
 
 		BOOST_REQUIRE(state.lines.size() == 19);
 		BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + 19);

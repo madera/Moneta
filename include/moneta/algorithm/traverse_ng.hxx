@@ -1,5 +1,6 @@
 #pragma once
 #include "../_aux/mplx_flatten.hxx"
+#include "../_aux/mplx_nullref.hxx"
 #include "../traits/detail/is_functor_callable.hxx"
 #include "../traits/is_entity.hxx"
 #include "../traits/is_container.hxx"
@@ -86,7 +87,7 @@ namespace moneta { namespace algorithm {
 				moneta::traits::detail::is_functor_callable<Action, void (Entity&, Path&, State&)>
 			>::type
 			process() const {
-				Action()(_entity, Path(), _state);
+				Action()(_entity, mplx::nullref<Path>(), _state);
 			}
 			
 		public:
@@ -109,7 +110,7 @@ namespace moneta { namespace algorithm {
 				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&)>
 			>::type
 			process() const {
-				Action()(Member(), _entity);
+				Action()(mplx::nullref<Member>(), _entity);
 			}
 
 			template <typename Action>
@@ -117,7 +118,7 @@ namespace moneta { namespace algorithm {
 				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, State&)>
 			>::type
 			process() const {
-				Action()(Member(), _entity, _state);
+				Action()(mplx::nullref<Member>(), _entity, _state);
 			}
 
 			template <typename Action>
@@ -125,7 +126,7 @@ namespace moneta { namespace algorithm {
 				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, Path&, State&)>
 			>::type
 			process() const {
-				Action()(Member(), _entity, Path(), _state);
+				Action()(mplx::nullref<Member>(), _entity, mplx::nullref<Path>(), _state);
 			}
 
 		public:
@@ -148,7 +149,7 @@ namespace moneta { namespace algorithm {
 				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&)>
 			>::type
 			process() const {
-				Action()(Member(), _entity);
+				Action()(mplx::nullref<Member>(), _entity);
 			}
 
 			template <typename Action>
@@ -156,15 +157,15 @@ namespace moneta { namespace algorithm {
 				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, State&)>
 			>::type
 			process() const {
-				Action()(Member(), _entity, _state);
+				Action()(mplx::nullref<Member>(), _entity, _state);
 			}
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, Path&, State&)>
+				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, const Path&, State&)>
 			>::type
 			process() const {
-				Action()(Member(), _entity, Path(), _state);
+				Action()(mplx::nullref<Member>(), _entity, mplx::nullref<Path>(), _state);
 			}
 			
 		public:
@@ -177,7 +178,7 @@ namespace moneta { namespace algorithm {
 			}
 		};
 
-		template <class Traverser, class Entity, class Path, class State>
+		template <class Traverser_, class Entity, class Path_, class State>
 		class member_action_dispatcher {
 			Entity& _entity;
 			State& _state;
@@ -193,7 +194,9 @@ namespace moneta { namespace algorithm {
 				>
 			>::type
 			process() const {
-				Traverser()._traverse<add_path<Path, Member>::type>(Member()(_entity), _state);
+				Traverser().template _traverse<
+					typename add_path<Path, Member>::type
+				>(mplx::nullref<Member>()(_entity), _state);
 			}
 
 			//
@@ -223,23 +226,20 @@ namespace moneta { namespace algorithm {
 				>
 			>::type
 			process() const {
-// 				typedef typename Member::result_type container_type;
-// 				typedef typename container_type::value_type value_type;
-
-				typedef detail::container_action<
-					Member,
-					Entity,
-					typename add_path<Path, Member>::type,
-					State
-				> action;
-
 				using boost::mpl::for_each;
+
+				typedef typename add_path<Path, Member>::type path;
+				typedef detail::container_action<Member, Entity, path, State> action;
+
 				for_each<typename Traverser::enter_container_actions>(action(_entity, _state));
-				for (auto& entity_value : Member()(_entity)) { // XXX: FIXME: Must be C++03!!
-					Traverser()._traverse<
-						typename add_path<Path, Member>::type
-					>(entity_value, _state);
+
+ 				typedef typename Member::result_type container_type;
+				container_type& container = Member()(_entity);
+				typename container_type::iterator itr = container.begin();
+				for ( ; itr != container.end(); ++itr) {
+					Traverser().template _traverse<path>(*itr, _state);
 				}
+
 				for_each<typename Traverser::leave_container_actions>(action(_entity, _state));
 			}
 
@@ -273,7 +273,7 @@ namespace moneta { namespace algorithm {
 
 			template <typename Member>
 			void operator()(Member&) const {
-				process<Traverser, Path, Member>();
+				process<Traverser_, Path_, Member>();
 			}
 		};
 

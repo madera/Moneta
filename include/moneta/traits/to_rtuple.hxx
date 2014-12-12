@@ -12,14 +12,14 @@ namespace moneta { namespace traits {
 
 	namespace detail {
 
-		template <class EntityType>
+		template <class Entity>
 		struct rtuple_maker {
-			typename rtuple<EntityType>::type
-			operator()(EntityType& entity) {
+			typename rtuple<Entity>::type
+			operator()(Entity& entity) {
 				return moneta::traits::detail::sepacon_opfx<
-					moneta::traits::members<EntityType>::type,
-					typename rtuple<EntityType>::type,
-					EntityType&,
+					moneta::traits::members<Entity>::type,
+					typename rtuple<Entity>::type,
+					Entity&,
 					moneta::traits::get_pk_functor
 				>()(entity);
 			}
@@ -27,16 +27,16 @@ namespace moneta { namespace traits {
 
 	}
 
-	template <class EntityType>
-	typename rtuple<EntityType>::type
-	to_rtuple(EntityType& x) {
-		return detail::rtuple_maker<EntityType>()(x);
+	template <class Entity>
+	typename rtuple<Entity>::type
+	to_rtuple(Entity& x) {
+		return detail::rtuple_maker<Entity>()(x);
 	}
 
 	// XXX: Move this somewhere else.
-	template <class EntityType>
-	typename traits::rtuple<EntityType>::type make_rtuple() {
-		traits::rtuple<EntityType>::type result;
+	template <class Entity>
+	typename traits::rtuple<Entity>::type make_rtuple() {
+		traits::rtuple<Entity>::type result;
 		return boost::fusion::transform(result, moneta::traits::detail::blanker());
 	}
 

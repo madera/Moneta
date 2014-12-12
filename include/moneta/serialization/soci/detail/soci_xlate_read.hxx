@@ -45,21 +45,21 @@ namespace moneta { namespace serialization { namespace soci { namespace detail {
 		}
 	};
 
-	template <class EntityType>
-	EntityType soci_xlate_read(
+	template <class Entity>
+	Entity soci_xlate_read(
 		::soci::session& session,
-		typename moneta::traits::rtuple<EntityType>::type& rtuple
+		typename moneta::traits::rtuple<Entity>::type& rtuple
 	) {
 		typedef boost::fusion::vector<
-			traits::tuple<EntityType>::type&,
-			traits::rtuple<EntityType>::type&
+			traits::tuple<Entity>::type&,
+			traits::rtuple<Entity>::type&
 		> zip_vector_type;
 
-		typename traits::tuple<EntityType>::type tuple = make_tuple<EntityType>();
+		typename traits::tuple<Entity>::type tuple = make_tuple<Entity>();
 		boost::fusion::zip_view<zip_vector_type> zip(zip_vector_type(tuple, rtuple));
 		boost::fusion::for_each(zip, fufu(session));
 	
-		EntityType result;
+		Entity result;
 		moneta::traits::to_tie(result) = tuple;
 		return result;
 	}

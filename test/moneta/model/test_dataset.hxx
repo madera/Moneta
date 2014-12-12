@@ -1,4 +1,4 @@
 #pragma once
 
-template <class EntityType>
+template <class Entity>
 struct test_dataset;

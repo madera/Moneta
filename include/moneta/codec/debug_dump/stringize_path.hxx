@@ -1,4 +1,6 @@
 #pragma once
+#include "../../traits/entity_name.hxx"
+#include "../../traits/member_names.hxx"
 
 namespace moneta { namespace codec { namespace detail {
 
@@ -6,7 +8,7 @@ namespace moneta { namespace codec { namespace detail {
 		std::ostringstream& oss;
 
 		path_printer(std::ostringstream& oss_)
-			: oss(oss_) {}
+		 : oss(oss_) {}
 
 		template <class Member>
 		void operator()(Member&) const {

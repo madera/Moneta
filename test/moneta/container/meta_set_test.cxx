@@ -6,7 +6,7 @@
 #include <moneta/container/change_trackers/hash_change_tracker.hxx>
 #include "../model/Person.hxx"
 
-template <class Master, class EntityType>
+template <class Master, class Entity>
 struct test_tracker_impl {
 	typedef test_tracker_impl this_type;
 
@@ -33,9 +33,9 @@ struct test_tracker_impl {
 	//};
 };
 
-template <class EntityType>
+template <class Entity>
 struct test_tracker : boost::mpl::lambda<
-	test_tracker_impl<boost::mpl::_1, EntityType>
+	test_tracker_impl<boost::mpl::_1, Entity>
 >::type {};
 
 BOOST_AUTO_TEST_CASE(meta_set_test) {

@@ -8,15 +8,15 @@
 
 namespace moneta { namespace sql { namespace generators {
 
-	template <class EntityType>
+	template <class Entity>
 	const std::string insert_into_table() {
-		const std::vector<std::string> fields = traits::get_field_names<EntityType>();
+		const std::vector<std::string> fields = traits::get_field_names<Entity>();
 
 		std::ostringstream oss;
-		oss << "INSERT INTO " << traits::get_table_name<EntityType>() << " (\n"
+		oss << "INSERT INTO " << traits::get_table_name<Entity>() << " (\n"
 		    << '\t' << boost::join(fields, ", ") << '\n'
 		    << ") VALUES (\n"
-		    << '\t' << detail::generate_parameters<EntityType>() << '\n'
+		    << '\t' << detail::generate_parameters<Entity>() << '\n'
 		    << ")";
 		return oss.str();
 	}

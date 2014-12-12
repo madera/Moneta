@@ -21,7 +21,7 @@ namespace moneta { namespace algorithm {
 		call_enter_if_defined(Operation& operation, Entity& entity) {
 			// NOTE: A compile time error here could indicate an unexpected signature
 			//       for the user defined enter() method.
-			return operation.enter<Entity, Path>(entity);
+			return operation.template enter<Entity, Path>(entity);
 		}
 
 		template <class Path, class Operation, class Entity>
@@ -40,7 +40,7 @@ namespace moneta { namespace algorithm {
 		call_leave_if_defined(Operation& operation, Entity& entity) {
 			// NOTE: A compile time error here could indicate an unexpected signature
 			//       for the user defined leave() method.
-			return operation.leave<Entity, Path>(entity);
+			return operation.template leave<Entity, Path>(entity);
 		}
 
 		template <class Path, class Operation, class Entity>
@@ -51,52 +51,12 @@ namespace moneta { namespace algorithm {
 		//
 		// --------------------------------------------------------------------------------------------------
 		//
-
-		// TODO: Could this be a simple function?
-		template <class MaybeEntity, class Path, class Enable = void>
-		struct recurse_or_call_operation;
-
-		// Specialization for: Recurse
-		//
-		template <class Member, class Path>
-		struct recurse_or_call_operation<
-			Member,
-			Path,
-			typename boost::enable_if<
-				traits::is_entity<
-					typename Member::result_type
-				>
-			>::type
-		> {
-			template <class Operation, class Entity>
-			void operator()(Operation& operation, Entity& entity) {
-				for_each_member_impl(
-					Member()(entity),
-					operation,
-					boost::mpl::push_back<Path, Member>::type()
-				);
-			}
-		};
-
 		// Specialization for: Operate
 		//
-		template <class Member, class Path>
-		struct recurse_or_call_operation<
-			Member, Path,
-			typename boost::disable_if<
-				traits::is_entity<
-					typename Member::result_type
-				>
-			>::type
-		> {
-			template <class Operation, class Entity>
-			void operator()(Operation& operation, Entity& entity) {
-				// TODO: Write a clever comment to alert users in case of compile error here.
+		// TODO: Could this be a simple function?
 
-				// FIXME: Encapsulate this call so it works with free functions et al.
-				operation.operator()<Entity, Member, Path>(entity);
-			}
-		};
+		template <class MaybeEntity, class Path, class Enable = void>
+		struct recurse_or_call_operation;
 
 		template <class Entity, class Operation, class Path>
 		class do_member_operator {
@@ -113,7 +73,7 @@ namespace moneta { namespace algorithm {
 		};
 
 		template <class Members, class Entity, class Operation, class Path = boost::mpl::vector0<> >
-		void for_some_members_impl(Entity& entity, Operation& operation, Path& path = Path()) {
+		void for_some_members_impl(Entity& entity, Operation& operation, Path* path = 0) {
 			call_enter_if_defined<Path>(operation, entity);
 
 			boost::mpl::for_each<
@@ -124,20 +84,67 @@ namespace moneta { namespace algorithm {
 		}
 
 		template <class Entity, class Operation, class Path = boost::mpl::vector0<> >
-		void for_each_member_impl(Entity& entity, Operation& operation, Path& path = Path()) {
+		void for_each_member_impl(Entity& entity, Operation& operation, Path* path = 0) {
 			for_some_members_impl<
 				typename traits::members<Entity>::type, Entity, Operation, Path
 			>(entity, operation);
 		}
+		//
+		// --------------------------------------------------------------------------------------------------
+		//
+
+		// Specialization for: Recurse
+		//
+		template <class Member, class Path>
+		struct recurse_or_call_operation<
+			Member, Path,
+			typename boost::disable_if<
+				traits::is_entity<
+					typename Member::result_type
+				>
+			>::type
+		> {
+			template <class Operation, class Entity>
+			void operator()(Operation& operation, Entity& entity) {
+				// TODO: Write a clever comment to alert users in case of compile error here.
+
+				// FIXME: Encapsulate this call so it works with free functions et al.
+#ifdef BOOST_MSVC
+				operation.operator()<Entity, Member, Path>(entity);
+#else
+				operation.template operator()<Entity, Member, Path>(entity);
+#endif
+			}
+		};
+
+		template <class Member, class Path>
+		struct recurse_or_call_operation<
+			Member,
+			Path,
+			typename boost::enable_if<
+				traits::is_entity<
+					typename Member::result_type
+				>
+			>::type
+		> {
+			template <class Operation, class Entity>
+			void operator()(Operation& operation, Entity& entity) {
+				for_each_member_impl(
+					Member()(entity),
+					operation,
+					static_cast<typename boost::mpl::push_back<Path, Member>::type*>(0)
+				);
+			}
+		};
 	}
 
 	template <class Members, class Entity, class Operation>
-	void for_some_members(Entity& entity, Operation& operation) {
+	void for_some_members(Entity& entity, Operation operation) {
 		detail::for_some_members_impl<Members>(entity, operation);
 	}
 
 	template <class Entity, class Operation>
-	void for_each_member(Entity& entity, Operation& operation) {
+	void for_each_member(Entity& entity, Operation operation) {
 		detail::for_each_member_impl(entity, operation);
 	}
 

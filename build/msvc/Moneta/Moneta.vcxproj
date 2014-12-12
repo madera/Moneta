@@ -147,6 +147,7 @@
     <ClInclude Include="..\..\..\include\moneta\traits\detail\memptr_constructor.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\mplx.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\pp\is_method_callable_spec.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\traits\detail\pp\is_method_callable_spec_old.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\pure_type.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sepacon_opfx.hxx" />
     <ClInclude Include="..\..\..\include\moneta\traits\detail\sub_tie_vector.hxx" />
@@ -177,6 +178,7 @@
     <ClInclude Include="..\..\..\include\moneta\traits\tuple.hxx" />
     <ClInclude Include="..\..\..\include\moneta\_aux\mplx_at_c.hxx" />
     <ClInclude Include="..\..\..\include\moneta\_aux\mplx_flatten.hxx" />
+    <ClInclude Include="..\..\..\include\moneta\_aux\mplx_nullref.hxx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\doc\Codecs.md" />

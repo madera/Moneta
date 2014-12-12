@@ -14,9 +14,11 @@
 #include <boost/mpl/size.hpp>
 
 #define MONETA_DECLARE_PRIMARY_KEY(k, t, m) \
-	template<> struct moneta::traits::detail::is_pk< \
+	namespace moneta { namespace traits { namespace detail { \
+	template<> struct is_pk< \
 		moneta::traits::member<k, t, &k::m> \
-	> : boost::true_type {};
+	> : boost::true_type {}; \
+	}}}
 
 namespace moneta { namespace traits {
 
@@ -27,66 +29,65 @@ namespace moneta { namespace traits {
 		};
 	}
 
-	template <class EntityType>
+	template <class Entity>
 	struct has_pk : boost::mpl::not_<
 		boost::is_same<
 			typename boost::mpl::find_if<
-				typename members<EntityType>::type,
+				typename members<Entity>::type,
 				detail::is_pk<boost::mpl::_1>
 			>::type,
 			typename boost::mpl::end<
-				typename members<EntityType>::type
+				typename members<Entity>::type
 			>::type
 		>
 	> {};
 
 	namespace detail {
 		struct get_pk_memptr_types {
-			template <class EntityType>
+			template <class Entity>
 			struct apply : boost::mpl::copy_if<
-				typename members<EntityType>::type,
+				typename members<Entity>::type,
 				is_pk<boost::mpl::_1>,
 				boost::mpl::back_inserter<boost::mpl::vector<> >
 			> {};
 		};
 
-		template <class EntityType>
 		struct get_primary_key {
-			template <class EntityType>
+			template <class Entity>
 			struct apply : boost::mpl::transform<
-				typename get_pk_memptr_types::apply<EntityType>::type,
-				detail::get_result_type<EntityType>
+				typename get_pk_memptr_types::apply<Entity>::type,
+				detail::get_result_type<Entity>
 			> {};
 		};
 
 		namespace mpl {
-			template <class EntityType>
+			template <class Entity>
 			struct pk : boost::mpl::apply<
-				detail::get_primary_key<EntityType>,
-				EntityType
+				detail::get_primary_key,
+				Entity
 			> {};
 		}
 
 		namespace fusion {
-			template <class EntityType>
+			template <class Entity>
 			struct pk : boost::fusion::result_of::as_vector<
-				typename mpl::pk<EntityType>::type
+				typename mpl::pk<Entity>::type
 			> {};
 		}
 
-		template <class EntityType>
+		template <class Entity>
 		struct entity_pk : detail::deref_if_unary<
-			typename detail::fusion::pk<EntityType>::type
+			typename detail::fusion::pk<Entity>::type
 		> {};
 	}
 
-	template <class EntityType>
+	template <class Entity>
 	struct pk_members : boost::mpl::apply<
 		detail::get_pk_memptr_types,
-		EntityType
+		Entity
 	> {};
 
-	template <class EntityType, class Enable = void>
+	template <class Entity, class Enable = void>
 	struct pk;
 
 	template <class NonEntityType>
@@ -105,16 +106,20 @@ namespace moneta { namespace traits {
 		}
 	};
 
-	template <class EntityType>
+	// TODO: Put this in a fwd?
+	template <class T, class U>
+	U extract_pk(T&);
+
+	template <class Entity>
 	struct pk<
-		EntityType,
+		Entity,
 		typename boost::enable_if<
-			moneta::traits::is_entity<EntityType>
+			moneta::traits::is_entity<Entity>
 		>::type
 	> {
-		typedef typename moneta::traits::detail::entity_pk<EntityType>::type type;
+		typedef typename moneta::traits::detail::entity_pk<Entity>::type type;
 		
-		type operator()(EntityType& entity) {
+		type operator()(Entity& entity) {
 			return moneta::traits::extract_pk(entity);
 		}
 	};
