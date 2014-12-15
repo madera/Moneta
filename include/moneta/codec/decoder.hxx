@@ -121,7 +121,7 @@ namespace moneta { namespace codec {
 
 		namespace decoder_handlers {
 			template <class Codec>
-			struct enter : moneta::algorithm::traverse_enter {
+			struct enter : moneta::algorithm::detail::traverse_enter {
 				template <class Path, class Entity, class State>
 				void operator()(Entity& entity, State& state) const {
 					if (state.good) {
@@ -139,7 +139,7 @@ namespace moneta { namespace codec {
 			};
 
 			template <class Codec>
-			struct member : moneta::algorithm::traverse_member {
+			struct member : moneta::algorithm::detail::traverse_member {
 				template <class Path, class Member, class Entity, class State>
 				void operator()(Entity& entity, State& state) const {
 					if (state.good) {
@@ -162,7 +162,7 @@ namespace moneta { namespace codec {
 			};
 
 			template <class Codec>
-			struct leave : moneta::algorithm::traverse_leave {
+			struct leave : moneta::algorithm::detail::traverse_leave {
 				template <class Path, class Entity, class State>
 				void operator()(Entity& entity, State& state) const {
 					if (state.good) {

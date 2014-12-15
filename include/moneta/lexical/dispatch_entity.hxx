@@ -1,13 +1,14 @@
 #pragma once
 #include "../limits/member.hxx"
 #include "../traits/member_names.hxx"
+#include "../traits/entity_name.hxx"
 #include "../algorithm/dispatch_entity.hxx"
 
 namespace moneta { namespace lexical {
 
 	namespace detail {
 		struct entity_name_is {
-			std::string _name;
+			const std::string _name;
 	
 			entity_name_is(const std::string& name)
 			 : _name(name) {}
@@ -20,7 +21,7 @@ namespace moneta { namespace lexical {
 	}
 
 	template <class Entities, class Visitor>
-	Visitor& dispatch_entity(const std::string& name, Visitor& visitor) {
+	const Visitor& dispatch_entity(const std::string& name, const Visitor& visitor) {
 		return algorithm::dispatch_entity<Entities>(visitor, detail::entity_name_is(name));
 	}
 

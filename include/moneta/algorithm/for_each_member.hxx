@@ -18,7 +18,7 @@ namespace moneta { namespace algorithm {
 
 		template <class Path, class Operation, class Entity>
 		typename boost::enable_if<has_member_enter<Operation> >::type
-		call_enter_if_defined(Operation& operation, Entity& entity) {
+		call_enter_if_defined(const Operation& operation, Entity& entity) {
 			// NOTE: A compile time error here could indicate an unexpected signature
 			//       for the user defined enter() method.
 			return operation.template enter<Entity, Path>(entity);
@@ -26,7 +26,7 @@ namespace moneta { namespace algorithm {
 
 		template <class Path, class Operation, class Entity>
 		typename boost::disable_if<has_member_enter<Operation> >::type
-		call_enter_if_defined(Operation& operation, Entity& entity) {
+		call_enter_if_defined(const Operation& operation, Entity& entity) {
 		}
 
 		//
@@ -37,7 +37,7 @@ namespace moneta { namespace algorithm {
 
 		template <class Path, class Operation, class Entity>
 		typename boost::enable_if<has_member_leave<Operation> >::type
-		call_leave_if_defined(Operation& operation, Entity& entity) {
+		call_leave_if_defined(const Operation& operation, Entity& entity) {
 			// NOTE: A compile time error here could indicate an unexpected signature
 			//       for the user defined leave() method.
 			return operation.template leave<Entity, Path>(entity);
@@ -45,7 +45,7 @@ namespace moneta { namespace algorithm {
 
 		template <class Path, class Operation, class Entity>
 		typename boost::disable_if<has_member_leave<Operation> >::type
-		call_leave_if_defined(Operation& operation, Entity& entity) {
+		call_leave_if_defined(const Operation& operation, Entity& entity) {
 		}
 
 		//
@@ -61,9 +61,9 @@ namespace moneta { namespace algorithm {
 		template <class Entity, class Operation, class Path>
 		class do_member_operator {
 			Entity& _entity;
-			Operation& _operation;
+			const Operation& _operation;
 		public:
-			do_member_operator(Entity& entity, Operation& operation)
+			do_member_operator(Entity& entity, const Operation& operation)
 			 : _entity(entity), _operation(operation) {}
 
 			template <typename Member>
@@ -73,7 +73,7 @@ namespace moneta { namespace algorithm {
 		};
 
 		template <class Members, class Entity, class Operation, class Path = boost::mpl::vector0<> >
-		void for_some_members_impl(Entity& entity, Operation& operation, Path* path = 0) {
+		void for_some_members_impl(Entity& entity, const Operation& operation, Path* path = 0) {
 			call_enter_if_defined<Path>(operation, entity);
 
 			boost::mpl::for_each<
@@ -84,7 +84,7 @@ namespace moneta { namespace algorithm {
 		}
 
 		template <class Entity, class Operation, class Path = boost::mpl::vector0<> >
-		void for_each_member_impl(Entity& entity, Operation& operation, Path* path = 0) {
+		void for_each_member_impl(Entity& entity, const Operation& operation, Path* path = 0) {
 			for_some_members_impl<
 				typename traits::members<Entity>::type, Entity, Operation, Path
 			>(entity, operation);
@@ -105,7 +105,7 @@ namespace moneta { namespace algorithm {
 			>::type
 		> {
 			template <class Operation, class Entity>
-			void operator()(Operation& operation, Entity& entity) {
+			void operator()(const Operation& operation, Entity& entity) {
 				// TODO: Write a clever comment to alert users in case of compile error here.
 
 				// FIXME: Encapsulate this call so it works with free functions et al.
@@ -128,7 +128,7 @@ namespace moneta { namespace algorithm {
 			>::type
 		> {
 			template <class Operation, class Entity>
-			void operator()(Operation& operation, Entity& entity) {
+			void operator()(const Operation& operation, Entity& entity) {
 				for_each_member_impl(
 					Member()(entity),
 					operation,
@@ -139,12 +139,12 @@ namespace moneta { namespace algorithm {
 	}
 
 	template <class Members, class Entity, class Operation>
-	void for_some_members(Entity& entity, Operation operation) {
+	void for_some_members(Entity& entity, const Operation& operation) {
 		detail::for_some_members_impl<Members>(entity, operation);
 	}
 
 	template <class Entity, class Operation>
-	void for_each_member(Entity& entity, Operation operation) {
+	void for_each_member(Entity& entity, const Operation& operation) {
 		detail::for_each_member_impl(entity, operation);
 	}
 

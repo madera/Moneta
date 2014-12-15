@@ -7,8 +7,8 @@
 
 struct Composite {
 	int Identifier;
-	Person Person;
-	Dog Dog;
+	::Person Person;
+	::Dog Dog;
 };
 
 MONETA_DESCRIBE_SQL_ENTITY(

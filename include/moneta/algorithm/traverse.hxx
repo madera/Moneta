@@ -15,6 +15,13 @@
 namespace moneta { namespace algorithm {
 
 	namespace detail {
+		struct no_state {};
+	}
+
+	template <class Actions, class Path = boost::mpl::vector0<>, class Entity = void, class State = detail::no_state>
+	void traverse(Entity& entity, State& state = State());
+
+	namespace detail {
 
 		template <class Path, class Member, class Enable = void>
 		struct add_path : boost::mpl::identity<void> {};
@@ -46,7 +53,11 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			void operator()(Action&) const {
+#ifdef BOOST_MSVC
 				typename Action().operator()<Path>(_entity, _state);
+#else
+				Action().template operator()<Path>(_entity, _state);
+#endif
 			}
 		};
 
@@ -60,7 +71,11 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			void operator()(Action&) const {
+#ifdef BOOST_MSVC
 				typename Action().operator()<Member, Path>(_entity, _state);
+#else
+				Action().template operator()<Member, Path>(_entity, _state);
+#endif
 			}
 		};
 
@@ -74,11 +89,16 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			void operator()(Action&) const {
+#ifdef BOOST_MSVC
 				typename Action().operator()<Path, Member>(_entity, _state);
+#else
+				Action().template operator()<Path, Member>(_entity, _state);
+#endif
 			}
 		};
 
-		//
+		template <class Actions, class Path, class Member, class Entity, class State>
+		void process(Entity& entity, State& state);
 
 		template <class Actions, class Entity, class Path, class State>
 		class member_operator {
@@ -104,9 +124,21 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			void operator()(Action&) const {
+#ifdef BOOST_MSVC
 				typename Action().operator()<Member, Path>(_entity, _state);
+#else
+				Action().template operator()<Member, Path>(_entity, _state);
+#endif
 			}
 		};
+
+		struct traverse_enter {};
+		struct traverse_member {};
+		struct traverse_leave {};
+
+		struct traverse_enter_container {};
+		struct traverse_container_member {};
+		struct traverse_leave_container {};
 
 		//
 		// Entity result_type
@@ -207,24 +239,14 @@ namespace moneta { namespace algorithm {
 				typename detail::actions_of<Actions, traverse_leave_container>::type
 			>(detail::container_enter_or_leave_action<Entity, new_path, Member, State>(entity, state));
 		}
-
-		struct no_state {};
 	}
 
-	struct traverse_enter {};
-	struct traverse_member {};
-	struct traverse_leave {};
-
-	struct traverse_enter_container {};
-	struct traverse_container_member {};
-	struct traverse_leave_container {};
-
-	template <class Actions, class Path = boost::mpl::vector0<>, class Entity = void, class State = detail::no_state>
-	void traverse(Entity& entity, State& state = State()) {
+	template <class Actions, class Path, class Entity, class State>
+	void traverse(Entity& entity, State& state) {
 		// Enter actions
 		//
 		boost::mpl::for_each<
-			typename detail::actions_of<Actions, traverse_enter>::type
+			typename detail::actions_of<Actions, detail::traverse_enter>::type
 		>(detail::enter_or_leave_action<Entity, Path, State>(entity, state));
 
 		// Members
@@ -236,7 +258,7 @@ namespace moneta { namespace algorithm {
 		// Leave actions
 		//
 		boost::mpl::for_each<
-			typename detail::actions_of<Actions, traverse_leave>::type
+			typename detail::actions_of<Actions, detail::traverse_leave>::type
 		>(detail::enter_or_leave_action<Entity, Path, State>(entity, state));
 	}
 

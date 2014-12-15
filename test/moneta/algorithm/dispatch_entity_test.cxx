@@ -19,7 +19,7 @@ struct test_operation {
 };
 
 struct entity_name_is {
-	std::string _name;
+	const std::string _name;
 	
 	entity_name_is(const std::string& name)
 	 : _name(name) {}

@@ -30,6 +30,7 @@ TestResult.xml
 *.ilk
 *.meta
 *.obj
+*.o
 *.pch
 *.pdb
 *.pgc
