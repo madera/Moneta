@@ -8,11 +8,11 @@ MONETA_DECLARE_TRAIT(xml_attribute)
 
 MONETA_DECLARE_MEMBER_TRAIT(xml_container_member_name)
 #define MONETA_XML_CONTAINER_MEMBER_NAME(member, name) \
-	MONETA_DEFINE_TRAIT_WITH_GET(xml_container_member_name, (member), std::string, BOOST_PP_STRINGIZE(name))
+	MONETA_DEFINE_TRAIT_WITH_GET(xml_container_member_name, (member), (std::string), BOOST_PP_STRINGIZE(name))
 
 MONETA_DECLARE_MEMBER_TRAIT(xml_container_member_element_name)
 #define MONETA_XML_CONTAINER_MEMBER_ELEMENT_NAME(member, name) \
-	MONETA_DEFINE_TRAIT_WITH_GET(xml_container_member_element_name, (member), std::string, BOOST_PP_STRINGIZE(name))
+	MONETA_DEFINE_TRAIT_WITH_GET(xml_container_member_element_name, (member), (std::string), BOOST_PP_STRINGIZE(name))
 
 namespace moneta { namespace codec { namespace detail {
 

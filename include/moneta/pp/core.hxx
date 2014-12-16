@@ -34,6 +34,8 @@
 #define __WRAP_MACRO_PARAM(x) (x)
 #define __UNWRAP_MACRO_PARAM(x) x
 
+#define __UNWRAP_TUPLE(t) BOOST_PP_TUPLE_REM(BOOST_PP_TUPLE_SIZE(t)) t
+
 //
 // User Macros
 //

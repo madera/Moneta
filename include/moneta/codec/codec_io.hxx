@@ -12,7 +12,7 @@ namespace moneta { namespace codec {
 		#define MONETA_CODEC_TABS_MAX 32
 
 		namespace {
-			char* tabs_cstr = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
+			const char* tabs_cstr = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 		}
 
 		template <int N>
@@ -59,7 +59,7 @@ namespace moneta { namespace codec {
 			Iterator _end;
 
 			ostringstream(Iterator begin, Iterator end)
-			 : _begin(begin), _end(end), _good(true), _total_written(0) {}
+			 : _good(true), _total_written(0), _begin(begin), _end(end) {}
 
 			this_type& operator<<(boost::function<int (Iterator, Iterator)> callable) {
 				if (_good) {

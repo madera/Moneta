@@ -7,6 +7,14 @@
 
 namespace moneta { namespace codec {
 
+	template <class Codec, class T, class Enable = void>
+	struct value_decoder;
+
+	template <class Codec, class Path, class Entity, class Enable = void>
+	struct leave_entity_decoder {};
+
+
+
 	template <class Codec, class Entity, class Enable = void>
 	struct entity_decoder;
 
@@ -44,12 +52,6 @@ namespace moneta { namespace codec {
 			return result;
 		}
 	};
-
-	template <class Codec, class T, class Enable = void>
-	struct value_decoder;
-
-	template <class Codec, class Path, class Entity, class Enable = void>
-	struct leave_entity_decoder {};
 
 	//
 
@@ -183,7 +185,7 @@ namespace moneta { namespace codec {
 
 	}
 
-	template <class Codec, class Entity, class Enable>
+	template <class Codec, class Entity_, class Enable>
 	struct entity_decoder {
 		template <class Entity, class Iterator>
 		int operator()(Entity& entity, Iterator begin, Iterator end) const {
@@ -219,25 +221,26 @@ namespace moneta { namespace codec {
 	namespace detail {
 
 		template <class Codec, class Visitor, class Iterator>
-		struct decode_and_dispatch {
-			size_t result;
-			
+		struct decode_and_dispatch {			
 			Visitor& _visitor;
 			const Iterator _begin;
 			const Iterator _end;
+			size_t& _size;
 
-			decode_and_dispatch(Visitor& visitor, Iterator begin, Iterator end)
-			 : result(0), _visitor(visitor), _begin(begin), _end(end) {}
+			decode_and_dispatch(Visitor& visitor, Iterator begin, Iterator end, size_t& size)
+			 : _visitor(visitor), _begin(begin), _end(end), _size(size) {
+				_size = 0;
+			}
 
 			template <class Entity>
-			int operator()() {
+			int operator()() const {
 				Entity entity = moneta::make_entity<Entity>();
-				result = moneta::codec::decode<Codec>(entity, _begin, _end);
-				if (result > 0) {
+				_size = moneta::codec::decode<Codec>(entity, _begin, _end);
+				if (_size > 0) {
 					_visitor(entity);
 				}
 
-				return result;
+				return _size;
 			}
 
 		};
@@ -269,10 +272,13 @@ namespace moneta { namespace codec {
 				return result;
 			}
 			
-			return moneta::algorithm::dispatch_entity<Entities>(
-				detail::decode_and_dispatch<Codec, Visitor, Iterator>(visitor, begin, end),
+			size_t size;
+			moneta::algorithm::dispatch_entity<Entities>(
+				detail::decode_and_dispatch<Codec, Visitor, Iterator>(visitor, begin, end, size),
 				detail::entity_type_is<Codec>(typecode)
-			).result;
+			);
+			
+			return size;
 		}
 		
 	};

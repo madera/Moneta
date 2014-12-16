@@ -132,7 +132,7 @@ namespace moneta { namespace codec {
 			std::ostringstream oss;
 			oss << traits::detail::member_name<Member>::get() << ": ";
 
-			std::string& str = oss.str();
+			std::string str = oss.str();
 			int size = str.size();
 
 			int available = end - itr;

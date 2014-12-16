@@ -6,6 +6,6 @@
 
 MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 	CascadedInts,
-	((TwoInts,   TwoInts  ))
-	((FourInts,  FourInts ))
+	((::TwoInts,   TwoInts  ))
+	((::FourInts,  FourInts ))
 )

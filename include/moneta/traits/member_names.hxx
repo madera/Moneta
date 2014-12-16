@@ -9,7 +9,7 @@
 MONETA_DECLARE_MEMBER_TRAIT(member_name)
 
 #define MONETA_MEMBER_NAME(member, name) \
-	MONETA_DEFINE_TRAIT_WITH_GET(member_name, (member), std::string, BOOST_PP_STRINGIZE(name))
+	MONETA_DEFINE_TRAIT_WITH_GET(member_name, (member), (std::string), BOOST_PP_STRINGIZE(name))
 
 namespace moneta { namespace traits {
 

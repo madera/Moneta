@@ -39,7 +39,8 @@ BOOST_AUTO_TEST_CASE(insufficient_buffer_decoder_test) {
 	char buffer[member_count];
 	std::fill(buffer, buffer + sizeof(buffer), 0);
 
-	const int result = moneta::codec::decode<moneta::codec::test_codec>(entity_type(), buffer, buffer);
+	entity_type entity;
+	const int result = moneta::codec::decode<moneta::codec::test_codec>(entity, buffer, buffer);
 	BOOST_CHECK_EQUAL(result, -1);
 }
 
@@ -136,7 +137,8 @@ BOOST_AUTO_TEST_CASE(member_decoder_test) {
 		typename moneta::traits::members<Arithmetics>::type
 	> ::value;
 
-	const int result = moneta::codec::decode<moneta::codec::named_test_codec>(Arithmetics(), 0, 0);
+	Arithmetics entity;
+	const int result = moneta::codec::decode<moneta::codec::named_test_codec>(entity, 0, 0);
 	BOOST_CHECK_EQUAL(result, member_count);
 
 	BOOST_CHECK_EQUAL(member_decoder_hits, member_count);

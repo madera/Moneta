@@ -18,7 +18,12 @@ namespace moneta { namespace algorithm {
 		struct no_state {};
 	}
 
-	template <class Actions, class Path = boost::mpl::vector0<>, class Entity = void, class State = detail::no_state>
+	template <
+		class Actions,
+		class Path = boost::mpl::vector0<>,
+		class Entity = void,
+		class State = detail::no_state
+	>
 	void traverse(Entity& entity, State& state = State());
 
 	namespace detail {
