@@ -120,7 +120,8 @@ namespace moneta { namespace codec {
 		};
 
 		template <class Entity>
-		Entity from_kv(std::map<std::string, std::string>& kv, Entity& result = make_entity<Entity>()) {
+		Entity from_kv(std::map<std::string, std::string>& kv, Entity& result) { // = make_entity<Entity>()) {
+			result = make_entity<Entity>();
 			for (const auto& pair : kv) {
 				const std::string& key = pair.first;
 				const std::string& value = pair.second;
@@ -143,7 +144,7 @@ namespace moneta { namespace codec {
 	template <class Entity>
 	struct entity_decoder<shell, Entity> {
 		
-		template <class Entity, class Iterator>
+		template <class Entity_, class Iterator>
 		int operator()(Entity& entity, Iterator begin, Iterator end) const {
 			entity = shell_detail::from_line<Entity>(std::string(begin, end));
 			return end - begin; // XXX: FIXME: This is bad.

@@ -1,4 +1,5 @@
 #pragma once
+#include "../../traits/entity_name.hxx"
 #include "../encoder.hxx"
 #include "../codec_io.hxx"
 

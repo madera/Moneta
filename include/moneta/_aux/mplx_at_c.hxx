@@ -69,7 +69,11 @@ namespace mplx {
 			template <class T>
 			void operator()(const T&) const {
 				if (_ordinal++ == _target) {
+#ifdef BOOST_MSVC
 					_operation.operator()<T>();
+#else
+					_operation.template operator()<T>();
+#endif
 				}
 			}
 		};
