@@ -7,7 +7,7 @@ static void static_test() {
 
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
-			typename mplx::flatten<
+			mplx::flatten<
 				boost::mpl::vector<
 					boost::mpl::vector<char, short, double>,
 					boost::mpl::vector<float, bool>
@@ -19,7 +19,7 @@ static void static_test() {
 
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
-			typename mplx::flatten<
+			mplx::flatten<
 				boost::mpl::vector<
 					boost::mpl::vector<char>,
 					boost::mpl::vector<>
@@ -31,7 +31,7 @@ static void static_test() {
 
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
-			typename mplx::flatten<
+			mplx::flatten<
 				boost::mpl::vector<
 					boost::mpl::vector<int*, char*>,
 					boost::mpl::vector<int, char>

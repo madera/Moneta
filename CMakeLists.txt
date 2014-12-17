@@ -19,5 +19,7 @@ if(ENABLE_SOLUTION_FOLDERS)
   set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMakeTargets")
 endif()
 
+include_directories(include)
+
 add_subdirectory(include)
-#add_subdirectory(test)
+add_subdirectory(tests)

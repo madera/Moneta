@@ -15,14 +15,14 @@
 	template <class Entity>
 	struct dispatch_member_impl<Entity, 0> {
 		template <class Operation>
-		void operator()(const int index, Operation& operation) const {
+		void operator()(const int index, const Operation& operation) const {
 		}
 	};
 
 	template <class Entity>
 	struct dispatch_member_impl<Entity, 1> {
 		template <class Operation>
-		void operator()(const int index, Operation& operation) const {
+		void operator()(const int index, const Operation& operation) const {
 			using boost::mpl::at_c;
 			if (false) {}
 			else if (index == 0)
@@ -33,7 +33,7 @@
 	template <class Entity>
 	struct dispatch_member_impl<Entity, 4> {
 		template <class Operation>
-		void operator()(const int index, Operation& operation) const {
+		void operator()(const int index, const Operation& operation) const {
 			using boost::mpl::at_c;
 			if (false) {}
 			else if (index == 0)
@@ -59,10 +59,10 @@ namespace mplx {
 		struct super_slow_at_c_impl {
 			int _target;
 			int& _ordinal;
-			Operation& _operation;
+			const Operation& _operation;
 
-			super_slow_at_c_impl(int& state, const int target, Operation& operation)
-			 : _ordinal(state), _target(target), _operation(operation) {
+			super_slow_at_c_impl(int& state, const int target, const Operation& operation)
+			 : _target(target), _ordinal(state), _operation(operation) {
 				_ordinal = 0;
 			}
 			
@@ -81,7 +81,7 @@ namespace mplx {
 	}
 
 	template <class Sequence, class Operation>
-	void at_c(const int index, Operation& operation) {
+	void at_c(const int index, const Operation& operation) {
 		int state;
 		boost::mpl::for_each<Sequence>(detail::super_slow_at_c_impl<Sequence, Operation>(state, index, operation));
 	}

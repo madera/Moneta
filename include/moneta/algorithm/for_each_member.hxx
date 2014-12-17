@@ -68,27 +68,45 @@ namespace moneta { namespace algorithm {
 
 			template <typename Member>
 			void operator()(Member&) const {
-				recurse_or_call_operation<Member, Path>()(_operation, _entity);
+				recurse_or_call_operation<Member, Path>()(_entity, _operation);
 			}
 		};
 
-		template <class Members, class Entity, class Operation, class Path = boost::mpl::vector0<> >
-		void for_some_members_impl(Entity& entity, const Operation& operation, Path* path = 0) {
-			call_enter_if_defined<Path>(operation, entity);
+		// ---
 
-			boost::mpl::for_each<
-				Members
-			>(detail::do_member_operator<Entity, Operation, Path>(entity, operation));
+		template <class Entity, class Operation, class Members, class Path = boost::mpl::vector0<> >
+		struct for_some_members_impl {
+			void operator()(Entity& entity, const Operation& operation) const {
+				call_enter_if_defined<Path>(operation, entity);
 
-			call_leave_if_defined<Path>(operation, entity);
+				boost::mpl::for_each<
+					Members
+				>(detail::do_member_operator<Entity, Operation, Path>(entity, operation));
+
+				call_leave_if_defined<Path>(operation, entity);
+			}
+		};
+
+		template <class Members, class Path, class Entity, class Operation>
+		void call_for_some_members_impl(Entity& entity, Operation& operation) {
+			for_some_members_impl<Entity, Operation, Members, Path>()(entity, operation);
 		}
+
+		// ---
 
 		template <class Entity, class Operation, class Path = boost::mpl::vector0<> >
-		void for_each_member_impl(Entity& entity, const Operation& operation, Path* path = 0) {
-			for_some_members_impl<
-				typename traits::members<Entity>::type, Entity, Operation, Path
-			>(entity, operation);
+		struct for_each_member_impl {
+			void operator()(Entity& entity, const Operation& operation) const {
+				typedef typename traits::members<Entity>::type members;
+				call_for_some_members_impl<members, Path>(entity, operation);
+			}
+		};
+
+		template <class Path, class Entity, class Operation>
+		void call_for_each_member_impl(Entity& entity, Operation& operation) {
+			for_each_member_impl<Entity, Operation, Path>()(entity, operation);
 		}
+
 		//
 		// --------------------------------------------------------------------------------------------------
 		//
@@ -105,7 +123,7 @@ namespace moneta { namespace algorithm {
 			>::type
 		> {
 			template <class Operation, class Entity>
-			void operator()(const Operation& operation, Entity& entity) {
+			void operator()(Entity& entity, const Operation& operation) {
 				// TODO: Write a clever comment to alert users in case of compile error here.
 
 				// FIXME: Encapsulate this call so it works with free functions et al.
@@ -128,24 +146,21 @@ namespace moneta { namespace algorithm {
 			>::type
 		> {
 			template <class Operation, class Entity>
-			void operator()(const Operation& operation, Entity& entity) {
-				for_each_member_impl(
-					Member()(entity),
-					operation,
-					static_cast<typename boost::mpl::push_back<Path, Member>::type*>(0)
-				);
+			void operator()(Entity& entity, const Operation& operation) {
+				typedef typename boost::mpl::push_back<Path, Member>::type new_path;
+				call_for_each_member_impl<new_path>(Member()(entity), operation);
 			}
 		};
 	}
 
 	template <class Members, class Entity, class Operation>
 	void for_some_members(Entity& entity, const Operation& operation) {
-		detail::for_some_members_impl<Members>(entity, operation);
+		detail::for_some_members_impl<Entity, Operation, Members>()(entity, operation);
 	}
 
 	template <class Entity, class Operation>
 	void for_each_member(Entity& entity, const Operation& operation) {
-		detail::for_each_member_impl(entity, operation);
+		detail::for_each_member_impl<Entity, Operation>()(entity, operation);
 	}
 
 }}

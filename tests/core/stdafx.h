@@ -7,7 +7,7 @@
 #define FUSION_MAX_VECTOR_SIZE 50	
 
 #ifdef BOOST_WINDOWS
-#include "targetver.h"
+//#include "targetver.h"
 #endif
 
 //

@@ -6,12 +6,12 @@
 
 template <class T>
 struct printer {
-	enum { value = 0 };
+	enum _ { value = 0 };
 };
 
 template <>
 struct printer<int> {
-	enum { value = 123 };
+	enum _ { value = 123 };
 };
 
 struct test_0 {
@@ -35,7 +35,7 @@ struct test_1 {
 };
 
 BOOST_AUTO_TEST_CASE(at_c_1_mplx_test) {
-	mplx::at_c<typename moneta::traits::members<Person>::type>(2, test_1());
+	mplx::at_c<moneta::traits::members<Person>::type>(2, test_1());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,5 +48,6 @@ struct test_2 {
 };
 
 BOOST_AUTO_TEST_CASE(at_c_2_mplx_test) {
-	mplx::at_c<typename moneta::traits::members<A>::type>(2, test_2());
+	mplx::at_c<moneta::traits::members<A>::type>(2, test_2());
 }
+

@@ -26,7 +26,7 @@ static void static_test() {
 
 
 		typedef detail::actions_of<
-			typename traverse_type::mpl_vector,
+			traverse_type::mpl_vector,
 			detail::traverse_enter
 		>::type enter_actions;
 
@@ -37,7 +37,7 @@ static void static_test() {
 
 
 		typedef detail::actions_of<
-			typename traverse_type::mpl_vector,
+			traverse_type::mpl_vector,
 			detail::traverse_member
 		>::type member_actions;
 
@@ -48,7 +48,7 @@ static void static_test() {
 
 
 		typedef detail::actions_of<
-			typename traverse_type::mpl_vector,
+			traverse_type::mpl_vector,
 			detail::traverse_leave
 		>::type leave_actions;
 
