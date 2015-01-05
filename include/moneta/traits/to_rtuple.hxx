@@ -7,6 +7,7 @@
 #include "../traits/extract_pk.hxx"
 #include "../traits/detail/blanker.hxx"
 #include <boost/utility/enable_if.hpp>
+#include <boost/fusion/algorithm/transformation.hpp>
 
 namespace moneta { namespace traits {
 
@@ -17,7 +18,7 @@ namespace moneta { namespace traits {
 			typename rtuple<Entity>::type
 			operator()(Entity& entity) {
 				return moneta::traits::detail::sepacon_opfx<
-					moneta::traits::members<Entity>::type,
+					typename moneta::traits::members<Entity>::type,
 					typename rtuple<Entity>::type,
 					Entity&,
 					moneta::traits::get_pk_functor
@@ -36,7 +37,7 @@ namespace moneta { namespace traits {
 	// XXX: Move this somewhere else.
 	template <class Entity>
 	typename traits::rtuple<Entity>::type make_rtuple() {
-		traits::rtuple<Entity>::type result;
+		typename traits::rtuple<Entity>::type result;
 		return boost::fusion::transform(result, moneta::traits::detail::blanker());
 	}
 

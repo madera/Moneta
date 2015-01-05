@@ -1,7 +1,13 @@
 #pragma once
-// TODO: Maybe extract exact includes?
 #include "pk.hxx"
+#include "members.hxx"
+#include "is_entity.hxx"
+#include "detail/deref_if_unary.hxx"
 #include "detail/sepacon_opfx.hxx"
+#include <boost/type_traits/add_reference.hpp>
+#include <boost/fusion/container/vector/convert.hpp>
+#include <boost/fusion/include/as_vector.hpp>
+#include <boost/mpl/transform.hpp>
 
 namespace moneta { namespace traits {
 
@@ -25,10 +31,9 @@ namespace moneta { namespace traits {
 		struct entity_pk_tie : detail::deref_if_unary<
 			typename detail::fusion::pk_tie<Entity>::type
 		> {};
-
 	}
 
-	template <class Entity, class Enable = void>
+	template <class Entity, class Enable/* = void*/>
 	struct pk_tie;
 
 	template <class NonEntityType>
@@ -52,9 +57,9 @@ namespace moneta { namespace traits {
 	> {
 		typedef typename moneta::traits::detail::entity_pk_tie<Entity>::type type;
 		
-		typename type operator()(Entity& entity) {
+		type operator()(Entity& entity) {
 			return moneta::traits::detail::sepacon_opfx<
-				moneta::traits::pk_members<Entity>::type,
+				typename moneta::traits::pk_members<Entity>::type,
 				type,
 				Entity&
 			>()(entity);

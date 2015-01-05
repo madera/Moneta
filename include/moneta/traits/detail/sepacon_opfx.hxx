@@ -1,5 +1,6 @@
 #pragma once
 #include <boost/mpl/size.hpp>
+#include <boost/mpl/at.hpp>
 
 namespace moneta { namespace traits { namespace detail {
 

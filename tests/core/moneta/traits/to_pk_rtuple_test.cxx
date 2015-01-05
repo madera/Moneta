@@ -39,5 +39,6 @@ BOOST_AUTO_TEST_CASE(to_pk_rtuple_test_2) {
 	typedef moneta::traits::rtuple<Dog>::type rtuple_t;
 	rtuple_t rtuple = moneta::traits::to_rtuple(snoopy);
 
-	auto pk = moneta::traits::to_pk_rtuple<Dog>(rtuple);
+	// FIXME: Use proper type.
+	/*auto pk = */ moneta::traits::to_pk_rtuple<Dog>(rtuple);
 }

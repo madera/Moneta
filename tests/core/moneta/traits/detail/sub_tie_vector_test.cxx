@@ -6,7 +6,7 @@
 #include <string>
 #include "../../model/Cat.hxx"
 
-static void static_test() {
+inline void static_test() {
 
 	using moneta::traits::detail::sub_tie_vector;
 	using boost::fusion::vector;

@@ -1,6 +1,6 @@
 #pragma once
-#include "pk.hxx"
 #include "pk_tie.hxx"
+#include "extract_pk.hxx"
 #include "detail/memptr_constructor.hxx"
 #include "detail/is_fusion_vector.hxx"
 #include "detail/blanker.hxx"
@@ -25,7 +25,8 @@ namespace moneta { namespace traits {
 		typename pk<Entity>::type
 	>::type
 	empty_pk() {
-		typename traits::pk<Entity>::type result{};
+		typedef typename traits::pk<Entity>::type result_type;
+		result_type result = result_type();
 		return result;
 	}
 

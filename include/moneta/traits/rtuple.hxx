@@ -1,6 +1,5 @@
 #pragma once
 #include "../traits/pk.hxx"
-#include "../traits/tuple.hxx"
 
 namespace moneta { namespace traits {
 

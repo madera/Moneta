@@ -10,7 +10,7 @@
 #include "../model/Cat.hxx"
 #include "../model/SportsTeam.hxx"
 
-static void static_test() {
+inline void static_test() {
 	using namespace moneta::algorithm;
 
 	//
@@ -214,8 +214,11 @@ struct counting_container_member_eps {
 		tmp += (path.empty()? "" : "," + path);
 		state.lines.push_back(tmp);
 
-		for (const auto& x : Member()(entity)) {
-			state.lines.push_back(std::string("cmv:") + x);
+		typedef typename Member::result_type container_type;
+		container_type& container = Member()(entity);
+		typename container_type::const_iterator itr = container.begin();
+		for ( ; itr != container.end(); ++itr) {
+			state.lines.push_back(std::string("cmv:") + *itr);
 		}
 	}
 };

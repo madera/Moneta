@@ -1,5 +1,4 @@
 #pragma once
-#include "../traits/detail/pure_type.hxx"
 #include "detail/member_trait_base.hxx"
 #include <boost/mpl/copy_if.hpp>
 

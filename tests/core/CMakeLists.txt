@@ -10,6 +10,36 @@ add_executable(core_tests
 	moneta/algorithm/for_each_member_test.cxx
 	moneta/algorithm/traverse_ng_test.cxx
 	moneta/algorithm/traverse_test.cxx
+	
+	moneta/traits/detail/deref_if_unary_test.cxx
+	moneta/traits/detail/has_member_trait_test.cxx
+	moneta/traits/detail/indices_of_test.cxx
+	moneta/traits/detail/is_functor_callable_test.cxx
+	moneta/traits/detail/is_functor_callable_test.o
+	moneta/traits/detail/sub_tie_vector_test.cxx
+	moneta/traits/detail/tie_vector_test.cxx	
+
+#	moneta/traits/empty_pk_test.cxx
+	moneta/traits/extract_pk_test.cxx
+#	moneta/traits/fixed_values_test.cxx
+#	moneta/traits/is_container_test.cxx
+#	moneta/traits/is_entity_test.cxx
+#	moneta/traits/member_names_test.cxx
+#	moneta/traits/members_test.cxx
+#	moneta/traits/pk_member_names_test.cxx
+#	moneta/traits/pk_rtie_test.cxx
+#	moneta/traits/pk_rtuple_test.cxx
+	moneta/traits/pk_test.cxx
+	moneta/traits/pk_tie_test.cxx
+#	moneta/traits/rtie_test.cxx
+#	moneta/traits/rtuple_test.cxx
+#	moneta/traits/tie_test.cxx
+#	moneta/traits/to_entity_test.cxx
+#	moneta/traits/to_pk_rtuple_test.cxx
+#	moneta/traits/to_rtie_test.cxx
+#	moneta/traits/to_rtuple_test.cxx
+#	moneta/traits/to_tie_test.cxx
+#	moneta/traits/tuple_test.cxx
 )
 
 target_link_libraries(core_tests ${Boost_LIBRARIES})

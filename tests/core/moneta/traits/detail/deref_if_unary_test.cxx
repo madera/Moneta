@@ -10,7 +10,7 @@ namespace mpl    = boost::mpl;
 
 using moneta::traits::detail::deref_if_unary;
 
-static void static_test() {
+inline void static_test() {
 	using boost::mpl::equal;
 
 	// Using mpl vectors

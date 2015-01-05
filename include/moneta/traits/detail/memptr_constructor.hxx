@@ -12,13 +12,13 @@ namespace moneta { namespace traits { namespace detail {
 	struct memptr_constructor<R, MemPtrs, ClassType, 1> {
 		R operator()(ClassType& instance) {
 			return R(
-				boost::mpl::at_c<MemPtrs, 0>::type()(instance)
+				typename boost::mpl::at_c<MemPtrs, 0>::type()(instance)
 			);
 		}
 
 		R operator()(const ClassType& instance) {
 			return R(
-				boost::mpl::at_c<MemPtrs, 0>::type()(instance)
+				typename boost::mpl::at_c<MemPtrs, 0>::type()(instance)
 			);
 		}
 	};
@@ -27,15 +27,15 @@ namespace moneta { namespace traits { namespace detail {
 	struct memptr_constructor<R, MemPtrs, ClassType, 2> {
 		R operator()(ClassType& instance) {
 			return R(
-				boost::mpl::at_c<MemPtrs, 0>::type()(instance),
-				boost::mpl::at_c<MemPtrs, 1>::type()(instance)
+				typename boost::mpl::at_c<MemPtrs, 0>::type()(instance),
+				typename boost::mpl::at_c<MemPtrs, 1>::type()(instance)
 			);
 		}
 
 		R operator()(const ClassType& instance) {
 			return R(
-				boost::mpl::at_c<MemPtrs, 0>::type()(instance),
-				boost::mpl::at_c<MemPtrs, 1>::type()(instance)
+				typename boost::mpl::at_c<MemPtrs, 0>::type()(instance),
+				typename boost::mpl::at_c<MemPtrs, 1>::type()(instance)
 			);
 		}
 	};

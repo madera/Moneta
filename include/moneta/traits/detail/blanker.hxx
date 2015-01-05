@@ -1,8 +1,10 @@
 #pragma once
 #include "pure_type.hxx"
 #include "../is_entity.hxx"
-#include "../../make_entity.hxx"
 
+//#include "../../make_entity.hxx"
+
+// XXX: Make this make_entity_fwd.hxx
 namespace moneta {
 	template <class Entity>
 	typename traits::pure_type<Entity>::type make_entity();

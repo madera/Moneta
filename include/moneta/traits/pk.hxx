@@ -1,5 +1,5 @@
 #pragma once
-#include "members.hxx"
+#include "extract_pk_fwd.hxx"
 #include "tuple.hxx" // for detail::get_result_type // TODO: Make this better.
 #include "is_entity.hxx"
 #include "detail/deref_if_unary.hxx"
@@ -15,9 +15,9 @@
 
 #define MONETA_DECLARE_PRIMARY_KEY(k, t, m) \
 	namespace moneta { namespace traits { namespace detail { \
-	template<> struct is_pk< \
-		moneta::traits::member<k, t, &k::m> \
-	> : boost::true_type {}; \
+		template<> struct is_pk< \
+			moneta::traits::member<k, t, &k::m> \
+		> : boost::true_type {}; \
 	}}}
 
 namespace moneta { namespace traits {
@@ -81,14 +81,12 @@ namespace moneta { namespace traits {
 		> {};
 	}
 
+	// TODO: Export this on it's own header.
 	template <class Entity>
 	struct pk_members : boost::mpl::apply<
 		detail::get_pk_memptr_types,
 		Entity
 	> {};
-
-	template <class Entity, class Enable = void>
-	struct pk;
 
 	template <class NonEntityType>
 	struct pk<
@@ -107,8 +105,8 @@ namespace moneta { namespace traits {
 	};
 
 	// TODO: Put this in a fwd?
-	template <class T, class U>
-	U extract_pk(T&);
+//	template <class T, class U>
+//	U extract_pk(T&);
 
 	template <class Entity>
 	struct pk<

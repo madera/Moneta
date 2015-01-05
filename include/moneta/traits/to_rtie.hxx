@@ -16,7 +16,7 @@ namespace moneta { namespace traits {
 			typename rtie<Entity>::type
 			operator()(Entity& entity) {
 				return moneta::traits::detail::sepacon_opfx<
-					moneta::traits::members<Entity>::type,
+					typename moneta::traits::members<Entity>::type,
 					typename rtie<Entity>::type,
 					Entity&,
 					moneta::traits::get_pk_tie_functor

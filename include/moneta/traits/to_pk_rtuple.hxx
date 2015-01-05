@@ -2,7 +2,6 @@
 #include "rtuple.hxx"
 #include "detail/indices_of.hxx"
 #include "detail/sub_tie_vector.hxx"
-#include "detail/deref_if_unary.hxx"
 #include "detail/indices_of.hxx"
 
 namespace moneta { namespace traits {
@@ -26,15 +25,13 @@ namespace moneta { namespace traits {
 		>::type type;
 
 		type operator()(rtuple_type& rtuple) const {
-			return moneta::traits::detail::deref_unary_vector(
-				sub_tie_type()(rtuple)
-			);
+			typename sub_tie_type::type sub = sub_tie_type()(rtuple);
+			return moneta::traits::detail::deref_unary_vector(sub);
 		}
 
 		type operator()(const rtuple_type& rtuple) const {
-			return moneta::traits::detail::deref_unary_vector(
-				sub_tie_type()(rtuple)
-			);
+			typename sub_tie_type::type sub = sub_tie_type()(rtuple);
+			return moneta::traits::detail::deref_unary_vector(sub);
 		}
 	};
 

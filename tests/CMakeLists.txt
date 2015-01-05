@@ -7,6 +7,10 @@ if (Boost_FOUND)
 	message(STATUS "Boost libs    : ${Boost_LIBRARIES}")
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++03 -Wall")
+if(MSVC)
+	#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /x /y /z")
+else(MSVC)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++03 -Wall")
+endif()
 
 add_subdirectory(core)

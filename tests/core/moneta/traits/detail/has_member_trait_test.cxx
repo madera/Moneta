@@ -18,7 +18,7 @@ DEFINE_HAS_NESTED_TYPE(f)
 DEFINE_HAS_NESTED_TYPE(x)
 DEFINE_HAS_NESTED_TYPE(floating_type)
 
-static void static_test() {
+inline void static_test() {
 	BOOST_MPL_ASSERT((has_member_x<a>));
 	BOOST_MPL_ASSERT((has_member_f<a>));
 	BOOST_MPL_ASSERT((has_member_floating_type<a>));

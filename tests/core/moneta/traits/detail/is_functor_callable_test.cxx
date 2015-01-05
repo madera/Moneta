@@ -15,7 +15,7 @@ struct b : a {
 	void operator()(T x, U y, V z) {}
 };
 
-static void static_test() {
+inline void static_test() {
 	using moneta::traits::detail::is_functor_callable;
 
 	// Test limitation... unfortunate.
@@ -56,7 +56,7 @@ struct e2 {
 	}
 };
 
-static void traverse_inspired_static_test() {
+inline void traverse_inspired_static_test() {
 	using moneta::traits::detail::is_functor_callable;
 
 	// Test limitation... unfortunate.

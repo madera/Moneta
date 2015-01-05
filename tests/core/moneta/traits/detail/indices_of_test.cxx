@@ -2,7 +2,7 @@
 #include <moneta/traits/detail/indices_of.hxx>
 #include <boost/mpl/at.hpp>
 
-static void static_test() {
+inline void static_test() {
 	using moneta::traits::detail::indices_of;
 	namespace mpl = boost::mpl;
 

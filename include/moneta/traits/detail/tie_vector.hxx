@@ -27,25 +27,25 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class Sequence>
 	struct tie_vector_impl<Sequence, 1> : basic_tie_vector<Sequence> {
-		type operator()(Sequence& s) {
+		typename basic_tie_vector<Sequence>::type operator()(Sequence& s) {
 			using boost::fusion::at_c;
-			return type(at_c<0>(s));
+			return typename basic_tie_vector<Sequence>::type(at_c<0>(s));
 		}
 	};
 
 	template <class Sequence>
 	struct tie_vector_impl<Sequence, 2> : basic_tie_vector<Sequence> {
-		type operator()(Sequence& s) {
+		typename basic_tie_vector<Sequence>::type operator()(Sequence& s) {
 			using boost::fusion::at_c;
-			return type(at_c<0>(s), at_c<1>(s));
+			return typename basic_tie_vector<Sequence>::type(at_c<0>(s), at_c<1>(s));
 		}
 	};
 
 	template <class Sequence>
 	struct tie_vector_impl<Sequence, 3> : basic_tie_vector<Sequence> {
-		type operator()(Sequence& s) {
+		typename basic_tie_vector<Sequence>::type operator()(Sequence& s) {
 			using boost::fusion::at_c;
-			return type(at_c<0>(s), at_c<1>(s), at_c<2>(s));
+			return typename basic_tie_vector<Sequence>::type(at_c<0>(s), at_c<1>(s), at_c<2>(s));
 		}
 	};
 

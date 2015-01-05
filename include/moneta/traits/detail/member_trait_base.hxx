@@ -7,7 +7,6 @@
 #include <string>
 #include <vector>
 
-
 #include <boost/preprocessor/tuple/rem.hpp>
 #include <boost/preprocessor/tuple/size.hpp>
 
@@ -81,7 +80,7 @@
 	}
 
 #define MONETA_DEFINE_MEMBER_TRAIT_COLLECTOR(trait, trait_type, name) \
-	MONETA_DEFINE_MEMBER_SEQUENCE_TRAIT_COLLECTOR(trait, trait_type, name, moneta::traits::members<Entity>::type)
+	MONETA_DEFINE_MEMBER_SEQUENCE_TRAIT_COLLECTOR(trait, trait_type, name, typename moneta::traits::members<Entity>::type)
 
 namespace moneta { namespace traits { namespace detail {
 
@@ -94,11 +93,11 @@ namespace moneta { namespace traits { namespace detail {
 		ContainerType& _target;
 
 		trait_back_inserter_iterator(ContainerType& target)
-			: _target(target) {
+		 : _target(target) {
 		}
 
 		template <class MemberType>
-		void operator()(MemberType& member) const {
+		void operator()(const MemberType& member) const {
 			_target.push_back(MemberTraitWithGet<MemberType>::get());
 		}
 	};
@@ -108,9 +107,9 @@ namespace moneta { namespace traits { namespace detail {
 		class MemberTraitWithGet,
 		class ContainerType
 	>
-	detail::trait_back_inserter_iterator<MemberTraitWithGet, ContainerType>
+	trait_back_inserter_iterator<MemberTraitWithGet, ContainerType>
 	trait_back_inserter(ContainerType& target) {
-		return detail::trait_back_inserter_iterator<MemberTraitWithGet, ContainerType>(target);
+		return trait_back_inserter_iterator<MemberTraitWithGet, ContainerType>(target);
 	}
 
 	// XXX: Type T is ignored...
@@ -123,7 +122,7 @@ namespace moneta { namespace traits { namespace detail {
 		std::vector<std::string> result;
 		boost::fusion::for_each(
 			MemberPointersSequence(),
-			detail::trait_back_inserter<MemberTraitWithGet>(result)
+			trait_back_inserter<MemberTraitWithGet>(result)
 		);
 
 		return result;
