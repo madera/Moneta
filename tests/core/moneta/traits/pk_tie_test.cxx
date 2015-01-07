@@ -9,7 +9,7 @@
 struct Dummy {
 };
 
-static void static_test() {
+inline void static_test() {
 	using boost::is_same;
 	using boost::mpl::equal;
 	using moneta::traits::pk;

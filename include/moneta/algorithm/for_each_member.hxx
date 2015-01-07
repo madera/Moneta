@@ -1,4 +1,5 @@
 #pragma once
+#include "../detail/keywords.hxx"
 #include "../traits/member_names.hxx"
 #include "../traits/is_entity.hxx"
 #include "../traits/detail/is_functor_callable.hxx"
@@ -127,11 +128,7 @@ namespace moneta { namespace algorithm {
 				// TODO: Write a clever comment to alert users in case of compile error here.
 
 				// FIXME: Encapsulate this call so it works with free functions et al.
-#ifdef BOOST_MSVC
-				operation.operator()<Entity, Member, Path>(entity);
-#else
-				operation.template operator()<Entity, Member, Path>(entity);
-#endif
+				operation.MONETA_INTRA_TEMPLATE_KEYWORD operator()<Entity, Member, Path>(entity);
 			}
 		};
 

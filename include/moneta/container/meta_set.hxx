@@ -1,4 +1,5 @@
 #pragma once
+#include "../detail/keywords.hxx"
 #include "../traits/detail/has_member_trait.hxx"
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/random_access_index.hpp>
@@ -209,7 +210,7 @@ namespace moneta { namespace container {
 
 			// Insert into default sequential index.
 			void insert(const entry& entry) {
-				_container.get<sequenced_index_tag>().push_back(entry);
+				_container.MONETA_INTRA_TEMPLATE_KEYWORD get<sequenced_index_tag>().push_back(entry);
 				std::cerr << "Inserted: " << entry.to_string() << std::endl;
 			}
 
@@ -233,7 +234,7 @@ namespace moneta { namespace container {
 			}
 
 			const entry& at(const size_t index) {
-				return _container.get<sequenced_index_tag>().at(index);
+				return _container.MONETA_INTRA_TEMPLATE_KEYWORD get<sequenced_index_tag>().at(index);
 			}
 
 			const entry& operator[](const size_t index) {

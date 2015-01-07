@@ -4,6 +4,7 @@
 #include "../../traits/to_rtuple.hxx"
 #include "../../traits/to_rtie.hxx"
 #include <boost/array.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/fusion/include/copy.hpp>
 #include <boost/fusion/include/transform.hpp>
 #include <boost/fusion/include/boost_array.hpp>

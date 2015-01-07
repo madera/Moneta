@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include <moneta/pp/sql_entity.hxx>
+#include <moneta/pp/describe_entity.hxx>
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY_WITH_NAMESPACE(
+MONETA_DEFINE_ENTITY_STRUCT_WITH_NAMESPACE(
 	(moneta)(model), big_entity_0,
 	((int, unknown_1))
 	((int, unknown_2))

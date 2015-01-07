@@ -10,7 +10,7 @@ endif()
 if(MSVC)
 	#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /x /y /z")
 else(MSVC)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++03 -Wall")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++03 -stdlib=libc++ -Wall")
 endif()
 
 add_subdirectory(core)

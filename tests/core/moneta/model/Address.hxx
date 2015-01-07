@@ -2,7 +2,7 @@
 // User entity.
 //
 #pragma once
-#include <moneta/pp/sql_entity.hxx>
+#include <moneta/sql/describe_sql_entity.hxx>
 #include <string>
 
 struct Address {

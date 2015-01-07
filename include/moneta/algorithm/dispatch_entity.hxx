@@ -1,4 +1,5 @@
 #pragma once
+#include "../detail/keywords.hxx"
 #include <boost/mpl/for_each.hpp>
 
 namespace moneta { namespace algorithm {
@@ -25,13 +26,8 @@ namespace moneta { namespace algorithm {
 			template <class Entity>
 			void operator()(const Entity&) const {
 				if (!_state.done) {
-#ifdef BOOST_MSVC
-					if (_state.predicate.operator()<Entity>()) {
-						_state.visitor.operator()<Entity>();
-#else
-					if (_state.predicate.template operator()<Entity>()) {
-						_state.visitor.template operator()<Entity>();
-#endif
+					if (_state.predicate.MONETA_INTRA_TEMPLATE_KEYWORD operator()<Entity>()) {
+						_state.visitor.MONETA_INTRA_TEMPLATE_KEYWORD operator()<Entity>();
 						_state.done = true;
 					}
 				}

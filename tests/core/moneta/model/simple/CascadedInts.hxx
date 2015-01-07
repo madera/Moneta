@@ -1,5 +1,5 @@
 #pragma once
-#include <moneta/pp/sql_entity.hxx>
+#include <moneta/pp/describe_entity.hxx>
 #include "TwoInts.hxx"
 #include "ThreeInts.hxx"
 #include "FourInts.hxx"

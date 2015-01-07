@@ -4,6 +4,7 @@
 #include "../traits/tuple.hxx"
 #include "../traits/rtuple.hxx"
 #include "../traits/is_entity.hxx"
+#include "../traits/entity_name.hxx"
 #include <boost/mpl/transform.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/mpl/identity.hpp>
@@ -33,8 +34,8 @@ namespace moneta { namespace container {
 				traits::is_entity<typename mpl::at_c<PairType, 0>::type>,
 				void
 			>::type
-			operator()(PairType& pair) const {
-				boost::fusion::get<1>(pair) = _context.insert<
+			operator()(const PairType& pair) const {
+				boost::fusion::get<1>(pair) = _context.MONETA_INTRA_TEMPLATE_KEYWORD insert<
 					typename traits::pure_type<typename mpl::at_c<PairType, 0>::type>::type
 				>(boost::fusion::get<0>(pair));
 			}
@@ -44,7 +45,7 @@ namespace moneta { namespace container {
 				mpl::not_<traits::is_entity<typename mpl::at_c<PairType, 0>::type> >,
 				void
 			>::type
-			operator()(PairType& pair) const {
+			operator()(const PairType& pair) const {
 				boost::fusion::get<1>(pair) = boost::fusion::get<0>(pair);
 			}
 
@@ -53,8 +54,8 @@ namespace moneta { namespace container {
 			insert(Entity& entity) {
 				using namespace moneta::traits;
 
-				tie<Entity>::type entity_tuple = to_tie<Entity>(entity);
-				traits::rtuple<Entity>::type rtuple;
+				typename tie<Entity>::type entity_tuple = to_tie<Entity>(entity);
+				typename traits::rtuple<Entity>::type rtuple;
 
 				typedef boost::fusion::vector<
 					typename traits::   tie<Entity>::type& ,
@@ -85,8 +86,8 @@ namespace moneta { namespace container {
 				traits::is_entity<typename mpl::at_c<PairType, 0>::type>,
 				void
 			>::type
-			operator()(PairType& pair) const {
-				boost::fusion::get<1>(pair) = _context.replace<
+			operator()(const PairType& pair) const {
+				boost::fusion::get<1>(pair) = _context.MONETA_INTRA_TEMPLATE_KEYWORD replace<
 					typename traits::pure_type<typename mpl::at_c<PairType, 0>::type>::type
 				>(boost::fusion::get<0>(pair));
 			}
@@ -96,7 +97,7 @@ namespace moneta { namespace container {
 				mpl::not_<traits::is_entity<typename mpl::at_c<PairType, 0>::type> >,
 				void
 			>::type
-			operator()(PairType& pair) const {
+			operator()(const PairType& pair) const {
 				boost::fusion::get<1>(pair) = boost::fusion::get<0>(pair);
 			}
 
@@ -105,8 +106,8 @@ namespace moneta { namespace container {
 			replace(Entity& entity) {
 				using namespace moneta::traits;
 
-				tie<Entity>::type entity_tuple = to_tie<Entity>(entity);
-				traits::rtuple<Entity>::type rtuple;
+				typename tie<Entity>::type entity_tuple = to_tie<Entity>(entity);
+				typename traits::rtuple<Entity>::type rtuple;
 
 				typedef boost::fusion::vector<
 					typename traits::   tie<Entity>::type& ,

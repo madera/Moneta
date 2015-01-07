@@ -1,4 +1,5 @@
 #pragma once
+#include "../detail/keywords.hxx"
 
 // MEQUEDE: This preprocessed version should be faster (theoretically) but it needs to be proven in lab first.
 //
@@ -69,11 +70,7 @@ namespace mplx {
 			template <class T>
 			void operator()(const T&) const {
 				if (_ordinal++ == _target) {
-#ifdef BOOST_MSVC
-					_operation.operator()<T>();
-#else
-					_operation.template operator()<T>();
-#endif
+					_operation.MONETA_INTRA_TEMPLATE_KEYWORD operator()<T>();
 				}
 			}
 		};

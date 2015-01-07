@@ -12,8 +12,8 @@
 #include <moneta/sql/traits/field_names.hxx>
 #include <boost/mpl/vector.hpp>
 
-#define __MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES(r, _, pair) \
-	MONETA_SQL_FIELD_NAME(MONETA_MEMBER_FROM_TN_PAIR(_, pair), BOOST_PP_TUPLE_ELEM(3, 2, pair))
+#define __MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES(r, _, trio) \
+	MONETA_SQL_FIELD_NAME(MONETA_MEMBER_FROM_TN_TRIO(_, trio), BOOST_PP_TUPLE_ELEM(3, 2, trio))
 
 #define MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES(entity, member_sequence) \
 	BOOST_PP_SEQ_FOR_EACH(__MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES, entity, member_sequence)
@@ -34,13 +34,6 @@
 
 #define MONETA_PP_EXPAND_PRIMARY_KEYS(entity, members) \
 	BOOST_PP_SEQ_FOR_EACH(__MONETA_PP_EXPAND_PRIMARY_KEYS, entity, members)
-
-#define MONETA_DESCRIBE_SQL_ENTITY(entity, table, members) \
-	MONETA_DESCRIBE_ENTITY_BASE(entity, members) \
-	MONETA_ENTITY_NAME(entity, entity) \
-	MONETA_SQL_TABLE_NAME(entity, table) \
-	MONETA_PP_EXPAND_ENTITY_SQL_FIELD_NAMES(entity, members)
-//	MONETA_PP_EXPAND_PRIMARY_KEYS(entity, members)
 
 #define MONETA_DEFINE_AND_DESCRIBE_SQL_ENTITY(entity, table, members) \
 	MONETA_PP_DEFINE_ENTITY_STRUCT(entity, members) \

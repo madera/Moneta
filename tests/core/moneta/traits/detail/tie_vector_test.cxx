@@ -8,7 +8,7 @@ BOOST_AUTO_TEST_CASE(tie_vector_with_boost_tuple_test) {
 		
 	tuple_t tuple(rand() % 128, rand() % 32768, rand() % 100000);
 
-	auto tie = moneta::traits::detail::tie_vector(tuple);
+	boost::fusion::vector<char&, short&, int&> tie = moneta::traits::detail::tie_vector(tuple);
 	
 	using boost::fusion::at_c;
 	BOOST_CHECK_EQUAL(at_c<0>(tie), at_c<0>(tuple));

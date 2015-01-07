@@ -1,4 +1,5 @@
 #pragma once
+#include "boost_pp.hxx"
 #include "core.hxx"
 #include "detail/kv.hxx"
 #include "detail/seq_join.hxx"

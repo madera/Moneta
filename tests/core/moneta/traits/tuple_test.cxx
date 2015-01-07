@@ -4,7 +4,7 @@
 #include "../model/Person.hxx"
 #include "../model/Cat.hxx"
 
-static void static_test() {
+inline void static_test() {
 	// Person
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<

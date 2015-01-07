@@ -58,11 +58,8 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			void operator()(Action&) const {
-#ifdef BOOST_MSVC
-				typename Action().operator()<Path>(_entity, _state);
-#else
-				Action().template operator()<Path>(_entity, _state);
-#endif
+//				typename Action().operator()<Path>(_entity, _state);
+				Action().MONETA_INTRA_TEMPLATE_KEYWORD operator()<Path>(_entity, _state);
 			}
 		};
 
@@ -76,11 +73,8 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			void operator()(Action&) const {
-#ifdef BOOST_MSVC
-				typename Action().operator()<Member, Path>(_entity, _state);
-#else
-				Action().template operator()<Member, Path>(_entity, _state);
-#endif
+//				typename Action().operator()<Member, Path>(_entity, _state);
+				Action().MONETA_INTRA_TEMPLATE_KEYWORD operator()<Member, Path>(_entity, _state);
 			}
 		};
 
@@ -94,11 +88,8 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			void operator()(Action&) const {
-#ifdef BOOST_MSVC
-				typename Action().operator()<Path, Member>(_entity, _state);
-#else
-				Action().template operator()<Path, Member>(_entity, _state);
-#endif
+//				typename Action().operator()<Path, Member>(_entity, _state);
+				Action().MONETA_INTRA_TEMPLATE_KEYWORD operator()<Path, Member>(_entity, _state);
 			}
 		};
 
@@ -129,11 +120,8 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			void operator()(Action&) const {
-#ifdef BOOST_MSVC
-				typename Action().operator()<Member, Path>(_entity, _state);
-#else
-				Action().template operator()<Member, Path>(_entity, _state);
-#endif
+//				typename Action().operator()<Member, Path>(_entity, _state);
+				Action().MONETA_INTRA_TEMPLATE_KEYWORD operator()<Member, Path>(_entity, _state);
 			}
 		};
 

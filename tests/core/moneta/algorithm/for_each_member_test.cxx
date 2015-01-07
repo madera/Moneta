@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include <moneta/algorithm/for_each_member.hxx>
-
 #include "../model/Person.hxx"
 #include "../model/Cat.hxx"
 
@@ -299,6 +298,8 @@ struct traversal_tester {
 		_output.push_back(std::string("l:") + moneta::traits::get_entity_name<Entity>());
 	}
 };
+
+#include <moneta/pp/describe_entity.hxx>
 
 MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 	E,

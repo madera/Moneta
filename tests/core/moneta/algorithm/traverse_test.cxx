@@ -1,6 +1,8 @@
+// XXX: Something went wrong here: Where's the code?
+
 #include "stdafx.h"
 
-#include <moneta/pp/sql_entity.hxx>
+#include <moneta/sql/describe_sql_entity.hxx>
 #include <string>
 
 struct Person {

@@ -12,7 +12,7 @@
 #include "../../traits/to_rtie.hxx"
 
 // XXX: Move somewhere. The trash, maybe?
-template <class T, class U, class X, const int Y>
+template <class T, class U, class X, const size_t Y>
 std::basic_ostream<T, U>& operator<<(std::basic_ostream<T, U>& output, const boost::array<X, Y>& rhs) {
 	typedef typename boost::array<X, Y>::const_iterator const_iterator_type;
 
@@ -148,8 +148,8 @@ namespace moneta { namespace container {
 				std::string to_string() const {
 					std::ostringstream oss;
 
-					state_type::const_iterator itr = std::begin(hash);
-					state_type::const_iterator last = itr + hash.size() - 1;
+					typename state_type::const_iterator itr = std::begin(hash);
+					typename state_type::const_iterator last = itr + hash.size() - 1;
 
 					for ( ; itr != std::end(hash); ++itr) {
 						oss << boost::format("0x%|08x|") % *itr

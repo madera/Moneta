@@ -121,19 +121,19 @@ namespace moneta { namespace container {
 	private:
 		boost::optional<entry> get_entry(const pk_rtuple_param_type pk) const {
 			typedef typename container_type::template index<by_hash>::type index;
-			index::const_iterator begin = _container.get<by_hash>().begin();
-			index::const_iterator   end = _container.get<by_hash>().end();
-			index::const_iterator   itr = std::find(begin, end, pk);
+			typename index::const_iterator begin = _container.MONETA_INTRA_TEMPLATE_KEYWORD get<by_hash>().begin();
+			typename index::const_iterator   end = _container.MONETA_INTRA_TEMPLATE_KEYWORD get<by_hash>().end();
+			typename index::const_iterator   itr = std::find(begin, end, pk);
 			return (itr == end)? boost::optional<entry>() : *itr;
 		}
 
 		void replace_entry(const pk_rtuple_param_type pk, const entry& entry) {
 			typedef typename container_type::template index<by_hash>::type index;
-			index::const_iterator begin = _container.get<by_hash>().begin();
-			index::const_iterator   end = _container.get<by_hash>().end();
-			index::const_iterator   itr = std::find(begin, end, pk);
+			typename index::const_iterator begin = _container.MONETA_INTRA_TEMPLATE_KEYWORD get<by_hash>().begin();
+			typename index::const_iterator   end = _container.MONETA_INTRA_TEMPLATE_KEYWORD get<by_hash>().end();
+			typename index::const_iterator   itr = std::find(begin, end, pk);
 			assert(itr != end);
-			_container.get<by_hash>().replace(itr, entry);
+			_container.MONETA_INTRA_TEMPLATE_KEYWORD get<by_hash>().replace(itr, entry);
 		}
 
 		void set_entry_flag(const pk_rtuple_param_type pk, const size_t flag, const bool value = true) {
@@ -153,17 +153,17 @@ namespace moneta { namespace container {
 
 	public:
 		const size_t size() {
-			return _container.get<0>().size();
+			return _container.MONETA_INTRA_TEMPLATE_KEYWORD get<0>().size();
 		}
 
 		void insert(const rtuple_type& rtuple, const bool newcomer = false) {
-			_container.get<by_hash>().insert(entry(rtuple, newcomer));
+			_container.MONETA_INTRA_TEMPLATE_KEYWORD get<by_hash>().insert(entry(rtuple, newcomer));
 		}
 
 		void replace(const rtuple_type& rtuple) {
-			auto itr = _container.get<by_hash>().find(traits::to_pk_rtuple<Entity>(rtuple));
-			if (itr != _container.get<by_hash>().end()) {
-				_container.get<by_hash>().replace(itr, entry(rtuple));
+			auto itr = _container.MONETA_INTRA_TEMPLATE_KEYWORD get<by_hash>().find(traits::to_pk_rtuple<Entity>(rtuple));
+			if (itr != _container.MONETA_INTRA_TEMPLATE_KEYWORD get<by_hash>().end()) {
+				_container.MONETA_INTRA_TEMPLATE_KEYWORD get<by_hash>().replace(itr, entry(rtuple));
 			}
 		}
 
@@ -216,7 +216,7 @@ namespace moneta { namespace container {
 
 	public:
 		void debug_dump() {
-			auto& index = _container.get<by_sequence>();
+			auto& index = _container.MONETA_INTRA_TEMPLATE_KEYWORD get<by_sequence>();
 			auto begin = index.begin();
 			auto end = index.end();
 

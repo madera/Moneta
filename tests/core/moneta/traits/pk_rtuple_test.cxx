@@ -5,7 +5,7 @@
 #include "../model/Dog.hxx"
 #include "../model/Lizard.hxx"
 
-static void static_test() {
+inline void static_test() {
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
 			moneta::traits::pk_rtuple<Cat>::type,

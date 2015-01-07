@@ -14,7 +14,7 @@ struct test_tracker_impl {
 		int state;
 
 		bool operator<(const int rhs) const {
-			return state < rhs.state;
+			return state < rhs;
 		}
 	};
 

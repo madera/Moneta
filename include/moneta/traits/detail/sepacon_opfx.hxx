@@ -33,7 +33,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 1> {
-		K operator()(P p = nullptr) const {
+		K operator()(P p = 0) const {
 			using namespace boost::mpl;
 			return K(
 				Filter<typename at_c<S, 0>::type::result_type>()(typename at_c<S, 0>::type()(p))
@@ -43,7 +43,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 2> {
-		K operator()(P p = nullptr) const {
+		K operator()(P p = 0) const {
 			using namespace boost::mpl;
 			return K(
 				Filter<typename at_c<S, 0>::type::result_type>()(typename at_c<S, 0>::type()(p)),
@@ -54,7 +54,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 3> {
-		K operator()(P p = nullptr) const {
+		K operator()(P p = 0) const {
 			using namespace boost::mpl;
 			return K(
 				Filter<typename at_c<S, 0>::type::result_type>()(typename at_c<S, 0>::type()(p)),
@@ -66,7 +66,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 4> {
-		K operator()(P p = nullptr) const {
+		K operator()(P p = 0) const {
 			using namespace boost::mpl;
 			return K(
 				Filter<typename at_c<S, 0>::type::result_type>()(typename at_c<S, 0>::type()(p)),
@@ -79,7 +79,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 5> {
-		K operator()(P p = nullptr) const {
+		K operator()(P p = 0) const {
 			using namespace boost::mpl;
 			return K(
 				Filter<typename at_c<S, 0>::type::result_type>()(typename at_c<S, 0>::type()(p)),
@@ -93,7 +93,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 6> {
-		K operator()(P p = nullptr) const {
+		K operator()(P p = 0) const {
 			using namespace boost::mpl;
 			return K(
 				Filter<typename at_c<S, 0>::type::result_type>()(typename at_c<S, 0>::type()(p)),
@@ -108,7 +108,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 7> {
-		K operator()(P p = nullptr) const {
+		K operator()(P p = 0) const {
 			using namespace boost::mpl;
 			return K(
 				Filter<typename at_c<S, 0>::type::result_type>()(typename at_c<S, 0>::type()(p)),
@@ -124,7 +124,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 8> {
-		K operator()(P p = nullptr) const {
+		K operator()(P p = 0) const {
 			using namespace boost::mpl;
 			return K(
 				Filter<typename at_c<S, 0>::type::result_type>()(typename at_c<S, 0>::type()(p)),
@@ -141,7 +141,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 9> {
-		K operator()(P p = nullptr) const {
+		K operator()(P p = 0) const {
 			using namespace boost::mpl;
 			return K(
 				Filter<typename at_c<S, 0>::type::result_type>()(typename at_c<S, 0>::type()(p)),
@@ -159,7 +159,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 10> {
-		K operator()(P p = nullptr) const {
+		K operator()(P p = 0) const {
 			using namespace boost::mpl;
 			return K(
 				Filter<typename at_c<S, 0>::type::result_type>()(typename at_c<S, 0>::type()(p)),
@@ -178,7 +178,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 11> {
-		K operator()(P p = nullptr) const {
+		K operator()(P p = 0) const {
 			using namespace boost::mpl;
 			return K(
 				Filter<typename at_c<S, 0>::type::result_type>()(typename at_c<S, 0>::type()(p)),
@@ -198,7 +198,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 12> {
-		K operator()(P p = nullptr) const {
+		K operator()(P p = 0) const {
 			using namespace boost::mpl;
 			return K(
 				Filter<typename at_c<S, 0>::type::result_type>()(typename at_c<S, 0>::type()(p)),
@@ -219,7 +219,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 13> {
-		K operator()(P p = nullptr) const {
+		K operator()(P p = 0) const {
 			using namespace boost::mpl;
 			return K(
 				Filter<typename at_c<S, 0>::type::result_type>()(typename at_c<S, 0>::type()(p)),
@@ -241,7 +241,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 14> {
-		K operator()(P p = nullptr) const {
+		K operator()(P p = 0) const {
 			using namespace boost::mpl;
 			return K(
 				Filter<typename at_c<S, 0>::type::result_type>()(typename at_c<S, 0>::type()(p)),
@@ -264,7 +264,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 15> {
-		K operator()(P p = nullptr) const {
+		K operator()(P p = 0) const {
 			using namespace boost::mpl;
 			return K(
 				Filter<typename at_c<S, 0>::type::result_type>()(typename at_c<S, 0>::type()(p)),
@@ -288,7 +288,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 16> {
-		K operator()(P p = nullptr) const {
+		K operator()(P p = 0) const {
 			using namespace boost::mpl;
 			return K(
 				Filter<typename at_c<S, 0>::type::result_type>()(typename at_c<S, 0>::type()(p)),

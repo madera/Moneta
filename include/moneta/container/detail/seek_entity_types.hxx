@@ -13,7 +13,7 @@ namespace moneta { namespace container { namespace detail {
 		typename boost::mpl::push_back<State, EntityType>::type,
 		boost::mpl::if_<
 			traits::is_entity<boost::mpl::_2>,
-			typename seek_entity_types<boost::mpl::_2, boost::mpl::_1>,
+			typename moneta::container::detail::seek_entity_types<boost::mpl::_2, boost::mpl::_1>,
 			boost::mpl::_1
 		>
 	> {};

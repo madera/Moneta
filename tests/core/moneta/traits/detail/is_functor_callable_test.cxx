@@ -1,8 +1,5 @@
 #include "stdafx.h"
 #include <moneta/traits/detail/is_functor_callable.hxx>
-#include <string>
-
-#include <boost/mpl/print.hpp>
 
 struct a {
 	void operator()() {}

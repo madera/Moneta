@@ -1,5 +1,5 @@
 #pragma once
-#include <moneta/pp/sql_entity.hxx>
+#include <moneta/pp/describe_entity.hxx>
 
 MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 	FourInts,

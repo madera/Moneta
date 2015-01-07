@@ -7,7 +7,7 @@
 #include "../model/Composite.hxx"
 #include "../model/Cat.hxx"
 
-static void static_test() {
+inline void static_test() {
 
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<

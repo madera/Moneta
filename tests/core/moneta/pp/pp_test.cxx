@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <moneta/pp/sql_entity.hxx>
+#include <moneta/pp/describe_entity.hxx>
 #include <moneta/traits/fixed_values.hxx>
 
 typedef char char_16[16];
