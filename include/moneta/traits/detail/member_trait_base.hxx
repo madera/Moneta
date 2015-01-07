@@ -46,13 +46,13 @@
 
 #define MONETA_DEFINE_TRAIT_WITH_GET(trait, type, return_type, value) \
 	namespace moneta { namespace traits { namespace detail {      \
-	template <>                                                   \
-	struct trait<type> : boost::true_type {       \
-		typedef return_type trait_type;       \
-		static trait_type get() {                             \
-			return value    ;                             \
-		}                                                     \
-	};                                                            \
+		template <>                                           \
+		struct trait<type> : boost::true_type {               \
+			typedef return_type trait_type;               \
+			static trait_type get() {                     \
+				return value;                         \
+			}                                             \
+		};                                                    \
 	}}}
 
 #define MONETA_DEFINE_FLAG_TRAIT(trait, type)                             \

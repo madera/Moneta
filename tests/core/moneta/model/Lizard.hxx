@@ -15,7 +15,7 @@ struct Lizard {
 MONETA_DESCRIBE_SQL_ENTITY(
 	Lizard, LIZARD,
 	((Person,      Owner, LIZARD_OWNER))
-	((int,         ID,    LIZARD_ID,  ))
+	((int,         ID,    LIZARD_ID   ))
 	((std::string, Name,  LIZARD_NAME ))
 )
 

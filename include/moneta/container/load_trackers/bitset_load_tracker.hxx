@@ -34,7 +34,7 @@ namespace moneta { namespace container {
 				}
 
 				std::string to_string() const {
-					return boost::lexical_cast<std::string>(load_state);
+					return load_state.to_string();
 				}
 
 				bool operator<(const state_type& rhs) const {
