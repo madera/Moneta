@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(insufficient_buffer_decoder_test) {
 	typedef ThreeInts entity_type;
 
 	const size_t member_count = boost::mpl::size<
-		typename moneta::traits::members<entity_type>::type
+		moneta::traits::members<entity_type>::type
 	>::value;
 
 	char buffer[member_count];
@@ -61,9 +61,9 @@ BOOST_AUTO_TEST_CASE(simple_decoder_test) {
 
 BOOST_AUTO_TEST_CASE(traversal_decoder_test) {
 	const size_t member_count =
-		boost::mpl::size<typename moneta::traits::members<CascadedInts>::type>::value - 2 +
-		boost::mpl::size<typename moneta::traits::members<TwoInts     >::type>::value     +
-		boost::mpl::size<typename moneta::traits::members<FourInts    >::type>::value
+		boost::mpl::size<moneta::traits::members<CascadedInts>::type>::value - 2 +
+		boost::mpl::size<moneta::traits::members<TwoInts     >::type>::value     +
+		boost::mpl::size<moneta::traits::members<FourInts    >::type>::value
 	;
 
 	char buffer[member_count] = {
@@ -134,7 +134,7 @@ namespace moneta { namespace codec {
 
 BOOST_AUTO_TEST_CASE(member_decoder_test) {
 	const size_t member_count = boost::mpl::size <
-		typename moneta::traits::members<Arithmetics>::type
+		moneta::traits::members<Arithmetics>::type
 	> ::value;
 
 	Arithmetics entity;

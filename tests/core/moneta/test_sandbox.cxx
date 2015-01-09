@@ -31,7 +31,7 @@ public:
 template <class Member>
 struct member_equals : member_comparer<Member> {
 	member_equals(const typename Member::result_type& value)
-	 : member_comparer(value) {}
+	 : member_comparer<Member>(value) {}
 
 	bool operator()(const typename Member::class_type& entity) const {
 		return *this == entity;

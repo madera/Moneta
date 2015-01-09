@@ -23,7 +23,11 @@ add_executable(core_tests
 	${local_project_headers}
 	
 	main.cxx
-
+	
+	moneta/make_entity_test.cxx
+	#moneta/test_sandbox.cxx
+	#moneta/interactive_shell_test.cxx
+	
 	moneta/_aux/mplx_at_c_test.cxx
 	moneta/_aux/mplx_flatten_test.cxx
 	
@@ -31,6 +35,18 @@ add_executable(core_tests
 	moneta/algorithm/for_each_member_test.cxx
 	moneta/algorithm/traverse_ng_test.cxx
 	moneta/algorithm/traverse_test.cxx
+
+	#moneta/codec/codec_io_test.cxx
+	#moneta/codec/decoder_test.cxx
+	#moneta/codec/encoder_test.cxx
+	#moneta/codec/multi_decoder_test.cxx
+	#moneta/codec/rawbin/rawbin_decoder_test.cxx
+	#moneta/codec/rawbin/rawbin_encoder_test.cxx
+	#moneta/codec/shell/shell_decoder_test.cxx
+	#moneta/codec/shell/shell_encoder_test.cxx
+	#moneta/codec/typecode_test.cxx
+	#moneta/codec/xml/xml_encoder_test.cxx
+	#moneta/codec/xml/xml_traits_test.cxx
 
 	moneta/container/change_trackers/bitset_change_tracker_test.cxx
 	moneta/container/change_trackers/hash_change_tracker_test.cxx
@@ -42,7 +58,17 @@ add_executable(core_tests
 	moneta/lexical/dispatch_member_test.cxx
 	moneta/lexical/lexical_dispatch_entity_test.cxx
 	moneta/lexical/set_value_test.cxx
-		
+
+	#		
+	# TODO: Make these selectable only if FindSOCI finds it.
+	#
+	#moneta/serialization/soci/detail/soci_fixture.cxx
+	#moneta/serialization/soci/soci_count_test.cxx
+	#moneta/serialization/soci/soci_create_test.cxx
+	#moneta/serialization/soci/soci_delete_test.cxx
+	#moneta/serialization/soci/soci_list_test.cxx
+	#moneta/serialization/soci/soci_read_test.cxx
+
 	moneta/traits/detail/deref_if_unary_test.cxx
 	moneta/traits/detail/has_member_trait_test.cxx
 	moneta/traits/detail/indices_of_test.cxx

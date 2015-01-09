@@ -1,4 +1,5 @@
 #pragma once
+#include "../detail/keywords.hxx"
 #include "../traits/member_names.hxx"
 #include "../traits/is_entity.hxx"
 #include "../traits/is_container.hxx"
