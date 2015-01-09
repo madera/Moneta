@@ -1,5 +1,13 @@
+#
+# TODO: Put these macros elsewhere (maybe the final FindMoneta.cmake).
+#	Leave this file for manual header listings.
+#
+
 set(moneta_include_base "${CMAKE_CURRENT_SOURCE_DIR}/" CACHE STRING INTERNAL)
 
+#
+# Gets all existing headers in the directories.
+#
 macro(moneta_header_files result)
 	file(GLOB_RECURSE files "${moneta_include_base}*.hxx")
 	set(${result} ${files})

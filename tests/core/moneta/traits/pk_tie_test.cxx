@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include <moneta/traits/pk_tie.hxx>
 #include <boost/mpl/equal.hpp>
-#include <moneta/pp/core.hxx>
 #include "../model/Person.hxx"
 #include "../model/Dog.hxx"
 #include "../model/Cat.hxx"

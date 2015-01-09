@@ -1,5 +1,4 @@
 #pragma once
-#include "../pp/boost_pp.hxx"
 #include "../traits/entity_name.hxx"
 #include "../traits/member_names.hxx"
 #include "traits/table_name.hxx"

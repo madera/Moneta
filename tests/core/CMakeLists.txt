@@ -1,9 +1,26 @@
 include_directories(.)
 
-moneta_header_files(all_moneta_headers)
+#
+# Describe groups for IDEs.
+#
+if (MSVC)
+	add_source_groups("External Moneta" "${moneta_include_base}" *.hxx)
+	add_source_groups("Header Files" "${CMAKE_CURRENT_SOURCE_DIR}" *.hxx)
+	add_source_groups("Source Files" "${CMAKE_CURRENT_SOURCE_DIR}" *.cxx)
+endif()
 
+#
+# Collect headers for inclusion.
+#
+moneta_header_files(moneta_headers)
+file(GLOB_RECURSE local_project_headers "${CMAKE_CURRENT_SOURCE_DIR}/*.hxx")
+
+#
+# Do it.
+#
 add_executable(core_tests
-	${all_moneta_headers}
+	${moneta_headers}
+	${local_project_headers}
 	
 	main.cxx
 
@@ -22,19 +39,16 @@ add_executable(core_tests
 	moneta/container/rcontext_test.cxx
 	moneta/container/rtuple_set_test.cxx
 
-
 	moneta/lexical/dispatch_member_test.cxx
 	moneta/lexical/lexical_dispatch_entity_test.cxx
 	moneta/lexical/set_value_test.cxx
-	
-	
+		
 	moneta/traits/detail/deref_if_unary_test.cxx
 	moneta/traits/detail/has_member_trait_test.cxx
 	moneta/traits/detail/indices_of_test.cxx
 	moneta/traits/detail/is_functor_callable_test.cxx
 	moneta/traits/detail/sub_tie_vector_test.cxx
 	moneta/traits/detail/tie_vector_test.cxx	
-	#
 	moneta/traits/empty_pk_test.cxx
 	moneta/traits/extract_pk_test.cxx
 	moneta/traits/fixed_values_test.cxx
@@ -57,19 +71,15 @@ add_executable(core_tests
 	moneta/traits/to_tie_test.cxx
 	moneta/traits/tuple_test.cxx
 
+	#moneta/pp/detail/cat_include_name_test.cxx
+	moneta/pp/detail/includer_test.cxx
+	moneta/pp/pp_test.cxx
 
 	moneta/sql/generators/delete_test.cxx
 	moneta/sql/generators/insert_test.cxx
 	moneta/sql/generators/select_test.cxx
-	#
 	moneta/sql/traits/field_names_test.cxx
 	moneta/sql/traits/table_name_test.cxx
 )
-
-if (MSVC)
-	add_source_groups("Moneta Headers" "${moneta_include_base}" *.hxx)
-	add_source_groups("Header Files" "${CMAKE_CURRENT_SOURCE_DIR}/" *.hxx)
-	add_source_groups("Source Files" "${CMAKE_CURRENT_SOURCE_DIR}/" *.cxx)
-endif() 
 
 target_link_libraries(core_tests ${Boost_LIBRARIES})

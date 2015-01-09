@@ -4,7 +4,7 @@
 
 typedef char char_16[16];
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY_WITH_NAMESPACE(
+MONETA_DEFINE_ENTITY_STRUCT_WITH_NAMESPACE(
 	(ns0)(ns1)(ns2), some_entity,
 	((int,     a))
 	((double,  b))
@@ -15,5 +15,4 @@ MONETA_DEFINE_AND_DESCRIBE_ENTITY_WITH_NAMESPACE(
 MONETA_FIXED_VALUE_MEMBER(ns0::ns1::ns2::some_entity, int,    a, 123)
 MONETA_FIXED_VALUE_MEMBER(ns0::ns1::ns2::some_entity, double, b, 1.5)
 
-static void static_test() {
-}
+// TODO: FIXME: This test lost focus.

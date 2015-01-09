@@ -1,3 +1,7 @@
+//
+// TODO: Make this work on non-MSVC.
+//
+
 #include "stdafx.h"
 #include <moneta/pp/detail/cat_include_name.hxx>
 

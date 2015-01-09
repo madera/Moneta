@@ -1,3 +1,5 @@
+// TODO: Continue this Joel-de-Guzman-inspired charm.
+
 #pragma once
 #include <boost/preprocessor/tuple/size.hpp>
 
