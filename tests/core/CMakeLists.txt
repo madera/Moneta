@@ -1,12 +1,12 @@
 include_directories(.)
 
-###
-### TODO: ORGANIZE THESE ALPHABETICALLY
-###
+moneta_header_files(all_moneta_headers)
 
 add_executable(core_tests
-	main.cxx
+	${all_moneta_headers}
 	
+	main.cxx
+
 	moneta/_aux/mplx_at_c_test.cxx
 	moneta/_aux/mplx_flatten_test.cxx
 	
@@ -64,8 +64,12 @@ add_executable(core_tests
 	#
 	moneta/sql/traits/field_names_test.cxx
 	moneta/sql/traits/table_name_test.cxx
-
-
 )
+
+if (MSVC)
+	add_source_groups("Moneta Headers" "${moneta_include_base}" *.hxx)
+	add_source_groups("Header Files" "${CMAKE_CURRENT_SOURCE_DIR}/" *.hxx)
+	add_source_groups("Source Files" "${CMAKE_CURRENT_SOURCE_DIR}/" *.cxx)
+endif() 
 
 target_link_libraries(core_tests ${Boost_LIBRARIES})
