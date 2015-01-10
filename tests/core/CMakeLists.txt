@@ -36,15 +36,15 @@ add_executable(core_tests
 	moneta/algorithm/traverse_ng_test.cxx
 	moneta/algorithm/traverse_test.cxx
 
-	#moneta/codec/codec_io_test.cxx
+	moneta/codec/typecode_test.cxx
+	moneta/codec/codec_io_test.cxx
+#	moneta/codec/encoder_test.cxx
 	#moneta/codec/decoder_test.cxx
-	#moneta/codec/encoder_test.cxx
 	#moneta/codec/multi_decoder_test.cxx
 	#moneta/codec/rawbin/rawbin_decoder_test.cxx
 	#moneta/codec/rawbin/rawbin_encoder_test.cxx
 	#moneta/codec/shell/shell_decoder_test.cxx
 	#moneta/codec/shell/shell_encoder_test.cxx
-	#moneta/codec/typecode_test.cxx
 	#moneta/codec/xml/xml_encoder_test.cxx
 	#moneta/codec/xml/xml_traits_test.cxx
 
@@ -109,3 +109,5 @@ add_executable(core_tests
 )
 
 target_link_libraries(core_tests ${Boost_LIBRARIES})
+
+add_test(core_tests core_tests)
