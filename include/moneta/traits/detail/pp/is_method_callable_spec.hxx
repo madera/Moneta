@@ -111,6 +111,44 @@ class trait_name<T, Result(Arg1,Arg2,Arg3,Arg4)>                                
 public:                                                                                                      \
    static const bool value = sizeof(yes) == sizeof(deduce(static_cast<base*>(0)));                           \
    static const boost::mpl::bool_<value> type;                                                               \
+};                                                                                                           \
+                                                                                                             \
+template<typename T, typename Result, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5> \
+class trait_name<T, Result(Arg1,Arg2,Arg3,Arg4,Arg5)>                                                        \
+{                                                                                                            \
+   class yes { char m; };                                                                                    \
+   class no { yes m[2]; };                                                                                   \
+   struct base_mixin                                                                                         \
+   {                                                                                                         \
+     Result member_function_name(Arg1,Arg2,Arg3,Arg4,Arg5);                                                  \
+   };                                                                                                        \
+   struct base : public T, public base_mixin {};                                                             \
+   template <typename U, U t>  class helper{};                                                               \
+   template <typename U>                                                                                     \
+   static no deduce(U*, helper<Result (base_mixin::*)(Arg1,Arg2,Arg3,Arg4,Arg5), &U::member_function_name>* = 0); \
+   static yes deduce(...);                                                                                   \
+public:                                                                                                      \
+   static const bool value = sizeof(yes) == sizeof(deduce(static_cast<base*>(0)));                           \
+   static const boost::mpl::bool_<value> type;                                                               \
+};                                                                                                           \
+                                                                                                             \
+template<typename T, typename Result, class T0, class T1, class T2, class T3, class T4, class T5>            \
+class trait_name<T, Result(T0,T1,T2,T3,T4,T5)>                                                               \
+{                                                                                                            \
+   class yes { char m; };                                                                                    \
+   class no { yes m[2]; };                                                                                   \
+   struct base_mixin                                                                                         \
+   {                                                                                                         \
+     Result member_function_name(T0,T1,T2,T3,T4,T5);                                                         \
+   };                                                                                                        \
+   struct base : public T, public base_mixin {};                                                             \
+   template <typename U, U t>  class helper{};                                                               \
+   template <typename U>                                                                                     \
+   static no deduce(U*, helper<Result (base_mixin::*)(T0,T1,T2,T3,T4,T5), &U::member_function_name>* = 0);   \
+   static yes deduce(...);                                                                                   \
+public:                                                                                                      \
+   static const bool value = sizeof(yes) == sizeof(deduce(static_cast<base*>(0)));                           \
+   static const boost::mpl::bool_<value> type;                                                               \
 };
 
 namespace is_call_possible_detail { 
@@ -173,7 +211,7 @@ struct trait_name                                                               
    struct impl                                                                                                          \
    {                                                                                                                    \
      static const bool value = false;                                                                                   \
-     typedef boost::mpl::bool_<value> type;                                                                        \
+     typedef boost::mpl::bool_<value> type;                                                                             \
    };                                                                                                                   \
                                                                                                                         \
    template <typename Result, typename Arg>                                                                             \
@@ -204,7 +242,7 @@ struct trait_name                                                               
              (test_me.member_function_name(arg1,arg2), is_call_possible_detail::void_exp_result<T>())                   \
                          )                                                                                              \
             ) == sizeof(yes);                                                                                           \
-     typedef boost::mpl::bool_<value> type;                                                                        \
+     typedef boost::mpl::bool_<value> type;                                                                             \
    };                                                                                                                   \
                                                                                                                         \
    template <typename Result, typename Arg1, typename Arg2, typename Arg3>                                              \
@@ -221,7 +259,7 @@ struct trait_name                                                               
              (test_me.member_function_name(arg1,arg2,arg3), is_call_possible_detail::void_exp_result<T>())              \
                          )                                                                                              \
             ) == sizeof(yes);                                                                                           \
-     typedef boost::mpl::bool_<value> type;                                                                        \
+     typedef boost::mpl::bool_<value> type;                                                                             \
    };                                                                                                                   \
                                                                                                                         \
    template <typename Result, typename Arg1, typename Arg2, typename Arg3, typename Arg4>                               \
@@ -239,11 +277,50 @@ struct trait_name                                                               
              (test_me.member_function_name(arg1,arg2,arg3,arg4), is_call_possible_detail::void_exp_result<T>())         \
                          )                                                                                              \
             ) == sizeof(yes);                                                                                           \
-     typedef boost::mpl::bool_<value> type;                                                                        \
+     typedef boost::mpl::bool_<value> type;                                                                             \
+   };                                                                                                                   \
+                                                                                                                        \
+   template <typename Result, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>                \
+   struct impl<true, Result(Arg1,Arg2,Arg3,Arg4,Arg5)>                                                                  \
+   {                                                                                                                    \
+     static typename is_call_possible_detail::add_reference<derived_type>::type test_me;                                \
+     static typename is_call_possible_detail::add_reference<Arg1>::type         arg1;                                   \
+     static typename is_call_possible_detail::add_reference<Arg2>::type         arg2;                                   \
+     static typename is_call_possible_detail::add_reference<Arg3>::type         arg3;                                   \
+     static typename is_call_possible_detail::add_reference<Arg4>::type         arg4;                                   \
+     static typename is_call_possible_detail::add_reference<Arg5>::type         arg5;                                   \
+                                                                                                                        \
+     static const bool value =                                                                                          \
+       sizeof(                                                                                                          \
+            return_value_check<T, Result>::deduce(                                                                      \
+             (test_me.member_function_name(arg1,arg2,arg3,arg4,arg5), is_call_possible_detail::void_exp_result<T>())    \
+                         )                                                                                              \
+            ) == sizeof(yes);                                                                                           \
+     typedef boost::mpl::bool_<value> type;                                                                             \
+   };                                                                                                                   \
+                                                                                                                        \
+   template <typename Result, class T0, class T1, class T2, class T3, class T4, class T5>                               \
+   struct impl<true, Result(T0,T1,T2,T3,T4,T5)>                                                                         \
+   {                                                                                                                    \
+     static typename is_call_possible_detail::add_reference<derived_type>::type test_me;                                \
+     static typename is_call_possible_detail::add_reference<T0>::type         arg1;                                     \
+     static typename is_call_possible_detail::add_reference<T1>::type         arg2;                                     \
+     static typename is_call_possible_detail::add_reference<T2>::type         arg3;                                     \
+     static typename is_call_possible_detail::add_reference<T3>::type         arg4;                                     \
+     static typename is_call_possible_detail::add_reference<T4>::type         arg5;                                     \
+     static typename is_call_possible_detail::add_reference<T5>::type         arg6;                                     \
+                                                                                                                        \
+     static const bool value =                                                                                          \
+       sizeof(                                                                                                          \
+            return_value_check<T, Result>::deduce(                                                                      \
+             (test_me.member_function_name(arg1,arg2,arg3,arg4,arg5,arg6), is_call_possible_detail::void_exp_result<T>()) \
+                         )                                                                                              \
+            ) == sizeof(yes);                                                                                           \
+     typedef boost::mpl::bool_<value> type;                                                                             \
    };                                                                                                                   \
                                                                                                                         \
   public:                                                                                                               \
     static const bool value = impl<trait_name##_detail::has_member<T,Signature>::value, Signature>::value;              \
-    typedef boost::mpl::bool_<value> type;                                                                        \
+    typedef boost::mpl::bool_<value> type;                                                                              \
 };                                                                                                                      \
 }}}

@@ -17,6 +17,8 @@ inline void static_test() {
 	// Testing moneta::algorithm::detail::actions_of<>
 	//
 	{
+		// FIXME: This is some code that shouldn't be able to compile.
+		//        Test differently. Use some real handlers.
 		typedef moneta::algorithm::traverse<
 			enter_actions<char, int, double>,
 			member_actions<int>,

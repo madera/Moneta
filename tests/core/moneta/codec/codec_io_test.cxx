@@ -83,8 +83,7 @@ BOOST_AUTO_TEST_CASE(ostringstream_codec_io_test) {
 		char buffer[1024];
 		std::fill(std::begin(buffer), std::end(buffer), 0x55);
 
-		int result =
-			moneta::codec::detail::make_ostringstream(std::begin(buffer), std::end(buffer))
+		int result = moneta::codec::detail::make_ostringstream(std::begin(buffer), std::end(buffer))
 			<< '<' << "Hello world!" << '>'
 			<< std::string(" How do you do?")
 			<< callable("\nTesting a callable")
@@ -97,8 +96,7 @@ BOOST_AUTO_TEST_CASE(ostringstream_codec_io_test) {
 		char buffer[10];
 		std::fill(std::begin(buffer), std::end(buffer), 0x55);
 
-		int result =
-			moneta::codec::detail::make_ostringstream(std::begin(buffer), std::end(buffer))
+		int result = moneta::codec::detail::make_ostringstream(std::begin(buffer), std::end(buffer))
 			<< '<' << "Hello world!" << '>'
 			<< std::string(" How do you do?")
 		;

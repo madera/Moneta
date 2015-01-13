@@ -1,3 +1,7 @@
+//
+// TODO: Rename this to traverser. Rename file to remove ng. Remove previous impl.
+//
+
 #pragma once
 #include "../_aux/mplx_flatten.hxx"
 #include "../_aux/mplx_nullref.hxx"
@@ -76,10 +80,10 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Entity&, State&)>
+				moneta::traits::detail::is_functor_callable<Action, void (Entity&, Path&)>
 			>::type
 			process() const {
-				Action()(_entity, _state);
+				Action()(_entity, mplx::nullref<Path>());
 			}
 
 			template <typename Action>

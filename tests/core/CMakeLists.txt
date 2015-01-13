@@ -15,6 +15,8 @@ endif()
 moneta_header_files(moneta_headers)
 file(GLOB_RECURSE local_project_headers "${CMAKE_CURRENT_SOURCE_DIR}/*.hxx")
 
+find_package(Soci)
+
 #
 # Do it.
 #
@@ -38,15 +40,16 @@ add_executable(core_tests
 
 	moneta/codec/typecode_test.cxx
 	moneta/codec/codec_io_test.cxx
+	moneta/codec/encoder_ng_test.cxx
 #	moneta/codec/encoder_test.cxx
-	#moneta/codec/decoder_test.cxx
-	#moneta/codec/multi_decoder_test.cxx
-	#moneta/codec/rawbin/rawbin_decoder_test.cxx
-	#moneta/codec/rawbin/rawbin_encoder_test.cxx
-	#moneta/codec/shell/shell_decoder_test.cxx
-	#moneta/codec/shell/shell_encoder_test.cxx
-	#moneta/codec/xml/xml_encoder_test.cxx
-	#moneta/codec/xml/xml_traits_test.cxx
+#	moneta/codec/decoder_test.cxx
+#	moneta/codec/multi_decoder_test.cxx
+#	moneta/codec/rawbin/rawbin_decoder_test.cxx
+#	moneta/codec/rawbin/rawbin_encoder_test.cxx
+#	moneta/codec/shell/shell_decoder_test.cxx
+#	moneta/codec/shell/shell_encoder_test.cxx
+#	moneta/codec/xml/xml_encoder_test.cxx
+#	moneta/codec/xml/xml_traits_test.cxx
 
 	moneta/container/change_trackers/bitset_change_tracker_test.cxx
 	moneta/container/change_trackers/hash_change_tracker_test.cxx
