@@ -119,15 +119,15 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, State&)>
+				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, const Path&)>
 			>::type
 			process() const {
-				Action()(mplx::nullref<Member>(), _entity, _state);
+				Action()(mplx::nullref<Member>(), _entity, mplx::nullref<Path>());
 			}
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, Path&, State&)>
+				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, const Path&, State&)>
 			>::type
 			process() const {
 				Action()(mplx::nullref<Member>(), _entity, mplx::nullref<Path>(), _state);
@@ -158,10 +158,10 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, State&)>
+				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, const Path&)>
 			>::type
 			process() const {
-				Action()(mplx::nullref<Member>(), _entity, _state);
+				Action()(mplx::nullref<Member>(), _entity, mplx::nullref<Path>());
 			}
 
 			template <typename Action>
@@ -230,13 +230,12 @@ namespace moneta { namespace algorithm {
 				>
 			>::type
 			process() const {
-				using boost::mpl::for_each;
-
 				typedef typename add_path<Path, Member>::type path;
 				typedef detail::container_action<Member, Entity, path, State> action;
 
+				using boost::mpl::for_each;
 				for_each<typename Traverser::enter_container_actions>(action(_entity, _state));
-
+    // ### MEQUEDE ### //
  				typedef typename Member::result_type container_type;
 				container_type& container = Member()(_entity);
 				typename container_type::iterator itr = container.begin();

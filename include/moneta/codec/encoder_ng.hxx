@@ -1,8 +1,7 @@
 #pragma once
 #include "../algorithm/traverse_ng.hxx"
 
-
-#include <boost/mpl/print.hpp>
+// TODO: Put in detail, well, the detail impls...
 
 namespace moneta { namespace codec {
 
@@ -26,12 +25,42 @@ namespace moneta { namespace codec {
 			typedef Iterator iterator_type;
 			typedef Substate substate_type;
 
-			typedef typename detail::actions_of<Actions, detail::traverse_enter >::type enter_actions;
-			typedef typename detail::actions_of<Actions, detail::traverse_member>::type member_actions;
-			typedef typename detail::actions_of<Actions, detail::traverse_leave >::type leave_actions;
-			typedef typename detail::actions_of<Actions, detail::traverse_enter_container >::type enter_container_actions;
-			typedef typename detail::actions_of<Actions, detail::traverse_container_member>::type container_member_actions;
-			typedef typename detail::actions_of<Actions, detail::traverse_leave_container >::type leave_container_actions;
+			//
+			//
+			//
+			typedef typename detail::actions_of<
+				Actions,
+				detail::traverse_enter
+			>::type enter_actions;
+			
+			typedef typename detail::actions_of<
+				Actions,
+				detail::traverse_member
+			>::type member_actions;
+
+			typedef typename detail::actions_of<
+				Actions,
+				detail::traverse_leave
+			>::type leave_actions;
+
+			typedef typename detail::actions_of<
+				Actions,
+				detail::traverse_enter_container
+			>::type enter_container_actions;
+
+			typedef typename detail::actions_of<
+				Actions,
+				detail::traverse_container_member
+			>::type container_member_actions;
+
+			typedef typename detail::actions_of<
+				Actions,
+				detail::traverse_leave_container
+			>::type leave_container_actions;
+
+			//
+			//
+			//
 
 			Iterator begin;
 			Iterator end;
@@ -144,12 +173,12 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (const Member&, Iterator, Iterator, const Entity&)
+				int (Iterator, Iterator, const Member&, const Entity&)
 			>
 		>::type
 		process() const {
 			update_result(
-				Action()(mplx::nullref<Member>(), _encoder_state.begin, _encoder_state.end, _entity)
+				Action()(_encoder_state.begin, _encoder_state.end, mplx::nullref<Member>(), _entity)
 			);
 		}
 
@@ -157,14 +186,14 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (const Member&, Iterator, Iterator, const Entity&, const Path&)
+				int (Iterator, Iterator, const Member&, const Entity&, const Path&)
 			>
 		>::type
 		process() const {
 			update_result(
 				Action()(
-					mplx::nullref<Member>(),
 					_encoder_state.begin, _encoder_state.end,
+					mplx::nullref<Member>(),
 					_entity,
 					mplx::nullref<Path>()
 				)
@@ -176,19 +205,21 @@ namespace moneta { namespace codec {
 			moneta::traits::detail::is_functor_callable<
 				Action,
 				int (
-					const Member&,
 					Iterator, Iterator,
+					const Member&,
 					const Entity&,
-					const Path&, typename EncoderState::substate_type&
+					const Path&,
+					typename EncoderState::substate_type&
 				)
 			>
 		>::type
 		process() const {
 			update_result(
 				Action()(
-					mplx::nullref<Member>(),
 					_encoder_state.begin, _encoder_state.end,
-					_entity, mplx::nullref<Path>(),
+					mplx::nullref<Member>(),
+					_entity,
+					mplx::nullref<Path>(),
 					_encoder_state.substate
 				)
 			);
@@ -206,12 +237,103 @@ namespace moneta { namespace codec {
 		}
 	};
 
+	template <class Member, class Entity, class Path, class EncoderState, typename Iterator = typename EncoderState::iterator_type>
+	class encoder_container_action {
+		Entity& _entity;
+		EncoderState& _encoder_state;
+
+		void update_result(const int result) const {
+			if (result < 0) {
+				_encoder_state.good = false;
+			} else if (result > 0) {
+				_encoder_state.total_written += result;
+				_encoder_state.begin += result;
+			} else {
+			}
+
+			_encoder_state.last_result = result;
+		}
+
+		template <typename Action>
+		typename boost::enable_if<
+			moneta::traits::detail::is_functor_callable<
+				Action,
+				int (Iterator, Iterator, const Member&, const Entity&)
+			>
+		>::type
+		process() const {
+			update_result(
+				Action()(_encoder_state.begin, _encoder_state.end, mplx::nullref<Member>(), _entity)
+			);
+		}
+
+		template <typename Action>
+		typename boost::enable_if<
+			moneta::traits::detail::is_functor_callable<
+				Action,
+				int (Iterator, Iterator, const Member&, const Entity&, const Path&)
+			>
+		>::type
+		process() const {
+			update_result(
+				Action()(
+					_encoder_state.begin, _encoder_state.end,
+					mplx::nullref<Member>(),
+					_entity,
+					mplx::nullref<Path>()
+				)
+			);
+		}
+
+		template <typename Action>
+		typename boost::enable_if<
+			moneta::traits::detail::is_functor_callable<
+				Action,
+				int (
+					Iterator, Iterator,
+					const Member&,
+					const Entity&,
+					const Path&,
+					typename EncoderState::substate_type&
+				)
+			>
+		>::type
+		process() const {
+			update_result(
+				Action()(
+					_encoder_state.begin, _encoder_state.end,
+					mplx::nullref<Member>(),
+					_entity,
+					mplx::nullref<Path>(),
+					_encoder_state.substate
+				)
+			);
+		}
+
+	public:
+		encoder_container_action(Entity& entity, EncoderState& encoder_state)
+		 : _entity(entity), _encoder_state(encoder_state) {}
+
+		template <typename Action>
+		void operator()(Action&) const {
+			process<Action>();
+		}
+	};
 
 	struct encoder_enter_entity {
 		template <class Entity, class Path, class EncoderState>
 		void operator()(const Entity& entity, const Path&, EncoderState& encoder_state) const {
 			boost::mpl::for_each<typename EncoderState::enter_actions>(
 				encoder_enter_or_leave_action<Entity, Path, EncoderState>(entity, encoder_state)
+			);
+		}
+	};
+
+	struct encoder_member {
+		template <class Member, class Entity, class Path, class EncoderState>
+		void operator()(Member&, const Entity& entity, const Path&, EncoderState& encoder_state) const {
+			boost::mpl::for_each<typename EncoderState::member_actions>(
+				encoder_member_action<Member, Entity, Path, EncoderState>(entity, encoder_state)
 			);
 		}
 	};
@@ -225,11 +347,33 @@ namespace moneta { namespace codec {
 		}
 	};
 
-	struct encoder_member {
+	struct encoder_enter_container {
 		template <class Member, class Entity, class Path, class EncoderState>
 		void operator()(Member&, const Entity& entity, const Path&, EncoderState& encoder_state) const {
-			boost::mpl::for_each<typename EncoderState::member_actions>(
-				encoder_member_action<Member, Entity, Path, EncoderState>(entity, encoder_state)
+			typedef typename detail::add_path<Path, Member>::type path;
+			typedef encoder_container_action<Member, Entity, path, EncoderState> action;
+			
+			boost::mpl::for_each<typename EncoderState::enter_container_actions>(
+				action(entity, encoder_state)
+			);
+		}
+	};
+
+	struct encoder_container_member {
+		template <class Member, class Entity, class Path, class EncoderState>
+		void operator()(Member&, const Entity& entity, const Path&, EncoderState& encoder_state) const {
+			// TODO: XXX
+		}
+	};
+
+	struct encoder_leave_container {
+		template <class Member, class Entity, class Path, class EncoderState>
+		void operator()(Member&, const Entity& entity, const Path&, EncoderState& encoder_state) const {
+			typedef typename detail::add_path<Path, Member>::type path;
+			typedef encoder_container_action<Member, Entity, path, EncoderState> action;
+			
+			boost::mpl::for_each<typename EncoderState::leave_container_actions>(
+				action(entity, encoder_state)
 			);
 		}
 	};
@@ -253,10 +397,10 @@ namespace moneta { namespace codec {
 			typedef moneta::algorithm::traverse<
 				enter_actions<encoder_enter_entity>,
 				member_actions<encoder_member>,
-				leave_actions<encoder_leave_entity>//,
-				//enter_container_actions<>,
-				//container_member_actions<>,
-				//leave_container_actions<>
+				leave_actions<encoder_leave_entity>,
+				enter_container_actions<encoder_enter_container>,
+				container_member_actions<encoder_container_member>,
+				leave_container_actions<encoder_leave_container>
 			> traverser;
 
 			detail::encoder_state<mpl_vector, Iterator, State> encoder_state(begin, end, state);
