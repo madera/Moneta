@@ -2,8 +2,6 @@
 #include <moneta/container/load_trackers/bitset_load_tracker.hxx>
 #include "../../model/Cat.hxx"
 
-#include <boost/mpl/print.hpp>
-
 BOOST_AUTO_TEST_CASE(bitset_load_tracker_test) {
 	Cat cat;
 	cat.ID = 1;

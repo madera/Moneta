@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include <moneta/_aux/mplx_flatten.hxx>
 #include <boost/mpl/equal.hpp>
-#include <boost/mpl/print.hpp>
 
 inline void static_test() {
 

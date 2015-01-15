@@ -3,8 +3,6 @@
 #include "../model/tree/A.hxx"
 #include <boost/mpl/at.hpp>
 
-#include <boost/mpl/print.hpp>
-
 inline void static_test() {
 
 	BOOST_MPL_ASSERT((

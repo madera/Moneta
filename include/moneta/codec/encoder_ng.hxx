@@ -350,11 +350,8 @@ namespace moneta { namespace codec {
 	struct encoder_enter_container {
 		template <class Member, class Entity, class Path, class EncoderState>
 		void operator()(Member&, const Entity& entity, const Path&, EncoderState& encoder_state) const {
-			typedef typename detail::add_path<Path, Member>::type path;
-			typedef encoder_container_action<Member, Entity, path, EncoderState> action;
-			
 			boost::mpl::for_each<typename EncoderState::enter_container_actions>(
-				action(entity, encoder_state)
+				encoder_container_action<Member, Entity, Path, EncoderState>(entity, encoder_state)
 			);
 		}
 	};
@@ -362,18 +359,17 @@ namespace moneta { namespace codec {
 	struct encoder_container_member {
 		template <class Member, class Entity, class Path, class EncoderState>
 		void operator()(Member&, const Entity& entity, const Path&, EncoderState& encoder_state) const {
-			// TODO: XXX
+			boost::mpl::for_each<typename EncoderState::container_member_actions>(
+				encoder_container_action<Member, Entity, Path, EncoderState>(entity, encoder_state)
+			);
 		}
 	};
 
 	struct encoder_leave_container {
 		template <class Member, class Entity, class Path, class EncoderState>
 		void operator()(Member&, const Entity& entity, const Path&, EncoderState& encoder_state) const {
-			typedef typename detail::add_path<Path, Member>::type path;
-			typedef encoder_container_action<Member, Entity, path, EncoderState> action;
-			
 			boost::mpl::for_each<typename EncoderState::leave_container_actions>(
-				action(entity, encoder_state)
+				encoder_container_action<Member, Entity, Path, EncoderState>(entity, encoder_state)
 			);
 		}
 	};
@@ -389,9 +385,6 @@ namespace moneta { namespace codec {
 		//template <class Path = boost::mpl::vector0<>, typename Iterator = void, class Entity = void, class State = detail::no_state>
 		template <class Iterator, class Entity, class Path, class State>
 		int _encode(Iterator begin, Iterator end, const Entity& entity, Path* path = 0, State& state = State()) const {
-			//typedef detail::enter_or_leave_action<Entity, Path, State> enter_leave_action;
-			//typedef detail::member_action_dispatcher<this_type, Entity, Path, State> member_action;
-
 			using namespace moneta::algorithm;
 
 			typedef moneta::algorithm::traverse<
@@ -399,7 +392,7 @@ namespace moneta { namespace codec {
 				member_actions<encoder_member>,
 				leave_actions<encoder_leave_entity>,
 				enter_container_actions<encoder_enter_container>,
-				//container_member_actions<encoder_container_member>,
+				container_member_actions<encoder_container_member>,
 				leave_container_actions<encoder_leave_container>
 			> traverser;
 

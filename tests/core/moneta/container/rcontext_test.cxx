@@ -7,8 +7,6 @@
 #include "../model/Dog.hxx"
 #include "../model/Composite.hxx"
 
-#include <boost/mpl/print.hpp>
-
 inline void static_test() {
 
 	BOOST_MPL_ASSERT((

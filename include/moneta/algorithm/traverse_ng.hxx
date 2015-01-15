@@ -3,17 +3,16 @@
 //
 
 #pragma once
+#include "detail/path.hxx"
 #include "../_aux/mplx_flatten.hxx"
 #include "../_aux/mplx_nullref.hxx"
 #include "../traits/detail/is_functor_callable.hxx"
 #include "../traits/is_entity.hxx"
 #include "../traits/is_container.hxx"
 
+#include <boost/core/enable_if.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 #include <boost/type_traits/is_base_of.hpp>
-#include <boost/mpl/copy_if.hpp>
-#include <boost/mpl/vector.hpp>
-#include <boost/core/enable_if.hpp>
 
 #define MONETA_TRAVERSE_MAX_MEMBERS 10
 
@@ -290,7 +289,6 @@ namespace moneta { namespace algorithm {
 				process<Traverser_, Path_, Member>();
 			}
 		};
-
 	}
 
 	template <class T, MONETA_TRAVERSE_PARAMS_WITH_DEFAULTS>

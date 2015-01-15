@@ -3,8 +3,6 @@
 #include "../../model/Person.hxx"
 #include "../../model/Cat.hxx"
 
-//#include <boost/mpl/print.hpp>
-
 BOOST_AUTO_TEST_CASE(hash_state_tracker_test) {
 	Cat cat;
 	cat.ID = 1;
