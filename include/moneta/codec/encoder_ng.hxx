@@ -239,7 +239,7 @@ namespace moneta { namespace codec {
 
 	template <class Member, class Entity, class Path, class EncoderState, typename Iterator = typename EncoderState::iterator_type>
 	class encoder_container_action {
-		Entity& _entity;
+		const Entity& _entity;
 		EncoderState& _encoder_state;
 
 		void update_result(const int result) const {
@@ -311,7 +311,7 @@ namespace moneta { namespace codec {
 		}
 
 	public:
-		encoder_container_action(Entity& entity, EncoderState& encoder_state)
+		encoder_container_action(const Entity& entity, EncoderState& encoder_state)
 		 : _entity(entity), _encoder_state(encoder_state) {}
 
 		template <typename Action>
@@ -399,7 +399,7 @@ namespace moneta { namespace codec {
 				member_actions<encoder_member>,
 				leave_actions<encoder_leave_entity>,
 				enter_container_actions<encoder_enter_container>,
-				container_member_actions<encoder_container_member>,
+				//container_member_actions<encoder_container_member>,
 				leave_container_actions<encoder_leave_container>
 			> traverser;
 

@@ -216,9 +216,20 @@ struct counting_container_member_eps {
 		tmp += (path.empty()? "" : "," + path);
 		state.lines.push_back(tmp);
 
-		typedef typename Member::result_type container_type;
+		typedef typename boost::mpl::if_<
+			boost::is_const<Entity>,
+			typename boost::add_const<typename Member::result_type>::type,
+			typename Member::result_type
+		>::type container_type;
+
+		typedef typename boost::mpl::if_<
+			boost::is_const<Entity>,
+			typename container_type::const_iterator,
+			typename container_type::iterator
+		>::type iterator_type;
+
 		container_type& container = Member()(entity);
-		typename container_type::const_iterator itr = container.begin();
+		iterator_type itr = container.begin();		
 		for ( ; itr != container.end(); ++itr) {
 			state.lines.push_back(std::string("cmv:") + *itr);
 		}
@@ -360,6 +371,17 @@ BOOST_AUTO_TEST_CASE(with_container_members_traverse_test) {
 
 	BOOST_REQUIRE(state.lines.size() == expected_size);
 	BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + expected_size);
+
+	{
+		const SportsTeam& const_team = team;
+		test_state state;
+
+		traverse_type()(const_team, state);
+
+		BOOST_REQUIRE(state.lines.size() == expected_size);
+		BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + expected_size);
+	}
+
 }
 
 BOOST_AUTO_TEST_CASE(traverse_test) {

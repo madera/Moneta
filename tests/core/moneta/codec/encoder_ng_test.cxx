@@ -141,27 +141,23 @@ BOOST_AUTO_TEST_CASE(traversal_encoder_test) {
 	const int result = encoder_t()(buffer, buffer + sizeof(buffer) - 1, team, level);
 
 	const std::string expected =
-		"e:A, 0\n"
-		"m:f, 1\n"
-		"m:g, 2\n"
-		"\te:B,/A::b 3\n"
-		"\t\te:C,/A::b/B::c 4\n"
-		"\t\tm:j,/A::b/B::c 5\n"
-		"\t\tm:k,/A::b/B::c 6\n"
-		"\t\tl:C,/A::b/B::c 7\n"
-		"\tm:i,/A::b 8\n"
-		"\t\te:D,/A::b/B::d 9\n"
-		"\t\tm:l,/A::b/B::d 10\n"
-		"\t\t\te:E,/A::b/B::d/D::e 11\n"
-		"\t\t\tm:m,/A::b/B::d/D::e 12\n"
-		"\t\t\tm:n,/A::b/B::d/D::e 13\n"
-		"\t\t\tl:E,/A::b/B::d/D::e 14\n"
-		"\t\tl:D,/A::b/B::d 15\n"
-		"\tl:B,/A::b 16\n"
-		"m:h, 17\n"
-		"l:A, 18\n"
+		"e:SportsTeam, 0\n"
+		"m:Name, 1\n"
+		"\te:Person,/SportsTeam::Players 2\n"
+		"\tm:ID,/SportsTeam::Players 3\n"
+		"\tm:Name,/SportsTeam::Players 4\n"
+		"\tm:Height,/SportsTeam::Players 5\n"
+		"\tm:Fingers,/SportsTeam::Players 6\n"
+		"\tl:Person,/SportsTeam::Players 7\n"
+		"\te:Person,/SportsTeam::Players 8\n"
+		"\tm:ID,/SportsTeam::Players 9\n"
+		"\tm:Name,/SportsTeam::Players 10\n"
+		"\tm:Height,/SportsTeam::Players 11\n"
+		"\tm:Fingers,/SportsTeam::Players 12\n"
+		"\tl:Person,/SportsTeam::Players 13\n"
+		"l:SportsTeam, 14\n"
 	;
 
-	BOOST_CHECK_EQUAL(result, 316);
+	BOOST_CHECK_EQUAL(result, 433);
 	BOOST_CHECK_EQUAL(expected, buffer);
 }

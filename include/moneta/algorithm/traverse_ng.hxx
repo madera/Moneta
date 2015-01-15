@@ -235,10 +235,21 @@ namespace moneta { namespace algorithm {
 
 				using boost::mpl::for_each;
 				for_each<typename Traverser::enter_container_actions>(action(_entity, _state));
-    // ### MEQUEDE ### //
- 				typedef typename Member::result_type container_type;
+
+				typedef typename boost::mpl::if_<
+					boost::is_const<Entity>,
+					typename boost::add_const<typename Member::result_type>::type,
+					typename Member::result_type
+				>::type container_type;
+
+				typedef typename boost::mpl::if_<
+					boost::is_const<Entity>,
+					typename container_type::const_iterator,
+					typename container_type::iterator
+				>::type iterator_type;
+
 				container_type& container = Member()(_entity);
-				typename container_type::iterator itr = container.begin();
+				iterator_type itr = container.begin();
 				for ( ; itr != container.end(); ++itr) {
 					Traverser().template _traverse<path>(*itr, _state);
 				}
