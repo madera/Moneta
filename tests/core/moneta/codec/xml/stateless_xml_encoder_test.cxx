@@ -8,7 +8,7 @@
 #include <moneta/serialization/detail/hexdump.hxx>
 
 MONETA_XML_ATTIBUTE(Composite, MONETA_MEMBER(Composite, int, Identifier))
-MONETA_XML_ATTIBUTE(Person, MONETA_MEMBER(Person, int, ID))
+MONETA_XML_ATTIBUTE(Person,    MONETA_MEMBER(Person,    int, ID        ))
 
 MONETA_XML_ATTIBUTE(Dog, MONETA_MEMBER(Dog, std::string, Owner))
 MONETA_XML_ATTIBUTE(Dog, MONETA_MEMBER(Dog, int        , ID   ))
@@ -95,39 +95,39 @@ BOOST_AUTO_TEST_CASE(composite_encode_stateless_xml_encoder_test) {
 }
 
 //
-//// Copied from XML traits test.
-////
+// Copied from XML traits test.
+//
 //MONETA_XML_ATTIBUTE(A, MONETA_MEMBER(A, int, f))
 //MONETA_XML_ATTIBUTE(A, MONETA_MEMBER(A, int, g))
 //MONETA_XML_ATTIBUTE(A, MONETA_MEMBER(A, int, h))
 //MONETA_XML_ATTIBUTE(E, MONETA_MEMBER(D, int, l))
 //MONETA_XML_ATTIBUTE(E, MONETA_MEMBER(E, int, m))
 //MONETA_XML_ATTIBUTE(E, MONETA_MEMBER(E, int, n))
-//
-//BOOST_AUTO_TEST_CASE(tree_encode_xml_encoder_test) {
-//	static const std::string expected =
-//		"<A f=\"0\" g=\"0\" h=\"0\">\n"
-//		"\t<B>\n"
-//		"\t\t<C>\n"
-//		"\t\t\t<j>0</j>\n"
-//		"\t\t\t<k>0</k>\n"
-//		"\t\t</C>\n"
-//		"\t\t<i>0</i>\n"
-//		"\t\t<D l=\"0\">\n"
-//		"\t\t\t<E m=\"0\" n=\"0\" />\n"
-//		"\t\t</D>\n"
-//		"\t</B>\n"
-//		"</A>\n"
-//	;
-//	
-//	char buffer[256];
-//	std::fill(std::begin(buffer), std::end(buffer), 0);
-//
-//	int result = moneta::codec::encode<moneta::codec::xml>(A(), std::begin(buffer), std::end(buffer));
-//
-//	BOOST_CHECK_EQUAL(result, expected.size());
-//	BOOST_CHECK_EQUAL(buffer, expected);
-//}
+
+BOOST_AUTO_TEST_CASE(tree_encode_stateless_xml_encoder_test) {
+	static const std::string expected =
+		"<A f=\"0\" g=\"0\" h=\"0\">\n"
+		"\t<B>\n"
+		"\t\t<C>\n"
+		"\t\t\t<j>0</j>\n"
+		"\t\t\t<k>0</k>\n"
+		"\t\t</C>\n"
+		"\t\t<i>0</i>\n"
+		"\t\t<D l=\"0\">\n"
+		"\t\t\t<E m=\"0\" n=\"0\" />\n"
+		"\t\t</D>\n"
+		"\t</B>\n"
+		"</A>\n"
+	;
+	
+	char buffer[256];
+	std::fill(std::begin(buffer), std::end(buffer), 0);
+
+	const int result = encoder_t()(buffer, buffer + sizeof(buffer) - 1, A());
+
+	BOOST_CHECK_EQUAL(result, expected.size());
+	BOOST_CHECK_EQUAL(expected, buffer);
+}
 
 //
 // Test - Next Generation stuff.
@@ -166,7 +166,25 @@ BOOST_AUTO_TEST_CASE(country_with_string_Persons_stateless_xml_encoder_test) {
 	cwss.Tags.push_back("Anothertag");
 
 	static const std::string expected =
-		""
+		"<Country>\n"
+		"\t<Name>Germany</Name>\n"
+		"\t<Persons>\n"
+		"\t\t<Person ID=\"0\">\n"
+		"\t\t\t<Name>Michael Jordan</Name>\n"
+		"\t\t\t<Height>2</Height>\n"
+		"\t\t\t<Fingers>0</Fingers>\n"
+		"\t\t</Person>\n"
+		"\t\t<Person ID=\"0\">\n"
+		"\t\t\t<Name>Magic Johnson</Name>\n"
+		"\t\t\t<Height>2.1000000000000001</Height>\n"
+		"\t\t\t<Fingers>0</Fingers>\n"
+		"\t\t</Person>\n"
+		"\t</Persons>\n"
+		"\t<Tags>\n"
+		"\t\t<CrazyTag>Sometag</CrazyTag>\n"
+		"\t\t<CrazyTag>Anothertag</CrazyTag>\n"
+		"\t</Tags>\n"
+		"</Country>\n"
 	;
 	
 	char buffer[2048];

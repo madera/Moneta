@@ -31,7 +31,7 @@ struct testcodec_member {
 	template <class Iterator, class Member, class Entity, class Path, class State>
 	int operator()(Iterator begin, Iterator end, const Member&, const Entity& entity, const Path&, State& state) const {
 		return moneta::codec::detail::make_ostringstream(begin, end)
-			<< path_tabs<Path>()
+			<< path_tabs<Path, 1>()
 			<< "m:" << moneta::traits::detail::member_name<Member>::get() << ','
 			<< moneta::codec::detail::stringize_path<Path>() << ' ' << state++ << '\n'
 		;
@@ -53,7 +53,7 @@ struct testcodec_enter_container {
 	template <class Iterator, class Member, class Entity, class Path, class State>
 	int operator()(Iterator begin, Iterator end, Member&, Entity& entity, const Path&, State& state) const {
 		return moneta::codec::detail::make_ostringstream(begin, end)
-			<< path_tabs<Path, -2>()
+			<< path_tabs<Path, -1>()
 			<< "ec:" << moneta::traits::detail::member_name<Member>::get() << ','
 			<< moneta::codec::detail::stringize_path<Path>() << ' ' << state++ << '\n'
 		;
@@ -64,7 +64,7 @@ struct testcodec_container_member {
 	template <class Iterator, class Member, class Entity, class Path, class State>
 	int operator()(Iterator begin, Iterator end, Member&, Entity& entity, const Path&, State& state) const {
 		return moneta::codec::detail::make_ostringstream(begin, end)
-			<< path_tabs<Path, -1>()
+			<< path_tabs<Path>()
 			<< "cm:" << moneta::traits::detail::member_name<Member>::get() << ','
 			<< moneta::codec::detail::stringize_path<Path>() << ' ' << state++ << '\n'
 		;
@@ -75,7 +75,7 @@ struct testcodec_leave_container {
 	template <class Iterator, class Member, class Entity, class Path, class State>
 	int operator()(Iterator begin, Iterator end, Member&, Entity& entity, const Path&, State& state) const {
 		return moneta::codec::detail::make_ostringstream(begin, end)
-			<< path_tabs<Path, -2>()
+			<< path_tabs<Path, -1>()
 			<< "lc:" << moneta::traits::detail::member_name<Member>::get() << ','
 			<< moneta::codec::detail::stringize_path<Path>() << ' ' << state++ << '\n'
 		;
@@ -150,23 +150,21 @@ BOOST_AUTO_TEST_CASE(traversal_encoder_test) {
 	int level = 0;
 	const int result = encoder_t()(buffer, buffer + sizeof(buffer) - 1, team, level);
 
-
-
 	const std::string expected =
 		"e:SportsTeam, 0\n"
-		"m:Name, 1\n"
+		"\tm:Name, 1\n"
 		"\tec:Players,/SportsTeam::Players 2\n"
 		"\t\te:Person,/SportsTeam::Players 3\n"
-		"\t\tm:ID,/SportsTeam::Players 4\n"
-		"\t\tm:Name,/SportsTeam::Players 5\n"
-		"\t\tm:Height,/SportsTeam::Players 6\n"
-		"\t\tm:Fingers,/SportsTeam::Players 7\n"
+		"\t\t\tm:ID,/SportsTeam::Players 4\n"
+		"\t\t\tm:Name,/SportsTeam::Players 5\n"
+		"\t\t\tm:Height,/SportsTeam::Players 6\n"
+		"\t\t\tm:Fingers,/SportsTeam::Players 7\n"
 		"\t\tl:Person,/SportsTeam::Players 8\n"
 		"\t\te:Person,/SportsTeam::Players 9\n"
-		"\t\tm:ID,/SportsTeam::Players 10\n"
-		"\t\tm:Name,/SportsTeam::Players 11\n"
-		"\t\tm:Height,/SportsTeam::Players 12\n"
-		"\t\tm:Fingers,/SportsTeam::Players 13\n"
+		"\t\t\tm:ID,/SportsTeam::Players 10\n"
+		"\t\t\tm:Name,/SportsTeam::Players 11\n"
+		"\t\t\tm:Height,/SportsTeam::Players 12\n"
+		"\t\t\tm:Fingers,/SportsTeam::Players 13\n"
 		"\t\tl:Person,/SportsTeam::Players 14\n"
 		"\tlc:Players,/SportsTeam::Players 15\n"
 		"\tec:Tags,/SportsTeam::Tags 16\n"
@@ -174,6 +172,6 @@ BOOST_AUTO_TEST_CASE(traversal_encoder_test) {
 		"\tlc:Tags,/SportsTeam::Tags 18\n"
 		"l:SportsTeam, 19\n"
 ;
-	BOOST_CHECK_EQUAL(result, 608);
+	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(expected, buffer);
 }

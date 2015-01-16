@@ -1,4 +1,5 @@
 #pragma once
+#include "../../algorithm/detail/path.hxx"
 #include "tabs.hxx"
 
 namespace moneta { namespace codec { namespace aux {
@@ -8,11 +9,16 @@ namespace moneta { namespace codec { namespace aux {
 		template <class Path, signed int Extra = 0>
 		struct tabs_impl {
 			static const char* get() {
-				const signed int n = boost::mpl::size<Path>::value +
-					      moneta::algorithm::detail::container_member_count<Path>::value + 
-					      Extra;
+				using boost::mpl::size;
+				using moneta::algorithm::detail::container_member_count;
+
+				const signed n = 
+					static_cast<signed>(size<Path>::value) +
+					static_cast<signed>(container_member_count<Path>::value) + 
+					static_cast<signed>(Extra)
+				;
 				
-				const int count = (n >= 0)? n : 0;
+				const signed int count = (n >= 0)? n : 0;
 				return tabs<count % MONETA_CODEC_TABS_MAX>::get();
 			}
 		};
@@ -21,18 +27,12 @@ namespace moneta { namespace codec { namespace aux {
 
 	template <class Path>
 	inline const char* path_tabs() {
-		return detail::tabs_impl<
-			Path,
-			moneta::algorithm::detail::is_cwd_container_member<Path>::type::value
-		>::get();
+		return detail::tabs_impl<Path>::get();
 	}
 
-	template <class Path, int Extra>
+	template <class Path, signed int Extra>
 	inline const char* path_tabs() {
-		return detail::tabs_impl<
-			Path,
-			Extra + moneta::algorithm::detail::is_cwd_container_member<Path>::type::value
-		>::get();
+		return detail::tabs_impl<Path, Extra>::get();
 	}
 
 }}}

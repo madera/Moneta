@@ -8,11 +8,12 @@ namespace moneta { namespace codec { namespace aux {
 		const char* tabs_cstr = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 	}
 
-	template <int N>
+	template <signed int N>
 	struct tabs {
 		enum  { size = MONETA_CODEC_TABS_MAX };
 		static const char* get() {
-			return &tabs_cstr[size - (N % size)];
+			const size_t count = (N > 0)? N : 0;
+			return &tabs_cstr[size - (count % size)];
 		}
 	};
 

@@ -4,16 +4,34 @@
 #include <boost/mpl/find_if.hpp>
 
 MONETA_DECLARE_TRAIT(xml_attribute)
-#define MONETA_XML_ATTIBUTE(klass, field) \
-	MONETA_DEFINE_FLAG_TRAIT(xml_attribute, field)
 
+#define MONETA_XML_ATTIBUTE(klass, field) \
+	namespace moneta { namespace traits { namespace detail { \
+		template <> \
+		struct moneta::traits::detail::xml_attribute<field> : boost::true_type {};\
+	}}}
+
+
+// TODO: Review these and test all XML features.
 MONETA_DECLARE_MEMBER_TRAIT(xml_container_member_name)
+
 #define MONETA_XML_CONTAINER_MEMBER_NAME(member, name) \
 	MONETA_DEFINE_TRAIT_WITH_GET(xml_container_member_name, member, std::string, BOOST_PP_STRINGIZE(name))
 
+
+
 MONETA_DECLARE_MEMBER_TRAIT(xml_container_member_element_name)
-#define MONETA_XML_CONTAINER_MEMBER_ELEMENT_NAME(member, name) \
-	MONETA_DEFINE_TRAIT_WITH_GET(xml_container_member_element_name, member, std::string, BOOST_PP_STRINGIZE(name))
+
+#define MONETA_XML_CONTAINER_MEMBER_ELEMENT_NAME(member, name)                        \
+	namespace moneta { namespace traits { namespace detail {                      \
+		template <>                                                           \
+		struct xml_container_member_element_name<member> : boost::true_type { \
+			typedef std::string trait_type;                               \
+			static trait_type get() {                                     \
+				return BOOST_PP_STRINGIZE(name);                      \
+			}                                                             \
+		};                                                                    \
+	}}}
 
 namespace moneta { namespace codec { namespace detail {
 
