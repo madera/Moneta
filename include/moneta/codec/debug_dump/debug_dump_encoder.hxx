@@ -1,8 +1,8 @@
 #pragma once
 #include "../encoder.hxx"
+#include "../../algorithm/detail/stringize_path.hxx"
 #include <boost/type_traits/is_pod.hpp>
 #include <boost/format.hpp>
-#include "stringize_path.hxx"
 
 namespace moneta { namespace codec {
 

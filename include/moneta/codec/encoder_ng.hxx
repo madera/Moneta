@@ -1,5 +1,6 @@
 #pragma once
 #include "../algorithm/traverse_ng.hxx"
+//#include "../traits/member_names.hxx"
 
 // TODO: Put in detail, well, the detail impls...
 
@@ -114,7 +115,7 @@ namespace moneta { namespace codec {
 		>::type
 		process() const {
 			update_result(
-				Action()(_encoder_state.begin, _encoder_state.end, _entity, _encoder_state.substate)
+				Action()(_encoder_state.begin, _encoder_state.end, _entity, mplx::nullref<Path>())
 			);
 		}
 

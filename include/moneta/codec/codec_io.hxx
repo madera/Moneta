@@ -6,25 +6,6 @@ namespace moneta { namespace codec {
 
 	namespace detail {
 
-		// Tabs
-		// TODO: Move somewhere?
-
-		#define MONETA_CODEC_TABS_MAX 32
-
-		namespace {
-			const char* tabs_cstr = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
-		}
-
-		template <int N>
-		struct tabs {
-			enum  { size = MONETA_CODEC_TABS_MAX };
-			static const char* get() {
-				return &tabs_cstr[size - (N % size)];
-			}
-		};
-
-		// Tabs ends
-
 		template <class InputIterator, class OutputIterator>
 		int copy(InputIterator first, InputIterator last, OutputIterator begin, OutputIterator end) {
 			int written = 0;

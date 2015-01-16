@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <moneta/codec/debug_dump/stringize_path.hxx>
+#include <moneta/algorithm/detail/stringize_path.hxx>
 #include <moneta/algorithm/traverse_ng.hxx>
 #include <boost/mpl/equal.hpp>
 #include <boost/mpl/at.hpp>

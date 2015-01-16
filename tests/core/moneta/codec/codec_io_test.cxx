@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <moneta/codec/codec_io.hxx>
+#include <moneta/codec/_aux/tabs.hxx>
 
 BOOST_AUTO_TEST_CASE(copy_codec_io_test) {
 
@@ -47,7 +48,7 @@ BOOST_AUTO_TEST_CASE(string_copy_codec_io_test) {
 }
 
 BOOST_AUTO_TEST_CASE(tabs_codec_io_test) {
-	using moneta::codec::detail::tabs;
+	using moneta::codec::aux::tabs;
 
 	// Generate test for every tab<N> value.
 	//

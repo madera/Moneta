@@ -4,6 +4,7 @@
 #include <boost/mpl/count_if.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/mpl/back.hpp>
+#include <boost/mpl/size.hpp>
 
 namespace moneta { namespace algorithm {
 
@@ -14,14 +15,18 @@ namespace moneta { namespace algorithm {
 			typename Member::result_type
 		> {};
 
+		namespace yet_more_detail {
+			template <class Path>
+			struct is_path_back_container_member :  is_container_member<
+				typename boost::mpl::back<Path>::type
+			> {};
+		}
+
 		template <class Path>
 		struct is_cwd_container_member : boost::mpl::if_<
 			boost::mpl::empty<Path>,
 			boost::false_type,
-			typename boost::mpl::apply<
-				is_container_member<boost::mpl::_1>,
-				typename boost::mpl::back<Path>::type
-			>::type
+			yet_more_detail::is_path_back_container_member<Path>
 		> {};
 
 		template <class Path>
