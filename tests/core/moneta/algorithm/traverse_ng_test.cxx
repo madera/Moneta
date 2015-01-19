@@ -216,6 +216,9 @@ struct counting_container_member_eps {
 		tmp += (path.empty()? "" : "," + path);
 		state.lines.push_back(tmp);
 
+		//
+		// TODO: Replace this code using Spirit's container_iterator or something.
+		//
 		typedef typename boost::mpl::if_<
 			boost::is_const<Entity>,
 			typename boost::add_const<typename Member::result_type>::type,

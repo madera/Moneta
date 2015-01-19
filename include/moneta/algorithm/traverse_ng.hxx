@@ -235,6 +235,9 @@ namespace moneta { namespace algorithm {
 				using boost::mpl::for_each;
 				for_each<typename Traverser::enter_container_actions>(action(_entity, _state));
 
+				//
+				// TODO: Replace this code using Spirit's container_iterator or something.
+				//
 				typedef typename boost::mpl::if_<
 					boost::is_const<Entity>,
 					typename boost::add_const<typename Member::result_type>::type,
@@ -334,8 +337,8 @@ namespace moneta { namespace algorithm {
 		typedef typename detail::actions_of<mpl_vector, detail::traverse_container_member>::type container_member_actions;
 		typedef typename detail::actions_of<mpl_vector, detail::traverse_leave_container >::type leave_container_actions;
 
-		template <class Path = boost::mpl::vector0<>, class Entity = void, class State = detail::no_state>
-		void _traverse(Entity& entity, State& state = State()) const {
+		template <class Path, class Entity, class State>
+		void _traverse(Entity& entity, State& state) const {
 			typedef detail::enter_or_leave_action<Entity, Path, State> enter_leave_action;
 			typedef detail::member_action_dispatcher<this_type, Entity, Path, State> member_action;
 
@@ -348,12 +351,12 @@ namespace moneta { namespace algorithm {
 	public:
 		template <class Entity>
 		void operator()(Entity& entity) const {
-			_traverse(entity);
+			_traverse<boost::mpl::vector0<> >(entity, detail::no_state());
 		}
 
 		template <class Entity, class State>
 		void operator()(Entity& entity, State& state) const {
-			_traverse(entity, state);
+			_traverse<boost::mpl::vector0<> >(entity, state);
 		}
 	};
 }}

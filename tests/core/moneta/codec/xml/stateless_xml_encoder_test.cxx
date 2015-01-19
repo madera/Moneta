@@ -7,12 +7,17 @@
 #include "../../model/tree/A.hxx"
 #include <moneta/serialization/detail/hexdump.hxx>
 
+// XXX
+typedef moneta::codec::stateless_xml_encoder encoder_t;
+// XXX
+
 MONETA_XML_ATTIBUTE(Composite, MONETA_MEMBER(Composite, int, Identifier))
 MONETA_XML_ATTIBUTE(Person,    MONETA_MEMBER(Person,    int, ID        ))
 
 MONETA_XML_ATTIBUTE(Dog, MONETA_MEMBER(Dog, std::string, Owner))
 MONETA_XML_ATTIBUTE(Dog, MONETA_MEMBER(Dog, int        , ID   ))
 
+//
 // Copied from XML traits test.
 //
 MONETA_XML_ATTIBUTE(A, MONETA_MEMBER(A, int, f))
@@ -34,16 +39,6 @@ static Composite make_composite() {
 	composite.Dog.Name = "Doggy";
 	return composite;
 }
-
-using namespace moneta::codec;
-typedef encoder<
-	enter_actions<stateless_xml_encoder::enter_entity_encoder>,
-	member_actions<stateless_xml_encoder::member_encoder>,
-	leave_actions<stateless_xml_encoder::leave_entity_encoder>,
-	enter_container_actions<stateless_xml_encoder::enter_container_encoder>,
-	container_member_actions<stateless_xml_encoder::container_member_encoder>,
-	leave_container_actions<stateless_xml_encoder::leave_container_encoder>
-> encoder_t;
 
 BOOST_AUTO_TEST_CASE(stateless_xml_encoder_basic_test) {
 	char buffer[1024];
@@ -93,16 +88,6 @@ BOOST_AUTO_TEST_CASE(composite_encode_stateless_xml_encoder_test) {
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(expected, buffer);
 }
-
-//
-// Copied from XML traits test.
-//
-//MONETA_XML_ATTIBUTE(A, MONETA_MEMBER(A, int, f))
-//MONETA_XML_ATTIBUTE(A, MONETA_MEMBER(A, int, g))
-//MONETA_XML_ATTIBUTE(A, MONETA_MEMBER(A, int, h))
-//MONETA_XML_ATTIBUTE(E, MONETA_MEMBER(D, int, l))
-//MONETA_XML_ATTIBUTE(E, MONETA_MEMBER(E, int, m))
-//MONETA_XML_ATTIBUTE(E, MONETA_MEMBER(E, int, n))
 
 BOOST_AUTO_TEST_CASE(tree_encode_stateless_xml_encoder_test) {
 	static const std::string expected =
@@ -190,7 +175,8 @@ BOOST_AUTO_TEST_CASE(country_with_string_Persons_stateless_xml_encoder_test) {
 	char buffer[2048];
 	std::fill(std::begin(buffer), std::end(buffer), 0);
 
-	const int result = encoder_t()(buffer, buffer + sizeof(buffer) - 1, cwss);
+	using namespace moneta::codec;
+	const int result = encoder_t()(std::begin(buffer), std::end(buffer), cwss);
 
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(buffer, expected);

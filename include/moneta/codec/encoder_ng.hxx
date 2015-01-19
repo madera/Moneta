@@ -418,4 +418,17 @@ namespace moneta { namespace codec {
 		}
 	};
 
+	//
+	// Syntax candy paused for now.
+	//
+	//template <class Encoder, class Entity, class Iterator>
+	//int encode(Iterator begin, Iterator end, const Entity& entity) {
+	//	return Encoder()(begin, end, entity);
+	//}
+
+	//template <class Encoder, class Entity, class Iterator, class State>
+	//int encode(Iterator begin, Iterator end, const Entity& entity, State state) {
+	//	return Encoder()(begin, end, entity, state);
+	//}
+
 }}

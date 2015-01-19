@@ -6,11 +6,9 @@
 #include "../../traits/entity_name.hxx"
 #include "../../traits/member_names.hxx"
 
-
-namespace moneta { namespace codec { namespace stateless_xml_encoder {
+namespace moneta { namespace codec { namespace stateless_xml_encoder_implementation {
 
 	namespace detail {
-
 		// XXX: This is ugly. Get these namespaces' s**t together.
 		using moneta::codec::detail::is_xml_attribute;
 		using moneta::codec::detail::is_xml_element;
@@ -81,7 +79,6 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder {
 			}
 		};
 	}
-
 
 	struct enter_entity_encoder {
 
@@ -255,11 +252,31 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder {
 	struct container_member_encoder {
 		template <class Iterator, class Member, class Entity, class Path, class State>
 		int operator()(Iterator begin, Iterator end, Member&, Entity& entity, const Path&, State& state) const {
-			auto output = moneta::codec::detail::make_ostringstream(begin, end); // XXX
+			using moneta::codec::detail::ostringstream;
+			ostringstream<Iterator> output = moneta::codec::detail::make_ostringstream(begin, end);
+			
 			const std::string& tag_name = traits::detail::xml_container_member_element_name<Member>::get();
-			for (const auto& x : Member()(entity)) { // XXX: XXX: XXX:
+
+			//
+			// TODO: Replace this code using Spirit's container_iterator or something.
+			//
+			typedef typename boost::mpl::if_<
+				boost::is_const<Entity>,
+				typename boost::add_const<typename Member::result_type>::type,
+				typename Member::result_type
+			>::type container_type;
+
+			typedef typename boost::mpl::if_<
+				boost::is_const<Entity>,
+				typename container_type::const_iterator,
+				typename container_type::iterator
+			>::type iterator_type;
+
+			container_type& container = Member()(entity);
+			iterator_type itr = container.begin();
+			for ( ; itr != container.end(); ++itr) {
 				output << aux::path_tabs<Path>()
-				       << '<' << tag_name << '>' << x << '<' << '/' << tag_name << '>' << '\n';
+				       << '<' << tag_name << '>' << *itr << '<' << '/' << tag_name << '>' << '\n';
 			}
 
 			return output;
@@ -275,5 +292,18 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder {
 			;
 		}
 	};
+	
+	typedef moneta::codec::encoder<
+		enter_actions <enter_entity_encoder>,
+		member_actions<member_encoder      >,
+		leave_actions <leave_entity_encoder>,
+		enter_container_actions <enter_container_encoder >,
+		container_member_actions<container_member_encoder>,
+		leave_container_actions <leave_container_encoder >
+	> stateless_xml_encoder;
 
 }}}
+
+namespace moneta { namespace codec {
+	using stateless_xml_encoder_implementation::stateless_xml_encoder;
+}}

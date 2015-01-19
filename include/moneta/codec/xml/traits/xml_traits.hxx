@@ -8,9 +8,8 @@ MONETA_DECLARE_TRAIT(xml_attribute)
 #define MONETA_XML_ATTIBUTE(klass, field) \
 	namespace moneta { namespace traits { namespace detail { \
 		template <> \
-		struct moneta::traits::detail::xml_attribute<field> : boost::true_type {};\
+		struct xml_attribute<field> : boost::true_type {};\
 	}}}
-
 
 // TODO: Review these and test all XML features.
 MONETA_DECLARE_MEMBER_TRAIT(xml_container_member_name)
