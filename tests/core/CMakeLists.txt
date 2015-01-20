@@ -45,7 +45,6 @@ add_executable(core_tests
 	moneta/codec/codec_io_test.cxx
 	moneta/codec/encoder_ng_test.cxx
 	#
-#	moneta/codec/xml/xml_encoder_test.cxx
 	moneta/codec/xml/detail/xml_traits_test.cxx
 	moneta/codec/xml/stateless_xml_encoder_test.cxx
 	moneta/codec/rawbin/rawbin_encoder_test.cxx
