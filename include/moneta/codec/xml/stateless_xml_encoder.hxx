@@ -2,7 +2,7 @@
 #include "traits/xml_traits.hxx"
 #include "../encoder_ng.hxx"
 #include "../_aux/path_tabs.hxx"
-#include "../codec_io.hxx"
+#include "../_aux/codec_io.hxx"
 #include "../../traits/entity_name.hxx"
 #include "../../traits/member_names.hxx"
 

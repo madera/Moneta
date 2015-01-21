@@ -23,8 +23,7 @@ BOOST_AUTO_TEST_CASE(unknown_tag_skip_stateless_xml_decoder_test) {
 
 	moneta::codec::stateless_xml_encoder()(std::begin(buffer), std::end(buffer), point);
 
-	std::cout << "===\n" << buffer << std::endl;
-
+//	std::cout << "===\n" << buffer << std::endl;
 
 	const std::string data = "<Point><x>1</x><y>2</y></Point>";
 

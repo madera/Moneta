@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include <moneta/codec/decoder_ng.hxx>
-#include <moneta/codec/codec_io.hxx>
+#include <moneta/codec/_aux/codec_io.hxx>
 #include <moneta/codec/_aux/path_tabs.hxx>
 #include <moneta/algorithm/detail/stringize_path.hxx>
 #include <moneta/pp/describe_entity.hxx>
@@ -150,6 +150,8 @@ BOOST_AUTO_TEST_CASE(point3d_simple_decoder_test) {
 	BOOST_CHECK_EQUAL(point.y, 2);
 	BOOST_CHECK_EQUAL(point.z, 3);
 }
+
+// TODO: Test triangle decoder.
 
 BOOST_AUTO_TEST_CASE(lottery_simple_decoder_test) {
 	const unsigned char buffer[] = {

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <moneta/codec/codec_io.hxx>
+#include <moneta/codec/_aux/codec_io.hxx>
 #include <moneta/codec/_aux/tabs.hxx>
 
 BOOST_AUTO_TEST_CASE(copy_codec_io_test) {

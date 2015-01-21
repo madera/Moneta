@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include <moneta/codec/encoder_ng.hxx>
-#include <moneta/codec/codec_io.hxx>
+#include <moneta/codec/_aux/codec_io.hxx>
 #include <moneta/codec/_aux/path_tabs.hxx>
 #include <moneta/algorithm/detail/stringize_path.hxx>
 #include "../model/tree/A.hxx"

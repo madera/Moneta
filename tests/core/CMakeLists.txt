@@ -41,8 +41,8 @@ add_executable(core_tests
 
 	moneta/codec/_aux/tabs_test.cxx
 	moneta/codec/_aux/path_tabs_test.cxx
+	moneta/codec/_aux/codec_io_test.cxx
 	moneta/codec/typecode_test.cxx
-	moneta/codec/codec_io_test.cxx
 	moneta/codec/encoder_ng_test.cxx
 	moneta/codec/decoder_ng_test.cxx
 	#
