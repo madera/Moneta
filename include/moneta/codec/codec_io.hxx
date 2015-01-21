@@ -6,6 +6,7 @@ namespace moneta { namespace codec {
 
 	namespace detail {
 
+		// TODO: Make this work with all forward iterators.
 		template <class InputIterator, class OutputIterator>
 		int copy(InputIterator first, InputIterator last, OutputIterator begin, OutputIterator end) {
 			int written = 0;
@@ -28,7 +29,6 @@ namespace moneta { namespace codec {
 		}
 
 		// TODO: Validate this non-reference Iterator state.
-		//
 		template <class Iterator>
 		struct ostringstream {
 			typedef ostringstream this_type;

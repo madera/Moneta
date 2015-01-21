@@ -36,6 +36,9 @@ namespace moneta { namespace algorithm {
 
 	}
 
+	//
+	// TODO: Keep an eye on this. Being O(n) could be a bottleneck.
+	//
 	template <class Entities, class Visitor, class Predicate>
 	const Visitor& dispatch_entity(const Visitor& visitor, const Predicate& predicate) {
 		BOOST_MPL_ASSERT((boost::mpl::is_sequence<Entities>));

@@ -7,13 +7,6 @@
 #include "../model/Cat.hxx"
 #include "../model/SportsTeam.hxx"
 
-//template <class Path>
-//static const char* tabs() {
-//	return moneta::codec::detail::tabs<
-//		boost::mpl::size<Path>::value + moneta::algorithm::detail::container_member_count<Path>::value
-//	>::get();
-//}
-
 using moneta::codec::aux::path_tabs;
 
 struct testcodec_enter_entity {

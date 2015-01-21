@@ -6,11 +6,6 @@
 
 namespace moneta { namespace codec {
 
-	namespace detail {
-		// Import algorithm's guts.
-		using namespace moneta::algorithm::detail;
-	}
-
 	using moneta::algorithm::enter_actions;
 	using moneta::algorithm::member_actions;
 	using moneta::algorithm::leave_actions;
@@ -19,6 +14,7 @@ namespace moneta { namespace codec {
 	using moneta::algorithm::leave_container_actions;
 
 	namespace detail {
+		using namespace moneta::algorithm::detail;
 
 		template <class Actions, typename Iterator, class Substate>
 		struct encoder_state {
@@ -381,9 +377,6 @@ namespace moneta { namespace codec {
 		
 		typedef boost::mpl::vector<T, MONETA_TRAVERSE_PARAMS> mpl_vector;
 
-		// FIXME: Maybe simplify this signature?
-		//        If it works, propagate the changes to algorithm::traverse_ng<>.
-		//template <class Path = boost::mpl::vector0<>, typename Iterator = void, class Entity = void, class State = detail::no_state>
 		template <class Iterator, class Entity, class Path, class State>
 		int _encode(Iterator begin, Iterator end, const Entity& entity, Path* path = 0, State& state = State()) const {
 			using namespace moneta::algorithm;
