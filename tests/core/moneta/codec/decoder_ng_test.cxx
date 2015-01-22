@@ -45,7 +45,7 @@ struct testcodec_member {
 	operator()(Iterator begin, Iterator end, const Member&, Entity& entity, const Path&, State& state) const {
 		const size_t needed = sizeof(typename Member::result_type);
 		if (end - begin < needed) {
-			return -(needed - (end - begin));
+			return 0 - (needed - (end - begin));
 		}
 
 		Member()(entity) = *(typename Member::result_type*)begin;
@@ -77,9 +77,11 @@ struct testcodec_enter_container {
 	}
 };
 
-struct testcodec_container_member {
-	template <class Iterator, class Member, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, Member&, Entity& entity, const Path&, State& state) const {
+	// MEQUEDE: Should decoder's container_item really carry a value? Maybe it doesn't make sense.
+
+struct testcodec_container_item {
+	template <class Iterator, class Value, class Member, class Entity, class Path, class State>
+	int operator()(Iterator begin, Iterator end, Value& value, Member&, Entity& entity, const Path&, State& state) const {
 		if (begin == end) {
 			return -1;
 		}
@@ -129,7 +131,7 @@ typedef decoder<
 	member_actions<testcodec_member>,
 	leave_actions<testcodec_leave_entity>,
 	enter_container_actions<testcodec_enter_container>,
-	container_member_actions<testcodec_container_member>,
+	container_item_actions<testcodec_container_item>,
 	leave_container_actions<testcodec_leave_container>
 > decoder_t;
 

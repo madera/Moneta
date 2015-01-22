@@ -190,52 +190,31 @@ struct counting_enter_container_eps {
 
 //
 
-size_t g_container_member_count = 0;
+size_t g_container_item_count = 0;
 
-struct counting_container_member_e {
-	template <class Member, class Entity>
-	void operator()(Member&, Entity& entity) const {
-		++g_container_member_count;
+struct counting_container_item_e {
+	template <class Value, class Member, class Entity>
+	void operator()(Value& value, Member&, Entity& entity) const {
+		++g_container_item_count;
 	}
 };
 
-struct counting_container_member_ep {
-	template <class Member, class Entity, class Path>
-	void operator()(Member&, Entity& entity, const Path&) const {
-		++g_container_member_count;
+struct counting_container_item_ep {
+	template <class Value, class Member, class Entity, class Path>
+	void operator()(Value& value, Member&, Entity& entity, const Path&) const {
+		++g_container_item_count;
 	}
 };
 
-struct counting_container_member_eps {
-	template <class Member, class Entity, class Path, class State>
-	void operator()(Member&, Entity& entity, const Path&, State& state) const {
-		++g_container_member_count;
+struct counting_container_item_eps {
+	template <class Value, class Member, class Entity, class Path, class State>
+	void operator()(Value& value, Member&, Entity& entity, const Path&, State& state) const {
+		++g_container_item_count;
 
-		std::string tmp = "cm:" + moneta::traits::detail::member_name<Member>::get();
+		std::string tmp = "ci:" + value;
 		const std::string path = moneta::codec::detail::stringize_path<Path>();
 		tmp += (path.empty()? "" : "," + path);
 		state.lines.push_back(tmp);
-
-		//
-		// TODO: Replace this code using Spirit's container_iterator or something.
-		//
-		typedef typename boost::mpl::if_<
-			boost::is_const<Entity>,
-			typename boost::add_const<typename Member::result_type>::type,
-			typename Member::result_type
-		>::type container_type;
-
-		typedef typename boost::mpl::if_<
-			boost::is_const<Entity>,
-			typename container_type::const_iterator,
-			typename container_type::iterator
-		>::type iterator_type;
-
-		container_type& container = Member()(entity);
-		iterator_type itr = container.begin();		
-		for ( ; itr != container.end(); ++itr) {
-			state.lines.push_back(std::string("cmv:") + *itr);
-		}
 	}
 };
 
@@ -277,13 +256,45 @@ void reset_counters() {
 	g_leave_count = 0;
 	
 	g_enter_container_count = 0;
-	g_container_member_count = 0;
+	g_container_item_count = 0;
 	g_leave_container_count = 0;
 }
 
-BOOST_AUTO_TEST_CASE(with_container_members_traverse_test) {
-	using namespace moneta::algorithm;
+using namespace moneta::algorithm;
+typedef moneta::algorithm::traverse<
+	enter_actions<
+		counting_enter_e,
+		counting_enter_ep,
+		counting_enter_eps
+	>,
+	member_actions<
+		counting_member_e,
+		counting_member_ep,
+		counting_member_eps
+	>,
+	leave_actions<
+		counting_leave_e,
+		counting_leave_ep,
+		counting_leave_eps
+	>,
+	enter_container_actions<
+		counting_enter_container_e,
+		counting_enter_container_ep,
+		counting_enter_container_eps
+	>,
+	container_item_actions<
+		counting_container_item_e,
+		counting_container_item_ep,
+		counting_container_item_eps
+	>,
+	leave_container_actions<
+		counting_leave_container_e,
+		counting_leave_container_ep,
+		counting_leave_container_eps
+	>
+> traverse_type;
 
+BOOST_AUTO_TEST_CASE(with_container_members_traverse_test) {
 	Person jordan;
 	jordan.Name = "Michael Jordan";
 	jordan.Height = 2.00;
@@ -300,39 +311,6 @@ BOOST_AUTO_TEST_CASE(with_container_members_traverse_test) {
 	team.Tags.push_back("tag1");
 	team.Tags.push_back("tag2");
 
-	typedef moneta::algorithm::traverse<
-		enter_actions<
-			counting_enter_e,
-			counting_enter_ep,
-			counting_enter_eps
-		>,
-		member_actions<
-			counting_member_e,
-			counting_member_ep,
-			counting_member_eps
-		>,
-		leave_actions<
-			counting_leave_e,
-			counting_leave_ep,
-			counting_leave_eps
-		>,
-		enter_container_actions<
-			counting_enter_container_e,
-			counting_enter_container_ep,
-			counting_enter_container_eps
-		>,
-		container_member_actions<
-			counting_container_member_e,
-			counting_container_member_ep,
-			counting_container_member_eps
-		>,
-		leave_container_actions<
-			counting_leave_container_e,
-			counting_leave_container_ep,
-			counting_leave_container_eps
-		>
-	> traverse_type;
-
 	reset_counters();
 
 	test_state state;
@@ -341,7 +319,7 @@ BOOST_AUTO_TEST_CASE(with_container_members_traverse_test) {
 	BOOST_CHECK_EQUAL(g_member_count, 9 * 3);
 	BOOST_CHECK_EQUAL(g_leave_count, 3 * 3);
 	BOOST_CHECK_EQUAL(g_enter_container_count, 2 * 3);
-	BOOST_CHECK_EQUAL(g_container_member_count, 1 * 3);
+	BOOST_CHECK_EQUAL(g_container_item_count, 3 * 3);
 	BOOST_CHECK_EQUAL(g_leave_container_count, 2 * 3);
 
 	const char* expected[] = {
@@ -362,10 +340,9 @@ BOOST_AUTO_TEST_CASE(with_container_members_traverse_test) {
 				"l:Person,/SportsTeam::Players",
 			"lc:Players,/SportsTeam::Players",
 			"ec:Tags,/SportsTeam::Tags",
-				"cm:Tags,/SportsTeam::Tags",
-				"cmv:tag0",
-				"cmv:tag1",
-				"cmv:tag2",
+				"ci:tag0,/SportsTeam::Tags",
+				"ci:tag1,/SportsTeam::Tags",
+				"ci:tag2,/SportsTeam::Tags",
 			"lc:Tags,/SportsTeam::Tags",
 		"l:SportsTeam"
 	};
@@ -388,8 +365,6 @@ BOOST_AUTO_TEST_CASE(with_container_members_traverse_test) {
 }
 
 BOOST_AUTO_TEST_CASE(traverse_test) {
-	using namespace moneta::algorithm;
-	
 	const char* expected[] = {
 		"e:A",
 		"m:f",
@@ -411,39 +386,6 @@ BOOST_AUTO_TEST_CASE(traverse_test) {
 		"m:h",
 		"l:A"
 	};
-
-	typedef moneta::algorithm::traverse<
-		enter_actions<
-			counting_enter_e,
-			counting_enter_ep,
-			counting_enter_eps
-		>,
-		member_actions<
-			counting_member_e,
-			counting_member_ep,
-			counting_member_eps
-		>,
-		leave_actions<
-			counting_leave_e,
-			counting_leave_ep,
-			counting_leave_eps
-		>,
-		enter_container_actions<
-			counting_enter_container_e,
-			counting_enter_container_ep,
-			counting_enter_container_eps
-		>,
-		container_member_actions<
-			counting_container_member_e,
-			counting_container_member_ep,
-			counting_container_member_eps
-		>,
-		leave_container_actions<
-			counting_leave_container_e,
-			counting_leave_container_ep,
-			counting_leave_container_eps
-		>
-	> traverse_type;
 
 	{
 		test_state state;
@@ -471,41 +413,6 @@ BOOST_AUTO_TEST_CASE(traverse_test) {
 }
 
 BOOST_AUTO_TEST_CASE(stateful_traverse_test) {
-	using namespace moneta::algorithm;
-
-	typedef moneta::algorithm::traverse<
-		enter_actions<
-			counting_enter_e,
-			counting_enter_ep,
-			counting_enter_eps
-		>,
-		member_actions<
-			counting_member_e,
-			counting_member_ep,
-			counting_member_eps
-		>,
-		leave_actions<
-			counting_leave_e,
-			counting_leave_ep,
-			counting_leave_eps
-		>,
-		enter_container_actions<
-			counting_enter_container_e,
-			counting_enter_container_ep,
-			counting_enter_container_eps
-		>,
-		container_member_actions<
-			counting_container_member_e,
-			counting_container_member_ep,
-			counting_container_member_eps
-		>,
-		leave_container_actions<
-			counting_leave_container_e,
-			counting_leave_container_ep,
-			counting_leave_container_eps
-		>
-	> traverse_type;
-
 	Cat cat;
 	test_state state;
 	traverse_type()(cat, state);

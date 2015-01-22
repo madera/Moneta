@@ -249,37 +249,14 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		}
 	};
 
-	struct container_member_encoder {
-		template <class Iterator, class Member, class Entity, class Path, class State>
-		int operator()(Iterator begin, Iterator end, Member&, Entity& entity, const Path&, State& state) const {
-			using moneta::codec::detail::ostringstream;
-			ostringstream<Iterator> output = moneta::codec::detail::make_ostringstream(begin, end);
-			
+	struct container_item_encoder {
+		template <class Iterator, class Value, class Member, class Entity, class Path, class State>
+		int operator()(Iterator begin, Iterator end, Value& value, Member&, Entity& entity, const Path&, State& state) const {
 			const std::string& tag_name = traits::detail::xml_container_member_element_name<Member>::get();
-
-			//
-			// TODO: Replace this code using Spirit's container_iterator or something.
-			//
-			typedef typename boost::mpl::if_<
-				boost::is_const<Entity>,
-				typename boost::add_const<typename Member::result_type>::type,
-				typename Member::result_type
-			>::type container_type;
-
-			typedef typename boost::mpl::if_<
-				boost::is_const<Entity>,
-				typename container_type::const_iterator,
-				typename container_type::iterator
-			>::type iterator_type;
-
-			container_type& container = Member()(entity);
-			iterator_type itr = container.begin();
-			for ( ; itr != container.end(); ++itr) {
-				output << aux::path_tabs<Path>()
-				       << '<' << tag_name << '>' << *itr << '<' << '/' << tag_name << '>' << '\n';
-			}
-
-			return output;
+			return moneta::codec::detail::make_ostringstream(begin, end)
+				<< aux::path_tabs<Path>()
+				<< '<' << tag_name << '>' << value << '<' << '/' << tag_name << '>' << '\n'
+			;
 		}
 	};
 
@@ -298,7 +275,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		member_actions<member_encoder      >,
 		leave_actions <leave_entity_encoder>,
 		enter_container_actions <enter_container_encoder >,
-		container_member_actions<container_member_encoder>,
+		container_item_actions<container_item_encoder>,
 		leave_container_actions <leave_container_encoder >
 	> stateless_xml_encoder;
 

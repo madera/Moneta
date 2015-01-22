@@ -53,12 +53,12 @@ struct testcodec_enter_container {
 	}
 };
 
-struct testcodec_container_member {
-	template <class Iterator, class Member, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, Member&, Entity& entity, const Path&, State& state) const {
+struct testcodec_container_item {
+	template <class Iterator, class Value, class Member, class Entity, class Path, class State>
+	int operator()(Iterator begin, Iterator end, Value& value, Member&, Entity& entity, const Path&, State& state) const {
 		return moneta::codec::detail::make_ostringstream(begin, end)
 			<< path_tabs<Path>()
-			<< "cm:" << moneta::traits::detail::member_name<Member>::get() << ','
+			<< "ci:" << value << ','
 			<< moneta::codec::detail::stringize_path<Path>() << ' ' << state++ << '\n'
 		;
 	}
@@ -81,7 +81,7 @@ typedef encoder<
 	member_actions<testcodec_member>,
 	leave_actions<testcodec_leave_entity>,
 	enter_container_actions<testcodec_enter_container>,
-	container_member_actions<testcodec_container_member>,
+	container_item_actions<testcodec_container_item>,
 	leave_container_actions<testcodec_leave_container>
 > encoder_t;
 
@@ -161,10 +161,13 @@ BOOST_AUTO_TEST_CASE(traversal_encoder_test) {
 		"\t\tl:Person,/SportsTeam::Players 14\n"
 		"\tlc:Players,/SportsTeam::Players 15\n"
 		"\tec:Tags,/SportsTeam::Tags 16\n"
-		"\t\tcm:Tags,/SportsTeam::Tags 17\n" // XXX: FIXME: Should be more than one. Right?...
-		"\tlc:Tags,/SportsTeam::Tags 18\n"
-		"l:SportsTeam, 19\n"
-;
+		"\t\tci:tag0,/SportsTeam::Tags 17\n"
+		"\t\tci:tag1,/SportsTeam::Tags 18\n"
+		"\t\tci:tag2,/SportsTeam::Tags 19\n"
+		"\tlc:Tags,/SportsTeam::Tags 20\n"
+		"l:SportsTeam, 21\n"
+	;
+
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(expected, buffer);
 }

@@ -7,12 +7,6 @@
 #include "../traits/detail/has_member_trait.hxx"
 #include <boost/mpl/copy_if.hpp>
 
-	//////////////////////////////////////////////////////////////////////////
-	//
-	// XXX: Free functions as well, dammit...
-	//
-	//////////////////////////////////////////////////////////////////////////
-
 namespace moneta { namespace algorithm {
 
 	namespace detail {
@@ -59,7 +53,6 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			void operator()(Action&) const {
-//				typename Action().operator()<Path>(_entity, _state);
 				Action().MONETA_INTRA_TEMPLATE_KEYWORD operator()<Path>(_entity, _state);
 			}
 		};
@@ -74,7 +67,6 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			void operator()(Action&) const {
-//				typename Action().operator()<Member, Path>(_entity, _state);
 				Action().MONETA_INTRA_TEMPLATE_KEYWORD operator()<Member, Path>(_entity, _state);
 			}
 		};
@@ -89,7 +81,6 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			void operator()(Action&) const {
-//				typename Action().operator()<Path, Member>(_entity, _state);
 				Action().MONETA_INTRA_TEMPLATE_KEYWORD operator()<Path, Member>(_entity, _state);
 			}
 		};
@@ -121,7 +112,6 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			void operator()(Action&) const {
-//				typename Action().operator()<Member, Path>(_entity, _state);
 				Action().MONETA_INTRA_TEMPLATE_KEYWORD operator()<Member, Path>(_entity, _state);
 			}
 		};
