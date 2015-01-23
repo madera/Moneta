@@ -36,14 +36,14 @@ add_executable(core_tests
 	moneta/algorithm/detail/path_test.cxx
 	moneta/algorithm/dispatch_entity_test.cxx
 	moneta/algorithm/for_each_member_test.cxx
-	moneta/algorithm/traverse_ng_test.cxx
+	moneta/algorithm/traverse_test.cxx
 
 	moneta/codec/_aux/tabs_test.cxx
 	moneta/codec/_aux/path_tabs_test.cxx
 	moneta/codec/_aux/codec_io_test.cxx
 	moneta/codec/typecode_test.cxx
-	moneta/codec/encoder_ng_test.cxx
-	moneta/codec/decoder_ng_test.cxx
+	moneta/codec/encoder_test.cxx
+	moneta/codec/decoder_test.cxx
 	#
 	moneta/codec/xml/detail/xml_traits_test.cxx
 	moneta/codec/xml/stateless_xml_encoder_test.cxx

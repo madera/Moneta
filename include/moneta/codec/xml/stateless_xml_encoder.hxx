@@ -1,6 +1,6 @@
 #pragma once
 #include "traits/xml_traits.hxx"
-#include "../encoder_ng.hxx"
+#include "../encoder.hxx"
 #include "../_aux/path_tabs.hxx"
 #include "../_aux/codec_io.hxx"
 #include "../../traits/entity_name.hxx"

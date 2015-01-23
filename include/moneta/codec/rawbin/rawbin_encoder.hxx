@@ -1,5 +1,5 @@
 #pragma once
-#include "../encoder_ng.hxx"
+#include "../encoder.hxx"
 #include <boost/type_traits/is_pod.hpp>
 
 namespace moneta { namespace codec { namespace rawbin_implementation {

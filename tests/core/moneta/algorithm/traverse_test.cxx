@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include <moneta/algorithm/detail/stringize_path.hxx>
-#include <moneta/algorithm/traverse_ng.hxx>
+#include <moneta/algorithm/traverse.hxx>
 #include <boost/mpl/equal.hpp>
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/size.hpp>

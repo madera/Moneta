@@ -2,7 +2,7 @@
 #include "../../traits/entity_name.hxx"
 #include "../../traits/member_names.hxx"
 #include "../_aux/codec_io.hxx"
-#include "../encoder_ng.hxx"
+#include "../encoder.hxx"
 
 namespace moneta { namespace codec { namespace shell_implementation {
 

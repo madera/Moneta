@@ -1,5 +1,5 @@
 #pragma once
-#include "../algorithm/traverse_ng.hxx"
+#include "../algorithm/traverse.hxx"
 //#include "../traits/member_names.hxx"
 
 // TODO: Put in detail, well, the detail impls...
