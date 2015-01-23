@@ -30,7 +30,6 @@ namespace moneta { namespace algorithm {
 		struct traverse_leave {};
 
 		struct traverse_enter_container {};
-		struct traverse_container_member {};
 		struct traverse_container_item {};
 		struct traverse_leave_container {};
 
@@ -392,11 +391,6 @@ namespace moneta { namespace algorithm {
 	};
 
 	template <class T, MONETA_TRAVERSE_PARAMS_WITH_DEFAULTS>
-	struct container_member_actions : detail::traverse_container_member {
-		typedef boost::mpl::vector<T, MONETA_TRAVERSE_PARAMS> mpl_vector;
-	};
-
-	template <class T, MONETA_TRAVERSE_PARAMS_WITH_DEFAULTS>
 	struct container_item_actions : detail::traverse_container_item {
 		typedef boost::mpl::vector<T, MONETA_TRAVERSE_PARAMS> mpl_vector;
 	};
@@ -416,7 +410,6 @@ namespace moneta { namespace algorithm {
 		typedef typename detail::actions_of<mpl_vector, detail::traverse_leave >::type leave_actions;
 
 		typedef typename detail::actions_of<mpl_vector, detail::traverse_enter_container >::type enter_container_actions;
-		typedef typename detail::actions_of<mpl_vector, detail::traverse_container_member>::type container_member_actions;
 		typedef typename detail::actions_of<mpl_vector, detail::traverse_container_item  >::type container_item_actions;
 		typedef typename detail::actions_of<mpl_vector, detail::traverse_leave_container >::type leave_container_actions;
 
