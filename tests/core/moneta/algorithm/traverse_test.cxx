@@ -367,23 +367,23 @@ BOOST_AUTO_TEST_CASE(with_container_members_traverse_test) {
 BOOST_AUTO_TEST_CASE(traverse_test) {
 	const char* expected[] = {
 		"e:A",
-		"m:f",
-		"m:g",
-		"e:B,/A::b",
-		"e:C,/A::b/B::c",
-		"m:j,/A::b/B::c",
-		"m:k,/A::b/B::c",
-		"l:C,/A::b/B::c",
-		"m:i,/A::b",
-		"e:D,/A::b/B::d",
-		"m:l,/A::b/B::d",
-		"e:E,/A::b/B::d/D::e",
-		"m:m,/A::b/B::d/D::e",
-		"m:n,/A::b/B::d/D::e",
-		"l:E,/A::b/B::d/D::e",
-		"l:D,/A::b/B::d",
-		"l:B,/A::b",
-		"m:h",
+			"m:f",
+			"m:g",
+			"e:B,/A::b",
+				"e:C,/A::b/B::c",
+					"m:j,/A::b/B::c",
+					"m:k,/A::b/B::c",
+				"l:C,/A::b/B::c",
+				"m:i,/A::b",
+				"e:D,/A::b/B::d",
+					"m:l,/A::b/B::d",
+					"e:E,/A::b/B::d/D::e",
+						"m:m,/A::b/B::d/D::e",
+						"m:n,/A::b/B::d/D::e",
+					"l:E,/A::b/B::d/D::e",
+				"l:D,/A::b/B::d",
+			"l:B,/A::b",
+			"m:h",
 		"l:A"
 	};
 
@@ -419,13 +419,13 @@ BOOST_AUTO_TEST_CASE(stateful_traverse_test) {
 
 	const char* expected[] = {
 		"e:Cat",
-		"m:ID",
-		"m:Name",
-		"e:Address,/Cat::Address",
-		"m:ID,/Cat::Address",
-		"m:Number,/Cat::Address",
-		"m:Street,/Cat::Address",
-		"l:Address,/Cat::Address",
+			"m:ID",
+			"m:Name",
+			"e:Address,/Cat::Address",
+				"m:ID,/Cat::Address",
+				"m:Number,/Cat::Address",
+				"m:Street,/Cat::Address",
+			"l:Address,/Cat::Address",
 		"l:Cat"
 	};
 

@@ -409,9 +409,9 @@ namespace moneta { namespace algorithm {
 		typedef typename detail::actions_of<mpl_vector, detail::traverse_member>::type member_actions;
 		typedef typename detail::actions_of<mpl_vector, detail::traverse_leave >::type leave_actions;
 
-		typedef typename detail::actions_of<mpl_vector, detail::traverse_enter_container >::type enter_container_actions;
-		typedef typename detail::actions_of<mpl_vector, detail::traverse_container_item  >::type container_item_actions;
-		typedef typename detail::actions_of<mpl_vector, detail::traverse_leave_container >::type leave_container_actions;
+		typedef typename detail::actions_of<mpl_vector, detail::traverse_enter_container>::type enter_container_actions;
+		typedef typename detail::actions_of<mpl_vector, detail::traverse_container_item >::type container_item_actions;
+		typedef typename detail::actions_of<mpl_vector, detail::traverse_leave_container>::type leave_container_actions;
 
 		template <class Path, class Entity, class State>
 		void _traverse(Entity& entity, State& state) const {

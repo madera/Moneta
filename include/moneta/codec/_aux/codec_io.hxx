@@ -1,6 +1,8 @@
 #pragma once
 #include <boost/function.hpp>
 #include <boost/lexical_cast.hpp>
+#include <iterator>
+#include "io/copy.hxx"
 
 namespace moneta { namespace codec {
 
