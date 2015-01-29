@@ -56,7 +56,7 @@ namespace moneta { namespace codec {
 					>::difference_type available = std::distance(next, end);
 
 					const Size usable = (available < count)? available : count;
-					std::copy_n(next, usable, result); // XXX
+					std::copy(next, next + usable, result); // XXX
 					next += usable;
 
 					const Size left = count - usable;
