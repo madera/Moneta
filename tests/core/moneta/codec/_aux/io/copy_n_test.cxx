@@ -201,3 +201,24 @@ BOOST_AUTO_TEST_CASE(test_codec_io_copy_n_inputiterator2) {
 	BOOST_CHECK_EQUAL(*itr, *(std::begin(src) + 12 + 6 + 8));
 	BOOST_CHECK_EQUAL_COLLECTIONS(std::begin(src) + 18, std::begin(src) + 18 + 8, buffer, buffer + 8);
 }
+
+BOOST_AUTO_TEST_CASE(test_codec_io_copy_n_looped_test) {
+
+	for (int i=0; i<=16; ++i) {
+		char v0[16];
+		std::fill(std::begin(v0), std::end(v0), 0x55);
+
+		char v1[16];
+		std::fill(std::begin(v1), std::end(v1), 0xaa);
+
+		char* itr = std::begin(v1);
+		const int result = moneta::codec::io::copy_n(itr, std::begin(v1) + i, 16, std::begin(v0));
+
+		const int expected = ((i == 16)? 16 : 0) - (sizeof(v0) - i);
+		BOOST_CHECK_EQUAL(result, expected);
+
+		// Check that at least some data got through.
+		BOOST_CHECK_EQUAL_COLLECTIONS(v0, v0+i, v1, v1+i);
+	}
+
+}

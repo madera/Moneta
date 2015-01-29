@@ -1,11 +1,7 @@
 #include "stdafx.h"
 #include <moneta/codec/_aux/tabs.hxx>
 
-//
-// TODO: Boost.PPize this test to test all the way up to MONETA_CODEC_TABS_MAX.
-//
-
-BOOST_AUTO_TEST_CASE(tabs_test) {
+BOOST_AUTO_TEST_CASE(test_codec_tabs_test) {
 	using moneta::codec::aux::tabs;
 	
 	BOOST_CHECK_EQUAL(tabs<-1>::get(), "");
@@ -50,4 +46,29 @@ BOOST_AUTO_TEST_CASE(tabs_test) {
 	BOOST_CHECK_EQUAL(tabs<30>::get(), "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
 	BOOST_CHECK_EQUAL(tabs<31>::get(), "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
 	BOOST_CHECK_EQUAL(tabs<32>::get(), "");
+}
+
+BOOST_AUTO_TEST_CASE(test_codec_tabs_test_pp) {
+	using moneta::codec::aux::tabs;
+
+	// Generate test for every tab<N> value.
+	//
+	#define __IMPL_TOKEN__(z, n, text) \
+		BOOST_CHECK_EQUAL(std::string(n, '\t'), tabs<n>::get());
+
+	BOOST_PP_REPEAT(MONETA_CODEC_TABS_MAX, __IMPL_TOKEN__, _)
+	
+	#undef __IMPL_TOKEN__
+
+	// Generate test for every tab<N> value, testing big modular indices.
+	//
+	#define __IMPL_TOKEN__(z, n, text) \
+		BOOST_CHECK_EQUAL(std::string(n, '\t'), tabs<n + (16 * MONETA_CODEC_TABS_MAX)>::get());
+	
+	BOOST_PP_REPEAT(MONETA_CODEC_TABS_MAX, __IMPL_TOKEN__, _)
+	
+	#undef __IMPL_TOKEN__
+
+	// Test modulo on max value. Should be empty.
+	BOOST_CHECK_EQUAL(std::string(), tabs<MONETA_CODEC_TABS_MAX>::get());
 }

@@ -6,7 +6,7 @@ namespace moneta { namespace codec {
 	namespace io {
 
 		template <typename InputIterator, typename OutputIterator>
-		int read_cstr(
+		int read(
 			InputIterator& next, InputIterator end,
 			OutputIterator result_begin, OutputIterator result_end,
 			const bool zero_terminate = true

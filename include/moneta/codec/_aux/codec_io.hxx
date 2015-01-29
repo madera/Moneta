@@ -2,33 +2,11 @@
 #include <boost/function.hpp>
 #include <boost/lexical_cast.hpp>
 #include <iterator>
-#include "io/copy.hxx"
+#include "io/write_string.hxx"
 
 namespace moneta { namespace codec {
 
 	namespace detail {
-
-		// TODO: Make this work with all forward iterators.
-		template <class InputIterator, class OutputIterator>
-		int copy(InputIterator first, InputIterator last, OutputIterator begin, OutputIterator end) {
-			int written = 0;
-		
-			for ( ; first != last && begin != end; ++written) {
-				*begin++ = *first++;
-			}
-
-			// Check if there was data left.
-			if (first != last && begin == end) {
-				return 0 - std::distance(first, last);
-			}
-
-			return written;
-		}
-
-		template <class Iterator>
-		int copy(const std::string& string, Iterator begin, Iterator end) {
-			return copy(std::begin(string), std::end(string), begin, end);
-		}
 
 		// TODO: Validate this non-reference Iterator state.
 		template <class Iterator>
@@ -62,11 +40,8 @@ namespace moneta { namespace codec {
 
 			this_type& operator<<(const char* string) {
 				if (_good) {
-					// XXX: strlen() is slow!!
-					// TODO: Implement fast c-string copy.
-					int result = copy(string, string + strlen(string), _begin, _end);
+					int result = io::write(_begin, _end, string, false);
 					if (result > 0) {
-						_begin += result;
 						_total_written += result;
 					} else if (result == 0) {
 					} else if (result < 0) {
@@ -94,9 +69,8 @@ namespace moneta { namespace codec {
 
 			this_type& operator<<(const std::string& string) {
 				if (_good) {
-					int result = copy(string, _begin, _end);
+					int result = io::write(_begin, _end, string.c_str(), false);
 					if (result > 0) {
-						_begin += result;
 						_total_written += result;
 					} else if (result == 0) {
 					} else if (result < 0) {

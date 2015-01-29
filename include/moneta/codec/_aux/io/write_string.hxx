@@ -6,7 +6,7 @@ namespace moneta { namespace codec {
 	namespace io {
 
 		template <typename OutputIterator>
-		int write_cstr(
+		int write(
 			OutputIterator& next, OutputIterator end,
 			const char* cstr,
 			const bool zero_terminate = true

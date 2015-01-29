@@ -43,10 +43,9 @@ add_executable(core_tests
 	moneta/codec/_aux/path_tabs_test.cxx
 	moneta/codec/_aux/codec_io_test.cxx
 
-	moneta/codec/_aux/io/copy_test.cxx
 	moneta/codec/_aux/io/copy_n_test.cxx
-	moneta/codec/_aux/io/read_cstr_test.cxx
-	moneta/codec/_aux/io/write_cstr_test.cxx
+	moneta/codec/_aux/io/read_string_test.cxx
+	moneta/codec/_aux/io/write_string_test.cxx
 
 
 	moneta/codec/typecode_test.cxx
