@@ -1,7 +1,5 @@
 #include "stdafx.h"
-#include <moneta/codec/_aux/io/copy_n.hxx>
-#include <moneta/codec/_aux/codec_io.hxx>
-#include <moneta/codec/_aux/tabs.hxx>
+#include <moneta/codec/_aux/io/ostringstream.hxx>
 
 struct callable {
 	std::string _text;
@@ -16,13 +14,14 @@ struct callable {
 	}
 };
 
-BOOST_AUTO_TEST_CASE(ostringstream_codec_io_test) {
+BOOST_AUTO_TEST_CASE(test_codec_io_ostringstream_test) {
 	
 	{
 		char buffer[1024];
 		std::fill(std::begin(buffer), std::end(buffer), 0x55);
 
-		int result = moneta::codec::detail::make_ostringstream(std::begin(buffer), std::end(buffer))
+		char* itr = std::begin(buffer);
+		int result = moneta::codec::io::make_ostringstream(itr, std::end(buffer))
 			<< '<' << "Hello world!" << '>'
 			<< std::string(" How do you do?")
 			<< callable("\nTesting a callable")
@@ -35,7 +34,8 @@ BOOST_AUTO_TEST_CASE(ostringstream_codec_io_test) {
 		char buffer[10];
 		std::fill(std::begin(buffer), std::end(buffer), 0x55);
 
-		int result = moneta::codec::detail::make_ostringstream(std::begin(buffer), std::end(buffer))
+		char* itr = std::begin(buffer);
+		int result = moneta::codec::io::make_ostringstream(itr, std::end(buffer))
 			<< '<' << "Hello world!" << '>'
 			<< std::string(" How do you do?")
 		;
