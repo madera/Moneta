@@ -2,7 +2,7 @@
 #include "traits/xml_traits.hxx"
 #include "../encoder.hxx"
 #include "../_aux/path_tabs.hxx"
-#include "../_aux/codec_io.hxx"
+#include "../_aux/io/ostringstream.hxx"
 #include "../../traits/entity_name.hxx"
 #include "../../traits/member_names.hxx"
 
@@ -44,7 +44,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 			template <class Member>
 			void operator()(Member&) const {
 				if (_state.good) {
-					int result = moneta::codec::detail::make_ostringstream(_state.begin, _state.end)
+					int result = io::make_ostringstream(_state.begin, _state.end)
 						<< ' ' << traits::detail::member_name<Member>::get()
 						<< "=\"" << Member()(_state.entity) << '"'
 					;
@@ -102,7 +102,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 			int
 		>::type
 		operator()(Iterator begin, Iterator end, const Entity& entity, const Path&) const {
-			return moneta::codec::detail::make_ostringstream(begin, end)
+			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path>()
 				<< '<' << traits::get_entity_name<Entity>() << " />\n"
 			;
@@ -117,7 +117,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 			int
 		>::type
 		operator()(Iterator begin, Iterator end, const Entity& entity, const Path&) const {
-			return moneta::codec::detail::make_ostringstream(begin, end)
+			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path>()
 				<< '<' << moneta::traits::get_entity_name<Entity>() << ">\n"
 			;
@@ -132,7 +132,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 			int
 		>::type
 		operator()(Iterator begin, Iterator end, const Entity& entity, const Path&) const {
-			return moneta::codec::detail::make_ostringstream(begin, end)
+			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path>()
 				<< '<' << moneta::traits::get_entity_name<Entity>()
 				<< detail::attribute_encoder<Entity>(entity)
@@ -149,7 +149,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 			int
 		>::type
 		operator()(Iterator begin, Iterator end, const Entity& entity, const Path&) const {
-			return moneta::codec::detail::make_ostringstream(begin, end)
+			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path>()
 				<< '<' << moneta::traits::get_entity_name<Entity>()
 				<< detail::attribute_encoder<Entity>(entity)
@@ -205,7 +205,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 			int
 		>::type
 		operator()(Iterator begin, Iterator end, const Entity& entity, const Path&) const {
-			return moneta::codec::detail::make_ostringstream(begin, end)
+			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path>()
 				<< "</" << moneta::traits::get_entity_name<Entity>() << ">\n"
 			;
@@ -229,7 +229,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 			int
 		>::type
 		operator()(Iterator begin, Iterator end, const Member&, const Entity& entity, const Path&) const {
-			return moneta::codec::detail::make_ostringstream(begin, end)
+			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path, 1>()
 				<< '<' << traits::detail::member_name<Member>::get() << '>'
 				<< Member()(entity)
@@ -242,7 +242,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 	struct enter_container_encoder {
 		template <class Iterator, class Member, class Entity, class Path, class State>
 		int operator()(Iterator begin, Iterator end, Member&, Entity& entity, const Path&, State& state) const {
-			return moneta::codec::detail::make_ostringstream(begin, end)
+			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path, -1>()
 				<< '<' << traits::detail::member_name<Member>::get() << '>' << '\n';
 			;
@@ -253,7 +253,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		template <class Iterator, class Value, class Member, class Entity, class Path, class State>
 		int operator()(Iterator begin, Iterator end, Value& value, Member&, Entity& entity, const Path&, State& state) const {
 			const std::string& tag_name = traits::detail::xml_container_member_element_name<Member>::get();
-			return moneta::codec::detail::make_ostringstream(begin, end)
+			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path>()
 				<< '<' << tag_name << '>' << value << '<' << '/' << tag_name << '>' << '\n'
 			;
@@ -263,7 +263,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 	struct leave_container_encoder {
 		template <class Iterator, class Member, class Entity, class Path, class State>
 		int operator()(Iterator begin, Iterator end, Member&, Entity& entity, const Path&, State& state) const {
-			return moneta::codec::detail::make_ostringstream(begin, end)
+			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path, -1>()
 				<< '<' << '/' << traits::detail::member_name<Member>::get() << '>' << '\n';
 			;

@@ -1,7 +1,7 @@
 #pragma once
 #include "../../traits/entity_name.hxx"
 #include "../../traits/member_names.hxx"
-#include "../_aux/codec_io.hxx"
+#include "../_aux/io/ostringstream.hxx"
 #include "../encoder.hxx"
 
 namespace moneta { namespace codec { namespace shell_implementation {
@@ -13,7 +13,7 @@ namespace moneta { namespace codec { namespace shell_implementation {
 			int
 		>::type
 		operator()(Iterator begin, Iterator end, const Entity& entity, const Path&) const {
-			return moneta::codec::detail::make_ostringstream(begin, end)
+			return io::make_ostringstream(begin, end)
 				<< moneta::traits::get_entity_name<Entity>() << "={"
 			;
 		}
@@ -24,7 +24,7 @@ namespace moneta { namespace codec { namespace shell_implementation {
 			int
 		>::type
 		operator()(Iterator begin, Iterator end, const Entity& entity, const Path&) const {
-			return moneta::codec::detail::make_ostringstream(begin, end)
+			return io::make_ostringstream(begin, end)
 				<< ' ' << moneta::traits::get_entity_name<Entity>() << "={"
 			;
 		}
@@ -36,7 +36,7 @@ namespace moneta { namespace codec { namespace shell_implementation {
 			boost::is_same<typename Member::result_type, std::string>, int
 		>::type
 		operator()(Iterator begin, Iterator end, const Member&, const Entity& entity) const {
-			return moneta::codec::detail::make_ostringstream(begin, end)
+			return io::make_ostringstream(begin, end)
 				<< ' ' << traits::detail::member_name<Member>::get() << '=' << Member()(entity)
 			;
 		}
@@ -46,7 +46,7 @@ namespace moneta { namespace codec { namespace shell_implementation {
 			boost::is_same<typename Member::result_type, std::string>, int
 		>::type
 		operator()(Iterator begin, Iterator end, const Member&, const Entity& entity) const {
-			return moneta::codec::detail::make_ostringstream(begin, end)
+			return io::make_ostringstream(begin, end)
 				<< ' ' << traits::detail::member_name<Member>::get() << "=\"" << Member()(entity) << '"'
 			;
 		}
@@ -55,7 +55,7 @@ namespace moneta { namespace codec { namespace shell_implementation {
 	struct leave_entity_encoder {
 		template <class Iterator, class Entity>
 		int operator()(Iterator begin, Iterator end, const Entity& entity) const {
-			return moneta::codec::detail::make_ostringstream(begin, end)
+			return io::make_ostringstream(begin, end)
 				<< " }"
 			;
 		}

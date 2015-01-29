@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include <moneta/codec/decoder.hxx>
-#include <moneta/codec/_aux/codec_io.hxx>
+#include <moneta/codec/_aux/io/ostringstream.hxx>
 #include <moneta/codec/_aux/path_tabs.hxx>
 #include <moneta/algorithm/detail/stringize_path.hxx>
 #include <moneta/pp/describe_entity.hxx>
