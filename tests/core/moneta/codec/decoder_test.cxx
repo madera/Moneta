@@ -1,3 +1,7 @@
+//
+// Decode this file using Codec IO primitives.
+//
+
 #include "stdafx.h"
 #include <moneta/codec/decoder.hxx>
 #include <moneta/codec/_aux/io/ostringstream.hxx>
@@ -73,11 +77,19 @@ struct testcodec_enter_container {
 		}
 
 		const bool correct = (*begin == 'e');
-		return correct? 1 : 0;
+		if (!correct) {
+			return 0;
+		}
+
+		++begin;
+		const size_t size = *begin++; // Char becomes size_t;
+		
+		// Resize the container. It'll get called once per item.
+		Member()(entity).resize(size);
+
+		return 1 + 1; // 'e' + size
 	}
 };
-
-	// MEQUEDE: Should decoder's container_item really carry a value? Maybe it doesn't make sense.
 
 struct testcodec_container_item {
 	template <class Iterator, class Value, class Member, class Entity, class Path, class State>
@@ -86,30 +98,8 @@ struct testcodec_container_item {
 			return -1;
 		}
 
-		const size_t size = *begin++; // Char becomes size_t.
-
-		//
-		// TODO: Replace this code using Spirit's container_iterator or something.
-		//
-		typedef typename boost::mpl::if_<
-			boost::is_const<Entity>,
-			typename boost::add_const<typename Member::result_type>::type,
-			typename Member::result_type
-		>::type container_type;
-
-		typedef typename boost::mpl::if_<
-			boost::is_const<Entity>,
-			typename container_type::const_iterator,
-			typename container_type::iterator
-		>::type iterator_type;
-
-		container_type& container = Member()(entity);
-		for (int i=0; i<size; ++i) {			
-			container.push_back(*(typename container_type::value_type*)begin);
-			begin += sizeof(typename container_type::value_type);
-		}
-
-		return 1 + size * sizeof(typename container_type::value_type);
+		value = *(Value*)begin;
+		return sizeof(Value);
 	}
 };
 

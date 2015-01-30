@@ -50,7 +50,6 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 					;
 
 					if (result > 0) {
-						_state.begin += result;
 						_state.total_written += result;
 					} else  if (result < 0) {
 						_state.good = false;
