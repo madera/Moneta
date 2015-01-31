@@ -92,6 +92,9 @@ struct testcodec_enter_container {
 };
 
 struct testcodec_container_item {
+	//
+	// This will be called once for each value of the container set in testcodec_enter_container.
+	//
 	template <class Iterator, class Value, class Member, class Entity, class Path, class State>
 	int operator()(Iterator begin, Iterator end, Value& value, Member&, Entity& entity, const Path&, State& state) const {
 		if (begin == end) {

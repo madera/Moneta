@@ -7,55 +7,72 @@
 namespace moneta { namespace codec { namespace shell_implementation {
 
 	struct enter_entity_encoder {
-		template <class Iterator, class Entity, class Path>
+		template <class OutputIterator, class Entity, class Path>
 		typename boost::enable_if<
 			boost::mpl::empty<Path>,
 			int
 		>::type
-		operator()(Iterator begin, Iterator end, const Entity& entity, const Path&) const {
-			return io::make_ostringstream(begin, end)
+		operator()(
+			OutputIterator& next, OutputIterator end,
+			const Entity& entity, const Path&
+		) const {
+			return io::make_ostringstream(next, end)
 				<< moneta::traits::get_entity_name<Entity>() << "={"
 			;
 		}
 
-		template <class Iterator, class Entity, class Path>
+		template <class OutputIterator, class Entity, class Path>
 		typename boost::disable_if<
 			boost::mpl::empty<Path>,
 			int
 		>::type
-		operator()(Iterator begin, Iterator end, const Entity& entity, const Path&) const {
-			return io::make_ostringstream(begin, end)
+		operator()(
+			OutputIterator& next, OutputIterator end,
+			const Entity& entity, const Path&
+		) const {
+			return io::make_ostringstream(next, end)
 				<< ' ' << moneta::traits::get_entity_name<Entity>() << "={"
 			;
 		}
 	};
 
 	struct member_encoder {
-		template <class Iterator, class Member, class Entity>
+		template <class OutputIterator, class Member, class Entity>
 		typename boost::disable_if<
 			boost::is_same<typename Member::result_type, std::string>, int
 		>::type
-		operator()(Iterator begin, Iterator end, const Member&, const Entity& entity) const {
-			return io::make_ostringstream(begin, end)
-				<< ' ' << traits::detail::member_name<Member>::get() << '=' << Member()(entity)
+		operator()(
+			OutputIterator& next, OutputIterator end,
+			const Member&, const Entity& entity
+		) const {
+			return io::make_ostringstream(next, end)
+				<< ' ' << traits::detail::member_name<Member>::get()
+				<< '=' << Member()(entity)
 			;
 		}
 
-		template <class Iterator, class Member, class Entity>
+		template <class OutputIterator, class Member, class Entity>
 		typename boost::enable_if<
 			boost::is_same<typename Member::result_type, std::string>, int
 		>::type
-		operator()(Iterator begin, Iterator end, const Member&, const Entity& entity) const {
-			return io::make_ostringstream(begin, end)
-				<< ' ' << traits::detail::member_name<Member>::get() << "=\"" << Member()(entity) << '"'
+		operator()(
+			OutputIterator& next, OutputIterator end,
+			const Member&, const Entity& entity
+		) const {
+			return io::make_ostringstream(next, end)
+				<< ' ' << traits::detail::member_name<Member>::get()
+				<< "=\"" << Member()(entity) << '"'
 			;
 		}
 	};
 
 	struct leave_entity_encoder {
-		template <class Iterator, class Entity>
-		int operator()(Iterator begin, Iterator end, const Entity& entity) const {
-			return io::make_ostringstream(begin, end)
+		template <class OutputIterator, class Entity>
+		int operator()(
+			OutputIterator& next, OutputIterator end,
+			const Entity& entity
+		) const {
+			return io::make_ostringstream(next, end)
 				<< " }"
 			;
 		}
