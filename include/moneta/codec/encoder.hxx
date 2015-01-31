@@ -86,7 +86,6 @@ namespace moneta { namespace codec {
 				_encoder_state.good = false;
 			} else if (result > 0) {
 				_encoder_state.total_written += result;
-				// _encoder_state.next += result; // XXX
 			} else {
 			}
 
@@ -182,7 +181,6 @@ namespace moneta { namespace codec {
 				_encoder_state.good = false;
 			} else if (result > 0) {
 				_encoder_state.total_written += result;
-				// _encoder_state.next += result; // XXX
 			} else {
 			}
 
@@ -284,7 +282,6 @@ namespace moneta { namespace codec {
 				_encoder_state.good = false;
 			} else if (result > 0) {
 				_encoder_state.total_written += result;
-				// _encoder_state.next += result; // XXX
 			} else {
 			}
 
@@ -385,7 +382,6 @@ namespace moneta { namespace codec {
 				_encoder_state.good = false;
 			} else if (result > 0) {
 				_encoder_state.total_written += result;
-				//_encoder_state.next += result; // XXX
 			} else {
 			}
 

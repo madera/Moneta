@@ -23,7 +23,6 @@ namespace moneta { namespace codec { namespace io {
 			if (_good) {
 				int result = callable(_begin, _end);
 				if (result > 0) {
-					// _begin += result; // XXX
 					_total_written += result;
 				} else if (result == 0) {
 				} else if (result < 0) {
