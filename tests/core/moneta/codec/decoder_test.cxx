@@ -177,9 +177,10 @@ BOOST_AUTO_TEST_CASE(point3d_simple_decoder_test) {
 		'L'
 	};
 
-	const unsigned char* itr = std::begin(buffer);
 	Point3D point;
-	const int result = decoder_t()(itr, std::end(buffer), point);
+	//const unsigned char* itr = std::begin(buffer);
+	//const int result = decoder_t()(itr, std::end(buffer), point);
+	const int result = moneta::codec::decode<decoder_t>(std::begin(buffer), std::end(buffer), point);
 
 	BOOST_CHECK_EQUAL(result, 1 + 3 * sizeof(boost::uint32_t) + 1);
 	BOOST_CHECK_EQUAL(point.x, 1);
@@ -202,9 +203,10 @@ BOOST_AUTO_TEST_CASE(lottery_simple_decoder_test) {
 		'L'
 	};
 
-	const unsigned char* itr = std::begin(buffer);
 	LotteryNumbers lottery;
-	const int result = decoder_t()(itr, std::end(buffer), lottery);
+	//const unsigned char* itr = std::begin(buffer);
+	//const int result = decoder_t()(itr, std::end(buffer), lottery);
+	const int result = moneta::codec::decode<decoder_t>(std::begin(buffer), std::end(buffer), lottery);
 
 	BOOST_CHECK_EQUAL(result, sizeof(buffer));
 	BOOST_CHECK_EQUAL(lottery.date, 0x01020304);

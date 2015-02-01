@@ -567,14 +567,14 @@ namespace moneta { namespace codec {
 	//
 	// Syntax candy paused for now.
 	//
-	//template <class decoder, class Entity, class InputIterator>
-	//int decode(InputIterator next, InputIterator end, const Entity& entity) {
-	//	return decoder()(next, end, entity);
-	//}
+	template <class Decoder, class InputIterator, class Entity>
+	int decode(InputIterator next, InputIterator end, Entity& entity) {
+		return Decoder()(next, end, entity);
+	}
 
-	//template <class decoder, class Entity, class InputIterator, class State>
-	//int decode(InputIterator next, InputIterator end, const Entity& entity, State state) {
-	//	return decoder()(next, end, entity, state);
-	//}
+	template <class Decoder, class InputIterator, class Entity, class State>
+	int decode(InputIterator next, InputIterator end, Entity& entity, State& state) {
+		return Decoder()(next, end, entity, state);
+	}
 
 }}

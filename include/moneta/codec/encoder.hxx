@@ -579,16 +579,16 @@ namespace moneta { namespace codec {
 	};
 
 	//
-	// Syntax candy paused for now.
+	// Syntax candy
 	//
-	//template <class Encoder, class Entity, class Iterator>
-	//int encode(Iterator next, Iterator end, const Entity& entity) {
-	//	return Encoder()(next, end, entity);
-	//}
+	template <class Encoder, class OutputIterator, class Entity>
+	int encode(OutputIterator next, OutputIterator end, const Entity& entity) {
+		return Encoder()(next, end, entity);
+	}
 
-	//template <class Encoder, class Entity, class Iterator, class State>
-	//int encode(Iterator next, Iterator end, const Entity& entity, State state) {
-	//	return Encoder()(next, end, entity, state);
-	//}
+	template <class Encoder, class OutputIterator, class Entity, class State>
+	int encode(OutputIterator next, OutputIterator end, const Entity& entity, State& state) {
+		return Encoder()(next, end, entity, state);
+	}
 
 }}

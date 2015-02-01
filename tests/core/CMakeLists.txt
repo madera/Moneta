@@ -51,6 +51,7 @@ add_executable(core_tests
 	moneta/codec/typecode_test.cxx
 	moneta/codec/encoder_test.cxx
 	moneta/codec/decoder_test.cxx
+#	moneta/codec/multi_decoder_test.cxx
 	#
 	moneta/codec/xml/detail/xml_traits_test.cxx
 	moneta/codec/xml/stateless_xml_encoder_test.cxx
@@ -60,11 +61,8 @@ add_executable(core_tests
 	moneta/codec/rawbin/rawbin_encoder_test.cxx
 	moneta/codec/rawbin/rawbin_decoder_test.cxx
 	moneta/codec/shell/shell_encoder_test.cxx
+	moneta/codec/shell/shell_decoder_test.cxx
 
-#	moneta/codec/encoder_test.cxx
-#	moneta/codec/decoder_test.cxx
-#	moneta/codec/multi_decoder_test.cxx
-#	moneta/codec/shell/shell_decoder_test.cxx
 
 	moneta/container/change_trackers/bitset_change_tracker_test.cxx
 	moneta/container/change_trackers/hash_change_tracker_test.cxx

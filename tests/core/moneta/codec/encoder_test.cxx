@@ -112,9 +112,10 @@ BOOST_AUTO_TEST_CASE(encoder_basic_test) {
 	char buffer[1024];
 	std::fill(buffer, buffer + sizeof(buffer), 0);
 
-	char* itr = std::begin(buffer);
 	int level = 0;
-	const int result = encoder_t()(itr, buffer + sizeof(buffer) - 1, A(), level);
+	//char* itr = std::begin(buffer);
+	//const int result = encoder_t()(itr, buffer + sizeof(buffer) - 1, A(), level);
+	const int result = moneta::codec::encode<encoder_t>(std::begin(buffer), std::end(buffer), A(), level);
 
 	const std::string expected =
 		"e:A, 0\n"
@@ -163,9 +164,10 @@ BOOST_AUTO_TEST_CASE(traversal_encoder_test) {
 	char buffer[1024];
 	std::fill(buffer, buffer + sizeof(buffer), 0);
 
-	char* itr = std::begin(buffer);
 	int level = 0;
-	const int result = encoder_t()(itr, buffer + sizeof(buffer) - 1, team, level);
+	//char* itr = std::begin(buffer);
+	//const int result = encoder_t()(itr, buffer + sizeof(buffer) - 1, team, level);
+	const int result = moneta::codec::encode<encoder_t>(std::begin(buffer), std::end(buffer), team, level);
 
 	const std::string expected =
 		"e:SportsTeam, 0\n"
