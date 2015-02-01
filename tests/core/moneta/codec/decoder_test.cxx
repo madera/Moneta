@@ -1,5 +1,5 @@
 //
-// Decode this file using Codec IO primitives.
+// TODO: Decode this file using Codec IO primitives.
 //
 
 #include "stdafx.h"
@@ -29,60 +29,86 @@ MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 )
 
 struct testcodec_enter_entity {
-	template <class Iterator, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, Entity& entity, const Path&, State& state) const {
-		if (begin == end) {
+	template <class InputIterator, class Entity, class Path, class State>
+	int operator()(
+		InputIterator& next, InputIterator end,
+		Entity& entity, const Path&, State& state
+	) const {
+		if (next == end) {
 			return -1;
 		}
 
-		const bool correct = (*begin == 'E');
-		return correct? 1 : 0;
+		if (*next != 'E') {
+			return 0;
+		}
+
+		++next;
+		return 1;
 	}
 };
 
 struct testcodec_member {
-	template <class Iterator, class Member, class Entity, class Path, class State>
+	template <class InputIterator, class Member, class Entity, class Path, class State>
 	typename boost::enable_if<
 		boost::is_pod<typename Member::result_type>,
 		int
 	>::type
-	operator()(Iterator begin, Iterator end, const Member&, Entity& entity, const Path&, State& state) const {
+	operator()(
+		InputIterator& next, InputIterator end,
+		const Member&,
+		Entity& entity, const Path&, State& state
+	) const {
+		// XXX: Fix this. This is an InputIterator.
+
 		const size_t needed = sizeof(typename Member::result_type);
-		if (end - begin < needed) {
-			return 0 - (needed - (end - begin));
+		if (end - next < needed) {
+			return 0 - (needed - (end - next));
 		}
 
-		Member()(entity) = *(typename Member::result_type*)begin;
+		Member()(entity) = *(typename Member::result_type*)next;
+		next += needed;
+
 		return needed;
 	}
 };
 
 struct testcodec_leave_entity {
-	template <class Iterator, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, Entity& entity, const Path&, State& state) const {
-		if (begin == end) {
+	template <class InputIterator, class Entity, class Path, class State>
+	int operator()(
+		InputIterator& next, InputIterator end,
+		Entity& entity, const Path&, State& state
+	) const {
+		if (next == end) {
 			return -1;
 		}
 
-		const bool correct = (*begin == 'L');
-		return correct? 1 : 0;
+		if (*next != 'L') {
+			return 0;
+		}
+
+		++next;
+		return 1;
 	}
 };
 
 struct testcodec_enter_container {
-	template <class Iterator, class Member, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, Member&, Entity& entity, const Path&, State& state) const {
-		if (begin == end) {
+	template <class InputIterator, class Member, class Entity, class Path, class State>
+	int operator()(
+		InputIterator& next, InputIterator end,
+		Member&,
+		Entity& entity, const Path&, State& state
+	) const {
+		if (next == end) {
 			return -1;
 		}
 
-		const bool correct = (*begin == 'e');
+		const bool correct = (*next == 'e');
 		if (!correct) {
 			return 0;
 		}
 
-		++begin;
-		const size_t size = *begin++; // Char becomes size_t;
+		++next;
+		const size_t size = *next++; // Char becomes size_t;
 		
 		// Resize the container. It'll get called once per item.
 		Member()(entity).resize(size);
@@ -95,26 +121,40 @@ struct testcodec_container_item {
 	//
 	// This will be called once for each value of the container set in testcodec_enter_container.
 	//
-	template <class Iterator, class Value, class Member, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, Value& value, Member&, Entity& entity, const Path&, State& state) const {
-		if (begin == end) {
+	template <class InputIterator, class Value, class Member, class Entity, class Path, class State>
+	int operator()(
+		InputIterator& next, InputIterator end,
+		Value& value, Member&,
+		Entity& entity, const Path&, State& state
+	) const {
+		if (next == end) {
 			return -1;
 		}
 
-		value = *(Value*)begin;
+		value = *(Value*)next;
+		next += sizeof(Value);
+
 		return sizeof(Value);
 	}
 };
 
 struct testcodec_leave_container {
-	template <class Iterator, class Member, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, Member&, Entity& entity, const Path&, State& state) const {
-		if (begin == end) {
+	template <class InputIterator, class Member, class Entity, class Path, class State>
+	int operator()(
+		InputIterator& next, InputIterator end,
+		Member&,
+		Entity& entity, const Path&, State& state
+	) const {
+		if (next == end) {
 			return -1;
 		}
 
-		const bool correct = (*begin == 'l');
-		return correct? 1 : 0;
+		if (*next != 'l') {
+			return 0;
+		}
+
+		++next;
+		return 1;
 	}
 };
 
@@ -137,8 +177,9 @@ BOOST_AUTO_TEST_CASE(point3d_simple_decoder_test) {
 		'L'
 	};
 
+	const unsigned char* itr = std::begin(buffer);
 	Point3D point;
-	const int result = decoder_t()(std::begin(buffer), std::end(buffer), point);
+	const int result = decoder_t()(itr, std::end(buffer), point);
 
 	BOOST_CHECK_EQUAL(result, 1 + 3 * sizeof(boost::uint32_t) + 1);
 	BOOST_CHECK_EQUAL(point.x, 1);
@@ -161,8 +202,9 @@ BOOST_AUTO_TEST_CASE(lottery_simple_decoder_test) {
 		'L'
 	};
 
+	const unsigned char* itr = std::begin(buffer);
 	LotteryNumbers lottery;
-	const int result = decoder_t()(std::begin(buffer), std::end(buffer), lottery);
+	const int result = decoder_t()(itr, std::end(buffer), lottery);
 
 	BOOST_CHECK_EQUAL(result, sizeof(buffer));
 	BOOST_CHECK_EQUAL(lottery.date, 0x01020304);

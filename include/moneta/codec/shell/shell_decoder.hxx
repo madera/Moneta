@@ -144,10 +144,10 @@ namespace moneta { namespace codec {
 	template <class Entity>
 	struct entity_decoder<shell, Entity> {
 		
-		template <class Entity_, class Iterator>
-		int operator()(Entity& entity, Iterator begin, Iterator end) const {
-			entity = shell_detail::from_line<Entity>(std::string(begin, end));
-			return end - begin; // XXX: FIXME: This is bad.
+		template <class Entity_, class InputIterator>
+		int operator()(Entity& entity, InputIterator& next, InputIterator end) const {
+			entity = shell_detail::from_line<Entity>(std::string(next, end));
+			return end - next; // XXX: FIXME: This is bad.
 		}
 
 	};
@@ -173,20 +173,20 @@ namespace moneta { namespace codec {
 	
 		// Deprecated!!
 		//
-		template <class Codec, class Operation, class Iterator>
+		template <class Codec, class Operation, class InputIterator>
 		struct decoder_dispatcher {
 			Operation& _operation;
-			Iterator& _begin;
-			Iterator& _end;
+			InputIterator& _next;
+			InputIterator& _end;
 			int& _result;
 
-			decoder_dispatcher(Operation& operation, Iterator& begin, Iterator& end, int& result)
-			 : _operation(operation), _begin(begin), _end(end), _result(result) {}
+			decoder_dispatcher(Operation& operation, InputIterator& next, InputIterator& end, int& result)
+			 : _operation(operation), _next(next), _end(end), _result(result) {}
 
 			template <class Entity>
 			void operator()() const {
 				Entity entity = moneta::make_entity<Entity>();
-				_result = moneta::codec::decode<Codec>(entity, _begin, _end);
+				_result = moneta::codec::decode<Codec>(entity, _next, _end);
 				// FIXME: What do we do with result? Check it better...
 				if (_result > 0) {
 					_operation.operator()(entity);
@@ -199,19 +199,22 @@ namespace moneta { namespace codec {
 	template <class Entities>	
 	struct deducing_entity_decoder<shell, Entities> {
 
-		template <class Visitor, class Iterator>
-		int operator()(Visitor& visitor, Iterator begin, Iterator end) const {		
-			Iterator pivot = std::find(begin, end, '=');
+		template <class Visitor, class InputIterator>
+		int operator()(Visitor& visitor, InputIterator& next, InputIterator end) const {		
+			InputIterator pivot = std::find(next, end, '=');
 			if (pivot == end) {
 				return -2; // Need at least two more bytes (one for =, one for data).
 			}
 		
-			std::string key(begin, pivot);
+			std::string key(next, pivot);
 			boost::trim(key);
 
 			int result;
 			moneta::lexical::dispatch_entity<Entities>(
-				key, detail::decoder_dispatcher<shell, Visitor, Iterator>(visitor, pivot + 1, end, result)
+				key,
+				detail::decoder_dispatcher<shell, Visitor, InputIterator>(
+					visitor, pivot + 1, end, result
+				)
 			);
 
 			return result;
