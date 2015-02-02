@@ -565,16 +565,30 @@ namespace moneta { namespace codec {
 	};
 
 	//
-	// Syntax candy paused for now.
+	// Syntax candy
 	//
 	template <class Decoder, class InputIterator, class Entity>
-	int decode(InputIterator next, InputIterator end, Entity& entity) {
+	typename boost::enable_if<traits::is_entity<Entity>, int>::type
+	decode(InputIterator next, InputIterator end, Entity& entity) {
 		return Decoder()(next, end, entity);
 	}
 
 	template <class Decoder, class InputIterator, class Entity, class State>
-	int decode(InputIterator next, InputIterator end, Entity& entity, State& state) {
+	typename boost::enable_if<traits::is_entity<Entity>, int>::type
+	decode(InputIterator next, InputIterator end, Entity& entity, State& state) {
 		return Decoder()(next, end, entity, state);
+	}
+
+	template <class Decoder, class InputIterator, class Visitor>
+	typename boost::disable_if<traits::is_entity<Visitor>, int>::type
+	decode(InputIterator next, InputIterator end, Visitor& visitor) {
+		return Decoder()(next, end, visitor);
+	}
+
+	template <class Decoder, class InputIterator, class Visitor, class State>
+	typename boost::disable_if<traits::is_entity<Visitor>, int>::type
+	decode(InputIterator next, InputIterator end, Visitor& visitor, State& state) {
+		return Decoder()(next, end, visitor, state);
 	}
 
 }}
