@@ -70,6 +70,7 @@ namespace mplx {
 			template <class T>
 			void operator()(const T&) const {
 				if (_ordinal++ == _target) {
+					// XXX: Change this to an op() arg.
 					_operation.MONETA_INTRA_TEMPLATE_KEYWORD operator()<T>();
 				}
 			}

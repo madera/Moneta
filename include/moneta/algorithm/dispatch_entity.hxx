@@ -25,9 +25,11 @@ namespace moneta { namespace algorithm {
 
 			template <class Entity>
 			void operator()(const Entity&) const {
+				Entity* dummy = 0;
+
 				if (!_state.done) {
-					if (_state.predicate.MONETA_INTRA_TEMPLATE_KEYWORD operator()<Entity>()) {
-						_state.visitor.MONETA_INTRA_TEMPLATE_KEYWORD operator()<Entity>();
+					if (_state.predicate(dummy)) {
+						_state.visitor(dummy);
 						_state.done = true;
 					}
 				}
