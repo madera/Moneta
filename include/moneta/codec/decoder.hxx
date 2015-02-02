@@ -528,11 +528,7 @@ namespace moneta { namespace codec {
 		typedef boost::mpl::vector<T, MONETA_TRAVERSE_PARAMS> mpl_vector;
 
 		template <class InputIterator, class Entity, class Path, class State>
-		typename boost::enable_if<
-			traits::is_entity<Entity>,
-			int
-		>::type
-		_decode(
+		int _decode(
 			InputIterator& next, InputIterator end, Entity& entity,
 			Path* path = 0, State& state = State()
 		) const {
@@ -553,46 +549,22 @@ namespace moneta { namespace codec {
 			return (decoder_state.good)? decoder_state.total_written : decoder_state.last_result;
 		}
 
-		template <class InputIterator, class Entity, class Path, class State>
-		typename boost::disable_if<
-			traits::is_entity<Entity>,
-			int
-		>::type
-		_decode(
-			InputIterator& next, InputIterator end, Entity& entity,
-			Path* path = 0, State& state = State()
-		) const {
-			//using namespace moneta::algorithm;
-
-			//typedef moneta::algorithm::traverse<
-			//	enter_actions<decoder_enter_entity>,
-			//	member_actions<decoder_member>,
-			//	leave_actions<decoder_leave_entity>,
-			//	enter_container_actions<decoder_enter_container>,
-			//	container_item_actions<decoder_container_item>,
-			//	leave_container_actions<decoder_leave_container>
-			//> traverser;
-
-			//detail::decoder_state<mpl_vector, InputIterator, State> decoder_state(next, end, state);
-			//traverser()(entity, decoder_state);
-
-			//return (decoder_state.good)? decoder_state.total_written : decoder_state.last_result;
-
-			return 0;
-		}
-
 	public:
-		template <class InputIterator, class EntityOrVisitor>
-		int operator()(InputIterator& next, InputIterator end, EntityOrVisitor& entity_or_visitor) {
+		template <class InputIterator, class Entity>
+		int operator()(
+			InputIterator& next, InputIterator end, Entity& entity
+		) {
 			const boost::mpl::vector0<>* path = 0;
 			const detail::no_state state = detail::no_state();
-			return _decode(next, end, entity_or_visitor, path, state);
+			return _decode(next, end, entity, path, state);
 		}
 
-		template <class InputIterator, class EntityOrVisitor, class State>
-		int operator()(InputIterator& next, InputIterator end, EntityOrVisitor& entity_or_visitor, State& state) {
+		template <class InputIterator, class Entity, class State>
+		int operator()(
+			InputIterator& next, InputIterator end, Entity& entity, State& state
+		) {
 			const boost::mpl::vector0<>* path = 0;
-			return _decode(next, end, entity_or_visitor, path, state);
+			return _decode(next, end, entity, path, state);
 		}
 	};
 
@@ -600,39 +572,13 @@ namespace moneta { namespace codec {
 	// Syntax candy
 	//
 	template <class Decoder, class InputIterator, class Entity>
-	typename boost::enable_if<
-		traits::is_entity<Entity>,
-		int
-	>::type
-	decode(InputIterator next, InputIterator end, Entity& entity) {
+	int decode(InputIterator next, InputIterator end, Entity& entity) {
 		return Decoder()(next, end, entity);
 	}
 
 	template <class Decoder, class InputIterator, class Entity, class State>
-	typename boost::enable_if<
-		traits::is_entity<Entity>,
-		int
-	>::type
-	decode(InputIterator next, InputIterator end, Entity& entity, State& state) {
+	int decode(InputIterator next, InputIterator end, Entity& entity, State& state) {
 		return Decoder()(next, end, entity, state);
-	}
-
-	template <class Decoder, class InputIterator, class Visitor>
-	typename boost::disable_if<
-		traits::is_entity<Visitor>,
-		int
-	>::type
-	decode(InputIterator next, InputIterator end, Visitor& visitor) {
-		return Decoder()(next, end, visitor);
-	}
-
-	template <class Decoder, class InputIterator, class Visitor, class State>
-	typename boost::disable_if<
-		traits::is_entity<Visitor>,
-		int
-	>::type
-	decode(InputIterator next, InputIterator end, Visitor& visitor, State& state) {
-		return Decoder()(next, end, visitor, state);
 	}
 
 }}

@@ -215,3 +215,30 @@ BOOST_AUTO_TEST_CASE(lottery_simple_decoder_test) {
 	BOOST_CHECK_EQUAL(lottery.numbers[1], 2);
 	BOOST_CHECK_EQUAL(lottery.numbers[2], 3);
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+struct some_visitor {
+	std::ostringstream& _output;
+
+	some_visitor(std::ostringstream& output)
+	 : _output(output) {
+	}
+
+	template <class Entity>
+	void operator()(Entity*) const {
+		_output << "x";
+	}
+};
+
+BOOST_AUTO_TEST_CASE(test_moneta_codec_decoder_typecode_based) {
+	const unsigned char buffer[] = {
+		0x01, 0x02, 0x03
+	};
+
+	std::ostringstream oss;
+	some_visitor visitor(oss);
+	//const int result = moneta::codec::decode<decoder_t>(std::begin(buffer), std::end(buffer), visitor);
+
+	std::cout << oss.str() << std::endl;
+}
