@@ -29,86 +29,67 @@ MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 )
 
 struct testcodec_enter_entity {
-	template <class InputIterator, class Entity, class Path, class State>
-	int operator()(
-		InputIterator& next, InputIterator end,
-		Entity& entity, const Path&, State& state
-	) const {
-		if (next == end) {
+	template <class Iterator, class Entity, class Path, class State>
+	int operator()(Iterator begin, Iterator end, Entity& entity, const Path&, State& state) const {
+		if (begin == end) {
 			return -1;
 		}
 
-		if (*next != 'E') {
+		if (*begin != 'E') {
 			return 0;
 		}
 
-		++next;
 		return 1;
 	}
 };
 
 struct testcodec_member {
-	template <class InputIterator, class Member, class Entity, class Path, class State>
+	template <class Iterator, class Member, class Entity, class Path, class State>
 	typename boost::enable_if<
 		boost::is_pod<typename Member::result_type>,
 		int
 	>::type
-	operator()(
-		InputIterator& next, InputIterator end,
-		const Member&,
-		Entity& entity, const Path&, State& state
-	) const {
-		// XXX: Fix this. This is an InputIterator.
-
+	operator()(Iterator begin, Iterator end, const Member&, Entity& entity, const Path&, State& state) const {
 		const size_t needed = sizeof(typename Member::result_type);
-		if (end - next < needed) {
-			return 0 - (needed - (end - next));
+		if (end - begin < needed) {
+			return 0 - (needed - (end - begin));
 		}
 
-		Member()(entity) = *(typename Member::result_type*)next;
-		next += needed;
+		Member()(entity) = *(typename Member::result_type*)begin;
 
 		return needed;
 	}
 };
 
 struct testcodec_leave_entity {
-	template <class InputIterator, class Entity, class Path, class State>
-	int operator()(
-		InputIterator& next, InputIterator end,
-		Entity& entity, const Path&, State& state
-	) const {
-		if (next == end) {
+	template <class Iterator, class Entity, class Path, class State>
+	int operator()(Iterator& begin, Iterator end, Entity& entity, const Path&, State& state) const {
+		if (begin == end) {
 			return -1;
 		}
 
-		if (*next != 'L') {
+		if (*begin != 'L') {
 			return 0;
 		}
 
-		++next;
 		return 1;
 	}
 };
 
 struct testcodec_enter_container {
-	template <class InputIterator, class Member, class Entity, class Path, class State>
-	int operator()(
-		InputIterator& next, InputIterator end,
-		Member&,
-		Entity& entity, const Path&, State& state
-	) const {
-		if (next == end) {
+	template <class Iterator, class Member, class Entity, class Path, class State>
+	int operator()(Iterator begin, Iterator end, Member&, Entity& entity, const Path&, State& state) const {
+		if (begin == end) {
 			return -1;
 		}
 
-		const bool correct = (*next == 'e');
+		const bool correct = (*begin == 'e');
 		if (!correct) {
 			return 0;
 		}
 
-		++next;
-		const size_t size = *next++; // Char becomes size_t;
+		++begin;
+		const size_t size = *begin++; // Char becomes size_t;
 		
 		// Resize the container. It'll get called once per item.
 		Member()(entity).resize(size);
@@ -121,39 +102,31 @@ struct testcodec_container_item {
 	//
 	// This will be called once for each value of the container set in testcodec_enter_container.
 	//
-	template <class InputIterator, class Value, class Member, class Entity, class Path, class State>
+	template <class Iterator, class Value, class Member, class Entity, class Path, class State>
 	int operator()(
-		InputIterator& next, InputIterator end,
-		Value& value, Member&,
-		Entity& entity, const Path&, State& state
+		Iterator begin, Iterator end, Value& value, Member&, Entity& entity, const Path&, State& state
 	) const {
-		if (next == end) {
+		if (begin == end) {
 			return -1;
 		}
 
-		value = *(Value*)next;
-		next += sizeof(Value);
+		value = *(Value*)begin;
 
 		return sizeof(Value);
 	}
 };
 
 struct testcodec_leave_container {
-	template <class InputIterator, class Member, class Entity, class Path, class State>
-	int operator()(
-		InputIterator& next, InputIterator end,
-		Member&,
-		Entity& entity, const Path&, State& state
-	) const {
-		if (next == end) {
+	template <class Iterator, class Member, class Entity, class Path, class State>
+	int operator()(Iterator begin, Iterator end, Member&, Entity& entity, const Path&, State& state) const {
+		if (begin == end) {
 			return -1;
 		}
 
-		if (*next != 'l') {
+		if (*begin != 'l') {
 			return 0;
 		}
 
-		++next;
 		return 1;
 	}
 };
@@ -171,9 +144,9 @@ typedef decoder<
 BOOST_AUTO_TEST_CASE(point3d_simple_decoder_test) {
 	const unsigned char buffer[] = {
 		'E',
-		0x01, 0x00, 0x00, 0x00,
-		0x02, 0x00, 0x00, 0x00,
-		0x03, 0x00, 0x00, 0x00,
+			0x01, 0x00, 0x00, 0x00,
+			0x02, 0x00, 0x00, 0x00,
+			0x03, 0x00, 0x00, 0x00,
 		'L'
 	};
 

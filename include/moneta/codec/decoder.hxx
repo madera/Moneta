@@ -16,10 +16,10 @@ namespace moneta { namespace codec {
 	namespace detail {
 		using namespace moneta::algorithm::detail;
 
-		template <class Actions, typename InputIterator, class Substate>
+		template <class Actions, typename Iterator, class Substate>
 		struct decoder_state {
 			typedef Actions actions;
-			typedef InputIterator iterator_type;
+			typedef Iterator iterator_type;
 			typedef Substate substate_type;
 
 			//
@@ -55,12 +55,8 @@ namespace moneta { namespace codec {
 				detail::traverse_leave_container
 			>::type leave_container_actions;
 
-			//
-			//
-			//
-
-			InputIterator& next;
-			InputIterator end;
+			Iterator begin;
+			Iterator end;
 
 			bool good;
 			int total_written;
@@ -68,47 +64,43 @@ namespace moneta { namespace codec {
 			
 			Substate& substate;
 
-			decoder_state(InputIterator& next_, InputIterator end_, Substate& substate_)
-			 : next(next_), end(end_), good(true), total_written(0), last_result(0), substate(substate_) {
+			decoder_state(Iterator begin_, Iterator end_, Substate& substate_)
+			 : begin(begin_), end(end_), substate(substate_), good(true), total_written(0), last_result(0) {
 			}
 		};
 	}
 
 	template <
 		class Entity, class Path, class DecoderState,
-		typename InputIterator = typename DecoderState::iterator_type
+		typename Iterator = typename DecoderState::iterator_type,
+		typename UserState = typename DecoderState::substate_type
 	>
 	class decoder_enter_or_leave_action {
 		Entity& _entity;
-		DecoderState& _decoder_state;
+		DecoderState& _state;
 
 		void update_result(const int result) const {
 			if (result < 0) {
-				_decoder_state.good = false;
+				_state.good = false;
 			} else if (result > 0) {
-				_decoder_state.total_written += result;
+				_state.begin += result;
+				_state.total_written += result;
 			} else {
 			}
 
-			_decoder_state.last_result = result;
+			_state.last_result = result;
 		}
 
 		template <typename Action>
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (
-					InputIterator&, InputIterator,
-					Entity&
-				)
+				int (Iterator, Iterator, Entity&)
 			>
 		>::type
 		process() const {
 			update_result(
-				Action()(
-					_decoder_state.next, _decoder_state.end,
-					_entity
-				)
+				Action()(_state.begin, _state.end, _entity)
 			);
 		}
 
@@ -116,20 +108,12 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (
-					InputIterator&, InputIterator,
-					Entity&,
-					const Path&
-				)
+				int (Iterator, Iterator, Entity&, const Path&)
 			>
 		>::type
 		process() const {
 			update_result(
-				Action()(
-					_decoder_state.next, _decoder_state.end,
-					_entity,
-					mplx::nullref<Path>()
-				)
+				Action()(_state.begin, _state.end, _entity, mplx::nullref<Path>())
 			);
 		}
 
@@ -137,70 +121,73 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (
-					InputIterator&, InputIterator,
-					Entity&,
-					const Path&,
-					typename DecoderState::substate_type&
-				)
+				int (Iterator, Iterator, Entity&, const Path&, UserState&)
 			>
 		>::type
 		process() const {
 			update_result(
-				Action()(
-					_decoder_state.next, _decoder_state.end,
-					_entity,
-					mplx::nullref<Path>(),
-					_decoder_state.substate
-				)
+				Action()(_state.begin, _state.end, _entity, mplx::nullref<Path>(), _state.substate)
 			);
 		}
 
 	public:
 		decoder_enter_or_leave_action(Entity& entity, DecoderState& decoder_state)
-		 : _entity(entity), _decoder_state(decoder_state) {}
+		 : _entity(entity), _state(decoder_state) {}
 
 		template <typename Action>
 		void operator()(Action&) const {
-			if (_decoder_state.good) {
+			if (_state.good) {
 				process<Action>();
 			}
 		}
 	};
 
-	template <class Member, class Entity, class Path, class DecoderState, typename InputIterator = typename DecoderState::iterator_type>
+	template <
+		class Member,
+		class Entity, class Path, class DecoderState,
+		typename Iterator = typename DecoderState::iterator_type,
+		typename UserState = typename DecoderState::substate_type
+	>
 	class decoder_member_action {
 		Entity& _entity;
-		DecoderState& _decoder_state;
+		DecoderState& _state;
 
 		void update_result(const int result) const {
 			if (result < 0) {
-				_decoder_state.good = false;
+				_state.good = false;
 			} else if (result > 0) {
-				_decoder_state.total_written += result;
+				_state.begin += result;
+				_state.total_written += result;
 			} else {
 			}
 
-			_decoder_state.last_result = result;
+			_state.last_result = result;
 		}
 
 		template <typename Action>
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (
-					InputIterator&, InputIterator,
-					const Member&,
-					Entity&
-				)
+				int (Iterator, Iterator, const Member&, Entity&)
+			>
+		>::type
+		process() const {
+			update_result(
+				Action()(_state.begin, _state.end, mplx::nullref<Member>(), _entity)
+			);
+		}
+
+		template <typename Action>
+		typename boost::enable_if<
+			moneta::traits::detail::is_functor_callable<
+				Action,
+				int (Iterator, Iterator, const Member&, Entity&, const Path&)
 			>
 		>::type
 		process() const {
 			update_result(
 				Action()(
-					_decoder_state.next, _decoder_state.end,
-					mplx::nullref<Member>(),
-					_entity
+					_state.begin, _state.end, mplx::nullref<Member>(), _entity, mplx::nullref<Path>()
 				)
 			);
 		}
@@ -209,96 +196,63 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (
-					InputIterator&, InputIterator,
-					const Member&,
-					Entity&,
-					const Path&
-				)
+				int (Iterator, Iterator, const Member&, Entity&, const Path&, UserState&)
 			>
 		>::type
 		process() const {
 			update_result(
 				Action()(
-					_decoder_state.next, _decoder_state.end,
+					_state.begin, _state.end,
 					mplx::nullref<Member>(),
-					_entity,
-					mplx::nullref<Path>()
-				)
-			);
-		}
-
-		template <typename Action>
-		typename boost::enable_if<
-			moneta::traits::detail::is_functor_callable<
-				Action,
-				int (
-					InputIterator&, InputIterator,
-					const Member&,
-					Entity&,
-					const Path&,
-					typename DecoderState::substate_type&
-				)
-			>
-		>::type
-		process() const {
-			update_result(
-				Action()(
-					_decoder_state.next, _decoder_state.end,
-					mplx::nullref<Member>(),
-					_entity,
-					mplx::nullref<Path>(),
-					_decoder_state.substate
+					_entity, mplx::nullref<Path>(), _state.substate
 				)
 			);
 		}
 			
 	public:
 		decoder_member_action(Entity& entity, DecoderState& decoder_state)
-		 : _entity(entity), _decoder_state(decoder_state) {}
+		 : _entity(entity), _state(decoder_state) {}
 
 		template <typename Action>
 		void operator()(Action&) const {
-			if (_decoder_state.good) {
+			if (_state.good) {
 				process<Action>();
 			}
 		}
 	};
 
-	template <class Member, class Entity, class Path, class DecoderState, typename InputIterator = typename DecoderState::iterator_type>
+	template <
+		class Member,
+		class Entity, class Path, class DecoderState,
+		typename Iterator = typename DecoderState::iterator_type,
+		typename UserState = typename DecoderState::substate_type
+	>
 	class decoder_container_enter_or_leave_action {
 		Entity& _entity;
-		DecoderState& _decoder_state;
+		DecoderState& _state;
 
 		void update_result(const int result) const {
 			if (result < 0) {
-				_decoder_state.good = false;
+				_state.good = false;
 			} else if (result > 0) {
-				_decoder_state.total_written += result;
+				_state.begin += result;
+				_state.total_written += result;
 			} else {
 			}
 
-			_decoder_state.last_result = result;
+			_state.last_result = result;
 		}
 
 		template <typename Action>
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (
-					InputIterator&, InputIterator,
-					const Member&,
-					Entity&
-				)
+				int (Iterator, Iterator, const Member&, Entity&)
 			>
 		>::type
 		process() const {
 			update_result(
-				Action()(
-					_decoder_state.next, _decoder_state.end,
-					mplx::nullref<Member>(),
-					_entity
-				)
+				Action()(_state.begin, _state.end, mplx::nullref<Member>(), _entity)
 			);
 		}
 
@@ -306,22 +260,12 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (
-					InputIterator&, InputIterator,
-					const Member&,
-					Entity&,
-					const Path&
-				)
+				int (Iterator, Iterator, const Member&, Entity&, const Path&)
 			>
 		>::type
 		process() const {
 			update_result(
-				Action()(
-					_decoder_state.next, _decoder_state.end,
-					mplx::nullref<Member>(),
-					_entity,
-					mplx::nullref<Path>()
-				)
+				Action()(_state.begin, _state.end, mplx::nullref<Member>(), _entity, mplx::nullref<Path>())
 			);
 		}
 
@@ -329,30 +273,22 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (
-					InputIterator&, InputIterator,
-					const Member&,
-					Entity&,
-					const Path&,
-					typename DecoderState::substate_type&
-				)
+				int (Iterator, Iterator, const Member&, Entity&, const Path&, UserState&)
 			>
 		>::type
 		process() const {
 			update_result(
 				Action()(
-					_decoder_state.next, _decoder_state.end,
+					_state.begin, _state.end,
 					mplx::nullref<Member>(),
-					_entity,
-					mplx::nullref<Path>(),
-					_decoder_state.substate
+					_entity, mplx::nullref<Path>(), _state.substate
 				)
 			);
 		}
 
 	public:
 		decoder_container_enter_or_leave_action(Entity& entity, DecoderState& decoder_state)
-		 : _entity(entity), _decoder_state(decoder_state) {}
+		 : _entity(entity), _state(decoder_state) {}
 
 		template <typename Action>
 		void operator()(Action&) const {
@@ -360,42 +296,55 @@ namespace moneta { namespace codec {
 		}
 	};
 
-	template <class Value, class Member, class Entity, class Path, class DecoderState, typename InputIterator = typename DecoderState::iterator_type>
+	template <
+		class Value, class Member,
+		class Entity, class Path, class DecoderState,
+		typename Iterator = typename DecoderState::iterator_type,
+		typename UserState = typename DecoderState::substate_type
+	>
 	class decoder_container_item_action {
 		Value& _value;
 		Entity& _entity;
-		DecoderState& _decoder_state;
+		DecoderState& _state;
 
 		void update_result(const int result) const {
 			if (result < 0) {
-				_decoder_state.good = false;
+				_state.good = false;
 			} else if (result > 0) {
-				_decoder_state.total_written += result;
+				_state.begin += result;
+				_state.total_written += result;
 			} else {
 			}
 
-			_decoder_state.last_result = result;
+			_state.last_result = result;
 		}
 
 		template <typename Action>
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (
-					InputIterator&, InputIterator,
-					Value&,
-					const Member&,
-					Entity&
-				)
+				int (Iterator, Iterator, Value&, const Member&, Entity&)
+			>
+		>::type
+		process() const {
+			update_result(
+				Action()(_state.begin, _state.end, _value, mplx::nullref<Member>(), _entity)
+			);
+		}
+
+		template <typename Action>
+		typename boost::enable_if<
+			moneta::traits::detail::is_functor_callable<
+				Action,
+				int (Iterator, Iterator, Value&, const Member&, Entity&, const Path&)
 			>
 		>::type
 		process() const {
 			update_result(
 				Action()(
-					_decoder_state.next, _decoder_state.end,
-					_value,
-					mplx::nullref<Member>(),
-					_entity
+					_state.begin, _state.end,
+					_value, mplx::nullref<Member>(),
+					_entity, mplx::nullref<Path>()
 				)
 			);
 		}
@@ -404,57 +353,22 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (
-					InputIterator&, InputIterator,
-					Value&,
-					const Member&,
-					Entity&,
-					const Path&
-				)
+				int (Iterator, Iterator, Value&, const Member&, Entity&, const Path&, UserState&)
 			>
 		>::type
 		process() const {
 			update_result(
 				Action()(
-					_decoder_state.next, _decoder_state.end,
-					_value,
-					mplx::nullref<Member>(),
-					_entity,
-					mplx::nullref<Path>()
-				)
-			);
-		}
-
-		template <typename Action>
-		typename boost::enable_if<
-			moneta::traits::detail::is_functor_callable<
-				Action,
-				int (
-					InputIterator&, InputIterator,
-					Value&,
-					const Member&,
-					Entity&,
-					const Path&,
-					typename DecoderState::substate_type&
-				)
-			>
-		>::type
-		process() const {
-			update_result(
-				Action()(
-					_decoder_state.next, _decoder_state.end,
-					_value,
-					mplx::nullref<Member>(),
-					_entity,
-					mplx::nullref<Path>(),
-					_decoder_state.substate
+					_state.begin, _state.end,
+					_value, mplx::nullref<Member>(),
+					_entity, mplx::nullref<Path>(), _state.substate
 				)
 			);
 		}
 
 	public:
 		decoder_container_item_action(Value& value, Entity& entity, DecoderState& decoder_state)
-		 : _value(value), _entity(entity), _decoder_state(decoder_state) {}
+		 : _value(value), _entity(entity), _state(decoder_state) {}
 
 		template <typename Action>
 		void operator()(Action&) const {
@@ -547,11 +461,8 @@ namespace moneta { namespace codec {
 		
 		typedef boost::mpl::vector<T, MONETA_TRAVERSE_PARAMS> mpl_vector;
 
-		template <class InputIterator, class Entity, class Path, class State>
-		int _decode(
-			InputIterator& next, InputIterator end, Entity& entity,
-			Path* path = 0, State& state = State()
-		) const {
+		template <class Iterator, class Entity, class Path, class State>
+		int _decode(Iterator begin, Iterator end, Entity& entity, Path* path = 0, State& state = State()) const {
 			using namespace moneta::algorithm;
 
 			typedef moneta::algorithm::traverse<
@@ -563,42 +474,38 @@ namespace moneta { namespace codec {
 				leave_container_actions<decoder_leave_container>
 			> traverser;
 
-			detail::decoder_state<mpl_vector, InputIterator, State> decoder_state(next, end, state);
+			detail::decoder_state<mpl_vector, Iterator, State> decoder_state(begin, end, state);
 			traverser()(entity, decoder_state);
 
 			return (decoder_state.good)? decoder_state.total_written : decoder_state.last_result;
 		}
 
 	public:
-		template <class InputIterator, class Entity>
-		int operator()(
-			InputIterator& next, InputIterator end, Entity& entity
-		) {
+		template <class Iterator, class Entity>
+		int operator()(Iterator begin, Iterator end, Entity& entity) {
 			const boost::mpl::vector0<>* path = 0;
 			const detail::no_state state = detail::no_state();
-			return _decode(next, end, entity, path, state);
+			return _decode(begin, end, entity, path, state);
 		}
 
-		template <class InputIterator, class Entity, class State>
-		int operator()(
-			InputIterator& next, InputIterator end, Entity& entity, State& state
-		) {
+		template <class Iterator, class Entity, class State>
+		int operator()(Iterator begin, Iterator end, Entity& entity, State& state) {
 			const boost::mpl::vector0<>* path = 0;
-			return _decode(next, end, entity, path, state);
+			return _decode(begin, end, entity, path, state);
 		}
 	};
 
 	//
 	// Syntax candy
 	//
-	template <class Decoder, class InputIterator, class Entity>
-	int decode(InputIterator next, InputIterator end, Entity& entity) {
-		return Decoder()(next, end, entity);
+	template <class Decoder, class Iterator, class Entity>
+	int decode(Iterator begin, Iterator end, Entity& entity) {
+		return Decoder()(begin, end, entity);
 	}
 
-	template <class Decoder, class InputIterator, class Entity, class State>
-	int decode(InputIterator next, InputIterator end, Entity& entity, State& state) {
-		return Decoder()(next, end, entity, state);
+	template <class Decoder, class Iterator, class Entity, class State>
+	int decode(Iterator begin, Iterator end, Entity& entity, State& state) {
+		return Decoder()(begin, end, entity, state);
 	}
 
 }}
