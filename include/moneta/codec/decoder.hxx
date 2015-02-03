@@ -491,13 +491,11 @@ namespace moneta { namespace codec {
 				decoder_member_action<Member, Entity, Path, DecoderState>(entity, decoder_state)
 			);
 
-			if (decoder_state.good) {
-				if (Member()(entity) != traits::detail::fixed_value<Member>::get()) {
-					decoder_state.good = false;
-				}
-			}
-
-			return 0;
+			//if (decoder_state.good) {
+			//	if (Member()(entity) != traits::detail::fixed_value<Member>::get()) {
+			//		decoder_state.good = false;
+			//	}
+			//}
 		}
 	};
 

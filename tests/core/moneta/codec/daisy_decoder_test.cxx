@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include <moneta/codec/rawbin/rawbin_decoder.hxx>
-#include <moneta/codec/group_decoder.hxx>
+#include <moneta/codec/daisy_decoder.hxx>
 #include "../model/simple/ThreeInts.hxx"
 #include "../model/simple/FourInts.hxx"
 
@@ -22,15 +22,15 @@ struct entity_visitor : boost::static_visitor<void> {
 	}
 };
 
-BOOST_AUTO_TEST_CASE(simple_group_decoder_test) {
-	using moneta::codec::group_decoder;
+BOOST_AUTO_TEST_CASE(simple_daisy_decoder_test) {
+	using moneta::codec::daisy_decoder;
 
 	unsigned char good_threeint[16] = {
 		0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0x22,
 		0x55, 0x55, 0x55, 0x55, 0x00, 0x00, 0x00, 0x00
 	};
 
-	group_decoder<moneta::codec::rawbin_decoder, ThreeInts, FourInts> decoder;
+	daisy_decoder<moneta::codec::rawbin_decoder, ThreeInts, FourInts> decoder;
 
 	std::ostringstream oss;
 	entity_visitor visitor(oss);
@@ -40,15 +40,15 @@ BOOST_AUTO_TEST_CASE(simple_group_decoder_test) {
 	BOOST_CHECK_EQUAL(oss.str(), "ThreeInts:");
 }
 
-BOOST_AUTO_TEST_CASE(simple2_group_decoder_test) {
-	using moneta::codec::group_decoder;
+BOOST_AUTO_TEST_CASE(simple2_daisy_decoder_test) {
+	using moneta::codec::daisy_decoder;
 
 	unsigned char bad_threeint[16] = {
 		0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0xba, 0xd2,
 		0x55, 0x55, 0x55, 0x55, 0x00, 0x00, 0x00, 0x00
 	};
 
-	group_decoder<moneta::codec::rawbin_decoder, ThreeInts, FourInts> decoder;
+	daisy_decoder<moneta::codec::rawbin_decoder, ThreeInts, FourInts> decoder;
 
 	std::ostringstream oss;
 	entity_visitor visitor(oss);
