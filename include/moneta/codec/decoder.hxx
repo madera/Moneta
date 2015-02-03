@@ -1,5 +1,6 @@
 #pragma once
 #include "../algorithm/traverse.hxx"
+#include "../traits/fixed_values.hxx"
 
 // TODO: Put in detail, well, the detail impls...
 
@@ -472,10 +473,31 @@ namespace moneta { namespace codec {
 
 	struct decoder_member {
 		template <class Member, class Entity, class Path, class DecoderState>
-		void operator()(Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
+		typename boost::enable_if<
+			traits::detail::fixed_value<Member>
+		>::type
+		operator()(Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
 			boost::mpl::for_each<typename DecoderState::member_actions>(
 				decoder_member_action<Member, Entity, Path, DecoderState>(entity, decoder_state)
 			);
+		}
+
+		template <class Member, class Entity, class Path, class DecoderState>
+		typename boost::disable_if<
+			traits::detail::fixed_value<Member>
+		>::type
+		operator()(Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
+			boost::mpl::for_each<typename DecoderState::member_actions>(
+				decoder_member_action<Member, Entity, Path, DecoderState>(entity, decoder_state)
+			);
+
+			if (decoder_state.good) {
+				if (Member()(entity) != traits::detail::fixed_value<Member>::get()) {
+					decoder_state.good = false;
+				}
+			}
+
+			return 0;
 		}
 	};
 

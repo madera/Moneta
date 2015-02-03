@@ -6,13 +6,19 @@
 
 #include <boost/variant/static_visitor.hpp>
 
-struct printer : boost::static_visitor<int> {
-	int operator()(const ThreeInts& entity) const {
-		return 3;
+struct entity_visitor : boost::static_visitor<void> {
+	std::ostringstream& _output;
+
+	entity_visitor(std::ostringstream& output)
+	 : _output(output) {
 	}
 
-	int operator()(const FourInts& entity) const {
-		return 4;
+	void operator()(const ThreeInts& entity) const {
+		_output << "ThreeInts:";
+	}
+
+	void operator()(const FourInts& entity) const {
+		_output << "FourInts:";
 	}
 };
 
@@ -25,13 +31,13 @@ BOOST_AUTO_TEST_CASE(simple_group_decoder_test) {
 	};
 
 	group_decoder<moneta::codec::rawbin_decoder, ThreeInts, FourInts> decoder;
-	group_decoder<moneta::codec::rawbin_decoder, ThreeInts, FourInts>::variant_type entity;
 
-	int result = decoder(entity, good_threeint, good_threeint + 16);
+	std::ostringstream oss;
+	entity_visitor visitor(oss);
+
+	int result = decoder(std::begin(good_threeint), std::end(good_threeint), visitor);
 	BOOST_CHECK_EQUAL(result, 12);
-
-	const int type_ordinal = boost::apply_visitor(printer(), entity);
-	BOOST_CHECK_EQUAL(type_ordinal, 3);
+	BOOST_CHECK_EQUAL(oss.str(), "ThreeInts:");
 }
 
 BOOST_AUTO_TEST_CASE(simple2_group_decoder_test) {
@@ -43,11 +49,11 @@ BOOST_AUTO_TEST_CASE(simple2_group_decoder_test) {
 	};
 
 	group_decoder<moneta::codec::rawbin_decoder, ThreeInts, FourInts> decoder;
-	group_decoder<moneta::codec::rawbin_decoder, ThreeInts, FourInts>::variant_type entity;
 
-	int result = decoder(entity, bad_threeint, bad_threeint + 16);
+	std::ostringstream oss;
+	entity_visitor visitor(oss);
+
+	int result = decoder(std::begin(bad_threeint), std::end(bad_threeint), visitor);
 	BOOST_CHECK_EQUAL(result, 16);
-
-	const int type_ordinal = boost::apply_visitor(printer(), entity);
-	BOOST_CHECK_EQUAL(type_ordinal, 4);
+	BOOST_CHECK_EQUAL(oss.str(), "FourInts:");
 }

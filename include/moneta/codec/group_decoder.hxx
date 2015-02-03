@@ -15,7 +15,6 @@ namespace moneta { namespace codec {
 		struct attempt_decode {
 
 			struct state {
-				// XXX: Review these.
 				RandomAccessIterator& begin;
 				RandomAccessIterator& end;
 				Variant& entity;
