@@ -394,6 +394,14 @@ namespace moneta { namespace codec {
 			boost::mpl::for_each<typename DecoderState::member_actions>(
 				decoder_member_action<Member, Entity, Path, DecoderState>(entity, decoder_state)
 			);
+
+			if (decoder_state.good) {
+				if (Member()(entity) != traits::detail::fixed_value<Member>::get()) {
+					decoder_state.good = false;
+					decoder_state.total_written = 0; // XXX: Confirm this is needed.
+					decoder_state.last_result = 0;
+				}
+			}
 		}
 
 		template <class Member, class Entity, class Path, class DecoderState>
@@ -404,12 +412,6 @@ namespace moneta { namespace codec {
 			boost::mpl::for_each<typename DecoderState::member_actions>(
 				decoder_member_action<Member, Entity, Path, DecoderState>(entity, decoder_state)
 			);
-
-			//if (decoder_state.good) {
-			//	if (Member()(entity) != traits::detail::fixed_value<Member>::get()) {
-			//		decoder_state.good = false;
-			//	}
-			//}
 		}
 	};
 

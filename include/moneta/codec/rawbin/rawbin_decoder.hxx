@@ -24,10 +24,10 @@ namespace moneta { namespace codec { namespace rawbin_implementation {
 			if (length < value_size) {
 				return length - value_size;
 			}
-
-			value_type* p = (value_type*)&begin;
+			
+			// XXX: FIX THIS!!
+			value_type* p = (value_type*)begin;
 			Member()(entity) = *p;
-			begin += value_size;
 
 			//io::copy_n(data, data + value_size, value_size, begin);
 

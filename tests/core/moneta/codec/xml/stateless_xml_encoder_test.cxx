@@ -42,8 +42,7 @@ BOOST_AUTO_TEST_CASE(stateless_xml_encoder_basic_test) {
 	char buffer[1024];
 	std::fill(buffer, buffer + sizeof(buffer), 0);
 
-	char* itr = std::begin(buffer);
-	const int result = stateless_xml_encoder()(itr, buffer + sizeof(buffer) - 1, A());
+	const int result = stateless_xml_encoder()(std::begin(buffer), buffer + sizeof(buffer) - 1, A());
 
 	static const std::string expected =
 		"<A f=\"0\" g=\"0\" h=\"0\">\n"
@@ -81,9 +80,8 @@ BOOST_AUTO_TEST_CASE(composite_encode_stateless_xml_encoder_test) {
 	char buffer[256];
 	std::fill(std::begin(buffer), std::end(buffer), 0);
 
-	char* itr = std::begin(buffer);
 	const Composite composite = make_composite();
-	const int result = stateless_xml_encoder()(itr, buffer + sizeof(buffer) - 1, composite);
+	const int result = stateless_xml_encoder()(std::begin(buffer), buffer + sizeof(buffer) - 1, composite);
 
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(expected, buffer);
@@ -108,8 +106,7 @@ BOOST_AUTO_TEST_CASE(tree_encode_stateless_xml_encoder_test) {
 	char buffer[256];
 	std::fill(std::begin(buffer), std::end(buffer), 0);
 
-	char* itr = std::begin(buffer);
-	const int result = stateless_xml_encoder()(itr, buffer + sizeof(buffer) - 1, A());
+	const int result = stateless_xml_encoder()(std::begin(buffer), buffer + sizeof(buffer) - 1, A());
 
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(expected, buffer);
@@ -178,8 +175,7 @@ BOOST_AUTO_TEST_CASE(country_with_string_Persons_stateless_xml_encoder_test) {
 
 	using namespace moneta::codec;
 
-	char* itr = std::begin(buffer);
-	const int result = stateless_xml_encoder()(itr, std::end(buffer), cwss);
+	const int result = stateless_xml_encoder()(std::begin(buffer), std::end(buffer), cwss);
 
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(buffer, expected);
