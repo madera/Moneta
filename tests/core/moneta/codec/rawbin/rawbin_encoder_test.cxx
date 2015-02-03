@@ -19,7 +19,8 @@ BOOST_AUTO_TEST_CASE(simple_rawbin_encoder_test) {
 	ints.Three = 0x33333333;
 
 	unsigned char* itr = std::begin(buffer);
-	moneta::codec::rawbin_encoder()(itr, std::end(buffer), ints);
+	int result = moneta::codec::rawbin_encoder()(itr, std::end(buffer), ints);
+	BOOST_CHECK_EQUAL(result, 12);
 	BOOST_CHECK_EQUAL_COLLECTIONS(std::begin(buffer), std::end(buffer), std::begin(expected), std::end(expected));
 }
 

@@ -6,16 +6,12 @@
 namespace moneta { namespace codec { namespace rawbin_implementation {
 
 	struct member_decoder {
-		template <class InputIterator, class Member, class Entity, class Path>
+		template <class Iterator, class Member, class Entity, class Path>
 		typename boost::enable_if<
 			boost::is_pod<typename Member::result_type>,
 			int
 		>::type
-		operator()(
-			InputIterator& next, InputIterator end,
-			const Member&,
-			Entity& entity, const Path&
-		) const {
+		operator()(Iterator begin, Iterator end, const Member&, Entity& entity, const Path&) const {
 			typedef typename boost::add_const<
 				typename Member::result_type
 			>::type value_type;
@@ -24,16 +20,16 @@ namespace moneta { namespace codec { namespace rawbin_implementation {
 			// XXX: This is trash. Fix this!!
 
 			const size_t value_size = sizeof(value_type);
-			int length = std::distance(next, end); // XXX: No. Just no.
+			int length = std::distance(begin, end); // XXX: No. Just no.
 			if (length < value_size) {
 				return length - value_size;
 			}
 
-			value_type* p = (value_type*)&next;
+			value_type* p = (value_type*)&begin;
 			Member()(entity) = *p;
-			next += value_size;
+			begin += value_size;
 
-			//io::copy_n(data, data + value_size, value_size, next);
+			//io::copy_n(data, data + value_size, value_size, begin);
 
 			return value_size;
 		}

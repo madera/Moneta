@@ -11,18 +11,19 @@ namespace moneta { namespace codec {
 	
 	namespace detail {
 
-		template <class Codec, class Variant, class RandomAccessIterator>
+		template <class Codec, class Variant, class Iterator>
 		struct attempt_decode {
 
+			// XXX: Review these reference members.
 			struct state {
-				RandomAccessIterator& begin;
-				RandomAccessIterator& end;
+				Iterator& begin;
+				Iterator& end;
 				Variant& entity;
 
 				bool done;
 				size_t total_read;
 
-				state(Variant& entity_, RandomAccessIterator& begin_, RandomAccessIterator& end_)
+				state(Variant& entity_, Iterator& begin_, Iterator& end_)
 				 : entity(entity_), begin(begin_), end(end_), done(false), total_read(0) {}
 			};
 
@@ -65,18 +66,18 @@ namespace moneta { namespace codec {
 		>::type variant_type;
 
 		// XXX: Deprecated
-		template <class RandomAccessIterator>
-		int operator()(variant_type& result, RandomAccessIterator begin, RandomAccessIterator end) const {
-			typedef detail::attempt_decode<Codec, variant_type, RandomAccessIterator> decoder_type;
+		template <class Iterator>
+		int operator()(variant_type& result, Iterator begin, Iterator end) const {
+			typedef detail::attempt_decode<Codec, variant_type, Iterator> decoder_type;
 			typename decoder_type::state state(result, begin, end);
 			boost::mpl::for_each<typename variant_type::types>(decoder_type(state));
 			return state.total_read;
 		}
 
-		template <class RandomAccessIterator, class Visitor>
-		int operator()(RandomAccessIterator begin, RandomAccessIterator end, Visitor& visitor) const {
+		template <class Iterator, class Visitor>
+		int operator()(Iterator begin, Iterator end, Visitor& visitor) const {
 			variant_type result;
-			typedef detail::attempt_decode<Codec, variant_type, RandomAccessIterator> decoder_type;
+			typedef detail::attempt_decode<Codec, variant_type, Iterator> decoder_type;
 			typename decoder_type::state state(result, begin, end);
 			boost::mpl::for_each<typename variant_type::types>(decoder_type(state));
 			boost::apply_visitor(visitor, result);

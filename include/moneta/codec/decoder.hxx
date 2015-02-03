@@ -16,11 +16,11 @@ namespace moneta { namespace codec {
 	namespace detail {
 		using namespace moneta::algorithm::detail;
 
-		template <class Actions, typename Iterator, class Substate>
+		template <class Actions, typename Iterator, class UserState>
 		struct decoder_state {
 			typedef Actions actions;
 			typedef Iterator iterator_type;
-			typedef Substate substate_type;
+			typedef UserState userstate_type;
 
 			//
 			//
@@ -62,9 +62,9 @@ namespace moneta { namespace codec {
 			int total_written;
 			int last_result;
 			
-			Substate& substate;
+			UserState& substate;
 
-			decoder_state(Iterator begin_, Iterator end_, Substate& substate_)
+			decoder_state(Iterator begin_, Iterator end_, UserState& substate_)
 			 : begin(begin_), end(end_), substate(substate_), good(true), total_written(0), last_result(0) {
 			}
 		};
@@ -73,7 +73,7 @@ namespace moneta { namespace codec {
 	template <
 		class Entity, class Path, class DecoderState,
 		typename Iterator = typename DecoderState::iterator_type,
-		typename UserState = typename DecoderState::substate_type
+		typename UserState = typename DecoderState::userstate_type
 	>
 	class decoder_enter_or_leave_action {
 		Entity& _entity;
@@ -146,7 +146,7 @@ namespace moneta { namespace codec {
 		class Member,
 		class Entity, class Path, class DecoderState,
 		typename Iterator = typename DecoderState::iterator_type,
-		typename UserState = typename DecoderState::substate_type
+		typename UserState = typename DecoderState::userstate_type
 	>
 	class decoder_member_action {
 		Entity& _entity;
@@ -225,7 +225,7 @@ namespace moneta { namespace codec {
 		class Member,
 		class Entity, class Path, class DecoderState,
 		typename Iterator = typename DecoderState::iterator_type,
-		typename UserState = typename DecoderState::substate_type
+		typename UserState = typename DecoderState::userstate_type
 	>
 	class decoder_container_enter_or_leave_action {
 		Entity& _entity;
@@ -300,7 +300,7 @@ namespace moneta { namespace codec {
 		class Value, class Member,
 		class Entity, class Path, class DecoderState,
 		typename Iterator = typename DecoderState::iterator_type,
-		typename UserState = typename DecoderState::substate_type
+		typename UserState = typename DecoderState::userstate_type
 	>
 	class decoder_container_item_action {
 		Value& _value;
@@ -462,7 +462,10 @@ namespace moneta { namespace codec {
 		typedef boost::mpl::vector<T, MONETA_TRAVERSE_PARAMS> mpl_vector;
 
 		template <class Iterator, class Entity, class Path, class State>
-		int _decode(Iterator begin, Iterator end, Entity& entity, Path* path = 0, State& state = State()) const {
+		int _decode(
+			Iterator begin, Iterator end, Entity& entity,
+			Path* path = 0, State& state = State()
+		) const {
 			using namespace moneta::algorithm;
 
 			typedef moneta::algorithm::traverse<

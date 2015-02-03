@@ -10,7 +10,6 @@ BOOST_AUTO_TEST_CASE(test_codec_io_write_string_basic) {
 
 	char* itr = std::begin(buffer);
 	BOOST_CHECK_EQUAL(io::write(itr, std::end(buffer), "abcdef"), 6 + 1);
-	BOOST_CHECK_EQUAL(itr, std::begin(buffer) + 6);
 }
 
 BOOST_AUTO_TEST_CASE(test_codec_io_write_string_no_null) {
@@ -18,7 +17,6 @@ BOOST_AUTO_TEST_CASE(test_codec_io_write_string_no_null) {
 
 	char* itr = std::begin(buffer);
 	BOOST_CHECK_EQUAL(io::write(itr, std::end(buffer), "abc", false), 3);
-	BOOST_CHECK_EQUAL(itr, std::begin(buffer) + 3);
 	BOOST_CHECK_EQUAL(buffer, "abcXXX");
 }
 
@@ -37,36 +35,32 @@ BOOST_AUTO_TEST_CASE(test_codec_io_write_string_scarce_output) {
 	BOOST_CHECK_EQUAL(itr, std::begin(buffer));
 
 	//
-	// Progressive writes
+	// Progressive residual writes tests
 	//
 	BOOST_CHECK_EQUAL(io::write(itr, itr, "abcdef", false), -6);
-	BOOST_CHECK_EQUAL(itr, std::begin(buffer));
-
 	BOOST_CHECK_EQUAL(io::write(itr, itr, "abcdef"), -7);
-	BOOST_CHECK_EQUAL(itr, std::begin(buffer));
 
 	BOOST_CHECK_EQUAL(io::write(itr, itr + 1, "abcdef"), -6);
-	BOOST_CHECK_EQUAL(itr, std::begin(buffer) + 1);
 	BOOST_CHECK_EQUAL(buffer, "aXXXXX");
 
+	++itr;
 	BOOST_CHECK_EQUAL(io::write(itr, itr + 1, "bcdef"), -5);
-	BOOST_CHECK_EQUAL(itr, std::begin(buffer) + 2);
 	BOOST_CHECK_EQUAL(buffer, "abXXXX");
 
+	++itr;
 	BOOST_CHECK_EQUAL(io::write(itr, itr + 1, "cdef"), -4);
-	BOOST_CHECK_EQUAL(itr, std::begin(buffer) + 3);
 	BOOST_CHECK_EQUAL(buffer, "abcXXX");
 
+	++itr;
 	BOOST_CHECK_EQUAL(io::write(itr, itr + 1, "def"), -3);
-	BOOST_CHECK_EQUAL(itr, std::begin(buffer) + 4);
 	BOOST_CHECK_EQUAL(buffer, "abcdXX");
 
+	++itr;
 	BOOST_CHECK_EQUAL(io::write(itr, itr + 1, "ef"), -2);
-	BOOST_CHECK_EQUAL(itr, std::begin(buffer) + 5);
 	BOOST_CHECK_EQUAL(buffer, "abcdeX");
 
+	++itr;
 	BOOST_CHECK_EQUAL(io::write(itr, itr + 1, "f"), -1);
-	BOOST_CHECK_EQUAL(itr, std::begin(buffer) + 6);
 	BOOST_CHECK_EQUAL(buffer, "abcdef");
 }
 
@@ -82,12 +76,12 @@ BOOST_AUTO_TEST_CASE(test_codec_io_write_string_scarce_output_2) {
 	BOOST_CHECK_EQUAL(io::write(itr, std::end(v0), text), 7);
 	BOOST_CHECK_EQUAL_COLLECTIONS(v0, v0+7, text, text+7);
 
-	itr = std::begin(v0); BOOST_CHECK_EQUAL(io::write(itr, std::begin(v0) + 0, text), -7);
-	itr = std::begin(v0); BOOST_CHECK_EQUAL(io::write(itr, std::begin(v0) + 1, text), -6);
-	itr = std::begin(v0); BOOST_CHECK_EQUAL(io::write(itr, std::begin(v0) + 2, text), -5);
-	itr = std::begin(v0); BOOST_CHECK_EQUAL(io::write(itr, std::begin(v0) + 3, text), -4);
-	itr = std::begin(v0); BOOST_CHECK_EQUAL(io::write(itr, std::begin(v0) + 4, text), -3);
-	itr = std::begin(v0); BOOST_CHECK_EQUAL(io::write(itr, std::begin(v0) + 5, text), -2);
-	itr = std::begin(v0); BOOST_CHECK_EQUAL(io::write(itr, std::begin(v0) + 6, text), -1);
-	itr = std::begin(v0); BOOST_CHECK_EQUAL(io::write(itr, std::begin(v0) + 7, text),  7);
+	BOOST_CHECK_EQUAL(io::write(itr, std::begin(v0) + 0, text), -7);
+	BOOST_CHECK_EQUAL(io::write(itr, std::begin(v0) + 1, text), -6);
+	BOOST_CHECK_EQUAL(io::write(itr, std::begin(v0) + 2, text), -5);
+	BOOST_CHECK_EQUAL(io::write(itr, std::begin(v0) + 3, text), -4);
+	BOOST_CHECK_EQUAL(io::write(itr, std::begin(v0) + 4, text), -3);
+	BOOST_CHECK_EQUAL(io::write(itr, std::begin(v0) + 5, text), -2);
+	BOOST_CHECK_EQUAL(io::write(itr, std::begin(v0) + 6, text), -1);
+	BOOST_CHECK_EQUAL(io::write(itr, std::begin(v0) + 7, text),  7);
 }

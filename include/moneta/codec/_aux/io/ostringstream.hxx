@@ -13,16 +13,17 @@ namespace moneta { namespace codec { namespace io {
 		bool _good;
 		size_t _total_written;
 
-		OutputIterator& _begin;
+		OutputIterator _begin;
 		OutputIterator  _end;
 
-		ostringstream(OutputIterator& begin, OutputIterator end)
+		ostringstream(OutputIterator begin, OutputIterator end)
 		 : _good(true), _total_written(0), _begin(begin), _end(end) {}
 
-		this_type& operator<<(boost::function<int (OutputIterator&, OutputIterator)> callable) {
+		this_type& operator<<(boost::function<int (OutputIterator, OutputIterator)> callable) {
 			if (_good) {
 				int result = callable(_begin, _end);
 				if (result > 0) {
+					_begin += result;
 					_total_written += result;
 				} else if (result == 0) {
 				} else if (result < 0) {
@@ -38,6 +39,7 @@ namespace moneta { namespace codec { namespace io {
 			if (_good) {
 				int result = io::write(_begin, _end, string, false);
 				if (result > 0) {
+					_begin += result;
 					_total_written += result;
 				} else if (result == 0) {
 				} else if (result < 0) {
@@ -67,6 +69,7 @@ namespace moneta { namespace codec { namespace io {
 			if (_good) {
 				int result = io::write(_begin, _end, string.c_str(), false);
 				if (result > 0) {
+					_begin += result;
 					_total_written += result;
 				} else if (result == 0) {
 				} else if (result < 0) {
@@ -106,7 +109,7 @@ namespace moneta { namespace codec { namespace io {
 	};
 
 	template <class OutputOutputIterator>
-	ostringstream<OutputOutputIterator> make_ostringstream(OutputOutputIterator& begin, OutputOutputIterator end) {
+	ostringstream<OutputOutputIterator> make_ostringstream(OutputOutputIterator begin, OutputOutputIterator end) {
 		return ostringstream<OutputOutputIterator>(begin, end);
 	}
 

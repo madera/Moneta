@@ -7,7 +7,7 @@ namespace moneta { namespace codec {
 
 		template <typename InputIterator, typename OutputIterator>
 		int read(
-			InputIterator& next, InputIterator end,
+			InputIterator next, InputIterator end,
 			OutputIterator result_begin, OutputIterator result_end,
 			const bool zero_terminate = true
 		) {

@@ -30,7 +30,8 @@ BOOST_AUTO_TEST_CASE(shell_encoder_test_1) {
 	;
 
 	char* itr = std::begin(buffer);
-	moneta::codec::shell_encoder()(itr, std::end(buffer), make_composite());
+	int result = moneta::codec::shell_encoder()(itr, std::end(buffer), make_composite());
+	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(buffer, expected);
 }
 
@@ -42,6 +43,7 @@ BOOST_AUTO_TEST_CASE(shell_encoder_test_2) {
 	const std::string expected = "A={ f=0 g=0 B={ C={ j=0 k=0 } i=0 D={ l=0 E={ m=0 n=0 } } } h=0 }";
 
 	char* itr = std::begin(buffer);
-	moneta::codec::shell_encoder()(itr, std::end(buffer), moneta::make_entity<A>());
+	int result = moneta::codec::shell_encoder()(itr, std::end(buffer), moneta::make_entity<A>());
+	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(buffer, expected);
 }

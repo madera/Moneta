@@ -63,7 +63,7 @@ struct testcodec_member {
 
 struct testcodec_leave_entity {
 	template <class Iterator, class Entity, class Path, class State>
-	int operator()(Iterator& begin, Iterator end, Entity& entity, const Path&, State& state) const {
+	int operator()(Iterator begin, Iterator end, Entity& entity, const Path&, State& state) const {
 		if (begin == end) {
 			return -1;
 		}
