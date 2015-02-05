@@ -13,7 +13,7 @@ namespace mplx {
 		boost::mpl::if_<
 			boost::mpl::is_sequence<boost::mpl::_2>,
 			boost::mpl::copy<
-				boost::mpl::_2,
+				mplx::flatten<boost::mpl::_2>,
 				boost::mpl::back_inserter<boost::mpl::_1>
 			>,
 			boost::mpl::push_back<boost::mpl::_1, boost::mpl::_2>

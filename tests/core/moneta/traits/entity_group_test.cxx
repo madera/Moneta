@@ -6,6 +6,7 @@
 #include "../model/Cat.hxx"
 #include "../model/Dog.hxx"
 #include "../model/tree/A.hxx"
+#include "../model/Composite.hxx"
 
 using moneta::traits::entity_group;
 
@@ -17,10 +18,10 @@ inline void static_test() {
 		entity_group<
 			entity_group<
 				entity_group<
-				//	entity_group<
-				//		entity_group<
-				//		>
-				//	>
+					entity_group<
+						entity_group<
+						>
+					>
 				>
 			>
 		>::top,
@@ -116,6 +117,7 @@ inline void static_test() {
 	//
 	// More mixes
 	//
+
 	typedef entity_group<
 		A,
 		entity_group<
@@ -150,14 +152,14 @@ inline void static_test() {
 		A,
 		entity_group<
 			Person,
-			Address/*,
+			Address,
 			entity_group<
 				Cat
-			>*/
+			>
 		>
 	> level2;
 	
-//	BOOST_MPL_ASSERT_RELATION(boost::mpl::size<level2::top>::value, ==, 4);
+	BOOST_MPL_ASSERT_RELATION(boost::mpl::size<level2::top>::value, ==, 4);
 	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level2::top, A>::type, A>));
 	BOOST_MPL_ASSERT_NOT((boost::is_same<boost::mpl::at<level2::top, B>::type, B>));
 	BOOST_MPL_ASSERT_NOT((boost::is_same<boost::mpl::at<level2::top, C>::type, C>));
@@ -165,9 +167,9 @@ inline void static_test() {
 	BOOST_MPL_ASSERT_NOT((boost::is_same<boost::mpl::at<level2::top, E>::type, E>));
 	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level2::top, Person >::type, Person >));
 	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level2::top, Address>::type, Address>));
-//	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level2::top, Cat    >::type, Cat    >));
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level2::top, Cat    >::type, Cat    >));
 
-//	BOOST_MPL_ASSERT_RELATION(boost::mpl::size<level2::type>::value, ==, 8);
+	BOOST_MPL_ASSERT_RELATION(boost::mpl::size<level2::type>::value, ==, 8);
 	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level2::type, A>::type, A>));
 	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level2::type, B>::type, B>));
 	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level2::type, C>::type, C>));
@@ -175,5 +177,54 @@ inline void static_test() {
 	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level2::type, E>::type, E>));
 	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level2::type, Person >::type, Person >));
 	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level2::type, Address>::type, Address>));
-//	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level2::type, Cat    >::type, Cat    >));
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level2::type, Cat    >::type, Cat    >));
+
+	//
+	// Just to be sure...
+	//
+
+	typedef entity_group<
+		A,
+		entity_group<
+			Person,
+			Address,
+			entity_group<
+				Cat,
+				entity_group<
+					Person,
+					Address,
+					entity_group<
+						entity_group<
+							entity_group<E>,
+							entity_group<Composite>
+						>
+					>
+				>
+			>
+		>
+	> level9001;
+
+	BOOST_MPL_ASSERT_RELATION(boost::mpl::size<level9001::top>::value, ==, 6);
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level9001::top, A>::type, A>));
+	BOOST_MPL_ASSERT_NOT((boost::is_same<boost::mpl::at<level9001::top, B>::type, B>));
+	BOOST_MPL_ASSERT_NOT((boost::is_same<boost::mpl::at<level9001::top, C>::type, C>));
+	BOOST_MPL_ASSERT_NOT((boost::is_same<boost::mpl::at<level9001::top, D>::type, D>));
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level9001::top, E>::type, E>));
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level9001::top, Person   >::type, Person   >));
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level9001::top, Address  >::type, Address  >));
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level9001::top, Cat      >::type, Cat      >));
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level9001::top, Composite>::type, Composite>));
+	BOOST_MPL_ASSERT_NOT((boost::is_same<boost::mpl::at<level9001::top, Dog>::type, Dog>));
+
+	BOOST_MPL_ASSERT_RELATION(boost::mpl::size<level9001::type>::value, ==, 10);
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level9001::type, A>::type, A>));
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level9001::type, B>::type, B>));
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level9001::type, C>::type, C>));
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level9001::type, D>::type, D>));
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level9001::type, E>::type, E>));
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level9001::type, Person >::type, Person >));
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level9001::type, Address>::type, Address>));
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level9001::type, Cat      >::type, Cat      >));
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level9001::type, Composite>::type, Composite>));
+	BOOST_MPL_ASSERT((boost::is_same<boost::mpl::at<level9001::type, Dog      >::type, Dog      >));
 }
