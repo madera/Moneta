@@ -38,6 +38,7 @@ TODO:
 	* Add State parameter for codec::encode() and codec::decode().
 	* Make better use of test PCH. Most of the MPL could be inserted.
 	* Watch out for #include <boost/mpl/print.hpp>
+	* Use typename boost::mpl::clear<Sequence>::type for all sequence operations.
 
 Codec:
 	* A visitor-based dispatcher seems appropriate. For now, only shell codec has it (with an initiator).

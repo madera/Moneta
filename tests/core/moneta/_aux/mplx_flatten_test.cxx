@@ -8,11 +8,11 @@ inline void static_test() {
 		boost::mpl::equal<
 			mplx::flatten<
 				boost::mpl::vector<
-					boost::mpl::vector<char, short, double>,
+					boost::mpl::vector<char, short, double, float>,
 					boost::mpl::vector<float, bool>
 				>
 			>::type,
-			boost::mpl::vector<char, short, double, float, bool>
+			boost::mpl::vector<char, short, double, float, float, bool>
 		>
 	));
 

@@ -60,7 +60,7 @@ namespace moneta { namespace codec {
 		class T,
 		BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_DEC(MONETA_MAX_MEMBERS), class T, boost::mpl::na)
 	>
-	struct daisy_decoder {
+	struct group_decoder {
 		typedef typename boost::make_variant_over<
 			boost::mpl::vector<T, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(MONETA_MAX_MEMBERS), T)>
 		>::type variant_type;

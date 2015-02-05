@@ -6,13 +6,25 @@
 #include "../model/CatDataset.hxx"
 #include "../model/Dog.hxx"
 #include "../model/Composite.hxx"
+#include "../model/tree/A.hxx"
 
 inline void static_test() {
+	// TODO: Move this to a separate test file.
 
+	//
+	// details::seek_entity_types<>
+	//
 	BOOST_MPL_ASSERT((
 		boost::mpl::equal<
 			moneta::container::detail::seek_entity_types<Cat>::type,
 			boost::mpl::vector<Cat, Address>
+		>
+	));
+
+	BOOST_MPL_ASSERT((
+		boost::mpl::equal<
+			moneta::container::detail::seek_entity_types<A>::type,
+			boost::mpl::vector<A, B, C, D, E>
 		>
 	));
 

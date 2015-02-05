@@ -1,3 +1,4 @@
+// XXX: Move this file.
 #pragma once
 #include "../../traits/tuple.hxx"
 #include "../../traits/is_entity.hxx"
@@ -13,11 +14,14 @@ namespace moneta { namespace container { namespace detail {
 		typename boost::mpl::push_back<State, EntityType>::type,
 		boost::mpl::if_<
 			traits::is_entity<boost::mpl::_2>,
-			typename moneta::container::detail::seek_entity_types<boost::mpl::_2, boost::mpl::_1>,
+			moneta::container::detail::seek_entity_types<boost::mpl::_2, boost::mpl::_1>,
 			boost::mpl::_1
 		>
 	> {};
 
+	//
+	// XXX: Extract this... this should be elsewhere.
+	//
 	template <class RootEntityType, class NodeFx>
 	struct rcontext_containers : boost::mpl::inherit_linearly<
 		typename seek_entity_types<RootEntityType>::type,

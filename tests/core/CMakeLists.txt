@@ -51,7 +51,7 @@ add_executable(core_tests
 	moneta/codec/typecode_test.cxx
 	moneta/codec/encoder_test.cxx
 	moneta/codec/decoder_test.cxx
-	moneta/codec/daisy_decoder_test.cxx
+	moneta/codec/group_decoder_test.cxx
 	#
 	moneta/codec/xml/detail/xml_traits_test.cxx
 	moneta/codec/xml/stateless_xml_encoder_test.cxx
@@ -112,6 +112,7 @@ add_executable(core_tests
 	moneta/traits/to_rtuple_test.cxx
 	moneta/traits/to_tie_test.cxx
 	moneta/traits/tuple_test.cxx
+	moneta/traits/entity_group_test.cxx
 
 	#moneta/pp/detail/cat_include_name_test.cxx
 	moneta/pp/detail/includer_test.cxx
