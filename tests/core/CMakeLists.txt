@@ -32,6 +32,7 @@ add_executable(core_tests
 	
 	moneta/_aux/mplx_at_c_test.cxx
 	moneta/_aux/mplx_flatten_test.cxx
+	moneta/_aux/mplx_remove_duplicates_test.cxx
 	
 	moneta/algorithm/detail/path_test.cxx
 	moneta/algorithm/dispatch_entity_test.cxx
