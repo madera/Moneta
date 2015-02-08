@@ -35,7 +35,7 @@ struct entity_visitor : boost::static_visitor<void> {
 	}
 };
 
-BOOST_AUTO_TEST_CASE(simple_group_decoder_test) {
+BOOST_AUTO_TEST_CASE(test_moneta_codec_group_decoder) {
 	unsigned char good_threeint[16] = {
 		0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0x22,
 		0x55, 0x55, 0x55, 0x55, 0x00, 0x00, 0x00, 0x00
@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_CASE(simple_group_decoder_test) {
 	BOOST_CHECK_EQUAL(oss.str(), "ThreeInts:11111111:22222222:55555555");
 }
 
-BOOST_AUTO_TEST_CASE(simple2_group_decoder_test) {
+BOOST_AUTO_TEST_CASE(test_moneta_codec_group_decoder_with_bad_fixed_values) {
 	unsigned char bad_threeint[16] = {
 		0x11, 0x11, 0x11, 0x11, 0xaa, 0xaa, 0xaa, 0xaa,
 		0x55, 0x55, 0x55, 0x55, 0x77, 0x77, 0x77, 0x77
@@ -82,40 +82,76 @@ BOOST_AUTO_TEST_CASE(simple2_group_decoder_test) {
 //
 //
 
-BOOST_AUTO_TEST_CASE(test_moneta_codec_group_decoder_test) {
-	using namespace moneta::codec;
+struct example_prefix {
+	typedef char type;
+	
+	template <class Iterator>
+	int operator()(Iterator begin, Iterator end, type& prefix) const {
+		if (begin == end) {
+			return -1;
+		}
 
-	struct codec_enter_entity {};
-	struct codec_member {};
-	struct codec_leave_entity {};
-	struct codec_enter_container {};
-	struct codec_container_item {};
-	struct codec_leave_container {};
+		prefix = *begin;
+		return 1;
+	}
+};
 
-	struct rawbin_prefix_reader {};
-	struct prefix_reader {};
-	struct prefix_getter {};
+struct acme_enter_entity {
+	template <class Iterator, class Entity, class Path, class State>
+	int operator()(Iterator begin, Iterator end, Entity& entity, const Path&, State& state) const {
+		if (begin == end) {
+			return -1;
+		}
+
+		const char ignored_entity_id = *begin++;
+		return 1;
+	}
+};
+
+struct acme_member_decoder {
+	template <class Iterator, class Member, class Entity, class Path>
+	int operator()(Iterator begin, Iterator end, const Member&, Entity& entity, const Path&) const {
+		typedef typename Member::result_type value_type;
+		const size_t value_size = sizeof(value_type);
+		int length = std::distance(begin, end);
+		if (length < value_size) {
+			return length - value_size;
+		}
+			
+		Member()(entity) = *((value_type*)begin);
+		return value_size;
+	}
+};
+
+MONETA_CODEC_PREFIX_VALUE(example_prefix, ThreeInts, 0x30)
+MONETA_CODEC_PREFIX_VALUE(example_prefix, FourInts,  0x40)
+
+BOOST_AUTO_TEST_CASE(test_moneta_codec_group_decoder_prefixed_test) {
+	unsigned char buffer[] = {
+		0x30,
+		0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0x22,
+		0x55, 0x55, 0x55, 0x55,
+		0x40,
+		0x11, 0x11, 0x11, 0x11, 0xaa, 0xaa, 0xaa, 0xaa,
+		0x55, 0x55, 0x55, 0x55, 0x77, 0x77, 0x77, 0x77
+	};
 
 	typedef moneta::codec::group_decoder<
 		moneta::codec::decoder<
-			enter_actions<codec_enter_entity>,
-			member_actions<codec_member>,
-			leave_actions<codec_leave_entity>,
-			enter_container_actions<codec_enter_container>,
-			container_item_actions<codec_container_item>,
-			leave_container_actions<codec_leave_container>
+			moneta::codec::enter_actions<acme_enter_entity>,
+			moneta::codec::member_actions<acme_member_decoder>
 		>,
 		moneta::traits::entity_group<
-			Person, Address, Cat
-		>
-		//with_prefix_reader<
-		//	prefix_reader<
-		//		rawbin_prefix_reader
-		//	>,
-		//	prefix_getter<
-		//		get_rawbin_entity_prefix
-		//	>
-		//>
-	> decoder_type;
+			FourInts, ThreeInts
+		>,
+		example_prefix
+	> decoder;
 
+	std::ostringstream oss;
+	entity_visitor visitor(oss);
+
+	int result = decoder()(std::begin(buffer), std::end(buffer), visitor);
+
+	BOOST_CHECK_EQUAL(result, 1 + 12);
+	BOOST_CHECK_EQUAL(oss.str(), "ThreeInts:11111111:22222222:55555555");
 }
