@@ -49,7 +49,7 @@ add_executable(core_tests
 	moneta/codec/_aux/io/ostringstream_test.cxx
 
 
-	moneta/codec/typecode_test.cxx
+	moneta/codec/prefix_test.cxx
 	moneta/codec/encoder_test.cxx
 	moneta/codec/decoder_test.cxx
 	moneta/codec/group_decoder_test.cxx
