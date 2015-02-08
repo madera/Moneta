@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include <moneta/codec/rawbin/rawbin_decoder.hxx>
-#include <moneta/codec/decoder.hxx>
 #include <moneta/codec/group_decoder.hxx>
+#include <moneta/codec/rawbin/rawbin_decoder.hxx>
+#include <moneta/codec/decode_many.hxx>
 #include <boost/variant/static_visitor.hpp>
 #include "../model/simple/ThreeInts.hxx"
 #include "../model/simple/FourInts.hxx"
@@ -9,6 +9,15 @@
 #include "../model/Address.hxx"
 #include "../model/Cat.hxx"
 #include "../model/Dog.hxx"
+
+MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+	FiveInts,
+	((int, One  ))
+	((int, Two  ))
+	((int, Three))
+	((int, Four ))
+	((int, Five ))
+)
 
 struct entity_visitor : boost::static_visitor<void> {
 	std::ostringstream& _output;
@@ -31,6 +40,16 @@ struct entity_visitor : boost::static_visitor<void> {
 			<< std::hex << entity.Two   << ':'
 			<< std::hex << entity.Three << ':'
 			<< std::hex << entity.Four
+		;
+	}
+
+	void operator()(const FiveInts& entity) const {
+		_output << "FiveInts:"
+			<< std::hex << entity.One   << ':'
+			<< std::hex << entity.Two   << ':'
+			<< std::hex << entity.Three << ':'
+			<< std::hex << entity.Four  << ':'
+			<< std::hex << entity.Five
 		;
 	}
 };
@@ -125,6 +144,7 @@ struct acme_member_decoder {
 
 MONETA_CODEC_PREFIX_VALUE(example_prefix, ThreeInts, 0x30)
 MONETA_CODEC_PREFIX_VALUE(example_prefix, FourInts,  0x40)
+MONETA_CODEC_PREFIX_VALUE(example_prefix, FiveInts,  0x50)
 
 BOOST_AUTO_TEST_CASE(test_moneta_codec_group_decoder_prefixed_test) {
 	unsigned char buffer[] = {
@@ -154,4 +174,45 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_group_decoder_prefixed_test) {
 
 	BOOST_CHECK_EQUAL(result, 1 + 12);
 	BOOST_CHECK_EQUAL(oss.str(), "ThreeInts:11111111:22222222:55555555");
+}
+
+BOOST_AUTO_TEST_CASE(test_moneta_codec_group_decoder_decode_many_test) {
+	unsigned char buffer[] = {
+		0x30,
+		0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0x22,
+		0x55, 0x55, 0x55, 0x55,
+		0x40,
+		0x11, 0x11, 0x11, 0x11, 0xaa, 0xaa, 0xaa, 0xaa,
+		0x55, 0x55, 0x55, 0x55, 0x77, 0x77, 0x77, 0x77,
+		0x50,
+		0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0x22,
+		0x33, 0x33, 0x33, 0x33, 0x44, 0x44, 0x44, 0x44,
+		0x55, 0x55, 0x55, 0x55,
+		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	};
+
+	typedef moneta::codec::group_decoder<
+		moneta::codec::decoder<
+			moneta::codec::enter_actions<acme_enter_entity>,
+			moneta::codec::member_actions<acme_member_decoder>
+		>,
+		moneta::traits::entity_group<
+			FiveInts, ThreeInts, FourInts
+		>,
+		example_prefix
+	> decoder;
+
+	std::ostringstream oss;
+	entity_visitor visitor(oss);
+
+	int result = moneta::codec::decode_many<decoder>(std::begin(buffer), std::end(buffer), visitor);
+
+	BOOST_CHECK_EQUAL(result, 1 + sizeof(ThreeInts) + 1 + sizeof(FourInts) + 1 + sizeof(FiveInts));
+	BOOST_CHECK_EQUAL(
+		oss.str(),
+		"ThreeInts:11111111:22222222:55555555"
+		"FourInts:11111111:aaaaaaaa:55555555:77777777"
+		"FiveInts:11111111:22222222:33333333:44444444:55555555"
+	);
 }
