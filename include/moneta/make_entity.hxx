@@ -7,6 +7,7 @@
 #include <boost/fusion/algorithm/transformation/transform.hpp>
 #include "algorithm/for_each_member.hxx"
 
+// XXX: Move this to a fwd.
 namespace moneta { namespace algorithm {
 	template <class Members, class Entity, class Operation>
 	void for_some_members(Entity& entity, Operation& operation);
@@ -34,6 +35,8 @@ namespace moneta {
 
 	template <class Entity>
 	typename traits::pure_type<Entity>::type make_entity() {
+		BOOST_MPL_ASSERT_NOT((boost::is_pointer<Entity>));
+
 		typedef typename traits::pure_type<Entity>::type result_type;
 
 		result_type result;
