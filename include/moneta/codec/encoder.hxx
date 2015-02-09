@@ -456,7 +456,7 @@ namespace moneta { namespace codec {
 		template <class Iterator, class Entity, class Path, class State>
 		int _encode(
 			Iterator begin, Iterator end, const Entity& entity,
-			Path* path = 0, State& state = State()
+			Path* = 0, State& state = State()
 		) const {
 			using namespace moneta::algorithm;
 

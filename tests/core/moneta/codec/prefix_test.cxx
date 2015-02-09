@@ -9,7 +9,7 @@ struct acme_prefix {
 	typedef char type;
 	
 	template <class Iterator>
-	int operator()(Iterator begin, Iterator end, type& prefix) const {
+	int operator()(Iterator, Iterator, type&) const {
 		// We don't use this for our tests.
 		return 0;
 	}

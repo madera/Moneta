@@ -55,11 +55,11 @@ namespace moneta { namespace codec {
 						InputIterator
 					>::difference_type available = std::distance(next, end);
 
-					const Size usable = (available < count)? available : count;
+					const auto usable = (available < count)? available : count;
 					std::copy(next, next + usable, result); // XXX
 					next += usable;
 
-					const Size left = count - usable;
+					const auto left = count - usable;
 					return (left == 0)? usable : 0 - left;
 				}
 			};

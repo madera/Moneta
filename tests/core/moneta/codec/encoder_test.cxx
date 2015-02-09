@@ -13,7 +13,7 @@ struct testcodec_enter_entity {
 	template <class Iterator, class Entity, class Path, class State>
 	int operator()(
 		Iterator begin, Iterator end,
-		const Entity& entity, const Path&, State& state
+		const Entity&, const Path&, State& state
 	) const {
 		return moneta::codec::io::make_ostringstream(begin, end)
 			<< path_tabs<Path>()
@@ -28,7 +28,7 @@ struct testcodec_member {
 	int operator()(
 		Iterator begin, Iterator end,
 		const Member&,
-		const Entity& entity, const Path&, State& state
+		const Entity&, const Path&, State& state
 	) const {
 		return moneta::codec::io::make_ostringstream(begin, end)
 			<< path_tabs<Path, 1>()
@@ -42,7 +42,7 @@ struct testcodec_leave_entity {
 	template <class Iterator, class Entity, class Path, class State>
 	int operator()(
 		Iterator begin, Iterator end,
-		const Entity& entity, const Path&, State& state
+		const Entity&, const Path&, State& state
 	) const {
 		return moneta::codec::io::make_ostringstream(begin, end)
 			<< path_tabs<Path>()
@@ -57,7 +57,7 @@ struct testcodec_enter_container {
 	int operator()(
 		Iterator begin, Iterator end,
 		const Member&,
-		Entity& entity, const Path&, State& state
+		Entity&, const Path&, State& state
 	) const {
 		return moneta::codec::io::make_ostringstream(begin, end)
 			<< path_tabs<Path, -1>()
@@ -72,7 +72,7 @@ struct testcodec_container_item {
 	int operator()(
 		Iterator begin, Iterator end,
 		Value& value, const Member&,
-		Entity& entity, const Path&, State& state
+		Entity&, const Path&, State& state
 	) const {
 		return moneta::codec::io::make_ostringstream(begin, end)
 			<< path_tabs<Path>()
@@ -87,7 +87,7 @@ struct testcodec_leave_container {
 	int operator()(
 		Iterator begin, Iterator end,
 		const Member&,
-		Entity& entity, const Path&, State& state
+		Entity&, const Path&, State& state
 	) const {
 		return moneta::codec::io::make_ostringstream(begin, end)
 			<< path_tabs<Path, -1>()
