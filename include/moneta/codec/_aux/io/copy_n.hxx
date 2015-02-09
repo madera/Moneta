@@ -51,15 +51,13 @@ namespace moneta { namespace codec {
 				operator()(
 					InputIterator& next, InputIterator end, const Size count, OutputIterator result
 				) const {
-					const typename std::iterator_traits<
-						InputIterator
-					>::difference_type available = std::distance(next, end);
+					const Size available = std::distance(next, end);
 
-					const auto usable = (available < count)? available : count;
+					const Size usable = (available < count)? available : count;
 					std::copy(next, next + usable, result); // XXX
 					next += usable;
 
-					const auto left = count - usable;
+					const Size left = count - usable;
 					return (left == 0)? usable : 0 - left;
 				}
 			};

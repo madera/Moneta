@@ -117,12 +117,13 @@ struct example_prefix {
 
 struct acme_enter_entity {
 	template <class Iterator, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, Entity& entity, const Path&, State& state) const {
+	int operator()(Iterator begin, Iterator end, Entity&, const Path&, State&) const {
 		if (begin == end) {
 			return -1;
 		}
 
-		const char ignored_entity_id = *begin++;
+		//const char ignored_entity_id = *begin++;
+
 		return 1;
 	}
 };
@@ -132,9 +133,9 @@ struct acme_member_decoder {
 	int operator()(Iterator begin, Iterator end, const Member&, Entity& entity, const Path&) const {
 		typedef typename Member::result_type value_type;
 		const size_t value_size = sizeof(value_type);
-		int length = std::distance(begin, end);
-		if (length < value_size) {
-			return length - value_size;
+		const size_t available = std::distance(begin, end);
+		if (available < value_size) {
+			return available - value_size;
 		}
 			
 		Member()(entity) = *((value_type*)begin);

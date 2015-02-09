@@ -65,7 +65,7 @@ namespace moneta { namespace codec {
 			UserState& substate;
 
 			decoder_state(Iterator begin_, Iterator end_, UserState& substate_)
-			 : begin(begin_), end(end_), substate(substate_), good(true), total_written(0), last_result(0) {
+			 : begin(begin_), end(end_), good(true), total_written(0), last_result(0), substate(substate_) {
 			}
 		};
 	}

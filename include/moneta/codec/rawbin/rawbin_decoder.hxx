@@ -20,7 +20,7 @@ namespace moneta { namespace codec { namespace rawbin_implementation {
 			// XXX: This is trash. Fix this!!
 
 			const size_t value_size = sizeof(value_type);
-			int length = std::distance(begin, end); // XXX: No. Just no.
+			const size_t length = std::distance(begin, end); // XXX: No. Just no.
 			if (length < value_size) {
 				return length - value_size;
 			}

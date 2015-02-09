@@ -8,7 +8,7 @@ struct callable {
 	 : _text(text) {}
 
 	template <class Iterator>
-	int operator()(Iterator begin, Iterator end) const {
+	int operator()(Iterator begin, Iterator /*end*/) const {
 		std::copy(_text.begin(), _text.end(), begin);
 		return _text.size();
 	}

@@ -22,7 +22,7 @@ namespace moneta { namespace codec { namespace rawbin_implementation {
 
 			// XXX: FIXME: Use Codec IO to do this properly.
 
-			int length = std::distance(begin, end); // XXX: No. Just no.
+			const size_t length = std::distance(begin, end); // XXX: No. Just no.
 			if (length < value_size) {
 				return length - value_size;
 			}

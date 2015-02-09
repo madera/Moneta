@@ -12,7 +12,7 @@ BOOST_AUTO_TEST_CASE(test_codec_io_copy_n_randomaccessiterator) {
 	std::fill(std::begin(out), std::end(out), 0);
 
 	using namespace moneta::codec;
-
+	
 	const int* p0 = std::begin(ints);
 	BOOST_CHECK_EQUAL(io::copy_n(p0, p0, 0, out),  0);
 	BOOST_CHECK_EQUAL(io::copy_n(p0, p0, 0, out),  0);
@@ -101,7 +101,7 @@ BOOST_AUTO_TEST_CASE(test_codec_io_copy_n_randomaccessiterator2) {
 //
 
 struct yes {
-	bool operator()(int i) const {
+	bool operator()(int) const {
 		return true;
 	}
 };
