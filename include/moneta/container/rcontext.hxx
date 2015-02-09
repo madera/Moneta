@@ -126,7 +126,7 @@ namespace moneta { namespace container {
 		};
 	}
 
-	template <class RootEntityType>
+	template <class RootEntity>
 	class rcontext {
 		typedef rcontext this_type;
 
@@ -144,7 +144,7 @@ namespace moneta { namespace container {
 		};
 
 		typedef typename detail::rcontext_containers<
-			RootEntityType,
+			RootEntity,
 			make_container
 		>::type containers_type;
 

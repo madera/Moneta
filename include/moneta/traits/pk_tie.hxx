@@ -36,16 +36,16 @@ namespace moneta { namespace traits {
 	template <class Entity, class Enable/* = void*/>
 	struct pk_tie;
 
-	template <class NonEntityType>
+	template <class NonEntity>
 	struct pk_tie<
-		NonEntityType,
+		NonEntity,
 		typename boost::enable_if<
-			typename boost::mpl::not_<moneta::traits::is_entity<NonEntityType> >::type
+			typename boost::mpl::not_<moneta::traits::is_entity<NonEntity> >::type
 		>::type
 	> {
-		typedef NonEntityType& type;
+		typedef NonEntity& type;
 
-		type operator()(NonEntityType& value) {
+		type operator()(NonEntity& value) {
 			return value;
 		}
 	};

@@ -1,7 +1,3 @@
-//
-// TODO: Rename this to traverser. Rename file to remove ng. Remove previous impl.
-//
-
 #pragma once
 #include "detail/path.hxx"
 #include "../_aux/mplx_flatten.hxx"

@@ -8,10 +8,10 @@
 
 namespace moneta { namespace container { namespace detail {
 
-	template <class EntityType, class State = boost::mpl::vector<> >
+	template <class Entity, class State = boost::mpl::vector<> >
 	struct seek_entity_types : boost::mpl::fold<
-		typename traits::tuple<EntityType>::type,
-		typename boost::mpl::push_back<State, EntityType>::type,
+		typename traits::tuple<Entity>::type,
+		typename boost::mpl::push_back<State, Entity>::type,
 		boost::mpl::if_<
 			traits::is_entity<boost::mpl::_2>,
 			moneta::container::detail::seek_entity_types<boost::mpl::_2, boost::mpl::_1>,
@@ -22,9 +22,9 @@ namespace moneta { namespace container { namespace detail {
 	//
 	// XXX: Extract this... this should be elsewhere.
 	//
-	template <class RootEntityType, class NodeFx>
+	template <class RootEntity, class NodeFx>
 	struct rcontext_containers : boost::mpl::inherit_linearly<
-		typename seek_entity_types<RootEntityType>::type,
+		typename seek_entity_types<RootEntity>::type,
 		boost::mpl::inherit<
 			boost::mpl::_1,
 			typename boost::mpl::apply<NodeFx, boost::mpl::_2>::type

@@ -24,7 +24,7 @@ namespace moneta { namespace traits {
 
 	namespace detail {
 		// XXX: Maybe export this? Looks useful...
-		template <class MemberType>
+		template <class Member>
 		struct is_pk : boost::false_type {
 		};
 	}
@@ -88,18 +88,18 @@ namespace moneta { namespace traits {
 		Entity
 	> {};
 
-	template <class NonEntityType>
+	template <class NonEntity>
 	struct pk<
-		NonEntityType,
+		NonEntity,
 		typename boost::enable_if<
 			typename boost::mpl::not_<
-				moneta::traits::is_entity<NonEntityType>
+				moneta::traits::is_entity<NonEntity>
 			>::type
 		>::type
 	> {
-		typedef NonEntityType type;
+		typedef NonEntity type;
 
-		type operator()(NonEntityType& value) {
+		type operator()(NonEntity& value) {
 			return value;
 		}
 	};
