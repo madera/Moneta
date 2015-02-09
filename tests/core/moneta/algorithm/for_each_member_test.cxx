@@ -44,7 +44,7 @@ struct call_counter {
 	 : count(count_) {}
 
 	template <class Entity, class Member, class Path>
-	void operator()(const Entity& entity) const {
+	void operator()(const Entity&) const {
 		++count;
 	}
 };
@@ -98,7 +98,7 @@ BOOST_AUTO_TEST_CASE(for_each_member_test) {
 
 template <class T>
 struct increment_it {
-	void operator()(T& x) {
+	void operator()(T&) {
 	}
 };
 
@@ -136,7 +136,7 @@ struct path_tester {
 	 : _output(output) {}
 
 	template <class Entity, class Member, class Path>
-	void operator()(Entity& entity) const {
+	void operator()(Entity&) const {
 		_output.push_back(boost::mpl::size<Path>::value);
 	}
 };
@@ -174,12 +174,12 @@ struct enter_tester {
 	 : _output(output) {}
 
 	template <class Entity, class Path>
-	void enter(Entity& entity) const {
+	void enter(Entity&) const {
 		_output.push_back(std::string("e:") + moneta::traits::get_entity_name<Entity>());
 	}
 
 	template <class Entity, class Member, class Path>
-	void operator()(Entity& entity) const {
+	void operator()(Entity&) const {
 		_output.push_back(".");
 	}
 };
@@ -229,12 +229,12 @@ struct leave_tester {
 	 : _output(output) {}
 
 	template <class Entity, class Member, class Path>
-	void operator()(Entity& entity) const {
+	void operator()(Entity&) const {
 		_output.push_back(".");
 	}
 
 	template <class Entity, class Path>
-	void leave(Entity& entity) const {
+	void leave(Entity&) const {
 		_output.push_back(std::string("l:") + moneta::traits::get_entity_name<Entity>());
 	}
 };
@@ -284,17 +284,17 @@ struct traversal_tester {
 	 : _output(output) {}
 
 	template <class Entity, class Path>
-	void enter(Entity& entity) const {
+	void enter(Entity&) const {
 		_output.push_back(std::string("e:") + moneta::traits::get_entity_name<Entity>());
 	}
 
 	template <class Entity, class Member, class Path>
-	void operator()(Entity& entity) const {
+	void operator()(Entity&) const {
 		_output.push_back(std::string("m:") + moneta::traits::detail::member_name<Member>::get());
 	}
 
 	template <class Entity, class Path>
-	void leave(Entity& entity) const {
+	void leave(Entity&) const {
 		_output.push_back(std::string("l:") + moneta::traits::get_entity_name<Entity>());
 	}
 };

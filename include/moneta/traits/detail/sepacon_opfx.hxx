@@ -26,7 +26,7 @@ namespace moneta { namespace traits { namespace detail {
 
 	template <class S, class K, typename P, template <typename T> class Filter>
 	struct sepacon_opfx<S, K, P, Filter, 0> {
-		K operator()(P p) const {
+		K operator()(P) const {
 			return K();
 		}
 	};

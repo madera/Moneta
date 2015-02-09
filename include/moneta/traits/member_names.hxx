@@ -20,7 +20,7 @@ namespace moneta { namespace traits {
 	// FIXME: O(n): Sloooowwww.
 	// XXX: Optimize this using hashes or something...
 	template <class Entity>
-	const size_t get_member_name_index(const std::string& name) {
+	size_t get_member_name_index(const std::string& name) {
 		const std::vector<std::string>& data = get_member_names<Entity>();
 
 		std::vector<std::string>::const_iterator itr = std::find(data.begin(), data.end(), name);

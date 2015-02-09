@@ -27,7 +27,7 @@ namespace moneta { namespace algorithm {
 
 		template <class Path, class Operation, class Entity>
 		typename boost::disable_if<has_member_enter<Operation> >::type
-		call_enter_if_defined(const Operation& operation, Entity& entity) {
+		call_enter_if_defined(const Operation&, Entity&) {
 		}
 
 		//
@@ -46,7 +46,7 @@ namespace moneta { namespace algorithm {
 
 		template <class Path, class Operation, class Entity>
 		typename boost::disable_if<has_member_leave<Operation> >::type
-		call_leave_if_defined(const Operation& operation, Entity& entity) {
+		call_leave_if_defined(const Operation&, Entity&) {
 		}
 
 		//

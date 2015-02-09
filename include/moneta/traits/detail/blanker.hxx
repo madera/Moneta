@@ -33,7 +33,7 @@ namespace moneta { namespace traits { namespace detail {
 
 		template <typename T>
 		typename result<blanker(T)>::type
-		operator()(T& x) const {
+		operator()(T&) const {
 			return make_blank<
 				typename result<blanker(T)>::type
 			>();
