@@ -1,7 +1,6 @@
 #pragma once
 #include "detail/path.hxx"
 #include "../_aux/mplx_flatten.hxx"
-#include "../_aux/mplx_nullref.hxx"
 #include "../traits/detail/is_functor_callable.hxx"
 #include "../traits/is_entity.hxx"
 #include "../traits/is_container.hxx"
@@ -78,7 +77,7 @@ namespace moneta { namespace algorithm {
 				moneta::traits::detail::is_functor_callable<Action, void (Entity&, Path&)>
 			>::type
 			process() const {
-				Action()(_entity, mplx::nullref<Path>());
+				Action()(_entity, Path());
 			}
 
 			template <typename Action>
@@ -86,7 +85,7 @@ namespace moneta { namespace algorithm {
 				moneta::traits::detail::is_functor_callable<Action, void (Entity&, Path&, State&)>
 			>::type
 			process() const {
-				Action()(_entity, mplx::nullref<Path>(), _state);
+				Action()(_entity, Path(), _state);
 			}
 			
 		public:
@@ -109,23 +108,23 @@ namespace moneta { namespace algorithm {
 				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&)>
 			>::type
 			process() const {
-				Action()(mplx::nullref<Member>(), _entity);
+				Action()(Member(), _entity);
 			}
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, const Path&)>
+				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, Path&)>
 			>::type
 			process() const {
-				Action()(mplx::nullref<Member>(), _entity, mplx::nullref<Path>());
+				Action()(Member(), _entity, Path());
 			}
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, const Path&, State&)>
+				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, Path&, State&)>
 			>::type
 			process() const {
-				Action()(mplx::nullref<Member>(), _entity, mplx::nullref<Path>(), _state);
+				Action()(Member(), _entity, Path(), _state);
 			}
 
 		public:
@@ -149,23 +148,23 @@ namespace moneta { namespace algorithm {
 				moneta::traits::detail::is_functor_callable<Action, void (Value&, Member&, Entity&)>
 			>::type
 			process() const {
-				Action()(_value, mplx::nullref<Member>(), _entity);
+				Action()(_value, Member(), _entity);
 			}
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Value&, Member&, Entity&, const Path&)>
+				moneta::traits::detail::is_functor_callable<Action, void (Value&, Member&, Entity&, Path&)>
 			>::type
 			process() const {
-				Action()(_value, mplx::nullref<Member>(), _entity, mplx::nullref<Path>());
+				Action()(_value, Member(), _entity, Path());
 			}
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Value&, Member&, Entity&, const Path&, State&)>
+				moneta::traits::detail::is_functor_callable<Action, void (Value&, Member&, Entity&, Path&, State&)>
 			>::type
 			process() const {
-				Action()(_value, mplx::nullref<Member>(), _entity, mplx::nullref<Path>(), _state);
+				Action()(_value, Member(), _entity, Path(), _state);
 			}
 
 		public:
@@ -188,23 +187,23 @@ namespace moneta { namespace algorithm {
 				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&)>
 			>::type
 			process() const {
-				Action()(mplx::nullref<Member>(), _entity);
+				Action()(Member(), _entity);
 			}
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, const Path&)>
+				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, Path&)>
 			>::type
 			process() const {
-				Action()(mplx::nullref<Member>(), _entity, mplx::nullref<Path>());
+				Action()(Member(), _entity, Path());
 			}
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, const Path&, State&)>
+				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, Path&, State&)>
 			>::type
 			process() const {
-				Action()(mplx::nullref<Member>(), _entity, mplx::nullref<Path>(), _state);
+				Action()(Member(), _entity, Path(), _state);
 			}
 			
 		public:
@@ -235,7 +234,7 @@ namespace moneta { namespace algorithm {
 			process() const {
 				Traverser().template _traverse<
 					typename add_path<Path, Member>::type
-				>(mplx::nullref<Member>()(_entity), _state);
+				>(Member()(_entity), _state);
 			}
 
 			//

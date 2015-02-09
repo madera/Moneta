@@ -78,7 +78,7 @@ struct testcodec_leave_entity {
 
 struct testcodec_enter_container {
 	template <class Iterator, class Member, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, Member&, Entity& entity, const Path&, State& state) const {
+	int operator()(Iterator begin, Iterator end, const Member&, Entity& entity, const Path&, State& state) const {
 		if (begin == end) {
 			return -1;
 		}
@@ -104,7 +104,7 @@ struct testcodec_container_item {
 	//
 	template <class Iterator, class Value, class Member, class Entity, class Path, class State>
 	int operator()(
-		Iterator begin, Iterator end, Value& value, Member&, Entity& entity, const Path&, State& state
+		Iterator begin, Iterator end, Value& value, const Member&, Entity& entity, const Path&, State& state
 	) const {
 		if (begin == end) {
 			return -1;
@@ -118,7 +118,7 @@ struct testcodec_container_item {
 
 struct testcodec_leave_container {
 	template <class Iterator, class Member, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, Member&, Entity& entity, const Path&, State& state) const {
+	int operator()(Iterator begin, Iterator end, const Member&, Entity& entity, const Path&, State& state) const {
 		if (begin == end) {
 			return -1;
 		}

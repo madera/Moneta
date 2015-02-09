@@ -113,7 +113,7 @@ namespace moneta { namespace codec {
 		>::type
 		process() const {
 			update_result(
-				Action()(_state.begin, _state.end, _entity, mplx::nullref<Path>())
+				Action()(_state.begin, _state.end, _entity, Path())
 			);
 		}
 
@@ -126,7 +126,7 @@ namespace moneta { namespace codec {
 		>::type
 		process() const {
 			update_result(
-				Action()(_state.begin, _state.end, _entity, mplx::nullref<Path>(), _state.substate)
+				Action()(_state.begin, _state.end, _entity, Path(), _state.substate)
 			);
 		}
 
@@ -173,7 +173,7 @@ namespace moneta { namespace codec {
 		>::type
 		process() const {
 			update_result(
-				Action()(_state.begin, _state.end, mplx::nullref<Member>(), _entity)
+				Action()(_state.begin, _state.end, Member(), _entity)
 			);
 		}
 
@@ -187,7 +187,7 @@ namespace moneta { namespace codec {
 		process() const {
 			update_result(
 				Action()(
-					_state.begin, _state.end, mplx::nullref<Member>(), _entity, mplx::nullref<Path>()
+					_state.begin, _state.end, Member(), _entity, Path()
 				)
 			);
 		}
@@ -203,8 +203,8 @@ namespace moneta { namespace codec {
 			update_result(
 				Action()(
 					_state.begin, _state.end,
-					mplx::nullref<Member>(),
-					_entity, mplx::nullref<Path>(), _state.substate
+					Member(),
+					_entity, Path(), _state.substate
 				)
 			);
 		}
@@ -252,7 +252,7 @@ namespace moneta { namespace codec {
 		>::type
 		process() const {
 			update_result(
-				Action()(_state.begin, _state.end, mplx::nullref<Member>(), _entity)
+				Action()(_state.begin, _state.end, Member(), _entity)
 			);
 		}
 
@@ -265,7 +265,7 @@ namespace moneta { namespace codec {
 		>::type
 		process() const {
 			update_result(
-				Action()(_state.begin, _state.end, mplx::nullref<Member>(), _entity, mplx::nullref<Path>())
+				Action()(_state.begin, _state.end, Member(), _entity, Path())
 			);
 		}
 
@@ -280,8 +280,8 @@ namespace moneta { namespace codec {
 			update_result(
 				Action()(
 					_state.begin, _state.end,
-					mplx::nullref<Member>(),
-					_entity, mplx::nullref<Path>(), _state.substate
+					Member(),
+					_entity, Path(), _state.substate
 				)
 			);
 		}
@@ -328,7 +328,7 @@ namespace moneta { namespace codec {
 		>::type
 		process() const {
 			update_result(
-				Action()(_state.begin, _state.end, _value, mplx::nullref<Member>(), _entity)
+				Action()(_state.begin, _state.end, _value, Member(), _entity)
 			);
 		}
 
@@ -343,8 +343,8 @@ namespace moneta { namespace codec {
 			update_result(
 				Action()(
 					_state.begin, _state.end,
-					_value, mplx::nullref<Member>(),
-					_entity, mplx::nullref<Path>()
+					_value, Member(),
+					_entity, Path()
 				)
 			);
 		}
@@ -360,8 +360,8 @@ namespace moneta { namespace codec {
 			update_result(
 				Action()(
 					_state.begin, _state.end,
-					_value, mplx::nullref<Member>(),
-					_entity, mplx::nullref<Path>(), _state.substate
+					_value, Member(),
+					_entity, Path(), _state.substate
 				)
 			);
 		}
@@ -390,7 +390,7 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			traits::detail::fixed_value<Member>
 		>::type
-		operator()(Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
+		operator()(const Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
 			boost::mpl::for_each<typename DecoderState::member_actions>(
 				decoder_member_action<Member, Entity, Path, DecoderState>(entity, decoder_state)
 			);
@@ -408,7 +408,7 @@ namespace moneta { namespace codec {
 		typename boost::disable_if<
 			traits::detail::fixed_value<Member>
 		>::type
-		operator()(Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
+		operator()(const Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
 			boost::mpl::for_each<typename DecoderState::member_actions>(
 				decoder_member_action<Member, Entity, Path, DecoderState>(entity, decoder_state)
 			);
@@ -426,7 +426,7 @@ namespace moneta { namespace codec {
 
 	struct decoder_enter_container {
 		template <class Member, class Entity, class Path, class DecoderState>
-		void operator()(Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
+		void operator()(const Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
 			boost::mpl::for_each<typename DecoderState::enter_container_actions>(
 				decoder_container_enter_or_leave_action<
 					Member, Entity, Path, DecoderState
@@ -437,7 +437,7 @@ namespace moneta { namespace codec {
 
 	struct decoder_container_item {
 		template <class Value, class Member, class Entity, class Path, class DecoderState>
-		void operator()(Value& value, Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
+		void operator()(Value& value, const Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
 			boost::mpl::for_each<typename DecoderState::container_item_actions>(
 				decoder_container_item_action<Value, Member, Entity, Path, DecoderState>(
 					value, entity, decoder_state
@@ -448,7 +448,7 @@ namespace moneta { namespace codec {
 
 	struct decoder_leave_container {
 		template <class Member, class Entity, class Path, class DecoderState>
-		void operator()(Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
+		void operator()(const Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
 			boost::mpl::for_each<typename DecoderState::leave_container_actions>(
 				decoder_container_enter_or_leave_action<
 					Member, Entity, Path, DecoderState

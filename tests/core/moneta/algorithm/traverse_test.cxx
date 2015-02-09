@@ -102,21 +102,21 @@ size_t g_member_count = 0;
 
 struct counting_member_e {
 	template <class Member, class Entity>
-	void operator()(Member&, Entity& entity) const {
+	void operator()(const Member&, Entity& entity) const {
 		++g_member_count;
 	}
 };
 
 struct counting_member_ep {
 	template <class Member, class Entity, class Path>
-	void operator()(Member&, Entity& entity, const Path&) const {
+	void operator()(const Member&, Entity& entity, const Path&) const {
 		++g_member_count;
 	}
 };
 
 struct counting_member_eps {
 	template <class Member, class Entity, class Path, class State>
-	void operator()(Member&, Entity& entity, const Path&, State& state) const {
+	void operator()(const Member&, Entity& entity, const Path&, State& state) const {
 		++g_member_count;
 
 		std::string tmp = "m:" + moneta::traits::detail::member_name<Member>::get();
@@ -164,21 +164,21 @@ size_t g_enter_container_count;
 
 struct counting_enter_container_e {
 	template <class Member, class Entity>
-	void operator()(Member&, Entity& entity) const {
+	void operator()(const Member&, Entity& entity) const {
 		++g_enter_container_count;
 	}
 };
 
 struct counting_enter_container_ep {
 	template <class Member, class Entity, class Path>
-	void operator()(Member&, Entity& entity, const Path&) const {
+	void operator()(const Member&, Entity& entity, const Path&) const {
 		++g_enter_container_count;
 	}
 };
 
 struct counting_enter_container_eps {
 	template <class Member, class Entity, class Path, class State>
-	void operator()(Member&, Entity& entity, const Path&, State& state) const {
+	void operator()(const Member&, Entity& entity, const Path&, State& state) const {
 		++g_enter_container_count;
 
 		std::string tmp = "ec:" + moneta::traits::detail::member_name<Member>::get();
@@ -194,21 +194,21 @@ size_t g_container_item_count = 0;
 
 struct counting_container_item_e {
 	template <class Value, class Member, class Entity>
-	void operator()(Value& value, Member&, Entity& entity) const {
+	void operator()(Value& value, const Member&, Entity& entity) const {
 		++g_container_item_count;
 	}
 };
 
 struct counting_container_item_ep {
 	template <class Value, class Member, class Entity, class Path>
-	void operator()(Value& value, Member&, Entity& entity, const Path&) const {
+	void operator()(Value& value, const Member&, Entity& entity, const Path&) const {
 		++g_container_item_count;
 	}
 };
 
 struct counting_container_item_eps {
 	template <class Value, class Member, class Entity, class Path, class State>
-	void operator()(Value& value, Member&, Entity& entity, const Path&, State& state) const {
+	void operator()(Value& value, const Member&, Entity& entity, const Path&, State& state) const {
 		++g_container_item_count;
 
 		std::string tmp = "ci:" + value;
@@ -224,21 +224,21 @@ size_t g_leave_container_count;
 
 struct counting_leave_container_e {
 	template <class Member, class Entity>
-	void operator()(Member&, Entity& entity) const {
+	void operator()(const Member&, Entity& entity) const {
 		++g_leave_container_count;
 	}
 };
 
 struct counting_leave_container_ep {
 	template <class Member, class Entity, class Path>
-	void operator()(Member&, Entity& entity, const Path&) const {
+	void operator()(const Member&, Entity& entity, const Path&) const {
 		++g_leave_container_count;
 	}
 };
 
 struct counting_leave_container_eps {
 	template <class Member, class Entity, class Path, class State>
-	void operator()(Member&, Entity& entity, const Path&, State& state) const {
+	void operator()(const Member&, Entity& entity, const Path&, State& state) const {
 		++g_leave_container_count;
 
 		std::string tmp = "lc:" + moneta::traits::detail::member_name<Member>::get();
