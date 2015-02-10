@@ -11,8 +11,6 @@
 #include <boost/preprocessor/enum_params.hpp>
 #include <boost/preprocessor/enum_params_with_a_default.hpp>
 
-#include <boost/mpl/print.hpp> // XXX
-
 namespace moneta { namespace codec {
 	
 	namespace detail {

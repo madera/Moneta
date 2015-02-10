@@ -3,10 +3,6 @@
 #include <moneta/algorithm/detail/path.hxx>
 #include "../../model/SportsTeam.hxx"
 
-#include <boost/mpl/print.hpp>
-
-// TODO: Elaborate these tests.
-
 inline void static_test() {
 	using namespace moneta::algorithm::detail;
 

@@ -25,29 +25,19 @@ TODO:
 	* Consider using Boost ASIO's placeholders elegance for Path-enabled codecs and for_each/some_member traversals.
 	* Test and stress vector limits for entities with several members.
 	* Reimplement for_each_member using traverse(), which does the job nicely.
-	* Implement traverse() without state explicitly.
-	* Implement traverse() with tag dispatching algorithms instead of a big traits class.
 	* Simplify traverse template parameters.
-	* Eliminate Iterator& on codec code.
 	* Move big_entity_test.cxx somewhere out of the model definitions.
-	* Check if metaprogramming loops are testing against a done flag to optimize exit.
 	* Boost PPize mplx::at_c
-	* Separate decode() from decode_unknown().
-	* Document codec specs. Encoding, decoding, typecode_type, fixed_values, etc etc etc.
+	* Document codec specs. Encoding, decoding, prefix_type, fixed_values, etc.
 	* Implement header optimization for end-users.
-	* Add State parameter for codec::encode() and codec::decode().
 	* Make better use of test PCH. Most of the MPL could be inserted.
-	* Watch out for #include <boost/mpl/print.hpp>
 	* Use typename boost::mpl::clear<Sequence>::type for all sequence operations.
 
-Codec:
-	* A visitor-based dispatcher seems appropriate. For now, only shell codec has it (with an initiator).
-
 Current Stack:
-	* Rawbin decoder with typecode_type.
 	* XML decoder.
 	* Shell decoder (using proper API)
 	* Relational mappings.
+	* Members that are boost::optional<>
 	* Implement XML encoder relational bits.
 
 Relational Stack - Stashed:
@@ -57,50 +47,3 @@ Relational Stack - Stashed:
 	* Associations
 	* Apply associations to relational contexts
 	* Reference based entity composition
-
-Special Comment -- São Paulo, 20141017T2209
-
-Moneta has a lot of code. It has become a big library, and still, there are things that need to be done.
-
-However, there are things to consider and action needs to be taken. Specifically:
-
-	1) Moneta codecs use a type-by-action system. I.e. enter_entity and leave_entity. These
-	   are types that are defined only when there is code to replace them.
-
-	2) Moneta traverse uses a derivation tagging mechanism. Like traverse_member, traverse_enter and
-	   traverse_leave.
-
-	3) Moneta has a scrap text on doing boost::multi_index-like declarations:
-
-		using namespace moneta::declarative;
-
-		typedef codec_declaration<
-			enter_entity<xml_enter_entity>,
-			leave_entity<xml_leave_entity>
-		> xml_codec;
-
-		moneta::codec::encode<xml_codec>(person);
-
-Since (1) and (2) are already implemented, and since (1) is giving serious problems outside MSVC, (3) should
-start being developed so it can become the leading implementation.
-
-Also, there is moneta::algorithm::for_each that used members for traversal. It could be a good idea if (2)
-proves wrong. But then again, only precise engineering will tell.
-
-HAVING SAID THAT, the goal right now is to finish the codec engine (or serialization, if you will) so as to
-provide functionality for the upcoming app. Specifically, typecode_type is the target right now.
-
-Having a good interface is a matter of testing all the options and techniques tested to this date. And a good
-design will be usable and very friendly even for the non C++ TMPer.
-
-Design:
-
-	encode<Entity>
-
-		Events:
-			enter entity
-			entity
-			leave entity
-
-
--- Madera
