@@ -32,6 +32,7 @@ TODO:
 	* Implement header optimization for end-users.
 	* Make better use of test PCH. Most of the MPL could be inserted.
 	* Use typename boost::mpl::clear<Sequence>::type for all sequence operations.
+	* Create network samples using Boost asio.
 
 Current Stack:
 	* XML decoder.

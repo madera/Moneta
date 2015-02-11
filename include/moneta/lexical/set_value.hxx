@@ -30,8 +30,8 @@ namespace moneta { namespace lexical {
 	}
 
 	template <class Entity>
-	void set_value(Entity& entity, const std::string name, const std::string& value) {
-		moneta::lexical::dispatch_member<Entity>(name, detail::lexical_setter<Entity>(entity, value));
+	void set_value(Entity& entity, const std::string member, const std::string& value) {
+		moneta::lexical::dispatch_member<Entity>(member, detail::lexical_setter<Entity>(entity, value));
 	}
 
 }}
