@@ -2,6 +2,13 @@
 #include <moneta/codec/xml/stateless_xml_decoder.hxx>
 #include <moneta/pp/describe_entity.hxx>
 
+#include "../../model/Person.hxx"
+#include "../../model/simple/ThreeInts.hxx"
+
+typedef moneta::codec::stateless_xml_decoder<
+	moneta::traits::entity_group<Person, ThreeInts>
+>::type decoder;
+
 MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 	Point,
 	((int, x))
@@ -11,8 +18,8 @@ MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_prefix) {
 	using moneta::codec::stateless_xml_decoder_implementation::read_prefix;
 
-	// We need at least three bytes for a best case scenario with a single letter named entity and separator.
 	{
+		// We need at least three bytes for, say, a single letter named entity and separator.
 		std::string prefix;
 		const std::string s;
 		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), -3); // "<a_"
@@ -44,6 +51,12 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_prefix) {
 	}
 	{
 		std::string prefix;
+		const std::string s = "<ee ";
+		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), 3);
+		BOOST_CHECK_EQUAL(prefix, "ee");
+	}
+	{
+		std::string prefix;
 		const std::string s = "<e/";
 		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), 2);
 		BOOST_CHECK_EQUAL(prefix, "e");
@@ -72,14 +85,156 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_prefix) {
 		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), 8);
 		BOOST_CHECK_EQUAL(prefix, "example");
 	}
+	{
+		std::string prefix;
+		const std::string s = "</a>";
+		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), 0);
+	}
 }
 
-#include "../../model/Person.hxx"
-#include "../../model/simple/ThreeInts.hxx"
+BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_tag) {
+	using moneta::codec::stateless_xml_decoder_implementation::tag_reader;
 
-typedef moneta::codec::stateless_xml_decoder<
-	moneta::traits::entity_group<Person, ThreeInts>
->::type decoder;
+	{
+		const std::string s;
+		std::string tag;
+		BOOST_CHECK_EQUAL(tag_reader<>()(std::begin(s), std::end(s), tag), -3);
+	}
+	{
+		const std::string s = "<";
+		std::string tag;
+		BOOST_CHECK_EQUAL(tag_reader<>()(std::begin(s), std::end(s), tag), -2);
+	}
+	{
+		const std::string s = "<a";
+		std::string tag;
+		BOOST_CHECK_EQUAL(tag_reader<>()(std::begin(s), std::end(s), tag), -1);
+	}
+	{
+		const std::string s = "<aa";
+		std::string tag;
+		BOOST_CHECK_EQUAL(tag_reader<>()(std::begin(s), std::end(s), tag), -1);
+	}
+	{
+		const std::string s = "<a ";
+		std::string tag;
+		BOOST_CHECK_EQUAL(tag_reader<>()(std::begin(s), std::end(s), tag), -1);
+	}
+	{
+		const std::string s = "<a /";
+		std::string tag;
+		BOOST_CHECK_EQUAL(tag_reader<>()(std::begin(s), std::end(s), tag), -1);
+	}
+	{
+		const std::string s = "<a>";
+		std::string tag;
+
+		tag_reader<> reader;
+		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), s.size());
+		BOOST_CHECK_EQUAL(tag, "a");
+		BOOST_CHECK(reader.last.is_opening);
+		BOOST_CHECK(!reader.last.has_attributes);
+		BOOST_CHECK(!reader.last.is_singleton);
+	}
+	{
+		const std::string s = "<a/>";
+		std::string tag;
+
+		tag_reader<> reader;
+		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), s.size());
+		BOOST_CHECK_EQUAL(tag, "a");
+		BOOST_CHECK(!reader.last.is_opening);
+		BOOST_CHECK(!reader.last.has_attributes);
+		BOOST_CHECK(reader.last.is_singleton);
+	}
+	{
+		// With error on attribute
+		const std::string s = "<a k='v />";
+		std::string tag;
+
+		tag_reader<> reader;
+		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), 0);
+	}
+	{
+		// With error on attribute
+		const std::string s = "<a k= />";
+		std::string tag;
+
+		tag_reader<> reader;
+		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), 0);
+	}
+	{
+		// With error on attribute
+		const std::string s = "<a k />";
+		std::string tag;
+
+		tag_reader<> reader;
+		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), 0);
+	}
+	{
+		// With error on attribute
+		const std::string s = "<a k='a />";
+		std::string tag;
+
+		tag_reader<> reader;
+		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), 0);
+	}
+	{
+		const std::string s = "<a k=\"v\" />";
+		std::string tag;
+
+		tag_reader<> reader;
+		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), s.size());
+		BOOST_CHECK_EQUAL(tag, "a");
+		BOOST_CHECK(!reader.last.is_opening);
+		BOOST_CHECK(reader.last.has_attributes);
+		BOOST_CHECK(reader.last.is_singleton);
+	}
+	{
+		const std::string s = "<a k='v' />";
+		std::string tag;
+
+		tag_reader<> reader;
+		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), s.size());
+		BOOST_CHECK_EQUAL(tag, "a");
+		BOOST_CHECK(!reader.last.is_opening);
+		BOOST_CHECK(reader.last.has_attributes);
+		BOOST_CHECK(reader.last.is_singleton);
+	}
+	{
+		const std::string s = "<a k='' />";
+		std::string tag;
+
+		tag_reader<> reader;
+		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), s.size());
+		BOOST_CHECK_EQUAL(tag, "a");
+		BOOST_CHECK(!reader.last.is_opening);
+		BOOST_CHECK(reader.last.has_attributes);
+		BOOST_CHECK(reader.last.is_singleton);
+	}
+	{
+		const std::string s = "<a k0='v0' k1='v1' k2='v2' />";
+		std::string tag;
+
+		tag_reader<> reader;
+		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), s.size());
+		BOOST_CHECK_EQUAL(tag, "a");
+		BOOST_CHECK(!reader.last.is_opening);
+		BOOST_CHECK(reader.last.has_attributes);
+		BOOST_CHECK(reader.last.is_singleton);
+	}
+	{
+		const std::string s = "<a k0='v0' k1='v1' k2='v2'>";
+		std::string tag;
+
+		tag_reader<> reader;
+		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), s.size());
+		BOOST_CHECK_EQUAL(tag, "a");
+		BOOST_CHECK(reader.last.is_opening);
+		BOOST_CHECK(reader.last.has_attributes);
+		BOOST_CHECK(!reader.last.is_singleton);
+	}
+}
 
 BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_0) {
 	{
@@ -165,7 +320,8 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_incomplete_clos
 		const std::string data = "<Person></P";
 		decoder::variant_type variant;
 		int result = decoder()(std::begin(data), std::end(data), variant);
-		BOOST_CHECK_EQUAL(result, 0 - std::string("erson>").size());
+//		BOOST_CHECK_EQUAL(result, 0 - std::string("erson>").size());
+		BOOST_CHECK_EQUAL(result, -6);
 	}
 	{
 		const std::string data = "<Person></Pe";
@@ -205,6 +361,20 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_incomplete_clos
 
 		Person* entity = boost::get<Person>(&variant);
 		BOOST_CHECK(entity);
+	}
+}
+
+BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_decode_with_members) {
+	{
+		const std::string data =
+			"<Person>\n"
+			"\t<Name>John Smith</Name>\n"
+			"</Person>\n"
+		;
+
+		decoder::variant_type variant;
+		int result = decoder()(std::begin(data), std::end(data), variant);
+		BOOST_CHECK_EQUAL(result, 0 - std::string("</Person>").size());
 	}
 }
 

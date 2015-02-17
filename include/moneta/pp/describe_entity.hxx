@@ -1,6 +1,7 @@
 #pragma once
 #include "detail/moneta_pp.hxx"
 #include "../traits/entity_name.hxx"
+#include "../traits/member.hxx"
 #include "../traits/member_names.hxx"
 #include <boost/mpl/vector.hpp>
 
