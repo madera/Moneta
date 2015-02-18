@@ -33,6 +33,7 @@ TODO:
 	* Make better use of test PCH. Most of the MPL could be inserted.
 	* Use typename boost::mpl::clear<Sequence>::type for all sequence operations.
 	* Create network samples using Boost asio.
+	* Either get_entity_name<ET> or entity_name<ET>::get(), but not both.
 
 Current Stack:
 	* XML decoder.

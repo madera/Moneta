@@ -57,6 +57,7 @@ namespace moneta { namespace codec { namespace io {
 #include "traits/xml_traits.hxx"
 #include "../../lexical/set_value.hxx"
 #include "../../lexical/dispatch_member.hxx"
+#include <stack>
 
 namespace moneta { namespace codec { namespace stateless_xml_decoder_implementation {
 
@@ -79,6 +80,13 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 
 		bool operator()(const char c) const {
 			return c == _expected;
+		}
+	};
+
+	struct is_cdata {
+		bool operator()(const char c) const {
+			// XXX: C'mon...
+			return c != '<';
 		}
 	};
 
@@ -119,81 +127,6 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 		template <class Iterator>
 		int operator()(Iterator begin, Iterator end, type& prefix) const {
 			return read_prefix(begin, end, prefix);
-		}
-	};
-
-	template <class Iterator, class Entity>
-	int process_attribute(Iterator begin, Iterator end, Entity& entity) {
-		Iterator itr = begin;
-		itr += io::consume_whitespaces(itr, end);
-
-		std::string key;
-		std::string value;
-		
-		itr += io::copy_while(itr, end, std::back_inserter(key), is_xml_identifier_char());
-		itr += io::consume_whitespaces(itr, end);
-		if (*itr++ != '=') {
-			return 0;
-		}
-
-		itr += io::consume_whitespaces(itr, end);
-		if (*itr == '"') {
-			itr += io::copy_while(++itr, end, std::back_inserter(value), std::not1(is_char('"')));
-			++itr;
-		} else if (*itr == '\'') {
-			itr += io::copy_while(++itr, end, std::back_inserter(value), std::not1(is_char('\'')));
-			++itr;
-		} else {
-			return 0;
-		}
-
-		moneta::lexical::set_value(entity, key, value);
-		return std::distance(begin, itr);
-	}
-
-	template <class Iterator, class Entity>
-	int process_attributes(Iterator begin, Iterator end, Entity& entity) {
-		Iterator itr = begin;
-		int consumed = 0;
-
-		bool done = false;
-		while (!done) {
-			const int result = process_attribute(itr, end, entity);
-			if (result < 0) {
-				return result;
-			} else if (result == 0) {
-				done = true;
-			} else {
-				consumed += result;
-				itr += result;
-			}
-		}
-
-		return consumed;
-	}
-
-	template <class Entity>
-	struct member_decoder {
-		//Entity& _entity;
-		//const std::string& _value;
-
-		//member_decoder(Entity& entity, const std::string& value)
-		// : _entity(entity), _value(value) {}
-
-		template <class Member>
-		typename boost::enable_if<
-			traits::is_container<typename Member::result_type>
-		>::type
-		operator()() const {
-			//Member()(_entity) = boost::lexical_cast<typename Member::result_type>(_value);
-		}
-
-		template <class Member>
-		typename boost::disable_if<
-			traits::is_container<typename Member::result_type>
-		>::type
-		operator()() const {
-			//Member()(_entity) = boost::lexical_cast<typename Member::result_type>(_value);
 		}
 	};
 
@@ -375,17 +308,136 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 
 			return 0;
 		}
-
 	};
 
 	template <class Iterator>
-	int ignore_tag(Iterator begin, Iterator end, const std::string& name) {
-		//std::stack<std::string> stack;
-		
-		Iterator itr = begin;
+	int ignore_tag(Iterator begin, Iterator end) {
+		tag_reader<> reader;
+
+		std::string tag0;
+		int result = reader(begin, end, tag0);
+		if (result <= 0 || reader.last.is_singleton) {
+			return result;
+		}
+
+		std::stack<std::string> stack;
+		stack.push(tag0);
+
+		Iterator itr = begin + result;
+
+		bool done = false;
+		while (!done) {
+			itr += io::consume_while(itr, end, is_cdata());
+
+			std::string tag;
+			const int result = reader(itr, end, tag);
+			if (result == 0) {
+				return result;
+			} else if (result < 0) {
+				// Calculate all the needed tags minimum.
+				int required = 0;
+				while (!stack.empty()) {
+					required += 2 + stack.top().size() + 1; // </ + name + >
+					stack.pop();
+				}
+
+				return std::distance(itr, end) - required;
+			}
+			
+			itr += result;
+			if (reader.last.is_opening) {
+				stack.push(tag);
+			} else if (!reader.last.is_singleton) {
+				if (stack.top() != tag) {
+					return 0;
+				}
+
+				if (stack.size() == 1) {
+					done = true;
+				} else {
+					stack.pop();
+				}
+			}
+		}
 
 		return std::distance(begin, itr);
 	}
+
+	// XXX: Remove the call to read_prefix() on all functions. Just put tag_reader<> to work.
+	//      If this is not corrected, prefix will be called each for every tag. Not good.
+
+	template <class Iterator, class Entity>
+	int read_entity(Iterator begin, Iterator end, Entity& entity);
+
+	template <class Member, class Iterator>
+	int read_element_member(Iterator begin, Iterator end, typename Member::class_type& entity) {
+		Iterator itr = begin;
+
+		tag_reader<
+			attribute_assigner<typename Member::class_type>
+		> reader = attribute_assigner<typename Member::class_type>(entity);
+
+		std::string opening_tag;
+		int result = reader(itr, end, opening_tag);
+		if (result <= 0) {
+			return result;
+		}
+
+		itr += result;
+
+		const std::string element_name = traits::detail::member_name<Member>::get(); // XXX
+		if (opening_tag != element_name) {
+			return 0;
+		}
+
+		Iterator data_begin = itr;
+		itr += io::consume_while(itr, end, is_cdata());
+
+		Iterator data_end = itr;
+		std::string data(data_begin, data_end);
+
+		std::string closing_tag;
+		result = reader(itr, end, closing_tag);
+		if (result <= 0) {
+			return result;
+		}
+
+		itr += result;
+
+		if (reader.last.is_opening || reader.last.is_singleton || closing_tag != opening_tag) {
+			return 0;
+		}
+
+		Member()(entity) = boost::lexical_cast<typename Member::result_type>(data);
+
+		return std::distance(begin, itr);
+	}
+
+	template <class Iterator, class Entity>
+	struct member_decoder {
+		Iterator _begin;
+		Iterator _end;
+		Entity& _entity;
+
+		member_decoder(Iterator begin, Iterator end, Entity& entity)
+		 : _begin(begin), _end(end), _entity(entity) {}
+
+		template <class Member>
+		typename boost::enable_if<
+			traits::is_entity<typename Member::result_type>
+		>::type
+		operator()() const {
+			read_entity(_begin, _end, Member()(_entity));
+		}
+
+		template <class Member>
+		typename boost::disable_if<
+			traits::is_entity<typename Member::result_type>
+		>::type
+		operator()() const {
+			read_element_member<Member>(_begin, _end, _entity);
+		}
+	};
 
 	template <class Iterator, class Entity>
 	int process_member(Iterator begin, Iterator end, Entity& entity) {
@@ -395,9 +447,11 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 			return prefix_result;
 		}
 
-		// MEQUEDE: Prefix reader is bugged.
+		moneta::lexical::dispatch_member<Entity>(
+			prefix, member_decoder<Iterator, Entity>(begin, end, entity)
+		);
 
-		return 0;
+		return 0; // XXX
 	}
 
 	template <class Iterator, class Entity>
@@ -421,8 +475,8 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 		return consumed;
 	}
 
-	template <class Iterator, class Entity, class Path, class State>
-	int read_entity(Iterator begin, Iterator end, Entity& entity, const Path&, State&) {
+	template <class Iterator, class Entity>
+	int read_entity(Iterator begin, Iterator end, Entity& entity) {
 		const std::string entity_name = traits::get_entity_name<Entity>();
 
 		std::string prefix;
@@ -439,6 +493,8 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 			attribute_assigner<Entity>
 		> reader = attribute_assigner<Entity>(entity);
 
+		// Opening tag
+		//
 		Iterator itr = begin;
 		std::string tag;
 		int result = reader(itr, end, tag);
@@ -456,6 +512,10 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 			return std::distance(begin, itr);
 		}
 
+		process_members(itr, end, entity);
+
+		// Closing tag
+		//
 		std::string closing_tag;
 		result = reader(itr, end, closing_tag);
 		if (result == 0) {
@@ -477,84 +537,7 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 	struct acme_enter_entity {
 		template <class Iterator, class Entity, class Path, class State>
 		int operator()(Iterator begin, Iterator end, Entity& entity, const Path&, State&) const {
-			return read_entity(begin, end, entity, Path(), State());
-		}
-
-		template <class Iterator, class Entity, class Path, class State>
-		int operator__(Iterator begin, Iterator end, Entity& entity, const Path&, State&) const {
-			const std::string entity_name = traits::get_entity_name<Entity>();
-
-			std::string prefix;
-			const int prefix_result = read_prefix(begin, end, prefix);
-			if (prefix_result <= 0) {
-				return prefix_result;
-			}
-
-			if (prefix != entity_name) {
-				return 0;
-			}
-
-			Iterator itr = begin + prefix_result;
-			itr += io::consume_whitespaces(itr, end);
-
-			// Do we have attributes?
-			if (*itr != '/' && *itr != '>') {
-				itr += process_attributes(itr, end, entity);
-			}
-
-			itr += io::consume_whitespaces(itr, end);
-
-			// We still need closure. At least one byte for '>', if not two for "/>".
-			if (itr == end) {
-				return -1;
-			}
-
-			if (*itr == '/') {
-				++itr;
-				if (itr == end) {
-					// Need at least '>'.
-					return -1;
-				}
-
-				// At this point, / must be followed by > to form />.
-				if (*itr++ != '>') {
-					return 0;
-				}
-
-				return std::distance(begin, itr);
-			}
-			
-			if (*itr++ != '>') {
-				return 0;
-			}
-
-			process_members(itr, end, entity);
-
-			// "</entity>"
-			const int close_tag_size = 2 + entity_name.size() + 1;
-
-			itr += io::consume_whitespaces(itr, end);
-			if (itr == end) {
-				return 0 - close_tag_size;
-			}
-
-			if (*itr++ != '<') return 0; if (itr == end) return 0 - (close_tag_size - 1);
-			if (*itr++ != '/') return 0; if (itr == end) return 0 - (close_tag_size - 2);
-
-			std::string closing;
-			itr += io::copy_while(itr, end, std::back_inserter(closing), is_xml_identifier_char());
-			itr += io::consume_whitespaces(itr, end);
-
-			if (closing.size() < entity_name.size()) {
-				return 0 - (entity_name.size() - closing.size() + 1); // 1 = '>'
-			} else if (closing != entity_name) {
-				return 0;
-			}
-
-			if (itr == end) return -1;
-			if (*itr++ != '>') return 0;
-
-			return std::distance(begin, itr);
+			return read_entity(begin, end, entity);
 		}
 	};
 

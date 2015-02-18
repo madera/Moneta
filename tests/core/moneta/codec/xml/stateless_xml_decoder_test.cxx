@@ -236,6 +236,93 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_tag) {
 	}
 }
 
+BOOST_AUTO_TEST_CASE(test_moneta_codec_stateless_xml_decoder_implementation_ignore_tag) {
+	using moneta::codec::stateless_xml_decoder_implementation::ignore_tag;
+	
+	{
+		const std::string data = "<a></a>";
+		const int result = ignore_tag(std::begin(data), std::end(data));
+		BOOST_CHECK_EQUAL(result, data.size());
+	}
+	{
+		const std::string data = "<a><b></b></a>";
+		const int result = ignore_tag(std::begin(data), std::end(data));
+		BOOST_CHECK_EQUAL(result, data.size());
+	}
+	{
+		const std::string data = "<a><b><c></c></b></a>";
+		const int result = ignore_tag(std::begin(data), std::end(data));
+		BOOST_CHECK_EQUAL(result, data.size());
+	}
+	{
+		const std::string data = "<a><b><c /></b></a>";
+		const int result = ignore_tag(std::begin(data), std::end(data));
+		BOOST_CHECK_EQUAL(result, data.size());
+	}
+	{
+		const std::string data = "<a><b><c/></b></a>";
+		const int result = ignore_tag(std::begin(data), std::end(data));
+		BOOST_CHECK_EQUAL(result, data.size());
+	}
+	{
+		// Invalid closing order.
+		const std::string data = "<a><b></a></b>";
+		const int result = ignore_tag(std::begin(data), std::end(data));
+		BOOST_CHECK_EQUAL(result, 0);
+	}
+	{
+		const std::string data = "<a/>";
+		const int result = ignore_tag(std::begin(data), std::end(data));
+		BOOST_CHECK_EQUAL(result, data.size());
+	}
+	{
+		const std::string data = "<a />";
+		const int result = ignore_tag(std::begin(data), std::end(data));
+		BOOST_CHECK_EQUAL(result, data.size());
+	}
+
+	//
+	// Proper size remaining arithmetic
+	//
+	// TODO: Be more thorough...
+	{
+		const std::string data = "<something><blabla>";
+		const int result = ignore_tag(std::begin(data), std::end(data));
+		BOOST_CHECK_EQUAL(result, 0 - std::string("</blabla></something>").size());
+	}
+	{
+		const std::string data = "<something><blabla></bla";
+		const int result = ignore_tag(std::begin(data), std::end(data));
+		BOOST_CHECK_EQUAL(result, 0 - std::string("bla></something>").size());
+	}
+	{
+		const std::string data = "<something><blabla></";
+		const int result = ignore_tag(std::begin(data), std::end(data));
+		BOOST_CHECK_EQUAL(result, 0 - std::string("blabla></something>").size());
+	}
+	{
+		const std::string data = "<something><blabla></blabla";
+		const int result = ignore_tag(std::begin(data), std::end(data));
+		BOOST_CHECK_EQUAL(result, 0 - std::string("></something>").size());
+	}
+}
+
+BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_element_member) {
+	using moneta::codec::stateless_xml_decoder_implementation::read_element_member;
+
+	{
+		Person person;
+
+		const std::string data = "<Name>John Smith</Name>";
+		const int result = read_element_member<
+			MONETA_MEMBER(Person, std::string, Name)
+		>(std::begin(data), std::end(data), person);
+
+		BOOST_CHECK_EQUAL(result, data.size());
+		BOOST_CHECK_EQUAL(person.Name, "John Smith");
+	}
+}
+
 BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_0) {
 	{
 		const std::string data = "<ThreeInts/>";
@@ -320,8 +407,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_incomplete_clos
 		const std::string data = "<Person></P";
 		decoder::variant_type variant;
 		int result = decoder()(std::begin(data), std::end(data), variant);
-//		BOOST_CHECK_EQUAL(result, 0 - std::string("erson>").size());
-		BOOST_CHECK_EQUAL(result, -6);
+		BOOST_CHECK_EQUAL(result, 0 - std::string("erson>").size());
 	}
 	{
 		const std::string data = "<Person></Pe";
