@@ -6,12 +6,14 @@
 
 namespace moneta { namespace codec {
 
+	using moneta::algorithm::start_actions;
 	using moneta::algorithm::enter_actions;
 	using moneta::algorithm::member_actions;
 	using moneta::algorithm::leave_actions;
 	using moneta::algorithm::enter_container_actions;
 	using moneta::algorithm::container_item_actions;
 	using moneta::algorithm::leave_container_actions;
+	using moneta::algorithm::finish_actions;
 
 	namespace detail {
 		using namespace moneta::algorithm::detail;
@@ -25,6 +27,11 @@ namespace moneta { namespace codec {
 			//
 			//
 			//
+			typedef typename detail::actions_of<
+				Actions,
+				detail::traverse_start
+			>::type start_actions;
+
 			typedef typename detail::actions_of<
 				Actions,
 				detail::traverse_enter
@@ -54,6 +61,11 @@ namespace moneta { namespace codec {
 				Actions,
 				detail::traverse_leave_container
 			>::type leave_container_actions;
+
+			typedef typename detail::actions_of<
+				Actions,
+				detail::traverse_finish
+			>::type finish_actions;
 
 			Iterator begin;
 			Iterator end;
@@ -376,6 +388,15 @@ namespace moneta { namespace codec {
 		}
 	};
 	
+	struct decoder_start_decoding {
+		template <class Entity, class Path, class DecoderState>
+		void operator()(Entity& entity, const Path&, DecoderState& decoder_state) const {
+			boost::mpl::for_each<typename DecoderState::start_actions>(
+				decoder_enter_or_leave_action<Entity, Path, DecoderState>(entity, decoder_state)
+			);
+		}
+	};
+
 	struct decoder_enter_entity {
 		template <class Entity, class Path, class DecoderState>
 		void operator()(Entity& entity, const Path&, DecoderState& decoder_state) const {
@@ -457,6 +478,15 @@ namespace moneta { namespace codec {
 		}
 	};
 
+	struct decoder_finish_decoding {
+		template <class Entity, class Path, class DecoderState>
+		void operator()(Entity& entity, const Path&, DecoderState& decoder_state) const {
+			boost::mpl::for_each<typename DecoderState::finish_actions>(
+				decoder_enter_or_leave_action<Entity, Path, DecoderState>(entity, decoder_state)
+			);
+		}
+	};
+
 	template <class T, MONETA_TRAVERSE_PARAMS_WITH_DEFAULTS>
 	struct decoder {
 		typedef decoder this_type;
@@ -471,12 +501,14 @@ namespace moneta { namespace codec {
 			using namespace moneta::algorithm;
 
 			typedef moneta::algorithm::traverse<
+				start_actions<decoder_start_decoding>,
 				enter_actions<decoder_enter_entity>,
 				member_actions<decoder_member>,
 				leave_actions<decoder_leave_entity>,
 				enter_container_actions<decoder_enter_container>,
 				container_item_actions<decoder_container_item>,
-				leave_container_actions<decoder_leave_container>
+				leave_container_actions<decoder_leave_container>,
+				finish_actions<decoder_finish_decoding>
 			> traverser;
 
 			detail::decoder_state<mpl_vector, Iterator, State> decoder_state(begin, end, state);

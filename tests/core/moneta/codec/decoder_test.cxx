@@ -28,6 +28,21 @@ MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 	((std::vector<boost::uint32_t>, numbers))
 )
 
+struct testcodec_start_decoding {
+	template <class Iterator, class Entity, class Path, class State>
+	int operator()(Iterator begin, Iterator end, Entity&, const Path&, State&) const {
+		if (begin == end) {
+			return -1;
+		}
+
+		if (*begin != 'S') {
+			return 0;
+		}
+
+		return 1;
+	}
+};
+
 struct testcodec_enter_entity {
 	template <class Iterator, class Entity, class Path, class State>
 	int operator()(Iterator begin, Iterator end, Entity&, const Path&, State&) const {
@@ -132,31 +147,48 @@ struct testcodec_leave_container {
 	}
 };
 
+struct testcodec_finish_decoding {
+	template <class Iterator, class Entity, class Path, class State>
+	int operator()(Iterator begin, Iterator end, Entity&, const Path&, State&) const {
+		if (begin == end) {
+			return -1;
+		}
+
+		if (*begin != 'F') {
+			return 0;
+		}
+
+		return 1;
+	}
+};
+
 using namespace moneta::codec;
 typedef decoder<
+	start_actions<testcodec_start_decoding>,
 	enter_actions<testcodec_enter_entity>,
 	member_actions<testcodec_member>,
 	leave_actions<testcodec_leave_entity>,
 	enter_container_actions<testcodec_enter_container>,
 	container_item_actions<testcodec_container_item>,
-	leave_container_actions<testcodec_leave_container>
+	leave_container_actions<testcodec_leave_container>,
+	finish_actions<testcodec_finish_decoding>
 > decoder_t;
 
 BOOST_AUTO_TEST_CASE(point3d_simple_decoder_test) {
 	const unsigned char buffer[] = {
-		'E',
-			0x01, 0x00, 0x00, 0x00,
-			0x02, 0x00, 0x00, 0x00,
-			0x03, 0x00, 0x00, 0x00,
-		'L'
+		'S',
+			'E',
+				0x01, 0x00, 0x00, 0x00,
+				0x02, 0x00, 0x00, 0x00,
+				0x03, 0x00, 0x00, 0x00,
+			'L',
+		'F'
 	};
 
 	Point3D point;
-	//const unsigned char* itr = std::begin(buffer);
-	//const int result = decoder_t()(itr, std::end(buffer), point);
-	const int result = moneta::codec::decode<decoder_t>(std::begin(buffer), std::end(buffer), point);
+	const int result = decoder_t()(std::begin(buffer), std::end(buffer), point);
 
-	BOOST_CHECK_EQUAL(result, 1 + 3 * sizeof(boost::uint32_t) + 1);
+	BOOST_CHECK_EQUAL(result, 1 + (1 + 3 * sizeof(boost::uint32_t) + 1) + 1);
 	BOOST_CHECK_EQUAL(point.x, 1);
 	BOOST_CHECK_EQUAL(point.y, 2);
 	BOOST_CHECK_EQUAL(point.z, 3);
@@ -166,21 +198,21 @@ BOOST_AUTO_TEST_CASE(point3d_simple_decoder_test) {
 
 BOOST_AUTO_TEST_CASE(lottery_simple_decoder_test) {
 	const unsigned char buffer[] = {
-		'E',
-		0x04, 0x03, 0x02, 0x01,
-			'e',
-				0x03,
-				0x01, 0x00, 0x00, 0x00,
-				0x02, 0x00, 0x00, 0x00,
-				0x03, 0x00, 0x00, 0x00,
-			'l',
-		'L'
+		'S',
+			'E',
+			0x04, 0x03, 0x02, 0x01,
+				'e',
+					0x03,
+					0x01, 0x00, 0x00, 0x00,
+					0x02, 0x00, 0x00, 0x00,
+					0x03, 0x00, 0x00, 0x00,
+				'l',
+			'L',
+		'F'
 	};
 
 	LotteryNumbers lottery;
-	//const unsigned char* itr = std::begin(buffer);
-	//const int result = decoder_t()(itr, std::end(buffer), lottery);
-	const int result = moneta::codec::decode<decoder_t>(std::begin(buffer), std::end(buffer), lottery);
+	const int result = decoder_t()(std::begin(buffer), std::end(buffer), lottery);
 
 	BOOST_CHECK_EQUAL(result, sizeof(buffer));
 	BOOST_CHECK_EQUAL(lottery.date, 0x01020304);
