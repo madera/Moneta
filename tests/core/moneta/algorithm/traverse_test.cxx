@@ -68,6 +68,36 @@ struct test_state {
 
 //
 
+size_t g_start_count;
+
+struct counting_start_e {
+	template <class Entity>
+	void operator()(Entity&) const {
+		++g_start_count;
+	}
+};
+
+struct counting_start_ep {
+	template <class Entity, class Path>
+	void operator()(Entity&, const Path&) const {
+		++g_start_count;
+	}
+};
+
+struct counting_start_eps {
+	template <class Entity, class Path, class State>
+	void operator()(Entity&, const Path&, State& state) const {
+		++g_start_count;
+
+		std::string tmp = "S:" + moneta::traits::get_entity_name<Entity>();
+		const std::string path = moneta::codec::detail::stringize_path<Path>();
+		tmp += (path.empty()? "" : "," + path);
+		state.lines.push_back(tmp);
+	}
+};
+
+//
+
 size_t g_enter_count;
 
 struct counting_enter_e {
@@ -250,7 +280,39 @@ struct counting_leave_container_eps {
 
 //
 
+size_t g_finish_count;
+
+struct counting_finish_e {
+	template <class Entity>
+	void operator()(Entity&) const {
+		++g_finish_count;
+	}
+};
+
+struct counting_finish_ep {
+	template <class Entity, class Path>
+	void operator()(Entity&, const Path&) const {
+		++g_finish_count;
+	}
+};
+
+struct counting_finish_eps {
+	template <class Entity, class Path, class State>
+	void operator()(Entity&, const Path&, State& state) const {
+		++g_finish_count;
+
+		std::string tmp = "F:" + moneta::traits::get_entity_name<Entity>();
+		const std::string path = moneta::codec::detail::stringize_path<Path>();
+		tmp += (path.empty()? "" : "," + path);
+		state.lines.push_back(tmp);
+	}
+};
+
+//
+
 void reset_counters() {
+	g_start_count = 0;
+
 	g_enter_count = 0;
 	g_member_count = 0;
 	g_leave_count = 0;
@@ -258,10 +320,17 @@ void reset_counters() {
 	g_enter_container_count = 0;
 	g_container_item_count = 0;
 	g_leave_container_count = 0;
+
+	g_finish_count = 0;
 }
 
 using namespace moneta::algorithm;
 typedef moneta::algorithm::traverse<
+	start_actions<
+		counting_start_e,
+		counting_start_ep,
+		counting_start_eps
+	>,
 	enter_actions<
 		counting_enter_e,
 		counting_enter_ep,
@@ -291,6 +360,11 @@ typedef moneta::algorithm::traverse<
 		counting_leave_container_e,
 		counting_leave_container_ep,
 		counting_leave_container_eps
+	>,
+	finish_actions<
+		counting_finish_e,
+		counting_finish_ep,
+		counting_finish_eps
 	>
 > traverse_type;
 
@@ -315,42 +389,46 @@ BOOST_AUTO_TEST_CASE(with_container_members_traverse_test) {
 
 	test_state state;
 	traverse_type()(team, state);
+	BOOST_CHECK_EQUAL(g_start_count, 3);
 	BOOST_CHECK_EQUAL(g_enter_count, 3 * 3);
 	BOOST_CHECK_EQUAL(g_member_count, 9 * 3);
 	BOOST_CHECK_EQUAL(g_leave_count, 3 * 3);
 	BOOST_CHECK_EQUAL(g_enter_container_count, 2 * 3);
 	BOOST_CHECK_EQUAL(g_container_item_count, 3 * 3);
 	BOOST_CHECK_EQUAL(g_leave_container_count, 2 * 3);
+	BOOST_CHECK_EQUAL(g_finish_count, 3);
 
 	const char* expected[] = {
-		"e:SportsTeam",
-			"m:Name",
-			"ec:Players,/SportsTeam::Players",
-				"e:Person,/SportsTeam::Players",
-					"m:ID,/SportsTeam::Players",
-					"m:Name,/SportsTeam::Players",
-					"m:Height,/SportsTeam::Players",
-					"m:Fingers,/SportsTeam::Players",
-				"l:Person,/SportsTeam::Players",
-				"e:Person,/SportsTeam::Players",
-					"m:ID,/SportsTeam::Players",
-					"m:Name,/SportsTeam::Players",
-					"m:Height,/SportsTeam::Players",
-					"m:Fingers,/SportsTeam::Players",
-				"l:Person,/SportsTeam::Players",
-			"lc:Players,/SportsTeam::Players",
-			"ec:Tags,/SportsTeam::Tags",
-				"ci:tag0,/SportsTeam::Tags",
-				"ci:tag1,/SportsTeam::Tags",
-				"ci:tag2,/SportsTeam::Tags",
-			"lc:Tags,/SportsTeam::Tags",
-		"l:SportsTeam"
+		"S:SportsTeam",
+			"e:SportsTeam",
+				"m:Name",
+				"ec:Players,/SportsTeam::Players",
+					"e:Person,/SportsTeam::Players",
+						"m:ID,/SportsTeam::Players",
+						"m:Name,/SportsTeam::Players",
+						"m:Height,/SportsTeam::Players",
+						"m:Fingers,/SportsTeam::Players",
+					"l:Person,/SportsTeam::Players",
+					"e:Person,/SportsTeam::Players",
+						"m:ID,/SportsTeam::Players",
+						"m:Name,/SportsTeam::Players",
+						"m:Height,/SportsTeam::Players",
+						"m:Fingers,/SportsTeam::Players",
+					"l:Person,/SportsTeam::Players",
+				"lc:Players,/SportsTeam::Players",
+				"ec:Tags,/SportsTeam::Tags",
+					"ci:tag0,/SportsTeam::Tags",
+					"ci:tag1,/SportsTeam::Tags",
+					"ci:tag2,/SportsTeam::Tags",
+				"lc:Tags,/SportsTeam::Tags",
+			"l:SportsTeam",
+		"F:SportsTeam"
 	};
 
-	const size_t expected_size = sizeof(expected) / sizeof(char*);
+	const size_t line_count = std::distance(std::begin(expected), std::end(expected));
 
-	BOOST_REQUIRE(state.lines.size() == expected_size);
-	BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + expected_size);
+	BOOST_REQUIRE_EQUAL(state.lines.size(), line_count);
+	BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + line_count);
 
 	{
 		const SportsTeam& const_team = team;
@@ -358,34 +436,38 @@ BOOST_AUTO_TEST_CASE(with_container_members_traverse_test) {
 
 		traverse_type()(const_team, state);
 
-		BOOST_REQUIRE(state.lines.size() == expected_size);
-		BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + expected_size);
+		BOOST_REQUIRE_EQUAL(state.lines.size(), line_count);
+		BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + line_count);
 	}
 
 }
 
 BOOST_AUTO_TEST_CASE(traverse_test) {
 	const char* expected[] = {
-		"e:A",
-			"m:f",
-			"m:g",
-			"e:B,/A::b",
-				"e:C,/A::b/B::c",
-					"m:j,/A::b/B::c",
-					"m:k,/A::b/B::c",
-				"l:C,/A::b/B::c",
-				"m:i,/A::b",
-				"e:D,/A::b/B::d",
-					"m:l,/A::b/B::d",
-					"e:E,/A::b/B::d/D::e",
-						"m:m,/A::b/B::d/D::e",
-						"m:n,/A::b/B::d/D::e",
-					"l:E,/A::b/B::d/D::e",
-				"l:D,/A::b/B::d",
-			"l:B,/A::b",
-			"m:h",
-		"l:A"
+		"S:A",
+			"e:A",
+				"m:f",
+				"m:g",
+				"e:B,/A::b",
+					"e:C,/A::b/B::c",
+						"m:j,/A::b/B::c",
+						"m:k,/A::b/B::c",
+					"l:C,/A::b/B::c",
+					"m:i,/A::b",
+					"e:D,/A::b/B::d",
+						"m:l,/A::b/B::d",
+						"e:E,/A::b/B::d/D::e",
+							"m:m,/A::b/B::d/D::e",
+							"m:n,/A::b/B::d/D::e",
+						"l:E,/A::b/B::d/D::e",
+					"l:D,/A::b/B::d",
+				"l:B,/A::b",
+				"m:h",
+			"l:A",
+		"F:A"
 	};
+
+	const size_t line_count = std::distance(std::begin(expected), std::end(expected));
 
 	{
 		test_state state;
@@ -395,8 +477,8 @@ BOOST_AUTO_TEST_CASE(traverse_test) {
 		traverse_type traverser;
 		traverser(a, state);
 
-		BOOST_REQUIRE(state.lines.size() == 19);
-		BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + 19);
+		BOOST_REQUIRE_EQUAL(state.lines.size(), line_count);
+		BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + line_count);
 	}
 
 	{
@@ -407,8 +489,8 @@ BOOST_AUTO_TEST_CASE(traverse_test) {
 		const A& ca = a;
 		traverser(ca, state);
 
-		BOOST_REQUIRE(state.lines.size() == 19);
-		BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + 19);
+		BOOST_REQUIRE_EQUAL(state.lines.size(), line_count);
+		BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + line_count);
 	}
 }
 
@@ -418,17 +500,20 @@ BOOST_AUTO_TEST_CASE(stateful_traverse_test) {
 	traverse_type()(cat, state);
 
 	const char* expected[] = {
-		"e:Cat",
-			"m:ID",
-			"m:Name",
-			"e:Address,/Cat::Address",
-				"m:ID,/Cat::Address",
-				"m:Number,/Cat::Address",
-				"m:Street,/Cat::Address",
-			"l:Address,/Cat::Address",
-		"l:Cat"
+		"S:Cat",
+			"e:Cat",
+				"m:ID",
+				"m:Name",
+				"e:Address,/Cat::Address",
+					"m:ID,/Cat::Address",
+					"m:Number,/Cat::Address",
+					"m:Street,/Cat::Address",
+				"l:Address,/Cat::Address",
+			"l:Cat",
+		"F:Cat"
 	};
 
-	BOOST_REQUIRE(state.lines.size() == 9);
-	BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + 9);
+	const size_t line_count = std::distance(std::begin(expected), std::end(expected));
+	BOOST_REQUIRE_EQUAL(state.lines.size(), line_count);
+	BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + line_count);
 }
