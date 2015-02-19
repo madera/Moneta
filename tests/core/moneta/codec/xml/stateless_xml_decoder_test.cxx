@@ -4,16 +4,26 @@
 
 #include "../../model/Person.hxx"
 #include "../../model/simple/ThreeInts.hxx"
-
-typedef moneta::codec::stateless_xml_decoder<
-	moneta::traits::entity_group<Person, ThreeInts>
->::type decoder;
+#include "../../model/Cat.hxx"
+#include "../../model/tree/A.hxx"
 
 MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 	Point,
 	((int, x))
 	((int, y))
 )
+
+MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+	Customer,
+	((int,         ID         ))
+	((std::string, Name       ))
+	((Address,     HomeAddress))
+	((Address,     WorkAddress))
+)
+
+typedef moneta::codec::stateless_xml_decoder<
+	moneta::traits::entity_group<Person, ThreeInts, A, Cat, Point, Customer>
+>::type decoder;
 
 BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_prefix) {
 	using moneta::codec::stateless_xml_decoder_implementation::read_prefix;
@@ -321,6 +331,8 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_element_me
 		BOOST_CHECK_EQUAL(result, data.size());
 		BOOST_CHECK_EQUAL(person.Name, "John Smith");
 	}
+
+	// TODO: Do more of these.
 }
 
 BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_0) {
@@ -452,15 +464,104 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_incomplete_clos
 
 BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_decode_with_members) {
 	{
-		const std::string data =
+		static const std::string data =
 			"<Person>\n"
 			"\t<Name>John Smith</Name>\n"
-			"</Person>\n"
+			"\t<Fingers>8</Fingers>\n"
+			"</Person>"
 		;
 
 		decoder::variant_type variant;
 		int result = decoder()(std::begin(data), std::end(data), variant);
-		BOOST_CHECK_EQUAL(result, 0 - std::string("</Person>").size());
+		BOOST_REQUIRE_EQUAL(result, data.size());
+
+		Person* entity = boost::get<Person>(&variant);
+		BOOST_REQUIRE(entity);
+
+		BOOST_CHECK_EQUAL(entity->Name, "John Smith");
+		BOOST_CHECK_EQUAL(entity->Fingers, 8);
+	}
+	{
+		static const std::string data =
+			"<A f=\"1\" g=\"2\" h=\"3\">\n"
+			"\t<b>\n"
+			"\t\t<c>\n"
+			"\t\t\t<j>10</j>\n"
+			"\t\t\t<k>20</k>\n"
+			"\t\t</c>\n"
+			"\t\t<i>100</i>\n"
+			"\t\t<d l=\"500\">\n"
+			"\t\t\t<e m=\"1000\" n=\"2000\" />\n"
+			"\t\t</d>\n"
+			"\t</b>\n"
+			"</A>"
+		;
+
+		decoder::variant_type variant;
+		int result = decoder()(std::begin(data), std::end(data), variant);
+		BOOST_REQUIRE_EQUAL(result, data.size());
+
+		A* entity = boost::get<A>(&variant);
+		BOOST_REQUIRE(entity);
+
+		A& a = *entity;
+		BOOST_CHECK_EQUAL(a.f, 1);
+		BOOST_CHECK_EQUAL(a.g, 2);
+		BOOST_CHECK_EQUAL(a.h, 3);
+		BOOST_CHECK_EQUAL(a.b.c.j, 10);
+		BOOST_CHECK_EQUAL(a.b.c.k, 20);
+		BOOST_CHECK_EQUAL(a.b.i, 100);
+		BOOST_CHECK_EQUAL(a.b.d.l, 500);
+		BOOST_CHECK_EQUAL(a.b.d.e.m, 1000);
+		BOOST_CHECK_EQUAL(a.b.d.e.n, 2000);
+	}
+	{
+		static const std::string data =
+			"<Cat>\n"
+			"\t<ID>123</ID>\n"
+			"\t<Name>Mr. Garfield</Name>\n"
+			"\t<Address ID='12345' Number='1' Street='5th Avenue' />\n"
+			"</Cat>"
+		;
+
+		decoder::variant_type variant;
+		int result = decoder()(std::begin(data), std::end(data), variant);
+		BOOST_REQUIRE_EQUAL(result, data.size());
+
+		Cat* entity = boost::get<Cat>(&variant);
+		BOOST_REQUIRE(entity);
+
+		Cat& cat = *entity;
+		BOOST_CHECK_EQUAL(cat.ID, 123);
+		BOOST_CHECK_EQUAL(cat.Name, "Mr. Garfield");
+		BOOST_CHECK_EQUAL(cat.Address.ID, 12345);
+		BOOST_CHECK_EQUAL(cat.Address.Number, 1);
+		BOOST_CHECK_EQUAL(cat.Address.Street, "5th Avenue");
+	}
+	{
+		static const std::string data =
+			"<Customer ID=\"123\" Name=\"John Smith\">\n"
+			"\t<HomeAddress ID=\"555\" Number=\"100\" Street=\"One Infinite Loop\" />\n"
+			"\t<WorkAddress ID=\"777\" Number=\"200\" Street=\"Two Infinite Loops\" />\n"
+			"</Customer>"
+		;
+
+		decoder::variant_type variant;
+		int result = decoder()(std::begin(data), std::end(data), variant);
+		BOOST_REQUIRE_EQUAL(result, data.size());
+
+		Customer* entity = boost::get<Customer>(&variant);
+		BOOST_REQUIRE(entity);
+
+		Customer& customer = *entity;
+		BOOST_CHECK_EQUAL(customer.ID, 123);
+		BOOST_CHECK_EQUAL(customer.Name, "John Smith");
+		BOOST_CHECK_EQUAL(customer.HomeAddress.ID, 555);
+		BOOST_CHECK_EQUAL(customer.HomeAddress.Number, 100);
+		BOOST_CHECK_EQUAL(customer.HomeAddress.Street, "One Infinite Loop");
+		BOOST_CHECK_EQUAL(customer.WorkAddress.ID, 777);
+		BOOST_CHECK_EQUAL(customer.WorkAddress.Number, 200);
+		BOOST_CHECK_EQUAL(customer.WorkAddress.Street, "Two Infinite Loops");
 	}
 }
 

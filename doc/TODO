@@ -34,6 +34,7 @@ TODO:
 	* Use typename boost::mpl::clear<Sequence>::type for all sequence operations.
 	* Create network samples using Boost asio.
 	* Either get_entity_name<ET> or entity_name<ET>::get(), but not both.
+	* Remove mpl_vector members.
 
 Current Stack:
 	* XML decoder.
