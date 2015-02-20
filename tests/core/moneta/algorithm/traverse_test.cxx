@@ -79,14 +79,14 @@ struct counting_start_e {
 
 struct counting_start_ep {
 	template <class Entity, class Path>
-	void operator()(Entity&, const Path&) const {
+	void operator()(Entity&, Path) const {
 		++g_start_count;
 	}
 };
 
-struct counting_start_eps {
-	template <class Entity, class Path, class State>
-	void operator()(Entity&, const Path&, State& state) const {
+struct counting_start_esp {
+	template <class Entity, class State, class Path>
+	void operator()(Entity&, State& state, Path) const {
 		++g_start_count;
 
 		std::string tmp = "S:" + moneta::traits::get_entity_name<Entity>();
@@ -109,14 +109,14 @@ struct counting_enter_e {
 
 struct counting_enter_ep {
 	template <class Entity, class Path>
-	void operator()(Entity&, const Path&) const {
+	void operator()(Entity&, Path) const {
 		++g_enter_count;
 	}
 };
 
-struct counting_enter_eps {
-	template <class Entity, class Path, class State>
-	void operator()(Entity&, const Path&, State& state) const {
+struct counting_enter_esp {
+	template <class Entity, class State, class Path>
+	void operator()(Entity&, State& state, Path) const {
 		++g_enter_count;
 
 		std::string tmp = "e:" + moneta::traits::get_entity_name<Entity>();
@@ -130,23 +130,23 @@ struct counting_enter_eps {
 
 size_t g_member_count = 0;
 
-struct counting_member_e {
-	template <class Member, class Entity>
-	void operator()(const Member&, Entity&) const {
+struct counting_member_em {
+	template <class Entity, class Member>
+	void operator()(Entity&, Member) const {
 		++g_member_count;
 	}
 };
 
-struct counting_member_ep {
-	template <class Member, class Entity, class Path>
-	void operator()(const Member&, Entity&, const Path&) const {
+struct counting_member_emp {
+	template <class Entity, class Member, class Path>
+	void operator()(Entity&, Member, Path) const {
 		++g_member_count;
 	}
 };
 
-struct counting_member_eps {
-	template <class Member, class Entity, class Path, class State>
-	void operator()(const Member&, Entity&, const Path&, State& state) const {
+struct counting_member_esmp {
+	template <class Entity, class State, class Member, class Path>
+	void operator()(Entity&, State& state, Member, Path) const {
 		++g_member_count;
 
 		std::string tmp = "m:" + moneta::traits::detail::member_name<Member>::get();
@@ -169,14 +169,14 @@ struct counting_leave_e {
 
 struct counting_leave_ep {
 	template <class Entity, class Path>
-	void operator()(Entity&, const Path&) const {
+	void operator()(Entity&, Path) const {
 		++g_leave_count;
 	}
 };
 
-struct counting_leave_eps {
-	template <class Entity, class Path, class State>
-	void operator()(Entity&, const Path&, State& state) const {
+struct counting_leave_esp {
+	template <class Entity, class State, class Path>
+	void operator()(Entity&, State& state, Path) const {
 		++g_leave_count;
 
 		std::string tmp = "l:" + moneta::traits::get_entity_name<Entity>();
@@ -192,23 +192,23 @@ struct counting_leave_eps {
 
 size_t g_enter_container_count;
 
-struct counting_enter_container_e {
-	template <class Member, class Entity>
-	void operator()(const Member&, Entity&) const {
+struct counting_enter_container_em {
+	template <class Entity, class Member>
+	void operator()(Entity&, Member) const {
 		++g_enter_container_count;
 	}
 };
 
-struct counting_enter_container_ep {
-	template <class Member, class Entity, class Path>
-	void operator()(const Member&, Entity&, const Path&) const {
+struct counting_enter_container_emp {
+	template <class Entity, class Member, class Path>
+	void operator()(Entity&, Member, Path) const {
 		++g_enter_container_count;
 	}
 };
 
-struct counting_enter_container_eps {
-	template <class Member, class Entity, class Path, class State>
-	void operator()(const Member&, Entity&, const Path&, State& state) const {
+struct counting_enter_container_esmp {
+	template <class Entity, class State, class Member, class Path>
+	void operator()(Entity&, State& state, Member, Path) const {
 		++g_enter_container_count;
 
 		std::string tmp = "ec:" + moneta::traits::detail::member_name<Member>::get();
@@ -222,23 +222,23 @@ struct counting_enter_container_eps {
 
 size_t g_container_item_count = 0;
 
-struct counting_container_item_e {
-	template <class Value, class Member, class Entity>
-	void operator()(Value&, const Member&, Entity&) const {
+struct counting_container_item_evm {
+	template <class Entity, typename Value, class Member>
+	void operator()(Entity&, Value&, Member) const {
 		++g_container_item_count;
 	}
 };
 
-struct counting_container_item_ep {
-	template <class Value, class Member, class Entity, class Path>
-	void operator()(Value&, const Member&, Entity&, const Path&) const {
+struct counting_container_item_evmp {
+	template <class Entity, typename Value, class Member, class Path>
+	void operator()(Entity&, Value&, Member, Path) const {
 		++g_container_item_count;
 	}
 };
 
-struct counting_container_item_eps {
-	template <class Value, class Member, class Entity, class Path, class State>
-	void operator()(Value& value, const Member&, Entity&, const Path&, State& state) const {
+struct counting_container_item_evsmp {
+	template <class Entity, typename Value, class State, class Member, class Path>
+	void operator()(Entity&, Value& value, State& state, Member, Path) const {
 		++g_container_item_count;
 
 		std::string tmp = "ci:" + value;
@@ -252,23 +252,23 @@ struct counting_container_item_eps {
 
 size_t g_leave_container_count;
 
-struct counting_leave_container_e {
-	template <class Member, class Entity>
-	void operator()(const Member&, Entity&) const {
+struct counting_leave_container_em {
+	template <class Entity, class Member>
+	void operator()(Entity&, Member) const {
 		++g_leave_container_count;
 	}
 };
 
-struct counting_leave_container_ep {
-	template <class Member, class Entity, class Path>
-	void operator()(const Member&, Entity&, const Path&) const {
+struct counting_leave_container_emp {
+	template <class Entity, class Member, class Path>
+	void operator()(Entity&, Member, Path) const {
 		++g_leave_container_count;
 	}
 };
 
-struct counting_leave_container_eps {
-	template <class Member, class Entity, class Path, class State>
-	void operator()(const Member&, Entity&, const Path&, State& state) const {
+struct counting_leave_container_esmp {
+	template <class Entity, class State, class Member, class Path>
+	void operator()(Entity&, State& state, Member, Path) const {
 		++g_leave_container_count;
 
 		std::string tmp = "lc:" + moneta::traits::detail::member_name<Member>::get();
@@ -291,14 +291,14 @@ struct counting_finish_e {
 
 struct counting_finish_ep {
 	template <class Entity, class Path>
-	void operator()(Entity&, const Path&) const {
+	void operator()(Entity&, Path) const {
 		++g_finish_count;
 	}
 };
 
-struct counting_finish_eps {
-	template <class Entity, class Path, class State>
-	void operator()(Entity&, const Path&, State& state) const {
+struct counting_finish_esp {
+	template <class Entity, class State, class Path>
+	void operator()(Entity&, State& state, Path) const {
 		++g_finish_count;
 
 		std::string tmp = "F:" + moneta::traits::get_entity_name<Entity>();
@@ -329,42 +329,42 @@ typedef moneta::algorithm::traverse<
 	start_actions<
 		counting_start_e,
 		counting_start_ep,
-		counting_start_eps
+		counting_start_esp
 	>,
 	enter_actions<
 		counting_enter_e,
 		counting_enter_ep,
-		counting_enter_eps
+		counting_enter_esp
 	>,
 	member_actions<
-		counting_member_e,
-		counting_member_ep,
-		counting_member_eps
+		counting_member_em,
+		counting_member_emp,
+		counting_member_esmp
 	>,
 	leave_actions<
 		counting_leave_e,
 		counting_leave_ep,
-		counting_leave_eps
+		counting_leave_esp
 	>,
 	enter_container_actions<
-		counting_enter_container_e,
-		counting_enter_container_ep,
-		counting_enter_container_eps
+		counting_enter_container_em,
+		counting_enter_container_emp,
+		counting_enter_container_esmp
 	>,
 	container_item_actions<
-		counting_container_item_e,
-		counting_container_item_ep,
-		counting_container_item_eps
+		counting_container_item_evm,
+		counting_container_item_evmp,
+		counting_container_item_evsmp
 	>,
 	leave_container_actions<
-		counting_leave_container_e,
-		counting_leave_container_ep,
-		counting_leave_container_eps
+		counting_leave_container_em,
+		counting_leave_container_emp,
+		counting_leave_container_esmp
 	>,
 	finish_actions<
 		counting_finish_e,
 		counting_finish_ep,
-		counting_finish_eps
+		counting_finish_esp
 	>
 > traverse_type;
 

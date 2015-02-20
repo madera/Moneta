@@ -54,23 +54,29 @@ namespace moneta { namespace algorithm {
 			>::type
 		> {};
 
+		// TODO: Export this useful function.
 		template <class Path, class Member, class Enable = void>
 		struct add_path : boost::mpl::identity<void> {};
 
 		template <class Path, class Member>
 		struct add_path<
 			Path, Member,
-			typename boost::enable_if<typename boost::mpl::is_sequence<Path>::type>::type
+			typename boost::enable_if<
+				typename boost::mpl::is_sequence<Path>::type
+			>::type
 		> : boost::mpl::push_back<Path, Member> {};
 
-		template <class Entity, class Path, class State>
-		class entity_enter_or_leave_action {
+		template <class Entity, class State, class Path>
+		class start_finish_enter_leave_action {
 			Entity& _entity;
 			State& _state;
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Entity&)>
+				moneta::traits::detail::is_functor_callable<
+					Action,
+					void (Entity&)
+				>
 			>::type
 			process() const {
 				Action()(_entity);
@@ -78,7 +84,10 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Entity&, Path&)>
+				moneta::traits::detail::is_functor_callable<
+					Action,
+					void (Entity&, Path)
+				>
 			>::type
 			process() const {
 				Action()(_entity, Path());
@@ -86,14 +95,17 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Entity&, Path&, State&)>
+				moneta::traits::detail::is_functor_callable<
+					Action,
+					void (Entity&, State&, Path)
+				>
 			>::type
 			process() const {
-				Action()(_entity, Path(), _state);
+				Action()(_entity, _state, Path());
 			}
 			
 		public:
-			entity_enter_or_leave_action(Entity& entity, State& state)
+			start_finish_enter_leave_action(Entity& entity, State& state)
 			 : _entity(entity), _state(state) {}
 
 			template <typename Action>
@@ -102,37 +114,46 @@ namespace moneta { namespace algorithm {
 			}
 		};
 
-		template <class Member, class Entity, class Path, class State>
-		class container_enter_or_leave_action {
+		template <class Entity, class State, class Member, class Path>
+		class member_or_container_enter_leave_action {
 			Entity& _entity;
 			State& _state;
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&)>
+				moneta::traits::detail::is_functor_callable<
+					Action,
+					void (Entity&, Member)
+				>
 			>::type
 			process() const {
-				Action()(Member(), _entity);
+				Action()(_entity, Member());
 			}
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, Path&)>
+				moneta::traits::detail::is_functor_callable<
+					Action,
+					void (Entity&, Member, Path)
+				>
 			>::type
 			process() const {
-				Action()(Member(), _entity, Path());
+				Action()(_entity, Member(), Path());
 			}
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, Path&, State&)>
+				moneta::traits::detail::is_functor_callable<
+					Action,
+					void (Entity&, State&, Member, Path)
+				>
 			>::type
 			process() const {
-				Action()(Member(), _entity, Path(), _state);
+				Action()(_entity, _state, Member(), Path());
 			}
 
 		public:
-			container_enter_or_leave_action(Entity& entity, State& state)
+			member_or_container_enter_leave_action(Entity& entity, State& state)
 			 : _entity(entity), _state(state) {}
 
 			template <typename Action>
@@ -141,7 +162,7 @@ namespace moneta { namespace algorithm {
 			}
 		};
 
-		template <class Value, class Member, class Entity, class Path, class State>
+		template <class Entity, typename Value, class State, class Member, class Path>
 		class container_item_action {
 			Value& _value;
 			Entity& _entity;
@@ -149,70 +170,40 @@ namespace moneta { namespace algorithm {
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Value&, Member&, Entity&)>
+				moneta::traits::detail::is_functor_callable<
+					Action,
+					void (Entity&, Value&, Member)
+				>
 			>::type
 			process() const {
-				Action()(_value, Member(), _entity);
+				Action()(_entity, _value, Member());
 			}
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Value&, Member&, Entity&, Path&)>
+				moneta::traits::detail::is_functor_callable<
+					Action,
+					void (Entity&, Value&, Member, Path)
+				>
 			>::type
 			process() const {
-				Action()(_value, Member(), _entity, Path());
+				Action()(_entity, _value, Member(), Path());
 			}
 
 			template <typename Action>
 			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Value&, Member&, Entity&, Path&, State&)>
+				moneta::traits::detail::is_functor_callable<
+					Action,
+					void (Entity&, Value&, State&, Member, Path)
+				>
 			>::type
 			process() const {
-				Action()(_value, Member(), _entity, Path(), _state);
+				Action()(_entity, _value, _state, Member(), Path());
 			}
 
 		public:
 			container_item_action(Value& value, Entity& entity, State& state)
 			 : _value(value), _entity(entity), _state(state) {}
-
-			template <typename Action>
-			void operator()(Action&) const {
-				process<Action>();
-			}
-		};
-
-		template <class Member, class Entity, class Path, class State>
-		class member_action {
-			Entity& _entity;
-			State& _state;
-
-			template <typename Action>
-			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&)>
-			>::type
-			process() const {
-				Action()(Member(), _entity);
-			}
-
-			template <typename Action>
-			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, Path&)>
-			>::type
-			process() const {
-				Action()(Member(), _entity, Path());
-			}
-
-			template <typename Action>
-			typename boost::enable_if<
-				moneta::traits::detail::is_functor_callable<Action, void (Member&, Entity&, Path&, State&)>
-			>::type
-			process() const {
-				Action()(Member(), _entity, Path(), _state);
-			}
-			
-		public:
-			member_action(Entity& entity, State& state)
-			 : _entity(entity), _state(state) {}
 
 			template <typename Action>
 			void operator()(Action&) const {
@@ -231,7 +222,9 @@ namespace moneta { namespace algorithm {
 			template <class Traverser, class Path, class Member>
 			typename boost::enable_if<
 				boost::mpl::and_<
-					boost::mpl::not_<traits::is_container<typename Member::result_type> >,
+					boost::mpl::not_<
+						traits::is_container<typename Member::result_type>
+					>,
 					traits::is_entity<typename Member::result_type>
 				>
 			>::type
@@ -253,7 +246,9 @@ namespace moneta { namespace algorithm {
 			>::type
 			process() const {
 				boost::mpl::for_each<typename Traverser::member_actions>(
-					detail::member_action<Member, Entity, Path, State>(_entity, _state)
+					detail::member_or_container_enter_leave_action<
+						Entity, State, Member, Path	
+					>(_entity, _state)
 				);
 			}
 
@@ -269,7 +264,10 @@ namespace moneta { namespace algorithm {
 			>::type
 			process() const {
 				typedef typename add_path<Path, Member>::type path;
-				typedef detail::container_enter_or_leave_action<Member, Entity, path, State> action;
+
+				typedef detail::member_or_container_enter_leave_action<
+					Entity, State, Member, path
+				> action;
 
 				using boost::mpl::for_each;
 				for_each<typename Traverser::enter_container_actions>(action(_entity, _state));
@@ -309,11 +307,11 @@ namespace moneta { namespace algorithm {
 				>
 			>::type
 			process() const {
-				typedef detail::container_enter_or_leave_action<
-					Member,
+				typedef detail::member_or_container_enter_leave_action<
 					Entity,
-					typename add_path<Path, Member>::type,
-					State
+					State,
+					Member,
+					typename add_path<Path, Member>::type
 				> action;
 
 				using boost::mpl::for_each;
@@ -346,11 +344,11 @@ namespace moneta { namespace algorithm {
 					value_type& value = *itr;
 					boost::mpl::for_each<typename Traverser::container_item_actions>(
 						detail::container_item_action<
-							value_type,
-							Member,
 							Entity,
-							typename add_path<Path, Member>::type,
-							State
+							value_type,
+							State,
+							Member,
+							typename add_path<Path, Member>::type
 						>(value, _entity, _state)
 					);
 				}
@@ -428,7 +426,7 @@ namespace moneta { namespace algorithm {
 
 		template <class Path, class Entity, class State>
 		void _traverse(Entity& entity, State& state) const {
-			typedef detail::entity_enter_or_leave_action<Entity, Path, State> enter_leave_action;
+			typedef detail::start_finish_enter_leave_action<Entity, State, Path> enter_leave_action;
 			typedef detail::member_action_dispatcher<this_type, Entity, Path, State> member_action;
 
 			using boost::mpl::for_each;
@@ -439,7 +437,7 @@ namespace moneta { namespace algorithm {
 
 		template <class Path, class Entity, class State>
 		void begin_traverse(Entity& entity, State& state) const {
-			typedef detail::entity_enter_or_leave_action<Entity, Path, State> enter_leave_action;
+			typedef detail::start_finish_enter_leave_action<Entity, State, Path> enter_leave_action;
 			boost::mpl::for_each<start_actions>(enter_leave_action(entity, state));
 			_traverse<Path>(entity, state);
 			boost::mpl::for_each<finish_actions>(enter_leave_action(entity, state));
