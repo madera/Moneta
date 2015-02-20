@@ -1,62 +1,12 @@
 #pragma once
-
-// XXX: Move to proper header file with proper tests.
-#include <cctype>
-
-namespace moneta { namespace codec { namespace io {
-
-	template <class Iterator, class Predicate>
-	int consume_while(Iterator begin, Iterator end, const Predicate& predicate) {
-
-		Iterator itr;
-		for (itr = begin; itr != end && predicate(*itr); ++itr)
-			;
-
-		return std::distance(begin, itr);
-	}
-
-	template <class Iterator, class OutputIterator, class Predicate>
-	int copy_while(Iterator begin, Iterator end, OutputIterator result, const Predicate& predicate) {
-
-		Iterator itr;
-		for (itr = begin; itr != end && predicate(*itr); ++itr) {
-			*result++ = *itr;
-		}
-
-		return std::distance(begin, itr);
-	}
-
-	template <class Iterator, class OutputIterator, class Predicate>
-	int copy_while(
-		Iterator begin, Iterator end, OutputIterator result_begin, OutputIterator result_end,
-		const Predicate& predicate
-	) {
-		Iterator itr;
-		for (itr = begin; itr != end && result_begin != result_end && predicate(*itr); ++itr) {
-			*result_begin++ = *itr;
-		}
-
-		return std::distance(begin, itr);
-	}
-
-	struct is_whitespace {		
-		bool operator()(const char x) const {
-			return std::isspace(x) != 0;
-		}
-	};
-
-	template <class Iterator>
-	int consume_whitespaces(Iterator begin, Iterator end) {
-		return consume_while(begin, end, is_whitespace());
-	}
-
-}}}
-
 #include "../group_decoder.hxx"
 #include "../../traits/entity_name.hxx"
 #include "traits/xml_traits.hxx"
 #include "../../lexical/set_value.hxx"
 #include "../../lexical/dispatch_member.hxx"
+#include "../_aux/io/copy_while.hxx"
+#include "../_aux/io/consume_while.hxx"
+#include "../_aux/io/consume_whitespaces.hxx"
 #include <stack>
 
 namespace moneta { namespace codec { namespace stateless_xml_decoder_implementation {
@@ -150,8 +100,6 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 	struct null_handler {
 		template <class Iterator>
 		void operator()(Iterator key_begin, Iterator key_end, Iterator value_begin, Iterator value_end) const {
-			//std::string key(key_begin, key_end);
-			//std::string value(value_begin, value_end);
 		}
 	};
 

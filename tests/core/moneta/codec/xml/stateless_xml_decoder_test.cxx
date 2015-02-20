@@ -462,7 +462,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_incomplete_clos
 	}
 }
 
-BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_decode_with_members) {
+BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_full_decode) {
 	{
 		static const std::string data =
 			"<Person>\n"
@@ -565,28 +565,4 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_decode_with_mem
 	}
 }
 
-BOOST_AUTO_TEST_CASE(foobar) {
-
-	const std::string data =
-		"<Point>\n"
-		"\t<x>1</x>\n"
-		"\t<y>2</y>\n"
-		"</Point>"
-	;
-	
-
-
-
-	//char buffer[1024];
-	//std::fill(std::begin(buffer), std::end(buffer), 0);
-
-	//Point point;
-	//point.x = 1;
-	//point.y = 3;
-
-	//moneta::codec::stateless_xml_encoder()(std::begin(buffer), std::end(buffer), point);
-
-//	std::cout << "===\n" << buffer << std::endl;
-
-
-}
+// TODO: Round trip encoding and decoding (on a separate file).
