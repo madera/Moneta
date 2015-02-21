@@ -108,7 +108,7 @@ namespace moneta { namespace traits { namespace detail {
 		}
 
 		template <class Member>
-		void operator()(const Member&) const {
+		void operator()(Member) const {
 			_target.push_back(MemberTraitWithGet<Member>::get());
 		}
 	};

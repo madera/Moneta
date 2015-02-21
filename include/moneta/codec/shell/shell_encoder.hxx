@@ -13,7 +13,7 @@ namespace moneta { namespace codec { namespace shell_implementation {
 			boost::mpl::empty<Path>,
 			int
 		>::type
-		operator()(Iterator begin, Iterator end, const Entity& entity, Path) const {
+		operator()(Iterator begin, Iterator end, const Entity&, Path) const {
 			return io::make_ostringstream(begin, end)
 				<< moneta::traits::get_entity_name<Entity>() << "={"
 			;
@@ -24,7 +24,7 @@ namespace moneta { namespace codec { namespace shell_implementation {
 			boost::mpl::empty<Path>,
 			int
 		>::type
-		operator()(Iterator begin, Iterator end, const Entity& entity, Path) const {
+		operator()(Iterator begin, Iterator end, const Entity&, Path) const {
 			return io::make_ostringstream(begin, end)
 				<< ' ' << moneta::traits::get_entity_name<Entity>() << "={"
 			;
@@ -57,7 +57,7 @@ namespace moneta { namespace codec { namespace shell_implementation {
 
 	struct leave_entity_encoder {
 		template <class Iterator, class Entity>
-		int operator()(Iterator begin, Iterator end, const Entity& entity) const {
+		int operator()(Iterator begin, Iterator end, const Entity&) const {
 			return io::make_ostringstream(begin, end)
 				<< " }"
 			;

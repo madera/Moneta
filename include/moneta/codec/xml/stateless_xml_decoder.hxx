@@ -315,7 +315,7 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 	//      If this is not corrected, prefix will be called each for every tag. Not good.
 
 	template <class Iterator, class Entity, class Path>
-	int read_entity(Iterator begin, Iterator end, Entity& entity, const Path& path);
+	int read_entity(Iterator begin, Iterator end, Entity& entity, Path);
 
 	template <class Member, class Iterator>
 	int read_element_member(Iterator begin, Iterator end, typename Member::class_type& entity) {
@@ -375,8 +375,8 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 			traits::is_entity<typename Member::result_type>
 		>::type
 		operator()() const {
-			typename boost::mpl::push_back<Path, Member>::type path;
-			_begin += read_entity(_begin, _end, Member()(_entity), path);
+			typedef typename boost::mpl::push_back<Path, Member>::type path_type;
+			_begin += read_entity(_begin, _end, Member()(_entity), path_type());
 		}
 
 		template <class Member>
@@ -389,7 +389,7 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 	};
 
 	template <class Iterator, class Entity, class Path>
-	int process_member(Iterator begin, Iterator end, Entity& entity, const Path& path) {
+	int process_member(Iterator begin, Iterator end, Entity& entity, Path) {
 		std::string prefix;
 		const int prefix_result = read_prefix(begin, end, prefix);
 		if (prefix_result <= 0) {
@@ -405,13 +405,13 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 	}
 
 	template <class Iterator, class Entity, class Path>
-	int process_members(Iterator begin, Iterator end, Entity& entity, const Path& path) {
+	int process_members(Iterator begin, Iterator end, Entity& entity, Path) {
 		Iterator itr = begin;
 		int consumed = 0;
 
 		bool done = false;
 		while (!done) {
-			const int result = process_member(itr, end, entity, path);
+			const int result = process_member(itr, end, entity, Path());
 			if (result < 0) {
 				return result;
 			} else if (result == 0) {
@@ -429,21 +429,21 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 	struct get_element_name_impl {
 		template <class Path>
 		typename boost::enable_if<boost::mpl::empty<Path>, std::string>::type
-		operator()(const Path& path) const {
+		operator()(Path) const {
 			return traits::get_entity_name<Entity>();
 		}
 
 		template <class Path>
 		typename boost::disable_if<boost::mpl::empty<Path>, std::string>::type
-		operator()(const Path& path) const {
+		operator()(Path) const {
 			typedef typename boost::mpl::back<Path>::type node;
 			return traits::detail::member_name<node>::get();
 		}
 	};
 
 	template <class Iterator, class Entity, class Path>
-	int read_entity(Iterator begin, Iterator end, Entity& entity, const Path& path) {
-		const std::string entity_name = get_element_name_impl<Entity>()(path);
+	int read_entity(Iterator begin, Iterator end, Entity& entity, Path) {
+		const std::string entity_name = get_element_name_impl<Entity>()(Path());
 
 		std::string prefix;
 		const int prefix_result = read_prefix(begin, end, prefix);
@@ -489,7 +489,7 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 		}
 
 		itr += io::consume_whitespaces(itr, end);
-		result = process_members(itr, end, entity, path);
+		result = process_members(itr, end, entity, Path());
 		if (result < 0) {
 			return result;
 		}

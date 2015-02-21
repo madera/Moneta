@@ -9,7 +9,7 @@ struct a {
 
 struct b : a {
 	template <class T, class U, class V>
-	void operator()(T x, U y, V z) {}
+	void operator()(T, U, V) {}
 };
 
 inline void static_test() {
@@ -37,19 +37,19 @@ struct test_state {};
 
 struct e0 {
 	template <class Entity>
-	void operator()(Entity& entity) const {
+	void operator()(Entity&) const {
 	}
 };
 
 struct e1 {
 	template <class Entity, class Path>
-	void operator()(Entity& entity, const Path&) const {
+	void operator()(Entity&, Path) const {
 	}
 };
 
 struct e2 {
 	template <class Entity, class Path>
-	void operator()(Entity& entity, const Path&, test_state& state) const {
+	void operator()(Entity&, Path, test_state&) const {
 	}
 };
 
