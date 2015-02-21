@@ -82,7 +82,7 @@ namespace moneta { namespace codec { namespace shell_decoder_implementation {
 	template <class Entity>
 	struct assign_or_recurse;
 
-	std::map<std::string, std::string> line_to_kv(const std::string& line) {
+	inline std::map<std::string, std::string> line_to_kv(const std::string& line) {
 		std::map<std::string, std::string> result;
 
 		std::vector<std::string> split = special_split(line);
@@ -151,14 +151,6 @@ namespace moneta { namespace codec { namespace shell_decoder_implementation {
 		}
 	};
 
-	struct shell_decoder_start_entity {
-		template <class Iterator, class Entity, class Path>
-		int operator()(Iterator begin, Iterator end, Entity& entity, Path) const {
-			entity = from_line<Entity>(std::string(begin, end));
-			return std::distance(begin, end); // XXX
-		}
-	};
-
 	struct shell_prefix_reader {
 		typedef std::string type;
 	
@@ -193,6 +185,26 @@ namespace moneta { namespace codec { namespace shell_decoder_implementation {
 			}
 
 			return std::distance(begin, itr);
+		}
+	};
+
+	struct shell_decoder_start_entity {
+		template <class Iterator, class Entity, class Path>
+		int operator()(Iterator begin, Iterator end, Entity& entity, Path) const {
+			std::string prefix;
+			const int result = shell_prefix_reader()(begin, end, prefix);
+			if (result <= 0) {
+				return result;
+			}
+
+			Iterator itr = begin + result;
+			if (itr != end && *itr == '=') {
+				++itr;
+			}
+
+			entity = from_line<Entity>(std::string(itr, end));
+			//return std::distance(begin, itr);
+			return std::distance(begin, end); // XXX
 		}
 	};
 
