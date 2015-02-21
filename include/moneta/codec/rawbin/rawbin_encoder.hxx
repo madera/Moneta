@@ -6,13 +6,12 @@
 namespace moneta { namespace codec { namespace rawbin_implementation {
 
 	struct member_encoder {
-
-		template <class Iterator, class Member, class Entity, class Path>
+		template <class Iterator, class Entity, class Member, class Path>
 		typename boost::enable_if<
 			boost::is_pod<typename Member::result_type>,
 			int
 		>::type
-		operator()(Iterator begin, Iterator end, const Member&, const Entity& entity, const Path&) const {
+		operator()(Iterator begin, Iterator end, const Entity& entity, Member, Path) const {
 			typedef typename boost::add_const<
 				typename Member::result_type
 			>::type value_type;

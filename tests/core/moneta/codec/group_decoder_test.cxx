@@ -116,8 +116,8 @@ struct example_prefix {
 };
 
 struct acme_enter_entity {
-	template <class Iterator, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, Entity&, const Path&, State&) const {
+	template <class Iterator, class Entity, class State, class Path>
+	int operator()(Iterator begin, Iterator end, Entity&, State&, Path) const {
 		if (begin == end) {
 			return -1;
 		}
@@ -129,8 +129,8 @@ struct acme_enter_entity {
 };
 
 struct acme_member_decoder {
-	template <class Iterator, class Member, class Entity, class Path>
-	int operator()(Iterator begin, Iterator end, const Member&, Entity& entity, const Path&) const {
+	template <class Iterator, class Entity, class Member, class Path>
+	int operator()(Iterator begin, Iterator end, Entity& entity, Member, Path) const {
 		typedef typename Member::result_type value_type;
 		const size_t value_size = sizeof(value_type);
 		const size_t available = std::distance(begin, end);

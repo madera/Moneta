@@ -517,9 +517,9 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 	}
 
 	struct stateless_xml_decoder_enter_entity {
-		template <class Iterator, class Entity, class Path, class State>
-		int operator()(Iterator begin, Iterator end, Entity& entity, const Path& path, State&) const {
-			return read_entity(begin, end, entity, path);
+		template <class Iterator, class Entity, class Path>
+		int operator()(Iterator begin, Iterator end, Entity& entity, Path) const {
+			return read_entity(begin, end, entity, Path());
 		}
 	};
 
