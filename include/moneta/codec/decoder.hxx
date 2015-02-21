@@ -389,8 +389,8 @@ namespace moneta { namespace codec {
 	};
 	
 	struct decoder_start_decoding {
-		template <class Entity, class Path, class DecoderState>
-		void operator()(Entity& entity, const Path&, DecoderState& decoder_state) const {
+		template <class Entity, class DecoderState, class Path>
+		void operator()(Entity& entity, DecoderState& decoder_state, Path) const {
 			boost::mpl::for_each<typename DecoderState::start_actions>(
 				decoder_enter_or_leave_action<Entity, Path, DecoderState>(entity, decoder_state)
 			);
@@ -398,8 +398,8 @@ namespace moneta { namespace codec {
 	};
 
 	struct decoder_enter_entity {
-		template <class Entity, class Path, class DecoderState>
-		void operator()(Entity& entity, const Path&, DecoderState& decoder_state) const {
+		template <class Entity, class DecoderState, class Path>
+		void operator()(Entity& entity, DecoderState& decoder_state, Path) const {
 			boost::mpl::for_each<typename DecoderState::enter_actions>(
 				decoder_enter_or_leave_action<Entity, Path, DecoderState>(entity, decoder_state)
 			);
@@ -407,11 +407,11 @@ namespace moneta { namespace codec {
 	};
 
 	struct decoder_member {
-		template <class Member, class Entity, class Path, class DecoderState>
+		template <class Entity, class DecoderState, class Member, class Path>
 		typename boost::enable_if<
 			traits::detail::fixed_value<Member>
 		>::type
-		operator()(const Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
+		operator()(Entity& entity, DecoderState& decoder_state, Member, Path) const {
 			boost::mpl::for_each<typename DecoderState::member_actions>(
 				decoder_member_action<Member, Entity, Path, DecoderState>(entity, decoder_state)
 			);
@@ -425,11 +425,11 @@ namespace moneta { namespace codec {
 			}
 		}
 
-		template <class Member, class Entity, class Path, class DecoderState>
+		template <class Entity, class DecoderState, class Member, class Path>
 		typename boost::disable_if<
 			traits::detail::fixed_value<Member>
 		>::type
-		operator()(const Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
+		operator()(Entity& entity, DecoderState& decoder_state, Member, Path) const {
 			boost::mpl::for_each<typename DecoderState::member_actions>(
 				decoder_member_action<Member, Entity, Path, DecoderState>(entity, decoder_state)
 			);
@@ -437,8 +437,8 @@ namespace moneta { namespace codec {
 	};
 
 	struct decoder_leave_entity {
-		template <class Entity, class Path, class DecoderState>
-		void operator()(Entity& entity, const Path&, DecoderState& decoder_state) const {
+		template <class Entity, class DecoderState, class Path>
+		void operator()(Entity& entity, DecoderState& decoder_state, Path) const {
 			boost::mpl::for_each<typename DecoderState::leave_actions>(
 				decoder_enter_or_leave_action<Entity, Path, DecoderState>(entity, decoder_state)
 			);
@@ -446,8 +446,8 @@ namespace moneta { namespace codec {
 	};
 
 	struct decoder_enter_container {
-		template <class Member, class Entity, class Path, class DecoderState>
-		void operator()(const Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
+		template <class Entity, class DecoderState, class Member, class Path>
+		void operator()(Entity& entity, DecoderState& decoder_state, Member, Path) const {
 			boost::mpl::for_each<typename DecoderState::enter_container_actions>(
 				decoder_container_enter_or_leave_action<
 					Member, Entity, Path, DecoderState
@@ -457,8 +457,8 @@ namespace moneta { namespace codec {
 	};
 
 	struct decoder_container_item {
-		template <class Value, class Member, class Entity, class Path, class DecoderState>
-		void operator()(Value& value, const Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
+		template <class Entity, typename Value, class DecoderState, class Member, class Path>
+		void operator()(Entity& entity, Value& value, DecoderState& decoder_state, Member, Path) const {
 			boost::mpl::for_each<typename DecoderState::container_item_actions>(
 				decoder_container_item_action<Value, Member, Entity, Path, DecoderState>(
 					value, entity, decoder_state
@@ -468,8 +468,8 @@ namespace moneta { namespace codec {
 	};
 
 	struct decoder_leave_container {
-		template <class Member, class Entity, class Path, class DecoderState>
-		void operator()(const Member&, Entity& entity, const Path&, DecoderState& decoder_state) const {
+		template <class Entity, class DecoderState, class Member, class Path>
+		void operator()(Entity& entity, DecoderState& decoder_state, Member, Path) const {
 			boost::mpl::for_each<typename DecoderState::leave_container_actions>(
 				decoder_container_enter_or_leave_action<
 					Member, Entity, Path, DecoderState
@@ -479,8 +479,8 @@ namespace moneta { namespace codec {
 	};
 
 	struct decoder_finish_decoding {
-		template <class Entity, class Path, class DecoderState>
-		void operator()(Entity& entity, const Path&, DecoderState& decoder_state) const {
+		template <class Entity, class DecoderState, class Path>
+		void operator()(Entity& entity, DecoderState& decoder_state, Path) const {
 			boost::mpl::for_each<typename DecoderState::finish_actions>(
 				decoder_enter_or_leave_action<Entity, Path, DecoderState>(entity, decoder_state)
 			);
