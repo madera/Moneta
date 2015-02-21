@@ -2,224 +2,224 @@
 #include "../decoder.hxx"
 #include "../../lexical/dispatch_entity.hxx"
 #include "../../lexical/dispatch_member.hxx"
+#include "../../make_entity.hxx"
+#include "../group_decoder.hxx"
+#include "../_aux/io/copy_while.hxx"
+#include "../_aux/io/consume_while.hxx"
+#include "../_aux/io/consume_whitespaces.hxx"
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <map>
 
-namespace moneta { namespace codec {
-	
-	namespace shell_detail {
+namespace moneta { namespace codec { namespace shell_decoder_implementation {
 
-		inline std::vector<std::string> special_split(std::string line) {
-			boost::trim(line);
-			if (line.size() >= 2) {
-				if (line.front() == '{' && line.back() == '}') {
-					line.erase(0, 1);
-					line.erase(line.size() - 1);
-				}
+	inline std::vector<std::string> special_split(std::string line) {
+		boost::trim(line);
+		if (line.size() >= 2) {
+			if (line.front() == '{' && line.back() == '}') {
+				line.erase(0, 1);
+				line.erase(line.size() - 1);
 			}
+		}
 
-			std::vector<std::string> result;
+		std::vector<std::string> result;
 
-			std::string token;
-			bool inside_sq_text = false;
-			bool inside_dq_text = false;
+		std::string token;
+		bool inside_sq_text = false;
+		bool inside_dq_text = false;
 			
-			int level = 0;
+		int level = 0;
 
-			for (const char c : line) {
-				if (c == ' ') {
-					if (inside_sq_text || inside_dq_text || level != 0) {
-						token += c;
-					} else {
-						if (!token.empty()) {
-							result.push_back(token);
-							token.clear();
-						}
-					}
-				} else if (c == '\'') {
-					if (inside_dq_text || level != 0) {
-						token += c;
-					} else {
-						inside_sq_text = !inside_sq_text;
-					}
-				} else if (c == '"') {
-					if (inside_sq_text || level != 0) {
-						token += c;
-					} else {
-						inside_dq_text = !inside_dq_text;
-					}
-				} else if (c == '{') {
-					++level;
+		for (const char c : line) {
+			if (c == ' ') {
+				if (inside_sq_text || inside_dq_text || level != 0) {
 					token += c;
-					if (!inside_sq_text && !inside_dq_text && level != 0) {
+				} else {
+					if (!token.empty()) {
+						result.push_back(token);
+						token.clear();
+					}
+				}
+			} else if (c == '\'') {
+				if (inside_dq_text || level != 0) {
+					token += c;
+				} else {
+					inside_sq_text = !inside_sq_text;
+				}
+			} else if (c == '"') {
+				if (inside_sq_text || level != 0) {
+					token += c;
+				} else {
+					inside_dq_text = !inside_dq_text;
+				}
+			} else if (c == '{') {
+				++level;
+				token += c;
+				if (!inside_sq_text && !inside_dq_text && level != 0) {
 						
-					}
-				} else if (c == '}') {
-					--level;
-					token += c;
-					if (level == 0) {
-						if (!token.empty()) {
-							result.push_back(token);
-							token.clear();
-						}
-					}
-				} else {
-					token += c;
 				}
-			}
-
-			if (!token.empty()) {
-				result.push_back(token);
-			}
-
-			return result;
-		}
-
-		inline std::map<std::string, std::string> line_to_kv(const std::string& line) {
-			std::map<std::string, std::string> result;
-
-			std::vector<std::string> split = special_split(line);
-
-			std::vector<std::string>::const_iterator itr;
-			for (itr = split.begin(); itr != split.end(); ++itr) {
-				const std::string& s = *itr;
-
-				const size_t pos = s.find('=');
-				if (pos == std::string::npos) {
-					result[s] = "";
-				} else {
-					const std::string key(s.begin(), s.begin() + pos);
-					const std::string value(s.begin() + pos + 1, s.end());
-					result[key] = value;
+			} else if (c == '}') {
+				--level;
+				token += c;
+				if (level == 0) {
+					if (!token.empty()) {
+						result.push_back(token);
+						token.clear();
+					}
 				}
+			} else {
+				token += c;
 			}
-
-			return result;
 		}
 
-		template <class Entity>
-		struct assign_or_recurse {
-			Entity& _entity;
-			const std::string& _value;
-
-			assign_or_recurse(Entity& entity, const std::string& value)
-				: _entity(entity), _value(value) {}
-
-			template <class Member>
-			typename boost::enable_if<moneta::traits::is_entity<typename Member::result_type> >::type
-			operator()() const {
-				from_line(_value, Member()(_entity));
-			}
-
-			template <class Member>
-			typename boost::disable_if<moneta::traits::is_entity<typename Member::result_type> >::type
-			operator()() const {
-				Member()(_entity) = boost::lexical_cast<typename Member::result_type>(_value);
-			}
-		};
-
-		template <class Entity>
-		Entity from_kv(std::map<std::string, std::string>& kv, Entity& result) { // = make_entity<Entity>()) {
-			result = make_entity<Entity>();
-			for (const auto& pair : kv) {
-				const std::string& key = pair.first;
-				const std::string& value = pair.second;
-
-				moneta::lexical::dispatch_member<Entity>(key, assign_or_recurse<Entity>(result, value));
-			}
-
-			return result;
+		if (!token.empty()) {
+			result.push_back(token);
 		}
 
-		template <class Entity>
-		Entity from_line(const std::string& line, Entity& result = make_entity<Entity>()) {
-			return from_kv<Entity>(line_to_kv(line), result);
-		}
-
+		return result;
 	}
-
-	struct shell;
 
 	template <class Entity>
-	struct entity_decoder<shell, Entity> {
-		
-		template <class Entity_, class Iterator>
-		int operator()(Entity& entity, Iterator begin, Iterator end) const {
-			entity = shell_detail::from_line<Entity>(std::string(begin, end));
-			return end - begin; // XXX: FIXME: This is bad.
+	struct assign_or_recurse;
+
+	std::map<std::string, std::string> line_to_kv(const std::string& line) {
+		std::map<std::string, std::string> result;
+
+		std::vector<std::string> split = special_split(line);
+
+		std::vector<std::string>::const_iterator itr;
+		for (itr = split.begin(); itr != split.end(); ++itr) {
+			const std::string& s = *itr;
+
+			const size_t pos = s.find('=');
+			if (pos == std::string::npos) {
+				result[s] = "";
+			} else {
+				const std::string key(s.begin(), s.begin() + pos);
+				const std::string value(s.begin() + pos + 1, s.end());
+				result[key] = value;
+			}
 		}
 
+		return result;
+	}
+
+	template <class Entity>
+	Entity from_kv(const std::map<std::string, std::string>& kv) {
+		Entity result = make_entity<Entity>();
+		for (const auto& pair : kv) {
+			const std::string& key = pair.first;
+			const std::string& value = pair.second;
+
+			moneta::lexical::dispatch_member<Entity>(key, assign_or_recurse<Entity>(result, value));
+		}
+
+		return result;
+	}
+
+	template <class Entity>
+	Entity from_line(const std::string& line) {
+		return from_kv<Entity>(line_to_kv(line));
+	}
+
+	template <class Entity>
+	struct assign_or_recurse {
+		Entity& _entity;
+		const std::string& _value;
+
+		assign_or_recurse(Entity& entity, const std::string& value)
+			: _entity(entity), _value(value) {}
+
+		template <class Member>
+		typename boost::enable_if<
+			moneta::traits::is_entity<
+				typename Member::result_type
+			>
+		>::type
+		operator()() const {
+			Member()(_entity) = from_line<typename Member::result_type>(_value);
+		}
+
+		template <class Member>
+		typename boost::disable_if<
+			moneta::traits::is_entity<
+				typename Member::result_type
+			>
+		>::type
+		operator()() const {
+			Member()(_entity) = boost::lexical_cast<typename Member::result_type>(_value);
+		}
 	};
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	struct shell_decoder_start_entity {
+		template <class Iterator, class Entity, class Path>
+		int operator()(Iterator begin, Iterator end, Entity& entity, Path) const {
+			entity = from_line<Entity>(std::string(begin, end));
+			return std::distance(begin, end); // XXX
+		}
+	};
 
-	//
-	// TODO: Make this standard API. Everyone needs an unknown decoder!!
-	//
-	// Continue refactoring when XML decoder resumes development.
-	//
-
-	//
-	// From this point on: decode_unkwnown() logic.
-	//
-
-	// XXX: Continue this refactoring!! Full decode() specs must be followed.
-	// Continue refactoring **when XML decoder** resumes development.
-
-	namespace detail {
+	struct shell_prefix_reader {
+		typedef std::string type;
 	
-		// Deprecated!!
-		//
-		template <class Codec, class Operation, class Iterator>
-		struct decoder_dispatcher {
-			Operation& _operation;
-			Iterator& _begin;
-			Iterator& _end;
-			int& _result;
+		struct is_identifier_char {
+			typedef char argument_type;
 
-			decoder_dispatcher(Operation& operation, Iterator& begin, Iterator& end, int& result)
-			 : _operation(operation), _begin(begin), _end(end), _result(result) {}
-
-			template <class Entity>
-			void operator()() const {
-				Entity entity = moneta::make_entity<Entity>();
-				_result = moneta::codec::decode<Codec>(entity, _begin, _end);
-				// FIXME: What do we do with result? Check it better...
-				if (_result > 0) {
-					_operation.operator()(entity);
-				}
+			bool operator()(const char c) const {
+				return std::isalnum(c) || c == '_';
 			}
 		};
 
-	}
-
-	template <class Entities>	
-	struct deducing_entity_decoder<shell, Entities> {
-
-		template <class Visitor, class Iterator>
-		int operator()(Visitor& visitor, Iterator begin, Iterator end) const {		
-			Iterator pivot = std::find(begin, end, '=');
-			if (pivot == end) {
-				return -2; // Need at least two more bytes (one for =, one for data).
+		template <class Iterator>
+		int operator()(Iterator begin, Iterator end, type& prefix) const {
+			const size_t minimum = 2; // The bare minimum: "a "
+			const size_t available = std::distance(begin, end);
+			if (available < minimum) {
+				return 0 - (minimum - available);
 			}
-		
-			std::string key(begin, pivot);
-			boost::trim(key);
 
-			int result;
-			moneta::lexical::dispatch_entity<Entities>(
-				key,
-				detail::decoder_dispatcher<shell, Visitor, Iterator>(
-					visitor, pivot + 1, end, result
-				)
+			Iterator itr = begin;
+			const int whitespaces = moneta::codec::io::consume_whitespaces(itr, end);
+			itr += whitespaces;
+
+			int result = moneta::codec::io::copy_while(
+				itr, end, std::back_inserter(prefix), is_identifier_char()
 			);
+			itr += result;
 
-			return result;
+			// If we've reached the end, we can't prove it's the complete entity name.
+			if (itr == end) {
+				return -1;
+			}
+
+			return std::distance(begin, itr);
 		}
-		
 	};
 
+	template <class EntityGroup>
+	struct shell_decoder {
+		typedef moneta::codec::group_decoder<
+			moneta::codec::decoder<
+				moneta::codec::start_actions<shell_decoder_start_entity>
+			>,
+			EntityGroup,
+			shell_prefix_reader
+		> type;
+	};
+
+}}}
+
+namespace moneta { namespace codec { namespace detail {
+
+	template <class Entity>
+	struct prefix_value<shell_decoder_implementation::shell_prefix_reader, Entity> {
+		static std::string get() {
+			return moneta::traits::get_entity_name<Entity>();
+		}
+	};
+
+}}}
+
+namespace moneta { namespace codec {
+	using shell_decoder_implementation::shell_decoder;
 }}

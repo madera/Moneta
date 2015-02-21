@@ -71,15 +71,6 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 		return std::distance(begin, itr);
 	}
 
-	struct xml_prefix_reader {
-		typedef std::string type;
-	
-		template <class Iterator>
-		int operator()(Iterator begin, Iterator end, type& prefix) const {
-			return read_prefix(begin, end, prefix);
-		}
-	};
-
 	template <class Entity>
 	struct attribute_assigner {
 		Entity& _entity;
@@ -516,10 +507,19 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 		return std::distance(begin, itr);
 	}
 
-	struct stateless_xml_decoder_enter_entity {
+	struct stateless_xml_decoder_start_entity {
 		template <class Iterator, class Entity, class Path>
 		int operator()(Iterator begin, Iterator end, Entity& entity, Path) const {
 			return read_entity(begin, end, entity, Path());
+		}
+	};
+
+	struct xml_prefix_reader {
+		typedef std::string type;
+	
+		template <class Iterator>
+		int operator()(Iterator begin, Iterator end, type& prefix) const {
+			return read_prefix(begin, end, prefix);
 		}
 	};
 
@@ -527,7 +527,7 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 	struct stateless_xml_decoder {
 		typedef moneta::codec::group_decoder<
 			moneta::codec::decoder<
-				moneta::codec::start_actions<stateless_xml_decoder_enter_entity>
+				moneta::codec::start_actions<stateless_xml_decoder_start_entity>
 			>,
 			EntityGroup,
 			xml_prefix_reader
