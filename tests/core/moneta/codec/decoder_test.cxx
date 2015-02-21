@@ -29,8 +29,8 @@ MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 )
 
 struct testcodec_start_decoding {
-	template <class Iterator, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, Entity&, const Path&, State&) const {
+	template <class Iterator, class Entity, class State, class Path>
+	int operator()(Iterator begin, Iterator end, Entity&, State& state, Path) const {
 		if (begin == end) {
 			return -1;
 		}
@@ -44,8 +44,8 @@ struct testcodec_start_decoding {
 };
 
 struct testcodec_enter_entity {
-	template <class Iterator, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, Entity&, const Path&, State&) const {
+	template <class Iterator, class Entity, class State, class Path>
+	int operator()(Iterator begin, Iterator end, Entity&, State& state, Path) const {
 		if (begin == end) {
 			return -1;
 		}
@@ -59,12 +59,12 @@ struct testcodec_enter_entity {
 };
 
 struct testcodec_member {
-	template <class Iterator, class Member, class Entity, class Path, class State>
+	template <class Iterator, class Entity, class State, class Member, class Path>
 	typename boost::enable_if<
 		boost::is_pod<typename Member::result_type>,
 		int
 	>::type
-	operator()(Iterator begin, Iterator end, const Member&, Entity& entity, const Path&, State&) const {
+	operator()(Iterator begin, Iterator end, Entity& entity, State& state, Member, Path) const {
 		const size_t needed = sizeof(typename Member::result_type);
 		const size_t available = std::distance(begin, end);
 		if (available < needed) {
@@ -78,8 +78,8 @@ struct testcodec_member {
 };
 
 struct testcodec_leave_entity {
-	template <class Iterator, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, Entity&, const Path&, State&) const {
+	template <class Iterator, class Entity, class State, class Path>
+	int operator()(Iterator begin, Iterator end, Entity&, State& state, Path) const {
 		if (begin == end) {
 			return -1;
 		}
@@ -93,8 +93,8 @@ struct testcodec_leave_entity {
 };
 
 struct testcodec_enter_container {
-	template <class Iterator, class Member, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, const Member&, Entity& entity, const Path&, State&) const {
+	template <class Iterator, class Entity, class State, class Member, class Path>
+	int operator()(Iterator begin, Iterator end, Entity& entity, State& state, Member, Path) const {
 		if (begin == end) {
 			return -1;
 		}
@@ -118,10 +118,8 @@ struct testcodec_container_item {
 	//
 	// This will be called once for each value of the container set in testcodec_enter_container.
 	//
-	template <class Iterator, class Value, class Member, class Entity, class Path, class State>
-	int operator()(
-		Iterator begin, Iterator end, Value& value, const Member&, Entity&, const Path&, State&
-	) const {
+	template <class Iterator, class Entity, typename Value, class State, class Member, class Path>
+	int operator()(Iterator begin, Iterator end, Entity&, Value& value, State& state, Member, Path) const {
 		if (begin == end) {
 			return -1;
 		}
@@ -133,8 +131,8 @@ struct testcodec_container_item {
 };
 
 struct testcodec_leave_container {
-	template <class Iterator, class Member, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, const Member&, Entity&, const Path&, State&) const {
+	template <class Iterator, class Entity, class State, class Member, class Path>
+	int operator()(Iterator begin, Iterator end, Entity&, State& state, Member, Path) const {
 		if (begin == end) {
 			return -1;
 		}
@@ -148,8 +146,8 @@ struct testcodec_leave_container {
 };
 
 struct testcodec_finish_decoding {
-	template <class Iterator, class Entity, class Path, class State>
-	int operator()(Iterator begin, Iterator end, Entity&, const Path&, State&) const {
+	template <class Iterator, class Entity, class State, class Path>
+	int operator()(Iterator begin, Iterator end, Entity&, State& state, Path) const {
 		if (begin == end) {
 			return -1;
 		}

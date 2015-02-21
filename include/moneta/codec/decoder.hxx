@@ -82,12 +82,11 @@ namespace moneta { namespace codec {
 		};
 	}
 
-	template <
-		class Entity, class Path, class DecoderState,
-		typename Iterator = typename DecoderState::iterator_type,
-		typename UserState = typename DecoderState::userstate_type
-	>
-	class decoder_enter_or_leave_action {
+	template <class Entity, class DecoderState, class Path>
+	class decoder_start_finish_enter_leave_action {
+		typedef typename DecoderState::iterator_type Iterator;
+		typedef typename DecoderState::userstate_type UserState;
+
 		Entity& _entity;
 		DecoderState& _state;
 
@@ -120,7 +119,7 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (Iterator, Iterator, Entity&, const Path&)
+				int (Iterator, Iterator, Entity&, Path)
 			>
 		>::type
 		process() const {
@@ -133,17 +132,17 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (Iterator, Iterator, Entity&, const Path&, UserState&)
+				int (Iterator, Iterator, Entity&, UserState&, Path)
 			>
 		>::type
 		process() const {
 			update_result(
-				Action()(_state.begin, _state.end, _entity, Path(), _state.substate)
+				Action()(_state.begin, _state.end, _entity, _state.substate, Path())
 			);
 		}
 
 	public:
-		decoder_enter_or_leave_action(Entity& entity, DecoderState& decoder_state)
+		decoder_start_finish_enter_leave_action(Entity& entity, DecoderState& decoder_state)
 		 : _entity(entity), _state(decoder_state) {}
 
 		template <typename Action>
@@ -154,13 +153,11 @@ namespace moneta { namespace codec {
 		}
 	};
 
-	template <
-		class Member,
-		class Entity, class Path, class DecoderState,
-		typename Iterator = typename DecoderState::iterator_type,
-		typename UserState = typename DecoderState::userstate_type
-	>
-	class decoder_member_action {
+	template <class Entity, class DecoderState, class Member, class Path>
+	class decoder_member_or_container_enter_leave_action {
+		typedef typename DecoderState::iterator_type Iterator;
+		typedef typename DecoderState::userstate_type UserState;
+
 		Entity& _entity;
 		DecoderState& _state;
 
@@ -180,12 +177,12 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (Iterator, Iterator, const Member&, Entity&)
+				int (Iterator, Iterator, Entity&, Member)
 			>
 		>::type
 		process() const {
 			update_result(
-				Action()(_state.begin, _state.end, Member(), _entity)
+				Action()(_state.begin, _state.end, _entity, Member())
 			);
 		}
 
@@ -193,14 +190,12 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (Iterator, Iterator, const Member&, Entity&, const Path&)
+				int (Iterator, Iterator, Entity&, Member, Path)
 			>
 		>::type
 		process() const {
 			update_result(
-				Action()(
-					_state.begin, _state.end, Member(), _entity, Path()
-				)
+				Action()(_state.begin, _state.end, _entity, Member(), Path())
 			);
 		}
 
@@ -208,21 +203,17 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (Iterator, Iterator, const Member&, Entity&, const Path&, UserState&)
+				int (Iterator, Iterator, Entity&, UserState&, Member, Path)
 			>
 		>::type
 		process() const {
 			update_result(
-				Action()(
-					_state.begin, _state.end,
-					Member(),
-					_entity, Path(), _state.substate
-				)
+				Action()(_state.begin, _state.end, _entity, _state.substate, Member(), Path())
 			);
 		}
 			
 	public:
-		decoder_member_action(Entity& entity, DecoderState& decoder_state)
+		decoder_member_or_container_enter_leave_action(Entity& entity, DecoderState& decoder_state)
 		 : _entity(entity), _state(decoder_state) {}
 
 		template <typename Action>
@@ -233,88 +224,11 @@ namespace moneta { namespace codec {
 		}
 	};
 
-	template <
-		class Member,
-		class Entity, class Path, class DecoderState,
-		typename Iterator = typename DecoderState::iterator_type,
-		typename UserState = typename DecoderState::userstate_type
-	>
-	class decoder_container_enter_or_leave_action {
-		Entity& _entity;
-		DecoderState& _state;
-
-		void update_result(const int result) const {
-			if (result < 0) {
-				_state.good = false;
-			} else if (result > 0) {
-				_state.begin += result;
-				_state.total_written += result;
-			} else {
-			}
-
-			_state.last_result = result;
-		}
-
-		template <typename Action>
-		typename boost::enable_if<
-			moneta::traits::detail::is_functor_callable<
-				Action,
-				int (Iterator, Iterator, const Member&, Entity&)
-			>
-		>::type
-		process() const {
-			update_result(
-				Action()(_state.begin, _state.end, Member(), _entity)
-			);
-		}
-
-		template <typename Action>
-		typename boost::enable_if<
-			moneta::traits::detail::is_functor_callable<
-				Action,
-				int (Iterator, Iterator, const Member&, Entity&, const Path&)
-			>
-		>::type
-		process() const {
-			update_result(
-				Action()(_state.begin, _state.end, Member(), _entity, Path())
-			);
-		}
-
-		template <typename Action>
-		typename boost::enable_if<
-			moneta::traits::detail::is_functor_callable<
-				Action,
-				int (Iterator, Iterator, const Member&, Entity&, const Path&, UserState&)
-			>
-		>::type
-		process() const {
-			update_result(
-				Action()(
-					_state.begin, _state.end,
-					Member(),
-					_entity, Path(), _state.substate
-				)
-			);
-		}
-
-	public:
-		decoder_container_enter_or_leave_action(Entity& entity, DecoderState& decoder_state)
-		 : _entity(entity), _state(decoder_state) {}
-
-		template <typename Action>
-		void operator()(Action&) const {
-			process<Action>();
-		}
-	};
-
-	template <
-		class Value, class Member,
-		class Entity, class Path, class DecoderState,
-		typename Iterator = typename DecoderState::iterator_type,
-		typename UserState = typename DecoderState::userstate_type
-	>
+	template <class Entity, class Value, class DecoderState, class Member, class Path>
 	class decoder_container_item_action {
+		typedef typename DecoderState::iterator_type Iterator;
+		typedef typename DecoderState::userstate_type UserState;
+
 		Value& _value;
 		Entity& _entity;
 		DecoderState& _state;
@@ -335,12 +249,12 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (Iterator, Iterator, Value&, const Member&, Entity&)
+				int (Iterator, Iterator, Entity&, Value&, Member)
 			>
 		>::type
 		process() const {
 			update_result(
-				Action()(_state.begin, _state.end, _value, Member(), _entity)
+				Action()(_state.begin, _state.end, _entity, _value, Member())
 			);
 		}
 
@@ -348,16 +262,12 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (Iterator, Iterator, Value&, const Member&, Entity&, const Path&)
+				int (Iterator, Iterator, Entity&, Value&, Member, Path)
 			>
 		>::type
 		process() const {
 			update_result(
-				Action()(
-					_state.begin, _state.end,
-					_value, Member(),
-					_entity, Path()
-				)
+				Action()(_state.begin, _state.end, _entity, _value, Member(), Path())
 			);
 		}
 
@@ -365,16 +275,12 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (Iterator, Iterator, Value&, const Member&, Entity&, const Path&, UserState&)
+				int (Iterator, Iterator, Entity&, Value&, UserState&, Member, Path)
 			>
 		>::type
 		process() const {
 			update_result(
-				Action()(
-					_state.begin, _state.end,
-					_value, Member(),
-					_entity, Path(), _state.substate
-				)
+				Action()(_state.begin, _state.end, _entity, _value, _state.substate, Member(), Path())
 			);
 		}
 
@@ -392,7 +298,9 @@ namespace moneta { namespace codec {
 		template <class Entity, class DecoderState, class Path>
 		void operator()(Entity& entity, DecoderState& decoder_state, Path) const {
 			boost::mpl::for_each<typename DecoderState::start_actions>(
-				decoder_enter_or_leave_action<Entity, Path, DecoderState>(entity, decoder_state)
+				decoder_start_finish_enter_leave_action<
+					Entity, DecoderState, Path
+				>(entity, decoder_state)
 			);
 		}
 	};
@@ -401,7 +309,9 @@ namespace moneta { namespace codec {
 		template <class Entity, class DecoderState, class Path>
 		void operator()(Entity& entity, DecoderState& decoder_state, Path) const {
 			boost::mpl::for_each<typename DecoderState::enter_actions>(
-				decoder_enter_or_leave_action<Entity, Path, DecoderState>(entity, decoder_state)
+				decoder_start_finish_enter_leave_action<
+					Entity, DecoderState, Path
+				>(entity, decoder_state)
 			);
 		}
 	};
@@ -413,7 +323,9 @@ namespace moneta { namespace codec {
 		>::type
 		operator()(Entity& entity, DecoderState& decoder_state, Member, Path) const {
 			boost::mpl::for_each<typename DecoderState::member_actions>(
-				decoder_member_action<Member, Entity, Path, DecoderState>(entity, decoder_state)
+				decoder_member_or_container_enter_leave_action<
+					Entity, DecoderState, Member, Path
+				>(entity, decoder_state)
 			);
 
 			if (decoder_state.good) {
@@ -431,7 +343,9 @@ namespace moneta { namespace codec {
 		>::type
 		operator()(Entity& entity, DecoderState& decoder_state, Member, Path) const {
 			boost::mpl::for_each<typename DecoderState::member_actions>(
-				decoder_member_action<Member, Entity, Path, DecoderState>(entity, decoder_state)
+				decoder_member_or_container_enter_leave_action<
+					Entity, DecoderState, Member, Path
+				>(entity, decoder_state)
 			);
 		}
 	};
@@ -440,7 +354,9 @@ namespace moneta { namespace codec {
 		template <class Entity, class DecoderState, class Path>
 		void operator()(Entity& entity, DecoderState& decoder_state, Path) const {
 			boost::mpl::for_each<typename DecoderState::leave_actions>(
-				decoder_enter_or_leave_action<Entity, Path, DecoderState>(entity, decoder_state)
+				decoder_start_finish_enter_leave_action<
+					Entity, DecoderState, Path
+				>(entity, decoder_state)
 			);
 		}
 	};
@@ -449,8 +365,8 @@ namespace moneta { namespace codec {
 		template <class Entity, class DecoderState, class Member, class Path>
 		void operator()(Entity& entity, DecoderState& decoder_state, Member, Path) const {
 			boost::mpl::for_each<typename DecoderState::enter_container_actions>(
-				decoder_container_enter_or_leave_action<
-					Member, Entity, Path, DecoderState
+				decoder_member_or_container_enter_leave_action<
+					Entity, DecoderState, Member, Path
 				>(entity, decoder_state)
 			);
 		}
@@ -460,9 +376,9 @@ namespace moneta { namespace codec {
 		template <class Entity, typename Value, class DecoderState, class Member, class Path>
 		void operator()(Entity& entity, Value& value, DecoderState& decoder_state, Member, Path) const {
 			boost::mpl::for_each<typename DecoderState::container_item_actions>(
-				decoder_container_item_action<Value, Member, Entity, Path, DecoderState>(
-					value, entity, decoder_state
-				)
+				decoder_container_item_action<
+					Entity, Value, DecoderState, Member, Path
+				>(value, entity, decoder_state)
 			);
 		}
 	};
@@ -471,8 +387,8 @@ namespace moneta { namespace codec {
 		template <class Entity, class DecoderState, class Member, class Path>
 		void operator()(Entity& entity, DecoderState& decoder_state, Member, Path) const {
 			boost::mpl::for_each<typename DecoderState::leave_container_actions>(
-				decoder_container_enter_or_leave_action<
-					Member, Entity, Path, DecoderState
+				decoder_member_or_container_enter_leave_action<
+					Entity, DecoderState, Member, Path
 				>(entity, decoder_state)
 			);
 		}
@@ -482,7 +398,9 @@ namespace moneta { namespace codec {
 		template <class Entity, class DecoderState, class Path>
 		void operator()(Entity& entity, DecoderState& decoder_state, Path) const {
 			boost::mpl::for_each<typename DecoderState::finish_actions>(
-				decoder_enter_or_leave_action<Entity, Path, DecoderState>(entity, decoder_state)
+				decoder_start_finish_enter_leave_action<
+					Entity, DecoderState, Path
+				>(entity, decoder_state)
 			);
 		}
 	};

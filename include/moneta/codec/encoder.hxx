@@ -125,7 +125,7 @@ namespace moneta { namespace codec {
 		typename boost::enable_if<
 			moneta::traits::detail::is_functor_callable<
 				Action,
-				int (Iterator, Iterator, const Entity&, UserState, Path)
+				int (Iterator, Iterator, const Entity&, UserState&, Path)
 			>
 		>::type
 		process() const {
