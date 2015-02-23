@@ -166,7 +166,7 @@ namespace moneta { namespace algorithm {
 
 		// XXX: TAG: Needs cleaning after done.
 		template <class Entity, class State, class Member, class Path>
-		class present_member_action {
+		class present_member_action { // XXX: Marked for review... it may not be needed.
 
 			typedef typename boost::mpl::if_<
 				boost::is_const<Entity>,
@@ -323,6 +323,7 @@ namespace moneta { namespace algorithm {
 
 		template <class Traverser_, class Entity, class Path_, class State>
 		class member_action_dispatcher {
+
 			Entity& _entity;
 			State& _state;
 
@@ -332,6 +333,9 @@ namespace moneta { namespace algorithm {
 			template <class Traverser, class Path, class Member>
 			typename boost::enable_if<
 				boost::mpl::and_<
+					boost::mpl::not_<
+						traits::is_optional<typename Member::result_type>
+					>,
 					boost::mpl::not_<
 						traits::is_container<typename Member::result_type>
 					>,
@@ -345,16 +349,73 @@ namespace moneta { namespace algorithm {
 			}
 
 			//
+			// Optional Entity result_type
+			//
+			template <class Traverser, class Path, class Member>
+			typename boost::enable_if<
+				boost::mpl::and_<
+					traits::is_optional<typename Member::result_type>,
+					boost::mpl::not_<
+						traits::is_container<typename Member::result_type::value_type>
+					>,
+					traits::is_entity<typename Member::result_type::value_type>
+				>
+			>::type
+			process() const {
+				if (Member()(_entity).is_initialized()) {
+					Traverser().template _traverse<
+						typename add_path<Path, Member>::type
+					>(Member()(_entity).get(), _state);
+				}
+			}
+
+			//
 			// Non-Entity result_type
 			//
 			template <class Traverser, class Path, class Member>
 			typename boost::enable_if<
 				boost::mpl::and_<
-					boost::mpl::not_<traits::is_container<typename Member::result_type> >,
-					boost::mpl::not_<traits::is_entity<typename Member::result_type> >
+					boost::mpl::not_<
+						traits::is_optional<typename Member::result_type>
+					>,
+					boost::mpl::not_<
+						traits::is_container<typename Member::result_type>
+					>,
+					boost::mpl::not_<
+						traits::is_entity<typename Member::result_type>
+					>
 				>
 			>::type
 			process() const {
+				boost::mpl::for_each<typename Traverser::member_actions>(
+					detail::member_or_container_enter_leave_action<
+						Entity, State, Member, Path	
+					>(_entity, _state)
+				);
+
+				boost::mpl::for_each<typename Traverser::present_member_actions>(
+					detail::present_member_action<
+						Entity, State, Member, Path
+					>(_entity, _state)
+				);
+			}
+
+			//
+			// Optional Non-Entity result_type
+			//
+			template <class Traverser, class Path, class Member>
+			typename boost::enable_if<
+				boost::mpl::and_<
+					traits::is_optional<typename Member::result_type>,
+					boost::mpl::not_<
+						traits::is_container<typename Member::result_type::value_type>
+					>,
+					boost::mpl::not_<
+						traits::is_entity<typename Member::result_type::value_type>
+					>
+				>
+			>::type
+			process() const { // XXX: This may be merged to the method above. They're identical.
 				boost::mpl::for_each<typename Traverser::member_actions>(
 					detail::member_or_container_enter_leave_action<
 						Entity, State, Member, Path	

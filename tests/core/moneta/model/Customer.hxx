@@ -10,5 +10,5 @@ MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 	((boost::gregorian::date,   DOB        ))
 	((boost::optional<Address>, HomeAddress))
 	((boost::optional<Address>, WorkAddress))
-	((long,                     Rating     ))
+	((boost::optional<int>,     Rating     ))
 )
