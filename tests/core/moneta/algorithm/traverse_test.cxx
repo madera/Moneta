@@ -9,6 +9,7 @@
 #include "../model/tree/A.hxx"
 #include "../model/Cat.hxx"
 #include "../model/SportsTeam.hxx"
+#include "../model/Customer.hxx"
 
 inline void static_test() {
 	using namespace moneta::algorithm;
@@ -150,6 +151,36 @@ struct counting_member_esmp {
 		++g_member_count;
 
 		std::string tmp = "m:" + moneta::traits::detail::member_name<Member>::get();
+		const std::string path = moneta::codec::detail::stringize_path<Path>();
+		tmp += (path.empty()? "" : "," + path);
+		state.lines.push_back(tmp);
+	}
+};
+
+//
+
+size_t g_present_member_count = 0;
+
+struct counting_present_member_evm {
+	template <class Entity, class Value, class Member>
+	void operator()(Entity&, Value&, Member) const {
+		++g_present_member_count;
+	}
+};
+
+struct counting_present_member_evmp {
+	template <class Entity, class Value, class Member, class Path>
+	void operator()(Entity&, Value&, Member, Path) const {
+		++g_present_member_count;
+	}
+};
+
+struct counting_present_member_esvmp {
+	template <class Entity, class State, class Value, class Member, class Path>
+	void operator()(Entity&, State& state, Value&, Member, Path) const {
+		++g_present_member_count;
+
+		std::string tmp = "pm:" + moneta::traits::detail::member_name<Member>::get();
 		const std::string path = moneta::codec::detail::stringize_path<Path>();
 		tmp += (path.empty()? "" : "," + path);
 		state.lines.push_back(tmp);
@@ -516,4 +547,82 @@ BOOST_AUTO_TEST_CASE(stateful_traverse_test) {
 	const size_t line_count = std::distance(std::begin(expected), std::end(expected));
 	BOOST_REQUIRE_EQUAL(state.lines.size(), line_count);
 	BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + line_count);
+}
+
+BOOST_AUTO_TEST_CASE(test_moneta_algorithm_traverse_present_members) {
+	typedef moneta::algorithm::traverse<
+		start_actions<
+			counting_start_e,
+			counting_start_ep,
+			counting_start_esp
+		>,
+		enter_actions<
+			counting_enter_e,
+			counting_enter_ep,
+			counting_enter_esp
+		>,
+		member_actions<
+			counting_member_em,
+			counting_member_emp,
+			counting_member_esmp
+		>,
+		present_member_actions<
+			counting_present_member_evm,
+			counting_present_member_evmp,
+			counting_present_member_esvmp
+		>,
+		leave_actions<
+			counting_leave_e,
+			counting_leave_ep,
+			counting_leave_esp
+		>,
+		enter_container_actions<
+			counting_enter_container_em,
+			counting_enter_container_emp,
+			counting_enter_container_esmp
+		>,
+		container_item_actions<
+			counting_container_item_evm,
+			counting_container_item_evmp,
+			counting_container_item_evsmp
+		>,
+		leave_container_actions<
+			counting_leave_container_em,
+			counting_leave_container_emp,
+			counting_leave_container_esmp
+		>,
+		finish_actions<
+			counting_finish_e,
+			counting_finish_ep,
+			counting_finish_esp
+		>
+	> traverse_type;
+
+	reset_counters();
+
+	Customer customer;
+	test_state state;
+	traverse_type()(customer, state);
+
+	const char* expected[] = {
+		"S:Cat",
+			"e:Customer",
+				"m:Name",
+				"m:DOB",
+			"l:Customer",
+		"F:Cat"
+	};
+
+	const size_t line_count = std::distance(std::begin(expected), std::end(expected));
+	BOOST_REQUIRE_EQUAL(state.lines.size(), line_count);
+	BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + line_count);
+
+	BOOST_CHECK_EQUAL(g_start_count, 3);
+	BOOST_CHECK_EQUAL(g_enter_count, 3 * 3);
+	BOOST_CHECK_EQUAL(g_member_count, 9 * 3);
+	BOOST_CHECK_EQUAL(g_leave_count, 3 * 3);
+	BOOST_CHECK_EQUAL(g_enter_container_count, 2 * 3);
+	BOOST_CHECK_EQUAL(g_container_item_count, 3 * 3);
+	BOOST_CHECK_EQUAL(g_leave_container_count, 2 * 3);
+	BOOST_CHECK_EQUAL(g_finish_count, 3);
 }

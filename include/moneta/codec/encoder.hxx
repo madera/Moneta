@@ -8,6 +8,7 @@ namespace moneta { namespace codec {
 	using moneta::algorithm::start_actions;
 	using moneta::algorithm::enter_actions;
 	using moneta::algorithm::member_actions;
+	using moneta::algorithm::present_member_actions;
 	using moneta::algorithm::leave_actions;
 	using moneta::algorithm::enter_container_actions;
 	using moneta::algorithm::container_item_actions;

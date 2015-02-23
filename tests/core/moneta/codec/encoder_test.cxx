@@ -6,6 +6,7 @@
 #include "../model/tree/A.hxx"
 #include "../model/Cat.hxx"
 #include "../model/SportsTeam.hxx"
+#include "../model/Customer.hxx"
 
 using moneta::codec::aux::path_tabs;
 
@@ -170,6 +171,51 @@ BOOST_AUTO_TEST_CASE(traversal_encoder_test) {
 		"\t\tci:tag2,/SportsTeam::Tags 19\n"
 		"\tlc:Tags,/SportsTeam::Tags 20\n"
 		"l:SportsTeam, 21\n"
+	;
+
+	BOOST_CHECK_EQUAL(result, expected.size());
+	BOOST_CHECK_EQUAL(expected, buffer);
+}
+
+BOOST_AUTO_TEST_CASE(test_moneta_codec_encoder_optionals) {
+
+	typedef encoder<
+		enter_actions<testcodec_enter_entity>,
+		/*present_*/member_actions<testcodec_member>,
+		leave_actions<testcodec_leave_entity>,
+		enter_container_actions<testcodec_enter_container>,
+		container_item_actions<testcodec_container_item>,
+		leave_container_actions<testcodec_leave_container>
+	> encoder_t;
+
+	char buffer[1024];
+	std::fill(buffer, buffer + sizeof(buffer), 0);
+
+	int level = 0;
+
+	const int result = encoder_t()(std::begin(buffer), buffer + sizeof(buffer) - 1, Customer(), level);
+	//const int result = moneta::codec::encode<encoder_t>(std::begin(buffer), std::end(buffer), A(), level);
+
+	const std::string expected =
+		"e:A, 0\n"
+		"\tm:f, 1\n"
+		"\tm:g, 2\n"
+		"\te:B,/A::b 3\n"
+		"\t\te:C,/A::b/B::c 4\n"
+		"\t\t\tm:j,/A::b/B::c 5\n"
+		"\t\t\tm:k,/A::b/B::c 6\n"
+		"\t\tl:C,/A::b/B::c 7\n"
+		"\t\tm:i,/A::b 8\n"
+		"\t\te:D,/A::b/B::d 9\n"
+		"\t\t\tm:l,/A::b/B::d 10\n"
+		"\t\t\te:E,/A::b/B::d/D::e 11\n"
+		"\t\t\t\tm:m,/A::b/B::d/D::e 12\n"
+		"\t\t\t\tm:n,/A::b/B::d/D::e 13\n"
+		"\t\t\tl:E,/A::b/B::d/D::e 14\n"
+		"\t\tl:D,/A::b/B::d 15\n"
+		"\tl:B,/A::b 16\n"
+		"\tm:h, 17\n"
+		"l:A, 18\n"
 	;
 
 	BOOST_CHECK_EQUAL(result, expected.size());

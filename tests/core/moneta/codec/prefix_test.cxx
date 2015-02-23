@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include <moneta/codec/prefix.hxx>
-#include <boost/optional.hpp>
 #include "../model/Person.hxx"
 #include "../model/Address.hxx"
 #include "../model/tree/A.hxx"

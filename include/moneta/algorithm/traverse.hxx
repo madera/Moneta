@@ -4,6 +4,7 @@
 #include "../traits/detail/is_functor_callable.hxx"
 #include "../traits/is_entity.hxx"
 #include "../traits/is_container.hxx"
+#include "../traits/is_optional.hxx"
 
 #include <boost/core/enable_if.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
@@ -24,6 +25,7 @@ namespace moneta { namespace algorithm {
 
 		struct traverse_enter {};
 		struct traverse_member {};
+		struct traverse_present_member {};
 		struct traverse_leave {};
 
 		struct traverse_enter_container {};
@@ -162,6 +164,114 @@ namespace moneta { namespace algorithm {
 			}
 		};
 
+		// XXX: TAG: Needs cleaning after done.
+		template <class Entity, class State, class Member, class Path>
+		class present_member_action {
+
+			typedef typename boost::mpl::if_<
+				boost::is_const<Entity>,
+				typename boost::add_const<
+					typename traits::optional_value_type<
+						typename Member::result_type
+					>::type
+				>::type,
+				typename traits::optional_value_type<
+					typename Member::result_type
+				>::type
+			>::type value_type;
+
+			struct value_getter {
+				template <class E, class M>
+				typename boost::enable_if<
+					traits::is_optional<typename M::result_type>,
+					value_type&
+				>::type
+				operator()(E& e, M) const {
+					return *(M()(e));
+				}
+
+				template <class E, class M>
+				typename boost::disable_if<
+					traits::is_optional<typename M::result_type>,
+					value_type&
+				>::type
+				operator()(E& e, M) const {
+					return M()(e);
+				}
+			};
+
+			struct is_present_member {
+				template <class E, class M>
+				typename boost::enable_if<
+					traits::is_optional<typename M::result_type>,
+					bool
+				>::type
+				operator()(E& e, M) const {
+					return M()(e).is_initialized();
+				}
+
+				template <class E, class M>
+				typename boost::disable_if<
+					traits::is_optional<typename M::result_type>,
+					bool
+				>::type
+				operator()(E&, M) const {
+					return true;
+				}
+			};
+
+			Entity& _entity;
+			State& _state;
+
+			template <typename Action>
+			typename boost::enable_if<
+				moneta::traits::detail::is_functor_callable<
+					Action,
+					void (Entity&, value_type&, Member)
+				>
+			>::type
+			process() const {
+				if (is_present_member()(_entity, Member())) {
+					Action()(_entity, value_getter()(_entity, Member()), Member());
+				}
+			}
+
+			template <typename Action>
+			typename boost::enable_if<
+				moneta::traits::detail::is_functor_callable<
+					Action,
+					void (Entity&, value_type&, Member, Path)
+				>
+			>::type
+			process() const {
+				if (is_present_member()(_entity, Member())) {
+					Action()(_entity, value_getter()(_entity, Member()), Member(), Path());
+				}
+			}
+
+			template <typename Action>
+			typename boost::enable_if<
+				moneta::traits::detail::is_functor_callable<
+					Action,
+					void (Entity&, State&, value_type&, Member, Path)
+				>
+			>::type
+			process() const {
+				if (is_present_member()(_entity, Member())) {
+					Action()(_entity, _state, value_getter()(_entity, Member()), Member(), Path());
+				}
+			}
+
+		public:
+			present_member_action(Entity& entity, State& state)
+			 : _entity(entity), _state(state) {}
+
+			template <typename Action>
+			void operator()(Action&) const {
+				process<Action>();
+			}
+		};
+
 		template <class Entity, typename Value, class State, class Member, class Path>
 		class container_item_action {
 			Value& _value;
@@ -247,6 +357,12 @@ namespace moneta { namespace algorithm {
 			process() const {
 				boost::mpl::for_each<typename Traverser::member_actions>(
 					detail::member_or_container_enter_leave_action<
+						Entity, State, Member, Path	
+					>(_entity, _state)
+				);
+
+				boost::mpl::for_each<typename Traverser::present_member_actions>(
+					detail::present_member_action<
 						Entity, State, Member, Path	
 					>(_entity, _state)
 				);
@@ -383,6 +499,11 @@ namespace moneta { namespace algorithm {
 	};
 
 	template <class T, MONETA_TRAVERSE_PARAMS_WITH_DEFAULTS>
+	struct present_member_actions : detail::traverse_present_member {
+		typedef boost::mpl::vector<T, MONETA_TRAVERSE_PARAMS> mpl_vector;
+	};
+
+	template <class T, MONETA_TRAVERSE_PARAMS_WITH_DEFAULTS>
 	struct leave_actions : detail::traverse_leave {
 		typedef boost::mpl::vector<T, MONETA_TRAVERSE_PARAMS> mpl_vector;
 	};
@@ -416,6 +537,7 @@ namespace moneta { namespace algorithm {
 
 		typedef typename detail::actions_of<mpl_vector, detail::traverse_enter >::type enter_actions;
 		typedef typename detail::actions_of<mpl_vector, detail::traverse_member>::type member_actions;
+		typedef typename detail::actions_of<mpl_vector, detail::traverse_present_member>::type present_member_actions;
 		typedef typename detail::actions_of<mpl_vector, detail::traverse_leave >::type leave_actions;
 
 		typedef typename detail::actions_of<mpl_vector, detail::traverse_enter_container>::type enter_container_actions;

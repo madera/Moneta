@@ -13,6 +13,7 @@ MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 	((int, y))
 )
 
+// TODO: Merge with external Customer entity once Optionals are done.
 MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 	Customer,
 	((int,         ID         ))
