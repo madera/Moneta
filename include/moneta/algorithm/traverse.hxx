@@ -10,6 +10,8 @@
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 #include <boost/type_traits/is_base_of.hpp>
 
+#include <boost/spirit/home/support/container.hpp>
+
 #define MONETA_TRAVERSE_MAX_MEMBERS 10
 
 #define MONETA_TRAVERSE_PARAMS \
@@ -321,8 +323,98 @@ namespace moneta { namespace algorithm {
 			}
 		};
 
+		template <class E, class C, class Enable = void>
+		struct get_iterator : boost::mpl::if_<
+			boost::is_const<E>,
+			typename C::const_iterator,
+			typename C::iterator
+		> {};
+
+		template <class E, class C>
+		struct get_iterator<
+			E,
+			C,
+			typename boost::enable_if<
+				traits::is_optional<C>
+			>::type
+		> : boost::mpl::if_<
+			boost::is_const<E>,
+			typename C::value_type::const_iterator,
+			typename C::value_type::iterator
+		> {};
+
 		template <class Traverser_, class Entity, class Path_, class State>
 		class member_action_dispatcher {
+
+			template <class Traverser, class Member, class Path>
+			void iterate_members() const {
+				boost::mpl::for_each<typename Traverser::member_actions>(
+					detail::member_or_container_enter_leave_action<
+						Entity, State, Member, Path	
+					>(_entity, _state)
+				);
+
+				boost::mpl::for_each<typename Traverser::present_member_actions>(
+					detail::present_member_action<
+						Entity, State, Member, Path
+					>(_entity, _state)
+				);
+			}
+
+			template <class Member, class Path, class Operation>
+			void iterate_container_member() const {
+				typedef typename add_path<
+					Path, Member
+				>::type new_path;
+
+				typedef detail::member_or_container_enter_leave_action<
+					Entity, State, Member, new_path
+				> action;
+
+				using boost::mpl::for_each;
+				for_each<typename Traverser_::enter_container_actions>(action(_entity, _state));
+
+				//
+				// TODO: Replace this code using Spirit's container_iterator or something.
+				//
+				typedef typename boost::mpl::if_<
+					boost::is_const<Entity>,
+					typename boost::add_const<
+						typename Member::result_type
+					>::type,
+					typename Member::result_type
+				>::type container_type;
+
+				typedef typename boost::mpl::if_<
+					boost::is_const<Entity>,
+					typename boost::add_const<
+						typename container_type::value_type
+					>::type,
+					typename container_type::value_type
+				>::type value_type;
+
+				typedef typename boost::mpl::if_<
+					boost::is_const<Entity>,
+					typename container_type::const_iterator,
+					typename container_type::iterator
+				>::type iterator_type;
+
+				container_type& container = Member()(_entity);
+				iterator_type itr = container.begin();
+				for ( ; itr != container.end(); ++itr) {
+//					Operation()(_entity, _state, *itr, Member(), new_path());
+				}
+
+				typename boost::spirit::result_of::begin<container_type>::type itr = boost::spirit::traits::begin(*tags);
+				typename boost::spirit::result_of::end  <v_t>::type end = boost::spirit::traits::end  (*tags);
+				for ( ; itr != end; ++itr) {
+					std::cout << "\t * " << *itr << std::endl;
+					Operation()(_entity, _state, *itr, Member(), new_path());
+				}
+
+
+				for_each<typename Traverser_::leave_container_actions>(action(_entity, _state));
+			}
 
 			Entity& _entity;
 			State& _state;
@@ -387,17 +479,7 @@ namespace moneta { namespace algorithm {
 				>
 			>::type
 			process() const {
-				boost::mpl::for_each<typename Traverser::member_actions>(
-					detail::member_or_container_enter_leave_action<
-						Entity, State, Member, Path	
-					>(_entity, _state)
-				);
-
-				boost::mpl::for_each<typename Traverser::present_member_actions>(
-					detail::present_member_action<
-						Entity, State, Member, Path
-					>(_entity, _state)
-				);
+				iterate_members<Traverser, Member, Path>();
 			}
 
 			//
@@ -415,19 +497,29 @@ namespace moneta { namespace algorithm {
 					>
 				>
 			>::type
-			process() const { // XXX: This may be merged to the method above. They're identical.
-				boost::mpl::for_each<typename Traverser::member_actions>(
-					detail::member_or_container_enter_leave_action<
-						Entity, State, Member, Path	
-					>(_entity, _state)
-				);
-
-				boost::mpl::for_each<typename Traverser::present_member_actions>(
-					detail::present_member_action<
-						Entity, State, Member, Path	
-					>(_entity, _state)
-				);
+			process() const {
+				iterate_members<Traverser, Member, Path>();
 			}
+
+			// --------------------------------------------------------------------------------------------
+
+			struct traverse_container_items {
+				template <class E, class S, class V, class M, class P>
+				typename boost::enable_if<
+					traits::is_optional<V>
+				>::type
+				operator()(E&, S& state, V& value, M, P) const {
+					Traverser_().template _traverse<P>(value.get(), state);
+				}
+
+				template <class E, class S, class V, class M, class P>
+				typename boost::disable_if<
+					traits::is_optional<V>
+				>::type
+				operator()(E&, S& state, V& value, M, P) const {
+					Traverser_().template _traverse<P>(value, state);
+				}
+			};
 
 			//
 			// Container of Entity values
@@ -435,43 +527,44 @@ namespace moneta { namespace algorithm {
 			template <class Traverser, class Path, class Member>
 			typename boost::enable_if<
 				boost::mpl::and_<
+					boost::mpl::not_<
+						traits::is_optional<typename Member::result_type>
+					>,
 					traits::is_container<typename Member::result_type>,
 					traits::is_entity<typename Member::result_type::value_type>
 				>
 			>::type
 			process() const {
-				typedef typename add_path<Path, Member>::type path;
-
-				typedef detail::member_or_container_enter_leave_action<
-					Entity, State, Member, path
-				> action;
-
-				using boost::mpl::for_each;
-				for_each<typename Traverser::enter_container_actions>(action(_entity, _state));
-
-				//
-				// TODO: Replace this code using Spirit's container_iterator or something.
-				//
-				typedef typename boost::mpl::if_<
-					boost::is_const<Entity>,
-					typename boost::add_const<typename Member::result_type>::type,
-					typename Member::result_type
-				>::type container_type;
-
-				typedef typename boost::mpl::if_<
-					boost::is_const<Entity>,
-					typename container_type::const_iterator,
-					typename container_type::iterator
-				>::type iterator_type;
-
-				container_type& container = Member()(_entity);
-				iterator_type itr = container.begin();
-				for ( ; itr != container.end(); ++itr) {
-					Traverser().template _traverse<path>(*itr, _state);
-				}
-
-				for_each<typename Traverser::leave_container_actions>(action(_entity, _state));
+				iterate_container_member<Member, Path, traverse_container_items>();
 			}
+
+			//
+			// Optional Container of Entity values
+			//
+			template <class Traverser, class Path, class Member>
+			typename boost::enable_if<
+				boost::mpl::and_<
+					traits::is_optional<typename Member::result_type>,
+					traits::is_container<typename Member::result_type::value_type>,
+					traits::is_entity<typename Member::result_type::value_type::value_type>
+				>
+			>::type
+			process() const {
+				iterate_container_member<Member, Path, traverse_container_items>();
+			}
+
+			// --------------------------------------------------------------------------------------------
+
+			struct iterate_container_items {
+				template <class E, class S, class V, class M, class P>
+				void operator()(E& entity, S& state, V& value, M, P) const {
+					boost::mpl::for_each<typename Traverser_::container_item_actions>(
+						detail::container_item_action<
+							E, V, S, M, P // XXX: Wrong order.
+						>(value, entity, state)
+					);
+				}
+			};
 
 			//
 			// Container of Non-Entity values
@@ -479,58 +572,36 @@ namespace moneta { namespace algorithm {
 			template <class Traverser, class Path, class Member>
 			typename boost::enable_if<
 				boost::mpl::and_<
+					boost::mpl::not_<
+						traits::is_optional<typename Member::result_type>
+					>,
 					traits::is_container<typename Member::result_type>,
-					boost::mpl::not_<typename traits::is_entity<typename Member::result_type::value_type> >
+					boost::mpl::not_<
+						typename traits::is_entity<typename Member::result_type::value_type>
+					>
 				>
 			>::type
 			process() const {
-				typedef detail::member_or_container_enter_leave_action<
-					Entity,
-					State,
-					Member,
-					typename add_path<Path, Member>::type
-				> action;
+				iterate_container_member<Member, Path, iterate_container_items>();
+			}
 
-				using boost::mpl::for_each;
-				for_each<typename Traverser::enter_container_actions>(action(_entity, _state));
-
-				//
-				// TODO: Replace this code using Spirit's container_iterator or something.
-				//
-				typedef typename boost::mpl::if_<
-					boost::is_const<Entity>,
-					typename boost::add_const<typename Member::result_type>::type,
-					typename Member::result_type
-				>::type container_type;
-
-				typedef typename boost::mpl::if_<
-					boost::is_const<Entity>,
-					typename boost::add_const<typename container_type::value_type>::type,
-					typename container_type::value_type
-				>::type value_type;
-
-				typedef typename boost::mpl::if_<
-					boost::is_const<Entity>,
-					typename container_type::const_iterator,
-					typename container_type::iterator
-				>::type iterator_type;
-
-				container_type& container = Member()(_entity);
-				iterator_type itr = container.begin();
-				for ( ; itr != container.end(); ++itr) {
-					value_type& value = *itr;
-					boost::mpl::for_each<typename Traverser::container_item_actions>(
-						detail::container_item_action<
-							Entity,
-							value_type,
-							State,
-							Member,
-							typename add_path<Path, Member>::type
-						>(value, _entity, _state)
-					);
-				}
-				
-				for_each<typename Traverser::leave_container_actions>(action(_entity, _state));
+			//
+			// Optional Container of Non-Entity values
+			//
+			template <class Traverser, class Path, class Member>
+			typename boost::enable_if<
+				boost::mpl::and_<
+					traits::is_optional<typename Member::result_type>,
+					traits::is_container<typename Member::result_type::value_type>,
+					boost::mpl::not_<
+						typename traits::is_entity<
+							typename Member::result_type::value_type::value_type
+						>
+					>
+				>
+			>::type
+			process() const {
+				iterate_container_member<Member, Path, iterate_container_items>();
 			}
 
 		public:

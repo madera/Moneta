@@ -681,4 +681,66 @@ BOOST_AUTO_TEST_CASE(test_moneta_algorithm_traverse_present_members) {
 		BOOST_CHECK_EQUAL(g_leave_container_count, 0);
 		BOOST_CHECK_EQUAL(g_finish_count, 1 * 3);
 	}
+	{
+		reset_counters();
+
+		Address address;
+		address.ID = 0;
+		address.Number = 1;
+		address.Street = "Something St.";
+
+		Customer customer;
+		customer.HomeAddress = address;
+		customer.Rating = 10;
+		customer.Dogs = std::vector<Dog>();
+		
+		Dog lassie;
+		lassie.ID = 1;
+		lassie.Name = "Lassie";
+		lassie.Owner = "Somebody";
+		customer.Dogs->push_back(lassie);
+
+		Dog yoddy;
+		yoddy.ID = 1;
+		yoddy.Name = "Yoddy";
+		yoddy.Owner = "Sam";
+		customer.Dogs->push_back(yoddy);
+
+		test_state state;
+		traverse_type()(customer, state);
+
+		const char* expected[] = {
+			"S:Customer",
+				"e:Customer",
+					 "m:Name",
+					"pm:Name",
+					 "m:DOB",
+					"pm:DOB",
+					"e:Address,/Customer::HomeAddress",
+						 "m:ID,/Customer::HomeAddress",
+						"pm:ID,/Customer::HomeAddress",
+						 "m:Number,/Customer::HomeAddress",
+						"pm:Number,/Customer::HomeAddress",
+						 "m:Street,/Customer::HomeAddress",
+						"pm:Street,/Customer::HomeAddress",
+					"l:Address,/Customer::HomeAddress",
+					 "m:Rating",
+					"pm:Rating",
+				"l:Customer",
+			"F:Customer"
+		};
+
+		const size_t line_count = std::distance(std::begin(expected), std::end(expected));
+		BOOST_CHECK_EQUAL(state.lines.size(), line_count);
+		BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + line_count);
+
+		BOOST_CHECK_EQUAL(g_start_count, 1 * 3);
+		BOOST_CHECK_EQUAL(g_enter_count, 2 * 3);
+		BOOST_CHECK_EQUAL(g_member_count, 6 * 3);
+		BOOST_CHECK_EQUAL(g_leave_count, 2 * 3);
+		BOOST_CHECK_EQUAL(g_enter_container_count, 0);
+		BOOST_CHECK_EQUAL(g_container_item_count, 0);
+		BOOST_CHECK_EQUAL(g_leave_container_count, 0);
+		BOOST_CHECK_EQUAL(g_finish_count, 1 * 3);
+	}
 }
