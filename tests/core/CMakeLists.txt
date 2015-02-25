@@ -95,6 +95,7 @@ add_executable(core_tests
 	moneta/traits/empty_pk_test.cxx
 	moneta/traits/extract_pk_test.cxx
 	moneta/traits/fixed_values_test.cxx
+	moneta/traits/optional_test.cxx
 	moneta/traits/is_container_test.cxx
 	moneta/traits/is_entity_test.cxx
 	moneta/traits/member_names_test.cxx
