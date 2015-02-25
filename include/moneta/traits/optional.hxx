@@ -71,14 +71,19 @@ namespace moneta { namespace traits {
 	namespace detail {
 		template <typename T, typename Enable = void>
 		struct is_optional_present_impl {
-			T& operator()(T&) const {
-				return false;
+			bool operator()(T&) const {
+				return true;
 			}
 		};
 
 		template <typename T>
-		struct is_optional_present_impl<boost::optional<T> > {
-			bool operator()(boost::optional<T>& x) const {
+		struct is_optional_present_impl<
+			T,
+			typename boost::enable_if<
+				is_optional<T>
+			>::type
+		> {
+			bool operator()(T& x) {
 				return x.is_initialized();
 			}
 		};

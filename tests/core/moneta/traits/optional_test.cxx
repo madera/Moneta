@@ -81,3 +81,30 @@ BOOST_AUTO_TEST_CASE(test_moneta_traits_is_optional_get_optional_value) {
 	BOOST_CHECK_EQUAL(moneta::traits::get_optional_value(oi), 1);
 	BOOST_CHECK_EQUAL(moneta::traits::get_optional_value(coi), 123);
 }
+
+BOOST_AUTO_TEST_CASE(test_moneta_traits_is_optional_is_optional_present) {
+	boost::optional<char> oc;
+	boost::optional<int > oi;
+	boost::optional<long> ol;
+
+	BOOST_CHECK(!moneta::traits::is_optional_present(oc));
+	BOOST_CHECK(!moneta::traits::is_optional_present(oi));
+	BOOST_CHECK(!moneta::traits::is_optional_present(ol));
+
+	oc = 1;
+	oi = 2;
+	ol = 3;
+
+	BOOST_CHECK(moneta::traits::is_optional_present(oc));
+	BOOST_CHECK(moneta::traits::is_optional_present(oi));
+	BOOST_CHECK(moneta::traits::is_optional_present(ol));
+
+	//
+
+	const boost::optional<char> coc = 111;
+	const boost::optional<int > coi = 222;
+	const boost::optional<long> col = 333;
+	BOOST_CHECK(moneta::traits::is_optional_present(coc));
+	BOOST_CHECK(moneta::traits::is_optional_present(coi));
+	BOOST_CHECK(moneta::traits::is_optional_present(col));
+}
