@@ -692,7 +692,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_algorithm_traverse_present_members) {
 		Customer customer;
 		customer.HomeAddress = address;
 		customer.Rating = 10;
-		customer.Dogs = std::vector<Dog>();
+		//customer.Dogs = std::vector<Dog>();
 		
 		Dog lassie;
 		lassie.ID = 1;
