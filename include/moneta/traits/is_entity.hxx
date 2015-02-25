@@ -10,4 +10,9 @@ namespace moneta { namespace traits {
 		boost::is_same<typename members<Entity>::type, boost::false_type>
 	> {};
 
+	template <class Entity>
+	struct isnt_entity : boost::mpl::not_<
+		is_entity<Entity>
+	> {};
+
 }}

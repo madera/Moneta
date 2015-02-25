@@ -19,4 +19,10 @@ namespace moneta { namespace traits {
 	template <>
 	struct is_container<std::string> : boost::false_type {};
 
+	//
+
+	template <typename T>
+	struct isnt_container : boost::mpl::not_<
+		is_container<T>
+	> {};
 }}
