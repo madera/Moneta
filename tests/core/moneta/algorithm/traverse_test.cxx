@@ -175,9 +175,9 @@ struct counting_present_member_evmp {
 	}
 };
 
-struct counting_present_member_esvmp {
-	template <class Entity, class State, class Value, class Member, class Path>
-	void operator()(Entity&, State& state, Value&, Member, Path) const {
+struct counting_present_member_evsmp {
+	template <class Entity, class Value, class State, class Member, class Path>
+	void operator()(Entity&, Value&, State& state, Member, Path) const {
 		++g_present_member_count;
 
 		std::string tmp = "pm:" + moneta::traits::detail::member_name<Member>::get();
@@ -569,7 +569,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_algorithm_traverse_present_members) {
 		present_member_actions<
 			counting_present_member_evm,
 			counting_present_member_evmp,
-			counting_present_member_esvmp
+			counting_present_member_evsmp
 		>,
 		leave_actions<
 			counting_leave_e,
@@ -692,7 +692,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_algorithm_traverse_present_members) {
 		Customer customer;
 		customer.HomeAddress = address;
 		customer.Rating = 10;
-		//customer.Dogs = std::vector<Dog>();
+		customer.Dogs = std::vector<Dog>();
 		
 		Dog lassie;
 		lassie.ID = 1;
@@ -726,6 +726,24 @@ BOOST_AUTO_TEST_CASE(test_moneta_algorithm_traverse_present_members) {
 					"l:Address,/Customer::HomeAddress",
 					 "m:Rating",
 					"pm:Rating",
+					"ec:Dogs,/Customer::Dogs",
+						"e:Dog,/Customer::Dogs",
+							 "m:Owner,/Customer::Dogs",
+							"pm:Owner,/Customer::Dogs",
+							 "m:ID,/Customer::Dogs",
+							"pm:ID,/Customer::Dogs",
+							 "m:Name,/Customer::Dogs",
+							"pm:Name,/Customer::Dogs",
+						"l:Dog,/Customer::Dogs",
+						"e:Dog,/Customer::Dogs",
+							 "m:Owner,/Customer::Dogs",
+							"pm:Owner,/Customer::Dogs",
+							 "m:ID,/Customer::Dogs",
+							"pm:ID,/Customer::Dogs",
+							 "m:Name,/Customer::Dogs",
+							"pm:Name,/Customer::Dogs",
+						"l:Dog,/Customer::Dogs",
+					"lc:Dogs,/Customer::Dogs",
 				"l:Customer",
 			"F:Customer"
 		};
@@ -735,12 +753,12 @@ BOOST_AUTO_TEST_CASE(test_moneta_algorithm_traverse_present_members) {
 		BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + line_count);
 
 		BOOST_CHECK_EQUAL(g_start_count, 1 * 3);
-		BOOST_CHECK_EQUAL(g_enter_count, 2 * 3);
-		BOOST_CHECK_EQUAL(g_member_count, 6 * 3);
-		BOOST_CHECK_EQUAL(g_leave_count, 2 * 3);
-		BOOST_CHECK_EQUAL(g_enter_container_count, 0);
+		BOOST_CHECK_EQUAL(g_enter_count, 4 * 3);
+		BOOST_CHECK_EQUAL(g_member_count, 12 * 3);
+		BOOST_CHECK_EQUAL(g_leave_count, 4 * 3);
+		BOOST_CHECK_EQUAL(g_enter_container_count, 1 * 3);
 		BOOST_CHECK_EQUAL(g_container_item_count, 0);
-		BOOST_CHECK_EQUAL(g_leave_container_count, 0);
+		BOOST_CHECK_EQUAL(g_leave_container_count, 1 * 3);
 		BOOST_CHECK_EQUAL(g_finish_count, 1 * 3);
 	}
 }

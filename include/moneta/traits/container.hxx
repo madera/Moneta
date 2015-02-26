@@ -36,11 +36,14 @@ namespace moneta { namespace traits {
 
 	template <class Container, class Operation>
 	void container_for_each(Container& container, const Operation& operation) {
+		if (!traits::is_optional_present(container)) {
+			return;
+		}
+
 		typedef typename detail::const_if_const<
 			Container,
 			typename traits::optional_value_type<Container>::type
 		>::type container_type;
-
 		container_type& kontainer = traits::get_optional_value(container);
 
 		typedef typename detail::container_iterator<

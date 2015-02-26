@@ -34,6 +34,18 @@ namespace moneta { namespace algorithm {
 			Path, is_container_member<boost::mpl::_1>
 		> {};
 
+		//
+
+		template <class Path, class Member, class Enable = void>
+		struct add_path : boost::mpl::identity<void> {};
+
+		template <class Path, class Member>
+		struct add_path<
+			Path, Member,
+			typename boost::enable_if<
+				typename boost::mpl::is_sequence<Path>::type
+			>::type
+		> : boost::mpl::push_back<Path, Member> {};
 	}
 
 }}

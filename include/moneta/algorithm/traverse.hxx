@@ -21,6 +21,7 @@
 namespace moneta { namespace algorithm {
 
 	namespace detail {
+
 		struct traverse_start {};
 
 		struct traverse_enter {};
@@ -35,6 +36,8 @@ namespace moneta { namespace algorithm {
 		struct traverse_finish {};
 
 		struct no_state {};
+
+		//
 
 		template <class T>
 		struct get_mpl_vector : boost::mpl::identity<
@@ -55,18 +58,6 @@ namespace moneta { namespace algorithm {
 				>
 			>::type
 		> {};
-
-		// TODO: Export this useful function.
-		template <class Path, class Member, class Enable = void>
-		struct add_path : boost::mpl::identity<void> {};
-
-		template <class Path, class Member>
-		struct add_path<
-			Path, Member,
-			typename boost::enable_if<
-				typename boost::mpl::is_sequence<Path>::type
-			>::type
-		> : boost::mpl::push_back<Path, Member> {};
 
 		template <class Entity, class State, class Path>
 		class start_finish_enter_leave_action {
@@ -164,9 +155,8 @@ namespace moneta { namespace algorithm {
 			}
 		};
 
-		// XXX: TAG: Needs cleaning after done.
 		template <class Entity, class State, class Member, class Path>
-		class present_member_action { // XXX: Marked for review... it may not be needed.
+		class present_member_action {
 
 			typedef typename traits::detail::const_if_const<
 				Entity,
@@ -208,12 +198,12 @@ namespace moneta { namespace algorithm {
 			typename boost::enable_if<
 				moneta::traits::detail::is_functor_callable<
 					Action,
-					void (Entity&, State&, value_type&, Member, Path)
+					void (Entity&, value_type&, State&, Member, Path)
 				>
 			>::type
 			process() const {
 				if (traits::is_optional_present(Member()(_entity))) {
-					Action()(_entity, _state, traits::get_optional_value(Member()(_entity)), Member(), Path());
+					Action()(_entity, traits::get_optional_value(Member()(_entity)), _state, Member(), Path());
 				}
 			}
 
@@ -276,7 +266,7 @@ namespace moneta { namespace algorithm {
 			}
 		};
 
-		template <class Traverser_, class Entity, class Path_, class State>
+		template <class Traverser_, class Entity, class State, class Path_>
 		class member_action_dispatcher {
 
 			template <class Path>
@@ -312,11 +302,13 @@ namespace moneta { namespace algorithm {
 
 			template <class Traverser, class Member, class Path>
 			void entity_member() const {
-				if (traits::is_optional_present(Member()(_entity))) {
-					Traverser().template _traverse<
-						typename add_path<Path, Member>::type
-					>(traits::get_optional_value(Member()(_entity)), _state);
+				if (!traits::is_optional_present(Member()(_entity))) {
+					return;
 				}
+
+				Traverser().template _traverse<
+					typename detail::add_path<Path, Member>::type
+				>(traits::get_optional_value(Member()(_entity)), _state);
 			}
 
 			template <class Traverser, class Member, class Path>
@@ -336,7 +328,11 @@ namespace moneta { namespace algorithm {
 
 			template <class Traverser, class Member, class Path>
 			void container_of_entities() const {
-				typedef typename add_path<Path, Member>::type path;
+				if (!traits::is_optional_present(Member()(_entity))) {
+					return;
+				}
+
+				typedef typename detail::add_path<Path, Member>::type path;
 				detail::member_or_container_enter_leave_action<
 					Entity, State, Member, path
 				> action(_entity, _state);
@@ -348,7 +344,11 @@ namespace moneta { namespace algorithm {
 
 			template <class Traverser, class Member, class Path>
 			void container_of_nonentities() const {
-				typedef typename add_path<Path, Member>::type path;
+				if (!traits::is_optional_present(Member()(_entity))) {
+					return;
+				}
+
+				typedef typename detail::add_path<Path, Member>::type path;
 				detail::member_or_container_enter_leave_action<
 					Entity, State, Member, path
 				> action(_entity, _state);
@@ -366,7 +366,7 @@ namespace moneta { namespace algorithm {
 			//
 	// 01 //	// Entity result_type
 			//
-			template <class Traverser, class Path, class Member>
+			template <class Traverser, class Member, class Path>
 			typename boost::enable_if<
 				boost::mpl::and_<
 					traits::isnt_optional<typename Member::result_type>,
@@ -381,7 +381,7 @@ namespace moneta { namespace algorithm {
 			//
 	// 02 //	// Optional Entity result_type
 			//
-			template <class Traverser, class Path, class Member>
+			template <class Traverser, class Member, class Path>
 			typename boost::enable_if<
 				boost::mpl::and_<
 					traits::is_optional<typename Member::result_type>,
@@ -396,7 +396,7 @@ namespace moneta { namespace algorithm {
 			//
 	// 03 //	// Non-Entity result_type
 			//
-			template <class Traverser, class Path, class Member>
+			template <class Traverser, class Member, class Path>
 			typename boost::enable_if<
 				boost::mpl::and_<
 					traits::isnt_optional<typename Member::result_type>,
@@ -411,7 +411,7 @@ namespace moneta { namespace algorithm {
 			//
 	// 04 //	// Optional Non-Entity result_type
 			//
-			template <class Traverser, class Path, class Member>
+			template <class Traverser, class Member, class Path>
 			typename boost::enable_if<
 				boost::mpl::and_<
 					traits::is_optional<typename Member::result_type>,
@@ -426,7 +426,7 @@ namespace moneta { namespace algorithm {
 			//
 	// 05 //	// Container of Entity values
 			//
-			template <class Traverser, class Path, class Member>
+			template <class Traverser, class Member, class Path>
 			typename boost::enable_if<
 				boost::mpl::and_<
 					traits::isnt_optional<typename Member::result_type>,
@@ -441,7 +441,7 @@ namespace moneta { namespace algorithm {
 			//
 	// 06 //	// Optional Container of Entity values
 			//
-			template <class Traverser, class Path, class Member>
+			template <class Traverser, class Member, class Path>
 			typename boost::enable_if<
 				boost::mpl::and_<
 					traits::is_optional<typename Member::result_type>,
@@ -460,7 +460,7 @@ namespace moneta { namespace algorithm {
 			//
 	// 07 //	// Container of Non-Entity values
 			//
-			template <class Traverser, class Path, class Member>
+			template <class Traverser, class Member, class Path>
 			typename boost::enable_if<
 				boost::mpl::and_<
 					traits::isnt_optional<typename Member::result_type>,
@@ -475,7 +475,7 @@ namespace moneta { namespace algorithm {
 			//
 	// 08 //	// Optional Container of Non-Entity values
 			//
-			template <class Traverser, class Path, class Member>
+			template <class Traverser, class Member, class Path>
 			typename boost::enable_if<
 				boost::mpl::and_<
 					traits::is_optional<typename Member::result_type>,
@@ -497,7 +497,7 @@ namespace moneta { namespace algorithm {
 
 			template <typename Member>
 			void operator()(Member&) const {
-				process<Traverser_, Path_, Member>();
+				process<Traverser_, Member, Path_>();
 			}
 		};
 	}
@@ -568,7 +568,7 @@ namespace moneta { namespace algorithm {
 		template <class Path, class Entity, class State>
 		void _traverse(Entity& entity, State& state) const {
 			typedef detail::start_finish_enter_leave_action<Entity, State, Path> enter_leave_action;
-			typedef detail::member_action_dispatcher<this_type, Entity, Path, State> member_action;
+			typedef detail::member_action_dispatcher<this_type, Entity, State, Path> member_action;
 
 			using boost::mpl::for_each;
 			for_each<enter_actions>(enter_leave_action(entity, state));
