@@ -279,21 +279,6 @@ namespace moneta { namespace algorithm {
 		template <class Traverser_, class Entity, class Path_, class State>
 		class member_action_dispatcher {
 
-			template <class Traverser, class Member, class Path>
-			void iterate_members() const {
-				boost::mpl::for_each<typename Traverser::member_actions>(
-					detail::member_or_container_enter_leave_action<
-						Entity, State, Member, Path	
-					>(_entity, _state)
-				);
-
-				boost::mpl::for_each<typename Traverser::present_member_actions>(
-					detail::present_member_action<
-						Entity, State, Member, Path
-					>(_entity, _state)
-				);
-			}
-
 			template <class Path>
 			struct traverse_item {
 				State& _state;
@@ -325,6 +310,56 @@ namespace moneta { namespace algorithm {
 				}
 			};
 
+			template <class Traverser, class Member, class Path>
+			void entity_member() const {
+				if (traits::is_optional_present(Member()(_entity))) {
+					Traverser().template _traverse<
+						typename add_path<Path, Member>::type
+					>(traits::get_optional_value(Member()(_entity)), _state);
+				}
+			}
+
+			template <class Traverser, class Member, class Path>
+			void nonentity_member() const {
+				boost::mpl::for_each<typename Traverser::member_actions>(
+					detail::member_or_container_enter_leave_action<
+						Entity, State, Member, Path	
+					>(_entity, _state)
+				);
+
+				boost::mpl::for_each<typename Traverser::present_member_actions>(
+					detail::present_member_action<
+						Entity, State, Member, Path
+					>(_entity, _state)
+				);
+			}
+
+			template <class Traverser, class Member, class Path>
+			void container_of_entities() const {
+				typedef typename add_path<Path, Member>::type path;
+				detail::member_or_container_enter_leave_action<
+					Entity, State, Member, path
+				> action(_entity, _state);
+
+				boost::mpl::for_each<typename Traverser::enter_container_actions>(action);
+				traits::container_for_each(Member()(_entity), traverse_item<path>(_state));
+				boost::mpl::for_each<typename Traverser::leave_container_actions>(action);
+			}
+
+			template <class Traverser, class Member, class Path>
+			void container_of_nonentities() const {
+				typedef typename add_path<Path, Member>::type path;
+				detail::member_or_container_enter_leave_action<
+					Entity, State, Member, path
+				> action(_entity, _state);
+
+				boost::mpl::for_each<typename Traverser::enter_container_actions>(action);
+				traits::container_for_each(
+					Member()(_entity), iterate_value_items<Member, path>(_entity, _state)
+				);
+				boost::mpl::for_each<typename Traverser::leave_container_actions>(action);
+			}
+
 			Entity& _entity;
 			State& _state;
 
@@ -340,9 +375,7 @@ namespace moneta { namespace algorithm {
 				>
 			>::type
 			process() const {
-				Traverser().template _traverse<
-					typename add_path<Path, Member>::type
-				>(Member()(_entity), _state);
+				entity_member<Traverser, Member, Path>();
 			}
 
 			//
@@ -357,11 +390,7 @@ namespace moneta { namespace algorithm {
 				>
 			>::type
 			process() const {
-				if (Member()(_entity).is_initialized()) {
-					Traverser().template _traverse<
-						typename add_path<Path, Member>::type
-					>(Member()(_entity).get(), _state);
-				}
+				entity_member<Traverser, Member, Path>();
 			}
 
 			//
@@ -376,7 +405,7 @@ namespace moneta { namespace algorithm {
 				>
 			>::type
 			process() const {
-				iterate_members<Traverser, Member, Path>();
+				nonentity_member<Traverser, Member, Path>();
 			}
 
 			//
@@ -391,7 +420,7 @@ namespace moneta { namespace algorithm {
 				>
 			>::type
 			process() const {
-				iterate_members<Traverser, Member, Path>();
+				nonentity_member<Traverser, Member, Path>();
 			}
 
 			//
@@ -406,7 +435,7 @@ namespace moneta { namespace algorithm {
 				>
 			>::type
 			process() const {
-				traits::container_for_each(Member()(_entity), traverse_item<Path>(_state));
+				container_of_entities<Traverser, Member, Path>();
 			}
 
 			//
@@ -425,7 +454,7 @@ namespace moneta { namespace algorithm {
 				>
 			>::type
 			process() const {
-				traits::container_for_each(Member()(_entity), traverse_item<Path>(_state));
+				container_of_entities<Traverser, Member, Path>();
 			}
 
 			//
@@ -440,9 +469,7 @@ namespace moneta { namespace algorithm {
 				>
 			>::type
 			process() const {
-				traits::container_for_each(
-					Member()(_entity), iterate_value_items<Member, Path>(_entity, _state)
-				);
+				container_of_nonentities<Traverser, Member, Path>();
 			}
 
 			//
@@ -461,9 +488,7 @@ namespace moneta { namespace algorithm {
 				>
 			>::type
 			process() const {
-				traits::container_for_each(
-					Member()(_entity), iterate_value_items<Member, Path>(_entity, _state)
-				);
+				container_of_nonentities<Traverser, Member, Path>();
 			}
 
 		public:
