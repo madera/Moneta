@@ -1,6 +1,6 @@
 #pragma once
 #include "../../../traits/members.hxx"
-#include "../../../traits/member_names.hxx"
+#include "../../../traits/member_name.hxx"
 #include "../../../traits/detail/member_trait_base.hxx"
 #include <boost/mpl/find_if.hpp>
 

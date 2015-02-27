@@ -1,6 +1,6 @@
 #pragma once
 #include "../traits/entity_name.hxx"
-#include "../traits/member_names.hxx"
+#include "../traits/member_name.hxx"
 #include "traits/table_name.hxx"
 #include "traits/field_names.hxx"
 

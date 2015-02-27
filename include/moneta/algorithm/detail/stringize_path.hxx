@@ -2,7 +2,7 @@
 
 #pragma once
 #include "../../traits/entity_name.hxx"
-#include "../../traits/member_names.hxx"
+#include "../../traits/member_name.hxx"
 
 namespace moneta { namespace codec { namespace detail {
 

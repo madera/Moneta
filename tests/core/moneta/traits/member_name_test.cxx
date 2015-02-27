@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <moneta/traits/member_names.hxx>
+#include <moneta/traits/member_name.hxx>
 #include "../model/Person.hxx"
 #include "../model/Dog.hxx"
 #include "../model/Address.hxx"

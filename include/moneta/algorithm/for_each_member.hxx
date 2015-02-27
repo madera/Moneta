@@ -1,6 +1,6 @@
 #pragma once
 #include "../detail/keywords.hxx"
-#include "../traits/member_names.hxx"
+#include "../traits/member_name.hxx"
 #include "../traits/is_entity.hxx"
 #include "../traits/detail/is_functor_callable.hxx"
 #include "../make_entity.hxx"

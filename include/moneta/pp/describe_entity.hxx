@@ -2,7 +2,7 @@
 #include "detail/moneta_pp.hxx"
 #include "../traits/entity_name.hxx"
 #include "../traits/member.hxx"
-#include "../traits/member_names.hxx"
+#include "../traits/member_name.hxx"
 #include <boost/mpl/vector.hpp>
 
 // ---

@@ -1,5 +1,5 @@
 #pragma once
-#include "member_names.hxx"
+#include "member_name.hxx"
 #include "pk.hxx"
 
 namespace moneta { namespace traits {

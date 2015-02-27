@@ -4,7 +4,7 @@
 #include "../_aux/path_tabs.hxx"
 #include "../_aux/io/ostringstream.hxx"
 #include "../../traits/entity_name.hxx"
-#include "../../traits/member_names.hxx"
+#include "../../traits/member_name.hxx"
 
 namespace moneta { namespace codec { namespace stateless_xml_encoder_implementation {
 

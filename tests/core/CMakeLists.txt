@@ -99,7 +99,7 @@ add_executable(core_tests
 	moneta/traits/optional_test.cxx
 	moneta/traits/is_container_test.cxx
 	moneta/traits/is_entity_test.cxx
-	moneta/traits/member_names_test.cxx
+	moneta/traits/member_name_test.cxx
 	moneta/traits/members_test.cxx
 	moneta/traits/pk_member_names_test.cxx
 	moneta/traits/pk_rtie_test.cxx

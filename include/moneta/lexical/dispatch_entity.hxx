@@ -1,6 +1,6 @@
 #pragma once
 #include "../limits/member.hxx"
-#include "../traits/member_names.hxx"
+#include "../traits/member_name.hxx"
 #include "../traits/entity_name.hxx"
 #include "../algorithm/dispatch_entity.hxx"
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "../limits/member.hxx"
-#include "../traits/member_names.hxx"
+#include "../traits/member_name.hxx"
 #include "../_aux/mplx_at_c.hxx"
 
 namespace moneta { namespace lexical {
