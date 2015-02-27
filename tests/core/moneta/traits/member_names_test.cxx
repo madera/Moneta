@@ -4,7 +4,7 @@
 #include "../model/Dog.hxx"
 #include "../model/Address.hxx"
 
-BOOST_AUTO_TEST_CASE(member_name_test) {
+BOOST_AUTO_TEST_CASE(test_moneta_traits_member_names_get) {
 	//
 	// Person
 	//
@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_CASE(member_name_test) {
 	);
 }
 
-BOOST_AUTO_TEST_CASE(member_names_test) {
+BOOST_AUTO_TEST_CASE(test_moneta_traits_member_names_get_member_names) {
 	{
 		std::vector<std::string> names = moneta::traits::get_member_names<Person>();
 		BOOST_REQUIRE_EQUAL(names.size(), 4);
@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE(member_names_test) {
 	}
 }
 
-BOOST_AUTO_TEST_CASE(get_member_name_index_test) {
+BOOST_AUTO_TEST_CASE(test_moneta_traits_member_names_test_get_member_name_index) {
 	BOOST_CHECK_EQUAL(moneta::traits::get_member_name_index<Person>("ID"), 0);
 	BOOST_CHECK_EQUAL(moneta::traits::get_member_name_index<Person>("Name"), 1);
 	BOOST_CHECK_EQUAL(moneta::traits::get_member_name_index<Person>("Height"), 2);

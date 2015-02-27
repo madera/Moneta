@@ -90,7 +90,8 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 
 	struct null_handler {
 		template <class Iterator>
-		void operator()(Iterator key_begin, Iterator key_end, Iterator value_begin, Iterator value_end) const {
+		// Iterator key_begin, Iterator key_end, Iterator value_begin, Iterator value_end
+		void operator()(Iterator, Iterator, Iterator, Iterator) const {
 		}
 	};
 

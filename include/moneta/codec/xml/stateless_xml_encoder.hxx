@@ -216,27 +216,27 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		}
 	};
 
-	struct member_encoder {
-		template <class Iterator, class Entity, class Member, class Path>
+	struct present_member_encoder {
+		template <class Iterator, class Entity, class Value, class Member, class Path>
 		typename boost::enable_if<
 			detail::is_xml_attribute<Member>,
 			int
 		>::type
-		operator()(Iterator, Iterator, const Entity&, Member, Path) const {
+		operator()(Iterator, Iterator, const Entity&, const Value&, Member, Path) const {
 			// Nothing to do here. Attributes have been taken care of already.
 			return  0;
 		}
 
-		template <class Iterator, class Entity, class Member, class Path>
+		template <class Iterator, class Entity, class Value, class Member, class Path>
 		typename boost::enable_if<
 			detail::is_xml_element<Member>,
 			int
 		>::type
-		operator()(Iterator begin, Iterator end, const Entity& entity, Member, Path) const {
+		operator()(Iterator begin, Iterator end, const Entity&, const Value& value, Member, Path) const {
 			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path, 1>()
 				<< '<' << traits::detail::member_name<Member>::get() << '>'
-				<< Member()(entity)
+				<< value
 				<< "</" << traits::detail::member_name<Member>::get() << '>'
 				<< '\n'
 			;
@@ -256,7 +256,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 	struct container_item_encoder {
 		template <class Iterator, class Entity, class Value, class Member, class Path>
 		int operator()(Iterator begin, Iterator end, const Entity&, const Value& value, Member, Path) const {
-			const std::string& tag_name = traits::detail::xml_container_member_element_name<Member>::get();
+			const std::string& tag_name = traits::detail::xml_container_item_name<Member>::get();
 			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path>()
 				<< '<' << tag_name << '>' << value << '<' << '/' << tag_name << '>' << '\n'
@@ -275,12 +275,12 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 	};
 	
 	typedef moneta::codec::encoder<
-		enter_actions <enter_entity_encoder>,
-		member_actions<member_encoder      >,
-		leave_actions <leave_entity_encoder>,
-		enter_container_actions <enter_container_encoder >,
+		enter_actions<enter_entity_encoder>,
+		present_member_actions<present_member_encoder>,
+		leave_actions<leave_entity_encoder>,
+		enter_container_actions<enter_container_encoder >,
 		container_item_actions<container_item_encoder>,
-		leave_container_actions <leave_container_encoder >
+		leave_container_actions<leave_container_encoder>
 	> stateless_xml_encoder;
 
 }}}

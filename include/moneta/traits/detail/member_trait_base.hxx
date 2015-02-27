@@ -33,17 +33,6 @@
 		typedef result_type trait_type;                         \
 	};
 
-//#define MONETA_DEFINE_TRAIT_WITH_GET(trait, type, return_type, value) \
-//	namespace moneta { namespace traits { namespace detail {      \
-//	template <>                                                   \
-//	struct trait<__UNWRAP_TUPLE(type)> : boost::true_type {       \
-//		typedef __UNWRAP_TUPLE(return_type) trait_type;       \
-//		static trait_type get() {                             \
-//			return value    ;                             \
-//		}                                                     \
-//	};                                                            \
-//	}}}
-
 #define MONETA_DEFINE_TRAIT_WITH_GET(trait, type, return_type, value) \
 	namespace moneta { namespace traits { namespace detail {      \
 		template <>                                           \

@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../traits/members.hxx"
+#include "../../../traits/member_names.hxx"
 #include "../../../traits/detail/member_trait_base.hxx"
 #include <boost/mpl/find_if.hpp>
 
@@ -11,34 +12,45 @@ MONETA_DECLARE_TRAIT(xml_attribute)
 		struct xml_attribute<field> : boost::true_type {};\
 	}}}
 
-// TODO: Review these and test all XML features.
-MONETA_DECLARE_MEMBER_TRAIT(xml_container_member_name)
+// --------------------------------------------------------------------------------------------------------------------
 
-#define MONETA_XML_CONTAINER_MEMBER_NAME(member, name) \
-	MONETA_DEFINE_TRAIT_WITH_GET(xml_container_member_name, member, std::string, BOOST_PP_STRINGIZE(name))
+namespace moneta { namespace traits { namespace detail {                             \
+	template <class Member>                                                      \
+	struct xml_container_item_name {                                             \
+			typedef std::string trait_type;                              \
+			static trait_type get() {                                    \
+				const std::string text = member_name<Member>::get(); \
+				return (std::isupper(text[0]))?                      \
+					text + "Item" :                              \
+					text + "_item";                              \
+			}                                                            \
+	};                                                                           \
+}}}
 
-
-
-MONETA_DECLARE_MEMBER_TRAIT(xml_container_member_element_name)
-
-#define MONETA_XML_CONTAINER_MEMBER_ELEMENT_NAME(member, name)                        \
-	namespace moneta { namespace traits { namespace detail {                      \
-		template <>                                                           \
-		struct xml_container_member_element_name<member> : boost::true_type { \
-			typedef std::string trait_type;                               \
-			static trait_type get() {                                     \
-				return BOOST_PP_STRINGIZE(name);                      \
-			}                                                             \
-		};                                                                    \
+#define MONETA_XML_CONTAINER_ITEM_NAME(member, name)                        \
+	namespace moneta { namespace traits { namespace detail {            \
+		template <>                                                 \
+		struct xml_container_item_name<member> : boost::true_type { \
+			typedef std::string trait_type;                     \
+			static trait_type get() {                           \
+				return BOOST_PP_STRINGIZE(name);            \
+			}                                                   \
+		};                                                          \
 	}}}
+
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace moneta { namespace codec { namespace detail {
 
 	template <class Member>
-	struct is_xml_attribute : traits::detail::xml_attribute<Member> {};
+	struct is_xml_attribute : traits::detail::xml_attribute<
+		Member
+	> {};
 
 	template <class Member>
-	struct is_xml_element : boost::mpl::not_<traits::detail::xml_attribute<Member> > {};
+	struct is_xml_element : boost::mpl::not_<
+		traits::detail::xml_attribute<Member>
+	> {};
 
 	//
 

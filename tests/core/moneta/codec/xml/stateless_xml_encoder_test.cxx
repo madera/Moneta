@@ -5,6 +5,7 @@
 #include "../../model/Dog.hxx"
 #include "../../model/Composite.hxx"
 #include "../../model/tree/A.hxx"
+#include "../../model/Customer.hxx"
 #include <moneta/serialization/detail/hexdump.hxx>
 
 using moneta::codec::stateless_xml_encoder;
@@ -113,7 +114,7 @@ BOOST_AUTO_TEST_CASE(tree_encode_stateless_xml_encoder_test) {
 }
 
 //
-// Test - Next Generation stuff.
+// --------------------------------------------------------------------------------------------------------------------
 //
 
 struct Country {
@@ -129,7 +130,7 @@ MONETA_DESCRIBE_SQL_ENTITY(
 	((std::vector<std::string>, Tags,   COUNTRY_TAGS  ))
 )
 
-MONETA_XML_CONTAINER_MEMBER_ELEMENT_NAME(MONETA_MEMBER(Country, std::vector<std::string>, Tags), CrazyTag)
+MONETA_XML_CONTAINER_ITEM_NAME(MONETA_MEMBER(Country, std::vector<std::string>, Tags), CrazyTag)
 
 BOOST_AUTO_TEST_CASE(country_with_string_Persons_stateless_xml_encoder_test) {
 	Person jordan = moneta::make_entity<Person>();
@@ -176,6 +177,91 @@ BOOST_AUTO_TEST_CASE(country_with_string_Persons_stateless_xml_encoder_test) {
 	using namespace moneta::codec;
 
 	const int result = stateless_xml_encoder()(std::begin(buffer), std::end(buffer), cwss);
+
+	BOOST_CHECK_EQUAL(result, expected.size());
+	BOOST_CHECK_EQUAL(buffer, expected);
+}
+
+BOOST_AUTO_TEST_CASE(test_moneta_codec_stateless_xml_encoder_optionals) {
+	Address address;
+	address.ID = 0;
+	address.Number = 1;
+	address.Street = "Something St.";
+
+	Dog lassie;
+	lassie.ID = 1;
+	lassie.Name = "Lassie";
+	lassie.Owner = "Somebody";
+
+	Dog yoddy;
+	yoddy.ID = 1;
+	yoddy.Name = "Yoddy";
+	yoddy.Owner = "Sam";
+
+	Customer customer;
+	customer.HomeAddress = address;
+	customer.Rating = 10;
+	customer.Dogs = std::vector<Dog>();
+	customer.Dogs->push_back(lassie);
+	customer.Dogs->push_back(yoddy);
+
+	customer.Tags = std::vector<std::string>();
+	customer.Tags->push_back("tag0");
+	customer.Tags->push_back("tag1");
+	customer.Tags->push_back("tag2");
+
+	static const std::string expected =
+		"<Customer>\n"
+		"\t<Name></Name>\n"
+		"\t<DOB>0</DOB>\n"
+		"\t<Address>\n"
+		"\t\t<ID>0</ID>\n"
+		"\t\t<Number>1</Number>\n"
+		"\t\t<Street>Something St.</Street>\n"
+		"\t</Address>\n"
+		"\t<Rating>10</Rating>\n"
+		"\t<Dogs>\n"
+		"\t\t<Dog Owner=\"Somebody\" ID=\"1\">\n"
+		"\t\t\t<Name>Lassie</Name>\n"
+		"\t\t</Dog>\n"
+		"\t\t<Dog Owner=\"Sam\" ID=\"1\">\n"
+		"\t\t\t<Name>Yoddy</Name>\n"
+		"\t\t</Dog>\n"
+		"\t</Dogs>\n"
+		"\t<Tags>\n"
+		"\t\t<TagsItem>tag0</TagsItem>\n"
+		"\t\t<TagsItem>tag1</TagsItem>\n"
+		"\t\t<TagsItem>tag2</TagsItem>\n"
+		"\t</Tags>\n"
+		"</Customer>\n"
+	;
+
+	char buffer[2048];
+	std::fill(std::begin(buffer), std::end(buffer), 0);
+
+	using namespace moneta::codec;
+	const int result = stateless_xml_encoder()(std::begin(buffer), std::end(buffer), customer);
+
+	BOOST_CHECK_EQUAL(result, expected.size());
+	BOOST_CHECK_EQUAL(buffer, expected);
+}
+
+BOOST_AUTO_TEST_CASE(test_moneta_codec_stateless_xml_encoder_optionals_2) {
+
+	Customer customer;
+
+	static const std::string expected =
+		"<Customer>\n"
+		"\t<Name></Name>\n"
+		"\t<DOB>0</DOB>\n"
+		"</Customer>\n"
+	;
+
+	char buffer[2048];
+	std::fill(std::begin(buffer), std::end(buffer), 0);
+
+	using namespace moneta::codec;
+	const int result = stateless_xml_encoder()(std::begin(buffer), std::end(buffer), customer);
 
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(buffer, expected);
