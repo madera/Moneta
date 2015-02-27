@@ -13,9 +13,8 @@ MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 	((int, y))
 )
 
-// TODO: Merge with external Customer entity once Optionals are done.
 MONETA_DEFINE_AND_DESCRIBE_ENTITY(
-	Customer,
+	Worker,
 	((int,         ID         ))
 	((std::string, Name       ))
 	((Address,     HomeAddress))
@@ -23,7 +22,7 @@ MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 )
 
 typedef moneta::codec::stateless_xml_decoder<
-	moneta::traits::entity_group<Person, ThreeInts, A, Cat, Point, Customer>
+	moneta::traits::entity_group<Person, ThreeInts, A, Cat, Point, Worker>
 >::type decoder;
 
 BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_prefix) {
@@ -541,28 +540,28 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_full_decode) {
 	}
 	{
 		static const std::string data =
-			"<Customer ID=\"123\" Name=\"John Smith\">\n"
+			"<Worker ID=\"123\" Name=\"John Smith\">\n"
 			"\t<HomeAddress ID=\"555\" Number=\"100\" Street=\"One Infinite Loop\" />\n"
 			"\t<WorkAddress ID=\"777\" Number=\"200\" Street=\"Two Infinite Loops\" />\n"
-			"</Customer>"
+			"</Worker>"
 		;
 
 		decoder::variant_type variant;
 		int result = decoder()(std::begin(data), std::end(data), variant);
 		BOOST_REQUIRE_EQUAL(result, data.size());
 
-		Customer* entity = boost::get<Customer>(&variant);
+		Worker* entity = boost::get<Worker>(&variant);
 		BOOST_REQUIRE(entity);
 
-		Customer& customer = *entity;
-		BOOST_CHECK_EQUAL(customer.ID, 123);
-		BOOST_CHECK_EQUAL(customer.Name, "John Smith");
-		BOOST_CHECK_EQUAL(customer.HomeAddress.ID, 555);
-		BOOST_CHECK_EQUAL(customer.HomeAddress.Number, 100);
-		BOOST_CHECK_EQUAL(customer.HomeAddress.Street, "One Infinite Loop");
-		BOOST_CHECK_EQUAL(customer.WorkAddress.ID, 777);
-		BOOST_CHECK_EQUAL(customer.WorkAddress.Number, 200);
-		BOOST_CHECK_EQUAL(customer.WorkAddress.Street, "Two Infinite Loops");
+		const Worker& worker = *entity;
+		BOOST_CHECK_EQUAL(worker.ID, 123);
+		BOOST_CHECK_EQUAL(worker.Name, "John Smith");
+		BOOST_CHECK_EQUAL(worker.HomeAddress.ID, 555);
+		BOOST_CHECK_EQUAL(worker.HomeAddress.Number, 100);
+		BOOST_CHECK_EQUAL(worker.HomeAddress.Street, "One Infinite Loop");
+		BOOST_CHECK_EQUAL(worker.WorkAddress.ID, 777);
+		BOOST_CHECK_EQUAL(worker.WorkAddress.Number, 200);
+		BOOST_CHECK_EQUAL(worker.WorkAddress.Street, "Two Infinite Loops");
 	}
 }
 

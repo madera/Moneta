@@ -706,6 +706,11 @@ BOOST_AUTO_TEST_CASE(test_moneta_algorithm_traverse_present_members) {
 		yoddy.Owner = "Sam";
 		customer.Dogs->push_back(yoddy);
 
+		customer.Tags = std::vector<std::string>();
+		customer.Tags->push_back("tag0");
+		customer.Tags->push_back("tag1");
+		customer.Tags->push_back("tag2");
+
 		test_state state;
 		traverse_type()(customer, state);
 
@@ -744,6 +749,11 @@ BOOST_AUTO_TEST_CASE(test_moneta_algorithm_traverse_present_members) {
 							"pm:Name,/Customer::Dogs",
 						"l:Dog,/Customer::Dogs",
 					"lc:Dogs,/Customer::Dogs",
+					"ec:Tags,/Customer::Tags",
+						"ci:tag0,/Customer::Tags",
+						"ci:tag1,/Customer::Tags",
+						"ci:tag2,/Customer::Tags",
+					"lc:Tags,/Customer::Tags",
 				"l:Customer",
 			"F:Customer"
 		};
@@ -756,9 +766,9 @@ BOOST_AUTO_TEST_CASE(test_moneta_algorithm_traverse_present_members) {
 		BOOST_CHECK_EQUAL(g_enter_count, 4 * 3);
 		BOOST_CHECK_EQUAL(g_member_count, 12 * 3);
 		BOOST_CHECK_EQUAL(g_leave_count, 4 * 3);
-		BOOST_CHECK_EQUAL(g_enter_container_count, 1 * 3);
-		BOOST_CHECK_EQUAL(g_container_item_count, 0);
-		BOOST_CHECK_EQUAL(g_leave_container_count, 1 * 3);
+		BOOST_CHECK_EQUAL(g_enter_container_count, 2 * 3);
+		BOOST_CHECK_EQUAL(g_container_item_count, 3 * 3);
+		BOOST_CHECK_EQUAL(g_leave_container_count, 2 * 3);
 		BOOST_CHECK_EQUAL(g_finish_count, 1 * 3);
 	}
 }

@@ -39,6 +39,11 @@ namespace moneta { namespace codec {
 
 			typedef typename detail::actions_of<
 				Actions,
+				detail::traverse_present_member
+			>::type present_member_actions;
+
+			typedef typename detail::actions_of<
+				Actions,
 				detail::traverse_leave
 			>::type leave_actions;
 
@@ -218,6 +223,84 @@ namespace moneta { namespace codec {
 		}
 	};
 
+	template <class Entity, class EncoderState, class Member, class Path>
+	class encoder_present_member_action {
+		typedef typename EncoderState::iterator_type Iterator;
+		typedef typename EncoderState::userstate_type UserState;
+
+		typedef typename traits::detail::const_if_const<
+			Entity,
+			typename traits::optional_value_type<
+				typename Member::result_type
+			>::type
+		>::type value_type;
+
+		const Entity& _entity;
+		EncoderState& _state;
+
+		void update_result(const int result) const {
+			if (result < 0) {
+				_state.good = false;
+			} else if (result > 0) {
+				_state.begin += result;
+				_state.total_written += result;
+			} else {
+			}
+
+			_state.last_result = result;
+		}
+
+		template <typename Action>
+		typename boost::enable_if<
+			moneta::traits::detail::is_functor_callable<
+				Action,
+				int (Iterator, Iterator, const Entity&, value_type&, Member)
+			>
+		>::type
+		process() const {
+			update_result(
+				Action()(_state.begin, _state.end, _entity, traits::get_optional_value(Member()(_entity)), Member())
+			);
+		}
+
+		template <typename Action>
+		typename boost::enable_if<
+			moneta::traits::detail::is_functor_callable<
+				Action,
+				int (Iterator, Iterator, const Entity&, value_type&, Member, Path)
+			>
+		>::type
+		process() const {
+			update_result(
+				Action()(_state.begin, _state.end, _entity, traits::get_optional_value(Member()(_entity)), Member(), Path())
+			);
+		}
+
+		template <typename Action>
+		typename boost::enable_if<
+			moneta::traits::detail::is_functor_callable<
+				Action,
+				int (Iterator, Iterator, const Entity&, value_type&, UserState&, Member, Path)
+			>
+		>::type
+		process() const {
+			update_result(
+				Action()(_state.begin, _state.end, _entity, traits::get_optional_value(Member()(_entity)), _state.substate, Member(), Path())
+			);
+		}
+
+	public:
+		encoder_present_member_action(const Entity& entity, EncoderState& encoder_state)
+		 : _entity(entity), _state(encoder_state) {}
+
+		template <typename Action>
+		void operator()(Action&) const {
+			if (_state.good) {
+				process<Action>();
+			}
+		}
+	};
+
 	template <class Entity, class Value, class EncoderState, class Member, class Path>
 	class encoder_container_item_action {
 		typedef typename EncoderState::iterator_type Iterator;
@@ -310,6 +393,17 @@ namespace moneta { namespace codec {
 		}
 	};
 
+	struct encoder_present_member {
+		template <class Entity, class Value, class EncoderState, class Member, class Path>
+		void operator()(const Entity& entity, const Value&, EncoderState& encoder_state, Member, Path) const {
+			boost::mpl::for_each<typename EncoderState::present_member_actions>(
+				encoder_present_member_action<
+					Entity, EncoderState, Member, Path
+				>(entity, encoder_state)
+			);
+		}
+	};
+
 	struct encoder_leave_entity {
 		template <class Entity, class EncoderState, class Path>
 		void operator()(const Entity& entity, EncoderState& encoder_state, Path) const {
@@ -370,6 +464,7 @@ namespace moneta { namespace codec {
 			typedef moneta::algorithm::traverse<
 				enter_actions<encoder_enter_entity>,
 				member_actions<encoder_member>,
+				present_member_actions<encoder_present_member>,
 				leave_actions<encoder_leave_entity>,
 				enter_container_actions<encoder_enter_container>,
 				container_item_actions<encoder_container_item>,
