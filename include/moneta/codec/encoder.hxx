@@ -29,6 +29,11 @@ namespace moneta { namespace codec {
 			//
 			typedef typename detail::actions_of<
 				Actions,
+				detail::traverse_start
+			>::type start_actions;
+
+			typedef typename detail::actions_of<
+				Actions,
 				detail::traverse_enter
 			>::type enter_actions;
 			
@@ -61,6 +66,11 @@ namespace moneta { namespace codec {
 				Actions,
 				detail::traverse_leave_container
 			>::type leave_container_actions;
+
+			typedef typename detail::actions_of<
+				Actions,
+				detail::traverse_finish
+			>::type finish_actions;
 
 			//
 			//
@@ -371,6 +381,17 @@ namespace moneta { namespace codec {
 		}
 	};
 
+	struct encoder_start_encoding {
+		template <class Entity, class EncoderState, class Path>
+		void operator()(const Entity& entity, EncoderState& encoder_state, Path) const {
+			boost::mpl::for_each<typename EncoderState::start_actions>(
+				encoder_start_finish_enter_leave_action<
+					Entity, EncoderState, Path
+				>(entity, encoder_state)
+			);
+		}
+	};
+
 	struct encoder_enter_entity {
 		template <class Entity, class EncoderState, class Path>
 		void operator()(const Entity& entity, EncoderState& encoder_state, Path) const {
@@ -448,6 +469,17 @@ namespace moneta { namespace codec {
 		}
 	};
 
+	struct encoder_finish_encoding {
+		template <class Entity, class EncoderState, class Path>
+		void operator()(const Entity& entity, EncoderState& encoder_state, Path) const {
+			boost::mpl::for_each<typename EncoderState::finish_actions>(
+				encoder_start_finish_enter_leave_action<
+					Entity, EncoderState, Path
+				>(entity, encoder_state)
+			);
+		}
+	};
+
 	template <class T, MONETA_TRAVERSE_PARAMS_WITH_DEFAULTS>
 	struct encoder {
 		typedef encoder this_type;
@@ -462,13 +494,15 @@ namespace moneta { namespace codec {
 			using namespace moneta::algorithm;
 
 			typedef moneta::algorithm::traverse<
+				start_actions<encoder_start_encoding>,
 				enter_actions<encoder_enter_entity>,
 				member_actions<encoder_member>,
 				present_member_actions<encoder_present_member>,
 				leave_actions<encoder_leave_entity>,
 				enter_container_actions<encoder_enter_container>,
 				container_item_actions<encoder_container_item>,
-				leave_container_actions<encoder_leave_container>
+				leave_container_actions<encoder_leave_container>,
+				finish_actions<encoder_finish_encoding>
 			> traverser;
 
 			detail::encoder_state<mpl_vector, Iterator, State> encoder_state(begin, end, state);

@@ -10,6 +10,17 @@
 
 using moneta::codec::aux::path_tabs;
 
+struct testcodec_start_encoding {
+	template <class Iterator, class Entity, class State, class Path>
+	int operator()(Iterator begin, Iterator end, const Entity&, State& state, Path) const {
+		return moneta::codec::io::make_ostringstream(begin, end)
+			<< path_tabs<Path>()
+			<< "S:" << moneta::traits::get_entity_name<Entity>() << ','
+			<< moneta::codec::detail::stringize_path<Path>() << ' ' << state++ << '\n'
+		;
+	}
+};
+
 struct testcodec_enter_entity {
 	template <class Iterator, class Entity, class State, class Path>
 	int operator()(Iterator begin, Iterator end, const Entity&, State& state, Path) const {
@@ -87,14 +98,29 @@ struct testcodec_leave_container {
 	}
 };
 
+struct testcodec_finish_encoding {
+	template <class Iterator, class Entity, class State, class Path>
+	int operator()(Iterator begin, Iterator end, const Entity&, State& state, Path) const {
+		return moneta::codec::io::make_ostringstream(begin, end)
+			<< path_tabs<Path>()
+			<< "F:" << moneta::traits::get_entity_name<Entity>() << ','
+			<< moneta::codec::detail::stringize_path<Path>() << ' ' << state++ << '\n'
+		;
+	}
+};
+
+// --------------------------------------------------------------------------------------------------------------------
+
 using namespace moneta::codec;
 typedef encoder<
+	start_actions<testcodec_start_encoding>,
 	enter_actions<testcodec_enter_entity>,
 	present_member_actions<testcodec_present_member>,
 	leave_actions<testcodec_leave_entity>,
 	enter_container_actions<testcodec_enter_container>,
 	container_item_actions<testcodec_container_item>,
-	leave_container_actions<testcodec_leave_container>
+	leave_container_actions<testcodec_leave_container>,
+	finish_actions<testcodec_finish_encoding>
 > encoder_t;
 
 BOOST_AUTO_TEST_CASE(encoder_basic_test) {
@@ -103,25 +129,27 @@ BOOST_AUTO_TEST_CASE(encoder_basic_test) {
 	std::fill(buffer, buffer + sizeof(buffer), 0);
 
 	const std::string expected =
-		"e:A, 0\n"
-		"\tpm:f, 1\n"
-		"\tpm:g, 2\n"
-		"\te:B,/A::b 3\n"
-		"\t\te:C,/A::b/B::c 4\n"
-		"\t\t\tpm:j,/A::b/B::c 5\n"
-		"\t\t\tpm:k,/A::b/B::c 6\n"
-		"\t\tl:C,/A::b/B::c 7\n"
-		"\t\tpm:i,/A::b 8\n"
-		"\t\te:D,/A::b/B::d 9\n"
-		"\t\t\tpm:l,/A::b/B::d 10\n"
-		"\t\t\te:E,/A::b/B::d/D::e 11\n"
-		"\t\t\t\tpm:m,/A::b/B::d/D::e 12\n"
-		"\t\t\t\tpm:n,/A::b/B::d/D::e 13\n"
-		"\t\t\tl:E,/A::b/B::d/D::e 14\n"
-		"\t\tl:D,/A::b/B::d 15\n"
-		"\tl:B,/A::b 16\n"
-		"\tpm:h, 17\n"
-		"l:A, 18\n"
+		"S:A, 0\n"
+		"e:A, 1\n"
+		"\tpm:f, 2\n"
+		"\tpm:g, 3\n"
+		"\te:B,/A::b 4\n"
+		"\t\te:C,/A::b/B::c 5\n"
+		"\t\t\tpm:j,/A::b/B::c 6\n"
+		"\t\t\tpm:k,/A::b/B::c 7\n"
+		"\t\tl:C,/A::b/B::c 8\n"
+		"\t\tpm:i,/A::b 9\n"
+		"\t\te:D,/A::b/B::d 10\n"
+		"\t\t\tpm:l,/A::b/B::d 11\n"
+		"\t\t\te:E,/A::b/B::d/D::e 12\n"
+		"\t\t\t\tpm:m,/A::b/B::d/D::e 13\n"
+		"\t\t\t\tpm:n,/A::b/B::d/D::e 14\n"
+		"\t\t\tl:E,/A::b/B::d/D::e 15\n"
+		"\t\tl:D,/A::b/B::d 16\n"
+		"\tl:B,/A::b 17\n"
+		"\tpm:h, 18\n"
+		"l:A, 19\n"
+		"F:A, 20\n"
 	;
 
 	int level = 0;
@@ -153,28 +181,30 @@ BOOST_AUTO_TEST_CASE(traversal_encoder_test) {
 	std::fill(buffer, buffer + sizeof(buffer), 0);
 
 	const std::string expected =
-		"e:SportsTeam, 0\n"
-		"\tpm:Name, 1\n"
-		"\tec:Players,/SportsTeam::Players 2\n"
-		"\t\te:Person,/SportsTeam::Players 3\n"
-		"\t\t\tpm:ID,/SportsTeam::Players 4\n"
-		"\t\t\tpm:Name,/SportsTeam::Players 5\n"
-		"\t\t\tpm:Height,/SportsTeam::Players 6\n"
-		"\t\t\tpm:Fingers,/SportsTeam::Players 7\n"
-		"\t\tl:Person,/SportsTeam::Players 8\n"
-		"\t\te:Person,/SportsTeam::Players 9\n"
-		"\t\t\tpm:ID,/SportsTeam::Players 10\n"
-		"\t\t\tpm:Name,/SportsTeam::Players 11\n"
-		"\t\t\tpm:Height,/SportsTeam::Players 12\n"
-		"\t\t\tpm:Fingers,/SportsTeam::Players 13\n"
-		"\t\tl:Person,/SportsTeam::Players 14\n"
-		"\tlc:Players,/SportsTeam::Players 15\n"
-		"\tec:Tags,/SportsTeam::Tags 16\n"
-		"\t\tci:tag0,/SportsTeam::Tags 17\n"
-		"\t\tci:tag1,/SportsTeam::Tags 18\n"
-		"\t\tci:tag2,/SportsTeam::Tags 19\n"
-		"\tlc:Tags,/SportsTeam::Tags 20\n"
-		"l:SportsTeam, 21\n"
+		"S:SportsTeam, 0\n"
+		"e:SportsTeam, 1\n"
+		"\tpm:Name, 2\n"
+		"\tec:Players,/SportsTeam::Players 3\n"
+		"\t\te:Person,/SportsTeam::Players 4\n"
+		"\t\t\tpm:ID,/SportsTeam::Players 5\n"
+		"\t\t\tpm:Name,/SportsTeam::Players 6\n"
+		"\t\t\tpm:Height,/SportsTeam::Players 7\n"
+		"\t\t\tpm:Fingers,/SportsTeam::Players 8\n"
+		"\t\tl:Person,/SportsTeam::Players 9\n"
+		"\t\te:Person,/SportsTeam::Players 10\n"
+		"\t\t\tpm:ID,/SportsTeam::Players 11\n"
+		"\t\t\tpm:Name,/SportsTeam::Players 12\n"
+		"\t\t\tpm:Height,/SportsTeam::Players 13\n"
+		"\t\t\tpm:Fingers,/SportsTeam::Players 14\n"
+		"\t\tl:Person,/SportsTeam::Players 15\n"
+		"\tlc:Players,/SportsTeam::Players 16\n"
+		"\tec:Tags,/SportsTeam::Tags 17\n"
+		"\t\tci:tag0,/SportsTeam::Tags 18\n"
+		"\t\tci:tag1,/SportsTeam::Tags 19\n"
+		"\t\tci:tag2,/SportsTeam::Tags 20\n"
+		"\tlc:Tags,/SportsTeam::Tags 21\n"
+		"l:SportsTeam, 22\n"
+		"F:SportsTeam, 23\n"
 	;
 
 	int level = 0;
@@ -186,27 +216,31 @@ BOOST_AUTO_TEST_CASE(traversal_encoder_test) {
 BOOST_AUTO_TEST_CASE(test_moneta_codec_encoder_optionals) {
 
 	typedef encoder<
+		start_actions<testcodec_start_encoding>,
 		enter_actions<testcodec_enter_entity>,
 		member_actions<testcodec_member>,
 		present_member_actions<testcodec_present_member>,
 		leave_actions<testcodec_leave_entity>,
 		enter_container_actions<testcodec_enter_container>,
 		container_item_actions<testcodec_container_item>,
-		leave_container_actions<testcodec_leave_container>
+		leave_container_actions<testcodec_leave_container>,
+		finish_actions<testcodec_finish_encoding>
 	> encoder_t;
 
 	char buffer[1024];
 	std::fill(buffer, buffer + sizeof(buffer), 0);
 
 	const std::string expected =
-		"e:Customer, 0\n"
-		"\tm:Name, 1\n"
-		"\tpm:Name, 2\n"
-		"\tm:DOB, 3\n"
-		"\tpm:DOB, 4\n"
-		"\tm:Rating, 5\n"
-		"\tpm:Rating, 6\n"
-		"l:Customer, 7\n"
+		"S:Customer, 0\n"
+		"e:Customer, 1\n"
+		"\tm:Name, 2\n"
+		"\tpm:Name, 3\n"
+		"\tm:DOB, 4\n"
+		"\tpm:DOB, 5\n"
+		"\tm:Rating, 6\n"
+		"\tpm:Rating, 7\n"
+		"l:Customer, 8\n"
+		"F:Customer, 9\n"
 	;
 
 	Customer customer;
