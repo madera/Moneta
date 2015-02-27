@@ -20,7 +20,7 @@ namespace moneta { namespace traits { namespace detail {                        
 			typedef std::string trait_type;                              \
 			static trait_type get() {                                    \
 				const std::string text = member_name<Member>::get(); \
-				return (std::isupper(text[0]))?                      \
+				return (text[0] >= 'A' && text[0] <= 'Z')?           \
 					text + "Item" :                              \
 					text + "_item";                              \
 			}                                                            \
