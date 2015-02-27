@@ -199,6 +199,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_stateless_xml_encoder_optionals) {
 	yoddy.Owner = "Sam";
 
 	Customer customer;
+	customer.DOB = 0;
 	customer.HomeAddress = address;
 	customer.Rating = 10;
 	customer.Dogs = std::vector<Dog>();
@@ -249,6 +250,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_stateless_xml_encoder_optionals) {
 BOOST_AUTO_TEST_CASE(test_moneta_codec_stateless_xml_encoder_optionals_2) {
 
 	Customer customer;
+	customer.DOB = 0;
 
 	static const std::string expected =
 		"<Customer>\n"
