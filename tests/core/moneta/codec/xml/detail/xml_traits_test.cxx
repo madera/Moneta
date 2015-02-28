@@ -26,56 +26,56 @@ MONETA_XML_ATTIBUTE(E, MONETA_MEMBER(E, int, m))
 MONETA_XML_ATTIBUTE(E, MONETA_MEMBER(E, int, n))
 
 inline void static_test() {
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_xml_attribute<MONETA_MEMBER(A, int, f)>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_xml_attribute<MONETA_MEMBER(A, int, g)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_xml_attribute<MONETA_MEMBER(A, B  , b)>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_xml_attribute<MONETA_MEMBER(A, int, h)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_xml_attribute<MONETA_MEMBER(B, C  , c)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_xml_attribute<MONETA_MEMBER(B, int, i)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_xml_attribute<MONETA_MEMBER(B, D  , d)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_xml_attribute<MONETA_MEMBER(C, int, j)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_xml_attribute<MONETA_MEMBER(C, int, k)>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_xml_attribute<MONETA_MEMBER(D, int, l)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_xml_attribute<MONETA_MEMBER(D, E  , e)>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_xml_attribute<MONETA_MEMBER(E, int, m)>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_xml_attribute<MONETA_MEMBER(E, int, n)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_xml_attribute<MONETA_MEMBER(A, int, f)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_xml_attribute<MONETA_MEMBER(A, int, g)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_xml_attribute<MONETA_MEMBER(A, B  , b)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_xml_attribute<MONETA_MEMBER(A, int, h)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_xml_attribute<MONETA_MEMBER(B, C  , c)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_xml_attribute<MONETA_MEMBER(B, int, i)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_xml_attribute<MONETA_MEMBER(B, D  , d)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_xml_attribute<MONETA_MEMBER(C, int, j)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_xml_attribute<MONETA_MEMBER(C, int, k)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_xml_attribute<MONETA_MEMBER(D, int, l)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_xml_attribute<MONETA_MEMBER(D, E  , e)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_xml_attribute<MONETA_MEMBER(E, int, m)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_xml_attribute<MONETA_MEMBER(E, int, n)>));
 
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_xml_element<MONETA_MEMBER(A, int, f)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_xml_element<MONETA_MEMBER(A, int, g)>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_xml_element<MONETA_MEMBER(A, B  , b)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_xml_element<MONETA_MEMBER(A, int, h)>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_xml_element<MONETA_MEMBER(B, C  , c)>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_xml_element<MONETA_MEMBER(B, int, i)>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_xml_element<MONETA_MEMBER(B, D  , d)>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_xml_element<MONETA_MEMBER(C, int, j)>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_xml_element<MONETA_MEMBER(C, int, k)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_xml_element<MONETA_MEMBER(D, int, l)>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_xml_element<MONETA_MEMBER(D, E  , e)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_xml_element<MONETA_MEMBER(E, int, m)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_xml_element<MONETA_MEMBER(E, int, n)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_xml_element<MONETA_MEMBER(A, int, f)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_xml_element<MONETA_MEMBER(A, int, g)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_xml_element<MONETA_MEMBER(A, B  , b)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_xml_element<MONETA_MEMBER(A, int, h)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_xml_element<MONETA_MEMBER(B, C  , c)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_xml_element<MONETA_MEMBER(B, int, i)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_xml_element<MONETA_MEMBER(B, D  , d)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_xml_element<MONETA_MEMBER(C, int, j)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_xml_element<MONETA_MEMBER(C, int, k)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_xml_element<MONETA_MEMBER(D, int, l)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_xml_element<MONETA_MEMBER(D, E  , e)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_xml_element<MONETA_MEMBER(E, int, m)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_xml_element<MONETA_MEMBER(E, int, n)>));
 
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::has_xml_attributes<A>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::has_xml_attributes<B>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::has_xml_attributes<E>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::has_xml_attributes<A>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::has_xml_attributes<B>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::has_xml_attributes<E>));
 
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::has_xml_elements<A>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::has_xml_elements<E>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::has_xml_elements<A>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::has_xml_elements<E>));
 
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_first_xml_attribute_member<MONETA_MEMBER(A, int, f)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_first_xml_attribute_member<MONETA_MEMBER(A, int, g)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_first_xml_attribute_member<MONETA_MEMBER(A, B  , b)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_first_xml_attribute_member<MONETA_MEMBER(A, int, h)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_first_xml_attribute_member<MONETA_MEMBER(A, int, f)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_first_xml_attribute_member<MONETA_MEMBER(A, int, g)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_first_xml_attribute_member<MONETA_MEMBER(A, B  , b)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_first_xml_attribute_member<MONETA_MEMBER(A, int, h)>));
 
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_last_xml_attribute_member<MONETA_MEMBER(A, int, f)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_last_xml_attribute_member<MONETA_MEMBER(A, int, g)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_last_xml_attribute_member<MONETA_MEMBER(A, B  , b)>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_last_xml_attribute_member<MONETA_MEMBER(A, int, h)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_last_xml_attribute_member<MONETA_MEMBER(A, int, f)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_last_xml_attribute_member<MONETA_MEMBER(A, int, g)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_last_xml_attribute_member<MONETA_MEMBER(A, B  , b)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_last_xml_attribute_member<MONETA_MEMBER(A, int, h)>));
 
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_first_xml_element_member<MONETA_MEMBER(C, int, j)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_first_xml_element_member<MONETA_MEMBER(C, int, k)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_first_xml_element_member<MONETA_MEMBER(C, int, j)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_first_xml_element_member<MONETA_MEMBER(C, int, k)>));
 
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_last_xml_element_member<MONETA_MEMBER(C, int, j)>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_last_xml_element_member<MONETA_MEMBER(C, int, k)>));
+	BOOST_MPL_ASSERT_NOT((moneta::codec::traits::is_last_xml_element_member<MONETA_MEMBER(C, int, j)>));
+	BOOST_MPL_ASSERT    ((moneta::codec::traits::is_last_xml_element_member<MONETA_MEMBER(C, int, k)>));
 }
 
 MONETA_DEFINE_AND_DESCRIBE_ENTITY(
@@ -86,7 +86,7 @@ MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 )
 
 BOOST_AUTO_TEST_CASE(test_moneta_traits_detail_xml_container_item_name) {
-	using moneta::traits::detail::xml_container_item_name;
+	using moneta::codec::traits::xml_container_item_name;
 
 	BOOST_CHECK_EQUAL(
 		(

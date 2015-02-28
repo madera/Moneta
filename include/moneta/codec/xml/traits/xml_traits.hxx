@@ -4,31 +4,56 @@
 #include "../../../traits/detail/member_trait_base.hxx"
 #include <boost/mpl/find_if.hpp>
 
-MONETA_DECLARE_TRAIT(xml_attribute)
+//
+// moneta::codec::traits::xml_item_name<>
+//
+// String trait defining member names for element or attributes.
+//
 
-#define MONETA_XML_ATTIBUTE(klass, field) \
-	namespace moneta { namespace traits { namespace detail { \
-		template <> \
-		struct xml_attribute<field> : boost::true_type {};\
+namespace moneta { namespace codec { namespace traits {                                    \
+	template <class Member>                                                            \
+	struct xml_item_name {                                                             \
+			typedef std::string trait_type;                                    \
+			static trait_type get() {                                          \
+				return moneta::traits::detail::member_name<Member>::get(); \
+			}                                                                  \
+	};                                                                                 \
+}}}
+
+#define MONETA_XML_ITEM_NAME(member, name)                        \
+	namespace moneta { namespace codec { namespace traits {   \
+		template <>                                       \
+		struct xml_item_name<member> : boost::true_type { \
+			typedef std::string trait_type;           \
+			static trait_type get() {                 \
+				return BOOST_PP_STRINGIZE(name);  \
+			}                                         \
+		};                                                \
 	}}}
 
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace moneta { namespace traits { namespace detail {                             \
-	template <class Member>                                                      \
-	struct xml_container_item_name {                                             \
-			typedef std::string trait_type;                              \
-			static trait_type get() {                                    \
-				const std::string text = member_name<Member>::get(); \
-				return (text[0] >= 'A' && text[0] <= 'Z')?           \
-					text + "Item" :                              \
-					text + "_item";                              \
-			}                                                            \
-	};                                                                           \
+//
+// moneta::codec::traits::xml_container_item_name<>
+//
+// String trait defining member names for non-entity items on a container.
+//
+
+namespace moneta { namespace codec { namespace traits {                                                      \
+	template <class Member>                                                                              \
+	struct xml_container_item_name {                                                                     \
+			typedef std::string trait_type;                                                      \
+			static trait_type get() {                                                            \
+				const std::string text = moneta::traits::detail::member_name<Member>::get(); \
+				return (text[0] >= 'A' && text[0] <= 'Z')?                                   \
+					text + "Item" :                                                      \
+					text + "_item";                                                      \
+			}                                                                                    \
+	};                                                                                                   \
 }}}
 
 #define MONETA_XML_CONTAINER_ITEM_NAME(member, name)                        \
-	namespace moneta { namespace traits { namespace detail {            \
+	namespace moneta { namespace codec { namespace traits {             \
 		template <>                                                 \
 		struct xml_container_item_name<member> : boost::true_type { \
 			typedef std::string trait_type;                     \
@@ -40,16 +65,33 @@ namespace moneta { namespace traits { namespace detail {                        
 
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace moneta { namespace codec { namespace detail {
+//
+// moneta::codec::traits::xml_attribute<>
+//
+// Binary trait defining member as attribute.
+//
+
+namespace moneta { namespace codec { namespace traits {
+	template <class T>
+	struct xml_attribute : boost::false_type {};
+}}}
+
+#define MONETA_XML_ATTIBUTE(klass, field) \
+	namespace moneta { namespace codec { namespace traits {    \
+		template <>                                        \
+		struct xml_attribute<field> : boost::true_type {}; \
+	}}}
+
+namespace moneta { namespace codec { namespace traits {
 
 	template <class Member>
-	struct is_xml_attribute : traits::detail::xml_attribute<
+	struct is_xml_attribute : xml_attribute<
 		Member
 	> {};
 
 	template <class Member>
 	struct is_xml_element : boost::mpl::not_<
-		traits::detail::xml_attribute<Member>
+		xml_attribute<Member>
 	> {};
 
 	//
@@ -58,18 +100,18 @@ namespace moneta { namespace codec { namespace detail {
 	struct has_xml_attributes : boost::mpl::not_<
 		boost::is_same<
 			typename boost::mpl::find_if<
-				typename traits::members<Entity>::type,
+				typename moneta::traits::members<Entity>::type,
 				is_xml_attribute<boost::mpl::_1>
 			>::type,
 			typename boost::mpl::end<
-				typename traits::members<Entity>::type
+				typename moneta::traits::members<Entity>::type
 			>::type
 		>
 	> {};
 
 	template <class Entity>
 	struct xml_attribute_members : boost::mpl::copy_if<
-		typename traits::members<Entity>::type,
+		typename moneta::traits::members<Entity>::type,
 		is_xml_attribute<boost::mpl::_1>,
 		boost::mpl::back_inserter<boost::mpl::vector0<> >
 	> {};
@@ -96,18 +138,18 @@ namespace moneta { namespace codec { namespace detail {
 	struct has_xml_elements : boost::mpl::not_<
 		boost::is_same<
 			typename boost::mpl::find_if<
-				typename traits::members<Entity>::type,
+				typename moneta::traits::members<Entity>::type,
 				is_xml_element<boost::mpl::_1>
 			>::type,
 			typename boost::mpl::end<
-				typename traits::members<Entity>::type
+				typename moneta::traits::members<Entity>::type
 			>::type
 		>
 	> {};
 
 	template <class Entity>
 	struct xml_element_members : boost::mpl::copy_if<
-		typename traits::members<Entity>::type,
+		typename moneta::traits::members<Entity>::type,
 		is_xml_element<boost::mpl::_1>,
 		boost::mpl::back_inserter<boost::mpl::vector0<> >
 	> {};

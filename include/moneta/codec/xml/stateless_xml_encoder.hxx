@@ -9,12 +9,6 @@
 namespace moneta { namespace codec { namespace stateless_xml_encoder_implementation {
 
 	namespace detail {
-		// XXX: This is ugly. Get these namespaces' s**t together.
-		using moneta::codec::detail::is_xml_attribute;
-		using moneta::codec::detail::is_xml_element;
-		using moneta::codec::detail::has_xml_attributes;
-		using moneta::codec::detail::has_xml_elements;
-		using moneta::codec::detail::xml_attribute_members;
 
 		// XXX: This is a serious candidate for a library facility.
 		//
@@ -45,7 +39,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 			void operator()(Member) const {
 				if (_state.good) {
 					int result = io::make_ostringstream(_state.begin, _state.end)
-						<< ' ' << traits::detail::member_name<Member>::get()
+						<< ' ' << moneta::traits::detail::member_name<Member>::get()
 						<< "=\"" << Member()(_state.entity) << '"'
 					;
 
@@ -76,7 +70,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 				state_type state(_entity, begin, end);
 
 				boost::mpl::for_each<
-					typename detail::xml_attribute_members<Entity>::type
+					typename traits::xml_attribute_members<Entity>::type
 				>(encode_attribute_kv<Entity, Iterator>(state));
 
 				return state.total_written;
@@ -100,23 +94,23 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		template <class Iterator, class Entity, class Path>
 		typename boost::enable_if<
 			boost::mpl::and_<
-				boost::mpl::not_<detail::has_xml_attributes<Entity> >,
-				boost::mpl::not_<detail::has_xml_elements  <Entity> >
+				boost::mpl::not_<traits::has_xml_attributes<Entity> >,
+				boost::mpl::not_<traits::has_xml_elements  <Entity> >
 			>,
 			int
 		>::type
 		operator()(Iterator begin, Iterator end, const Entity&, Path) const {
 			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path>()
-				<< '<' << traits::get_entity_name<Entity>() << " />\n"
+				<< '<' << moneta::traits::get_entity_name<Entity>() << " />\n"
 			;
 		}
 
 		template <class Iterator, class Entity, class Path>
 		typename boost::enable_if<
 			boost::mpl::and_<
-				boost::mpl::not_<detail::has_xml_attributes<Entity> >,
-				detail::has_xml_elements<Entity>
+				boost::mpl::not_<traits::has_xml_attributes<Entity> >,
+				traits::has_xml_elements<Entity>
 			>,
 			int
 		>::type
@@ -130,8 +124,8 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		template <class Iterator, class Entity, class Path>
 		typename boost::enable_if<
 			boost::mpl::and_<
-				detail::has_xml_attributes<Entity>,
-				boost::mpl::not_<detail::has_xml_elements<Entity> >
+				traits::has_xml_attributes<Entity>,
+				boost::mpl::not_<traits::has_xml_elements<Entity> >
 			>,
 			int
 		>::type
@@ -147,8 +141,8 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		template <class Iterator, class Entity, class Path>
 		typename boost::enable_if<
 			boost::mpl::and_<
-				detail::has_xml_attributes<Entity>,
-				detail::has_xml_elements<Entity>
+				traits::has_xml_attributes<Entity>,
+				traits::has_xml_elements<Entity>
 			>,
 			int
 		>::type
@@ -180,12 +174,12 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		typename boost::enable_if<
 			boost::mpl::or_<
 				boost::mpl::and_<
-					boost::mpl::not_<detail::has_xml_attributes<Entity> >,
-					boost::mpl::not_<detail::has_xml_elements<Entity> >
+					boost::mpl::not_<traits::has_xml_attributes<Entity> >,
+					boost::mpl::not_<traits::has_xml_elements<Entity> >
 				>,
 				boost::mpl::and_<
-					detail::has_xml_attributes<Entity>,
-					boost::mpl::not_<detail::has_xml_elements<Entity> >
+					traits::has_xml_attributes<Entity>,
+					boost::mpl::not_<traits::has_xml_elements<Entity> >
 				>
 			>,
 			int
@@ -198,12 +192,12 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		typename boost::enable_if<
 			boost::mpl::or_<
 				boost::mpl::and_<
-					boost::mpl::not_<detail::has_xml_attributes<Entity> >,
-					detail::has_xml_elements<Entity>
+					boost::mpl::not_<traits::has_xml_attributes<Entity> >,
+					traits::has_xml_elements<Entity>
 				>,
 				boost::mpl::and_<
-					detail::has_xml_attributes<Entity>,
-					detail::has_xml_elements<Entity>
+					traits::has_xml_attributes<Entity>,
+					traits::has_xml_elements<Entity>
 				>
 			>,
 			int
@@ -219,7 +213,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 	struct present_member_encoder {
 		template <class Iterator, class Entity, class Value, class Member, class Path>
 		typename boost::enable_if<
-			detail::is_xml_attribute<Member>,
+			traits::is_xml_attribute<Member>,
 			int
 		>::type
 		operator()(Iterator, Iterator, const Entity&, const Value&, Member, Path) const {
@@ -229,15 +223,15 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 
 		template <class Iterator, class Entity, class Value, class Member, class Path>
 		typename boost::enable_if<
-			detail::is_xml_element<Member>,
+			traits::is_xml_element<Member>,
 			int
 		>::type
 		operator()(Iterator begin, Iterator end, const Entity&, const Value& value, Member, Path) const {
 			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path, 1>()
-				<< '<' << traits::detail::member_name<Member>::get() << '>'
+				<< '<' << moneta::traits::detail::member_name<Member>::get() << '>'
 				<< value
-				<< "</" << traits::detail::member_name<Member>::get() << '>'
+				<< "</" << moneta::traits::detail::member_name<Member>::get() << '>'
 				<< '\n'
 			;
 		}
@@ -248,7 +242,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		int operator()(Iterator begin, Iterator end, const Entity&, Member, Path) const {
 			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path, -1>()
-				<< '<' << traits::detail::member_name<Member>::get() << '>' << '\n';
+				<< '<' << moneta::traits::detail::member_name<Member>::get() << '>' << '\n';
 			;
 		}
 	};
@@ -256,7 +250,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 	struct container_item_encoder {
 		template <class Iterator, class Entity, class Value, class Member, class Path>
 		int operator()(Iterator begin, Iterator end, const Entity&, const Value& value, Member, Path) const {
-			const std::string& tag_name = traits::detail::xml_container_item_name<Member>::get();
+			const std::string& tag_name = traits::xml_container_item_name<Member>::get();
 			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path>()
 				<< '<' << tag_name << '>' << value << '<' << '/' << tag_name << '>' << '\n'
@@ -269,7 +263,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		int operator()(Iterator begin, Iterator end, const Entity&, Member, Path) const {
 			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path, -1>()
-				<< '<' << '/' << traits::detail::member_name<Member>::get() << '>' << '\n';
+				<< '<' << '/' << moneta::traits::detail::member_name<Member>::get() << '>' << '\n';
 			;
 		}
 	};

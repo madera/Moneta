@@ -238,9 +238,9 @@ namespace moneta { namespace codec {
 		typedef typename EncoderState::iterator_type Iterator;
 		typedef typename EncoderState::userstate_type UserState;
 
-		typedef typename traits::detail::const_if_const<
+		typedef typename moneta::traits::detail::const_if_const<
 			Entity,
-			typename traits::optional_value_type<
+			typename moneta::traits::optional_value_type<
 				typename Member::result_type
 			>::type
 		>::type value_type;
@@ -269,7 +269,7 @@ namespace moneta { namespace codec {
 		>::type
 		process() const {
 			update_result(
-				Action()(_state.begin, _state.end, _entity, traits::get_optional_value(Member()(_entity)), Member())
+				Action()(_state.begin, _state.end, _entity, moneta::traits::get_optional_value(Member()(_entity)), Member())
 			);
 		}
 
@@ -282,7 +282,7 @@ namespace moneta { namespace codec {
 		>::type
 		process() const {
 			update_result(
-				Action()(_state.begin, _state.end, _entity, traits::get_optional_value(Member()(_entity)), Member(), Path())
+				Action()(_state.begin, _state.end, _entity, moneta::traits::get_optional_value(Member()(_entity)), Member(), Path())
 			);
 		}
 
@@ -295,7 +295,7 @@ namespace moneta { namespace codec {
 		>::type
 		process() const {
 			update_result(
-				Action()(_state.begin, _state.end, _entity, traits::get_optional_value(Member()(_entity)), _state.substate, Member(), Path())
+				Action()(_state.begin, _state.end, _entity, moneta::traits::get_optional_value(Member()(_entity)), _state.substate, Member(), Path())
 			);
 		}
 
