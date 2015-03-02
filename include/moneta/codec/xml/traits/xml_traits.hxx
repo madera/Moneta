@@ -19,14 +19,39 @@ MONETA_DECLARE_TRAIT(xml_attribute)
 namespace moneta { namespace traits {
 
 	template <class Member>
+	struct xml_item_name {
+		typedef std::string trait_type;
+		static trait_type get() {
+			return member_name<Member>::get();
+		}
+	};
+
+}}
+
+#define MONETA_XML_ITEM_NAME(member, name)                        \
+	namespace moneta { namespace traits {                     \
+		template <>                                       \
+		struct xml_item_name<member> : boost::true_type { \
+			typedef std::string trait_type;           \
+			static trait_type get() {                 \
+				return BOOST_PP_STRINGIZE(name);  \
+			}                                         \
+		};                                                \
+	}}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace moneta { namespace traits {
+
+	template <class Member>
 	struct xml_container_item_name {
-			typedef std::string trait_type;
-			static trait_type get() {
-				const std::string text = member_name<Member>::get();
-				return (text[0] >= 'A' && text[0] <= 'Z')?
-					text + "Item" :
-					text + "_item";
-			}
+		typedef std::string trait_type;
+		static trait_type get() {
+			const std::string text = member_name<Member>::get();
+			return (text[0] >= 'A' && text[0] <= 'Z')?
+				text + "Item" :
+				text + "_item";
+		}
 	};
 
 }}

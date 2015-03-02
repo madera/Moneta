@@ -9,17 +9,7 @@
 namespace moneta { namespace codec { namespace stateless_xml_encoder_implementation {
 
 	namespace detail {
-		// XXX: This is ugly. Get these namespaces' s**t together.
-		using moneta::traits::is_xml_attribute;
-		using moneta::traits::is_xml_element;
-		using moneta::traits::has_xml_attributes;
-		using moneta::traits::has_xml_elements;
-		using moneta::traits::xml_attribute_members;
 
-		// XXX: This is a serious candidate for a library facility.
-		//
-		//	Motivation: encoding members should be fairly common.
-		//
 		template <class Entity, class Iterator>
 		struct encode_attribute_kv {
 
@@ -219,7 +209,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 	struct present_member_encoder {
 		template <class Iterator, class Entity, class Value, class Member, class Path>
 		typename boost::enable_if<
-			detail::is_xml_attribute<Member>,
+			traits::is_xml_attribute<Member>,
 			int
 		>::type
 		operator()(Iterator, Iterator, const Entity&, const Value&, Member, Path) const {
