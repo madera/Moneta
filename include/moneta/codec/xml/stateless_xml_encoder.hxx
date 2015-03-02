@@ -256,7 +256,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 	struct container_item_encoder {
 		template <class Iterator, class Entity, class Value, class Member, class Path>
 		int operator()(Iterator begin, Iterator end, const Entity&, const Value& value, Member, Path) const {
-			const std::string& tag_name = traits::detail::xml_container_item_name<Member>::get();
+			const std::string& tag_name = traits::xml_container_item_name<Member>::get();
 			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path>()
 				<< '<' << tag_name << '>' << value << '<' << '/' << tag_name << '>' << '\n'

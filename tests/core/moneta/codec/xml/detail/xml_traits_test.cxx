@@ -86,7 +86,7 @@ MONETA_DEFINE_AND_DESCRIBE_ENTITY(
 )
 
 BOOST_AUTO_TEST_CASE(test_moneta_traits_detail_xml_container_item_name) {
-	using moneta::traits::detail::xml_container_item_name;
+	using moneta::traits::xml_container_item_name;
 
 	BOOST_CHECK_EQUAL(
 		(

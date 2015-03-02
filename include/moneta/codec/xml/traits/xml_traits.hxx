@@ -14,7 +14,7 @@ MONETA_DECLARE_TRAIT(xml_attribute)
 
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace moneta { namespace traits { namespace detail {                             \
+namespace moneta { namespace traits {                                                \
 	template <class Member>                                                      \
 	struct xml_container_item_name {                                             \
 			typedef std::string trait_type;                              \
@@ -25,10 +25,10 @@ namespace moneta { namespace traits { namespace detail {                        
 					text + "_item";                              \
 			}                                                            \
 	};                                                                           \
-}}}
+}}
 
 #define MONETA_XML_CONTAINER_ITEM_NAME(member, name)                        \
-	namespace moneta { namespace traits { namespace detail {            \
+	namespace moneta { namespace traits {                               \
 		template <>                                                 \
 		struct xml_container_item_name<member> : boost::true_type { \
 			typedef std::string trait_type;                     \
@@ -36,7 +36,7 @@ namespace moneta { namespace traits { namespace detail {                        
 				return BOOST_PP_STRINGIZE(name);            \
 			}                                                   \
 		};                                                          \
-	}}}
+	}}
 
 // --------------------------------------------------------------------------------------------------------------------
 
