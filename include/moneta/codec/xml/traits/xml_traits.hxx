@@ -88,13 +88,6 @@ namespace moneta { namespace traits {
 		Member
 	> {};
 
-
-}}
-
-namespace moneta { namespace codec { namespace detail {
-
-	//
-
 	template <class Entity>
 	struct has_xml_elements : boost::mpl::not_<
 		boost::is_same<
@@ -131,4 +124,4 @@ namespace moneta { namespace codec { namespace detail {
 		Member
 	> {};
 
-}}}
+}}

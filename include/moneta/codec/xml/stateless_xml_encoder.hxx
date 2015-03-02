@@ -13,7 +13,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		using moneta::traits::is_xml_attribute;
 		using moneta::traits::is_xml_element;
 		using moneta::traits::has_xml_attributes;
-		using moneta::codec::detail::has_xml_elements;
+		using moneta::traits::has_xml_elements;
 		using moneta::traits::xml_attribute_members;
 
 		// XXX: This is a serious candidate for a library facility.
@@ -101,7 +101,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		typename boost::enable_if<
 			boost::mpl::and_<
 				boost::mpl::not_<traits::has_xml_attributes<Entity> >,
-				boost::mpl::not_<detail::has_xml_elements  <Entity> >
+				boost::mpl::not_<traits::has_xml_elements  <Entity> >
 			>,
 			int
 		>::type
@@ -116,7 +116,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		typename boost::enable_if<
 			boost::mpl::and_<
 				boost::mpl::not_<traits::has_xml_attributes<Entity> >,
-				detail::has_xml_elements<Entity>
+				traits::has_xml_elements<Entity>
 			>,
 			int
 		>::type
@@ -131,7 +131,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		typename boost::enable_if<
 			boost::mpl::and_<
 				traits::has_xml_attributes<Entity>,
-				boost::mpl::not_<detail::has_xml_elements<Entity> >
+				boost::mpl::not_<traits::has_xml_elements<Entity> >
 			>,
 			int
 		>::type
@@ -148,7 +148,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		typename boost::enable_if<
 			boost::mpl::and_<
 				traits::has_xml_attributes<Entity>,
-				detail::has_xml_elements<Entity>
+				traits::has_xml_elements<Entity>
 			>,
 			int
 		>::type
@@ -181,11 +181,11 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 			boost::mpl::or_<
 				boost::mpl::and_<
 					boost::mpl::not_<traits::has_xml_attributes<Entity> >,
-					boost::mpl::not_<detail::has_xml_elements<Entity> >
+					boost::mpl::not_<traits::has_xml_elements<Entity> >
 				>,
 				boost::mpl::and_<
 					traits::has_xml_attributes<Entity>,
-					boost::mpl::not_<detail::has_xml_elements<Entity> >
+					boost::mpl::not_<traits::has_xml_elements<Entity> >
 				>
 			>,
 			int
@@ -199,11 +199,11 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 			boost::mpl::or_<
 				boost::mpl::and_<
 					boost::mpl::not_<traits::has_xml_attributes<Entity> >,
-					detail::has_xml_elements<Entity>
+					traits::has_xml_elements<Entity>
 				>,
 				boost::mpl::and_<
 					traits::has_xml_attributes<Entity>,
-					detail::has_xml_elements<Entity>
+					traits::has_xml_elements<Entity>
 				>
 			>,
 			int
