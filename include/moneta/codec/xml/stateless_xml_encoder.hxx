@@ -14,7 +14,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		using moneta::traits::is_xml_element;
 		using moneta::traits::has_xml_attributes;
 		using moneta::codec::detail::has_xml_elements;
-		using moneta::codec::detail::xml_attribute_members;
+		using moneta::traits::xml_attribute_members;
 
 		// XXX: This is a serious candidate for a library facility.
 		//
@@ -76,7 +76,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 				state_type state(_entity, begin, end);
 
 				boost::mpl::for_each<
-					typename detail::xml_attribute_members<Entity>::type
+					typename traits::xml_attribute_members<Entity>::type
 				>(encode_attribute_kv<Entity, Iterator>(state));
 
 				return state.total_written;

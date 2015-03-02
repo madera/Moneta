@@ -65,10 +65,6 @@ namespace moneta { namespace traits {
 		>
 	> {};
 
-}}
-
-namespace moneta { namespace codec { namespace detail {
-
 	template <class Entity>
 	struct xml_attribute_members : boost::mpl::copy_if<
 		typename traits::members<Entity>::type,
@@ -79,7 +75,7 @@ namespace moneta { namespace codec { namespace detail {
 	template <class Member>
 	struct is_first_xml_attribute_member : boost::is_same<
 		typename boost::mpl::front<
-			typename xml_attribute_members<typename Member::class_type>::type
+			typename moneta::traits::xml_attribute_members<typename Member::class_type>::type
 		>::type,
 		Member
 	> {};
@@ -87,10 +83,15 @@ namespace moneta { namespace codec { namespace detail {
 	template <class Member>
 	struct is_last_xml_attribute_member : boost::is_same<
 		typename boost::mpl::back<
-			typename xml_attribute_members<typename Member::class_type>::type
+			typename moneta::traits::xml_attribute_members<typename Member::class_type>::type
 		>::type,
 		Member
 	> {};
+
+
+}}
+
+namespace moneta { namespace codec { namespace detail {
 
 	//
 

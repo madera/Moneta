@@ -61,15 +61,15 @@ inline void static_test() {
 	BOOST_MPL_ASSERT    ((moneta::codec::detail::has_xml_elements<A>));
 	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::has_xml_elements<E>));
 
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_first_xml_attribute_member<MONETA_MEMBER(A, int, f)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_first_xml_attribute_member<MONETA_MEMBER(A, int, g)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_first_xml_attribute_member<MONETA_MEMBER(A, B  , b)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_first_xml_attribute_member<MONETA_MEMBER(A, int, h)>));
+	BOOST_MPL_ASSERT    ((moneta::traits::is_first_xml_attribute_member<MONETA_MEMBER(A, int, f)>));
+	BOOST_MPL_ASSERT_NOT((moneta::traits::is_first_xml_attribute_member<MONETA_MEMBER(A, int, g)>));
+	BOOST_MPL_ASSERT_NOT((moneta::traits::is_first_xml_attribute_member<MONETA_MEMBER(A, B  , b)>));
+	BOOST_MPL_ASSERT_NOT((moneta::traits::is_first_xml_attribute_member<MONETA_MEMBER(A, int, h)>));
 
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_last_xml_attribute_member<MONETA_MEMBER(A, int, f)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_last_xml_attribute_member<MONETA_MEMBER(A, int, g)>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_last_xml_attribute_member<MONETA_MEMBER(A, B  , b)>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_last_xml_attribute_member<MONETA_MEMBER(A, int, h)>));
+	BOOST_MPL_ASSERT_NOT((moneta::traits::is_last_xml_attribute_member<MONETA_MEMBER(A, int, f)>));
+	BOOST_MPL_ASSERT_NOT((moneta::traits::is_last_xml_attribute_member<MONETA_MEMBER(A, int, g)>));
+	BOOST_MPL_ASSERT_NOT((moneta::traits::is_last_xml_attribute_member<MONETA_MEMBER(A, B  , b)>));
+	BOOST_MPL_ASSERT    ((moneta::traits::is_last_xml_attribute_member<MONETA_MEMBER(A, int, h)>));
 
 	BOOST_MPL_ASSERT    ((moneta::codec::detail::is_first_xml_element_member<MONETA_MEMBER(C, int, j)>));
 	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::is_first_xml_element_member<MONETA_MEMBER(C, int, k)>));
