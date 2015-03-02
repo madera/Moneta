@@ -10,8 +10,8 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 
 	namespace detail {
 		// XXX: This is ugly. Get these namespaces' s**t together.
-		using moneta::codec::detail::is_xml_attribute;
-		using moneta::codec::detail::is_xml_element;
+		using moneta::traits::is_xml_attribute;
+		using moneta::traits::is_xml_element;
 		using moneta::codec::detail::has_xml_attributes;
 		using moneta::codec::detail::has_xml_elements;
 		using moneta::codec::detail::xml_attribute_members;
@@ -229,7 +229,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 
 		template <class Iterator, class Entity, class Value, class Member, class Path>
 		typename boost::enable_if<
-			detail::is_xml_element<Member>,
+			traits::is_xml_element<Member>,
 			int
 		>::type
 		operator()(Iterator begin, Iterator end, const Entity&, const Value& value, Member, Path) const {

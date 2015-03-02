@@ -40,7 +40,7 @@ namespace moneta { namespace traits {                                           
 
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace moneta { namespace codec { namespace detail {
+namespace moneta { namespace traits {
 
 	template <class Member>
 	struct is_xml_attribute : traits::xml_attribute<
@@ -52,14 +52,16 @@ namespace moneta { namespace codec { namespace detail {
 		traits::xml_attribute<Member>
 	> {};
 
-	//
+}}
+
+namespace moneta { namespace codec { namespace detail {
 
 	template <class Entity>
 	struct has_xml_attributes : boost::mpl::not_<
 		boost::is_same<
 			typename boost::mpl::find_if<
 				typename traits::members<Entity>::type,
-				is_xml_attribute<boost::mpl::_1>
+				traits::is_xml_attribute<boost::mpl::_1>
 			>::type,
 			typename boost::mpl::end<
 				typename traits::members<Entity>::type
@@ -70,7 +72,7 @@ namespace moneta { namespace codec { namespace detail {
 	template <class Entity>
 	struct xml_attribute_members : boost::mpl::copy_if<
 		typename traits::members<Entity>::type,
-		is_xml_attribute<boost::mpl::_1>,
+		traits::is_xml_attribute<boost::mpl::_1>,
 		boost::mpl::back_inserter<boost::mpl::vector0<> >
 	> {};
 
@@ -97,7 +99,7 @@ namespace moneta { namespace codec { namespace detail {
 		boost::is_same<
 			typename boost::mpl::find_if<
 				typename traits::members<Entity>::type,
-				is_xml_element<boost::mpl::_1>
+				traits::is_xml_element<boost::mpl::_1>
 			>::type,
 			typename boost::mpl::end<
 				typename traits::members<Entity>::type
@@ -108,7 +110,7 @@ namespace moneta { namespace codec { namespace detail {
 	template <class Entity>
 	struct xml_element_members : boost::mpl::copy_if<
 		typename traits::members<Entity>::type,
-		is_xml_element<boost::mpl::_1>,
+		traits::is_xml_element<boost::mpl::_1>,
 		boost::mpl::back_inserter<boost::mpl::vector0<> >
 	> {};
 
