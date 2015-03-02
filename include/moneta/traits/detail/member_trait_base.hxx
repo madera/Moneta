@@ -20,33 +20,33 @@
 //	  Examples: member_name and sql_field_name.
 //
 
-#define MONETA_DECLARE_TRAIT(trait)                              \
-	namespace moneta { namespace traits { namespace detail { \
-		template <class T>                               \
-		struct trait : boost::false_type {               \
-		};                                               \
-	}}}
+#define MONETA_DECLARE_TRAIT(trait)                \
+	namespace moneta { namespace traits {      \
+		template <class T>                 \
+		struct trait : boost::false_type { \
+		};                                 \
+	}}
 
-#define MONETA_DEFINE_TRAIT(trait, type, result_type)                   \
-	template <>                                                     \
-	struct moneta::traits::detail::trait<type> : boost::true_type { \
-		typedef result_type trait_type;                         \
+#define MONETA_DEFINE_TRAIT(trait, type, result_type)           \
+	template <>                                             \
+	struct moneta::traits::trait<type> : boost::true_type { \
+		typedef result_type trait_type;                 \
 	};
 
 #define MONETA_DEFINE_TRAIT_WITH_GET(trait, type, return_type, value) \
-	namespace moneta { namespace traits { namespace detail {      \
-		template <>                                           \
-		struct trait<type> : boost::true_type {               \
-			typedef return_type trait_type;               \
-			static trait_type get() {                     \
-				return value;                         \
-			}                                             \
-		};                                                    \
-	}}}
+	namespace moneta { namespace traits {           \
+		template <>                             \
+		struct trait<type> : boost::true_type { \
+			typedef return_type trait_type; \
+			static trait_type get() {       \
+				return value;           \
+			}                               \
+		};                                      \
+	}}
 
 #define MONETA_DEFINE_FLAG_TRAIT(trait, type)                             \
 	template <>                                                       \
-	struct moneta::traits::detail::trait<type> : boost::true_type {};
+	struct moneta::traits::trait<type> : boost::true_type {};
 
 #define MONETA_DECLARE_ENTITY_TRAIT(trait) \
 	MONETA_DECLARE_TRAIT(trait)
@@ -59,11 +59,11 @@
 // TODO: Add a nice assert to capture non-registered entities early.
 #define MONETA_DEFINE_ENTITY_TRAIT_GETTER(trait, name)                   \
 	template <class Entity>                                          \
-	const typename moneta::traits::detail::trait<                    \
+	const typename moneta::traits::trait<                            \
 		typename moneta::traits::pure_type<Entity>::type         \
 	>::trait_type                                                    \
 	name() {                                                         \
-		return moneta::traits::detail::trait<                    \
+		return moneta::traits::trait<                            \
 			typename moneta::traits::pure_type<Entity>::type \
 		>::get();                                                \
 	}
@@ -73,8 +73,8 @@
 #define MONETA_DEFINE_MEMBER_SEQUENCE_TRAIT_COLLECTOR(trait, type, name, members) \
 	template <class Entity>                                                   \
 	const std::vector<type> name() {                                          \
-		return moneta::traits::detail::get_member_traits_with_get<        \
-			moneta::traits::detail::trait,                            \
+		return moneta::traits::get_member_traits_with_get<                \
+			moneta::traits::trait,                                    \
 			members                                                   \
 		>();                                                              \
 	}
@@ -82,7 +82,7 @@
 #define MONETA_DEFINE_MEMBER_TRAIT_COLLECTOR(trait, trait_type, name) \
 	MONETA_DEFINE_MEMBER_SEQUENCE_TRAIT_COLLECTOR(trait, trait_type, name, typename moneta::traits::members<Entity>::type)
 
-namespace moneta { namespace traits { namespace detail {
+namespace moneta { namespace traits {
 
 	template <
 		template <typename T>
@@ -128,4 +128,4 @@ namespace moneta { namespace traits { namespace detail {
 		return result;
 	}
 
-}}}
+}}

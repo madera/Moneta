@@ -38,7 +38,7 @@ namespace moneta { namespace codec { namespace shell_implementation {
 		>::type
 		operator()(Iterator begin, Iterator end, const Entity& entity, Member) const {
 			return io::make_ostringstream(begin, end)
-				<< ' ' << traits::detail::member_name<Member>::get()
+				<< ' ' << traits::member_name<Member>::get()
 				<< '=' << Member()(entity)
 			;
 		}
@@ -49,7 +49,7 @@ namespace moneta { namespace codec { namespace shell_implementation {
 		>::type
 		operator()(Iterator begin, Iterator end, const Entity& entity, Member) const {
 			return io::make_ostringstream(begin, end)
-				<< ' ' << traits::detail::member_name<Member>::get()
+				<< ' ' << traits::member_name<Member>::get()
 				<< "=\"" << Member()(entity) << '"'
 			;
 		}

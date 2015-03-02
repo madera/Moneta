@@ -15,7 +15,7 @@ namespace moneta { namespace lexical {
 
 			template <class Entity>
 			bool operator()(Entity*) const {
-				return _name == moneta::traits::detail::entity_name<Entity>::get();
+				return _name == moneta::traits::entity_name<Entity>::get();
 			}
 		};
 	}

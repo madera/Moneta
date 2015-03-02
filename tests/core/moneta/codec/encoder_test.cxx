@@ -37,7 +37,7 @@ struct testcodec_member {
 	int operator()(Iterator begin, Iterator end, const Entity&, State& state, Member, Path) const {
 		return moneta::codec::io::make_ostringstream(begin, end)
 			<< path_tabs<Path, 1>()
-			<< "m:" << moneta::traits::detail::member_name<Member>::get() << ','
+			<< "m:" << moneta::traits::member_name<Member>::get() << ','
 			<< moneta::codec::detail::stringize_path<Path>() << ' ' << state++ << '\n'
 		;
 	}
@@ -48,7 +48,7 @@ struct testcodec_present_member {
 	int operator()(Iterator begin, Iterator end, const Entity&, const Value&, State& state, Member, Path) const {
 		return moneta::codec::io::make_ostringstream(begin, end)
 			<< path_tabs<Path, 1>()
-			<< "pm:" << moneta::traits::detail::member_name<Member>::get() << ','
+			<< "pm:" << moneta::traits::member_name<Member>::get() << ','
 			<< moneta::codec::detail::stringize_path<Path>() << ' ' << state++ << '\n'
 		;
 	}
@@ -70,7 +70,7 @@ struct testcodec_enter_container {
 	int operator()(Iterator begin, Iterator end, const Entity&, State& state, Member, Path) const {
 		return moneta::codec::io::make_ostringstream(begin, end)
 			<< path_tabs<Path, -1>()
-			<< "ec:" << moneta::traits::detail::member_name<Member>::get() << ','
+			<< "ec:" << moneta::traits::member_name<Member>::get() << ','
 			<< moneta::codec::detail::stringize_path<Path>() << ' ' << state++ << '\n'
 		;
 	}
@@ -92,7 +92,7 @@ struct testcodec_leave_container {
 	int operator()(Iterator begin, Iterator end, const Entity&, State& state, Member, Path) const {
 		return moneta::codec::io::make_ostringstream(begin, end)
 			<< path_tabs<Path, -1>()
-			<< "lc:" << moneta::traits::detail::member_name<Member>::get() << ','
+			<< "lc:" << moneta::traits::member_name<Member>::get() << ','
 			<< moneta::codec::detail::stringize_path<Path>() << ' ' << state++ << '\n'
 		;
 	}

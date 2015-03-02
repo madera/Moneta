@@ -10,16 +10,16 @@
 
 MONETA_DECLARE_TRAIT(fixed_value)
 
-#define MONETA_FIXED_VALUE(member, value)                                \
-	namespace moneta { namespace traits { namespace detail {         \
-		template <>                                              \
-		struct fixed_value<member> : boost::true_type {          \
+#define MONETA_FIXED_VALUE(member, value)                       \
+	namespace moneta { namespace traits {                   \
+		template <>                                     \
+		struct fixed_value<member> : boost::true_type { \
 			typedef member::result_type trait_type; \
-			static trait_type get() {                        \
-				return value;                            \
-			}                                                \
-		};                                                       \
-	}}}
+			static trait_type get() {               \
+				return value;                   \
+			}                                       \
+		};                                              \
+	}}
 
 #define MONETA_FIXED_VALUE_MEMBER(entity, type, name, value) \
 	MONETA_FIXED_VALUE(MONETA_MEMBER(entity, type, name), value)
@@ -29,7 +29,7 @@ namespace moneta { namespace traits {
 	template <class Entity>
 	struct fixed_value_members : boost::mpl::copy_if<
 		typename traits::members<Entity>::type,
-		traits::detail::fixed_value<boost::mpl::_1>,
+		traits::fixed_value<boost::mpl::_1>,
 		boost::mpl::back_inserter<boost::mpl::vector<> >
 	> {};
 

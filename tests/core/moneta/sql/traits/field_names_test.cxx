@@ -4,22 +4,22 @@
 
 BOOST_AUTO_TEST_CASE(field_name_test) {
 	BOOST_CHECK_EQUAL(
-		(moneta::traits::detail::sql_field_name<MONETA_MEMBER(Person, int, ID)>::get()),
+		(moneta::traits::sql_field_name<MONETA_MEMBER(Person, int, ID)>::get()),
 		"PERSON_ID"
 	);
 
 	BOOST_CHECK_EQUAL(
-		(moneta::traits::detail::sql_field_name<MONETA_MEMBER(Person, std::string, Name)>::get()),
+		(moneta::traits::sql_field_name<MONETA_MEMBER(Person, std::string, Name)>::get()),
 		"PERSON_NAME"
 	);
 
 	BOOST_CHECK_EQUAL(
-		(moneta::traits::detail::sql_field_name<MONETA_MEMBER(Person, double, Height)>::get()),
+		(moneta::traits::sql_field_name<MONETA_MEMBER(Person, double, Height)>::get()),
 		"PERSON_HEIGHT"
 	);
 
 	BOOST_CHECK_EQUAL(
-		(moneta::traits::detail::sql_field_name<MONETA_MEMBER(Person, int, Fingers)>::get()),
+		(moneta::traits::sql_field_name<MONETA_MEMBER(Person, int, Fingers)>::get()),
 		"PERSON_FINGERS"
 	);
 }

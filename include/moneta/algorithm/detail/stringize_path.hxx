@@ -17,7 +17,7 @@ namespace moneta { namespace codec { namespace detail {
 			oss << '/'
 				<< moneta::traits::get_entity_name<typename Member::class_type>()
 				<< "::"
-				<< moneta::traits::detail::member_name<Member>::get();
+				<< moneta::traits::member_name<Member>::get();
 		}
 	};
 

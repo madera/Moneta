@@ -150,7 +150,7 @@ struct counting_member_esmp {
 	void operator()(Entity&, State& state, Member, Path) const {
 		++g_member_count;
 
-		std::string tmp = "m:" + moneta::traits::detail::member_name<Member>::get();
+		std::string tmp = "m:" + moneta::traits::member_name<Member>::get();
 		const std::string path = moneta::codec::detail::stringize_path<Path>();
 		tmp += (path.empty()? "" : "," + path);
 		state.lines.push_back(tmp);
@@ -180,7 +180,7 @@ struct counting_present_member_evsmp {
 	void operator()(Entity&, Value&, State& state, Member, Path) const {
 		++g_present_member_count;
 
-		std::string tmp = "pm:" + moneta::traits::detail::member_name<Member>::get();
+		std::string tmp = "pm:" + moneta::traits::member_name<Member>::get();
 		const std::string path = moneta::codec::detail::stringize_path<Path>();
 		tmp += (path.empty()? "" : "," + path);
 		state.lines.push_back(tmp);
@@ -242,7 +242,7 @@ struct counting_enter_container_esmp {
 	void operator()(Entity&, State& state, Member, Path) const {
 		++g_enter_container_count;
 
-		std::string tmp = "ec:" + moneta::traits::detail::member_name<Member>::get();
+		std::string tmp = "ec:" + moneta::traits::member_name<Member>::get();
 		const std::string path = moneta::codec::detail::stringize_path<Path>();
 		tmp += (path.empty()? "" : "," + path);
 		state.lines.push_back(tmp);
@@ -302,7 +302,7 @@ struct counting_leave_container_esmp {
 	void operator()(Entity&, State& state, Member, Path) const {
 		++g_leave_container_count;
 
-		std::string tmp = "lc:" + moneta::traits::detail::member_name<Member>::get();
+		std::string tmp = "lc:" + moneta::traits::member_name<Member>::get();
 		const std::string path = moneta::codec::detail::stringize_path<Path>();
 		tmp += (path.empty()? "" : "," + path);
 		state.lines.push_back(tmp);

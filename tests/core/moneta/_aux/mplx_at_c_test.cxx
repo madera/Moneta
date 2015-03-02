@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE(at_c_0_mplx_test) {
 struct test_1 {
 	template <class T>
 	void operator()() const {
-		BOOST_CHECK_EQUAL(moneta::traits::detail::member_name<T>::get(), "Height");
+		BOOST_CHECK_EQUAL(moneta::traits::member_name<T>::get(), "Height");
 	}
 };
 
@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(at_c_1_mplx_test) {
 struct test_2 {
 	template <class T>
 	void operator()() const {
-		BOOST_CHECK_EQUAL(moneta::traits::detail::member_name<T>::get(), "b");
+		BOOST_CHECK_EQUAL(moneta::traits::member_name<T>::get(), "b");
 	}
 };
 

@@ -7,10 +7,10 @@
 MONETA_DECLARE_TRAIT(xml_attribute)
 
 #define MONETA_XML_ATTIBUTE(klass, field) \
-	namespace moneta { namespace traits { namespace detail { \
+	namespace moneta { namespace traits { \
 		template <> \
 		struct xml_attribute<field> : boost::true_type {};\
-	}}}
+	}}
 
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -43,13 +43,13 @@ namespace moneta { namespace traits { namespace detail {                        
 namespace moneta { namespace codec { namespace detail {
 
 	template <class Member>
-	struct is_xml_attribute : traits::detail::xml_attribute<
+	struct is_xml_attribute : traits::xml_attribute<
 		Member
 	> {};
 
 	template <class Member>
 	struct is_xml_element : boost::mpl::not_<
-		traits::detail::xml_attribute<Member>
+		traits::xml_attribute<Member>
 	> {};
 
 	//

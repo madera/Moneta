@@ -14,7 +14,7 @@ struct test_operation {
 
 	template <class Entity>
 	void operator()(Entity*) const {
-		_oss << moneta::traits::detail::entity_name<Entity>::get();
+		_oss << moneta::traits::entity_name<Entity>::get();
 	}
 };
 
@@ -26,7 +26,7 @@ struct entity_name_is {
 
 	template <class Entity>
 	bool operator()(Entity*) const {
-		return _name == moneta::traits::detail::entity_name<Entity>::get();
+		return _name == moneta::traits::entity_name<Entity>::get();
 	}
 };
 

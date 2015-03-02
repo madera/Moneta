@@ -9,22 +9,22 @@ BOOST_AUTO_TEST_CASE(test_moneta_traits_member_names_get) {
 	// Person
 	//
 	BOOST_CHECK_EQUAL(
-		(moneta::traits::detail::member_name<MONETA_MEMBER(Person, int, ID)>::get()),
+		(moneta::traits::member_name<MONETA_MEMBER(Person, int, ID)>::get()),
 		"ID"
 	);
 
 	BOOST_CHECK_EQUAL(
-		(moneta::traits::detail::member_name<MONETA_MEMBER(Person, std::string, Name)>::get()),
+		(moneta::traits::member_name<MONETA_MEMBER(Person, std::string, Name)>::get()),
 		"Name"
 	);
 
 	BOOST_CHECK_EQUAL(
-		(moneta::traits::detail::member_name<MONETA_MEMBER(Person, double, Height)>::get()),
+		(moneta::traits::member_name<MONETA_MEMBER(Person, double, Height)>::get()),
 		"Height"
 	);
 
 	BOOST_CHECK_EQUAL(
-		(moneta::traits::detail::member_name<MONETA_MEMBER(Person, int, Fingers)>::get()),
+		(moneta::traits::member_name<MONETA_MEMBER(Person, int, Fingers)>::get()),
 		"Fingers"
 	);
 
@@ -32,17 +32,17 @@ BOOST_AUTO_TEST_CASE(test_moneta_traits_member_names_get) {
 	// Dog
 	//
 	BOOST_CHECK_EQUAL(
-		(moneta::traits::detail::member_name<MONETA_MEMBER(Dog, std::string, Owner)>::get()),
+		(moneta::traits::member_name<MONETA_MEMBER(Dog, std::string, Owner)>::get()),
 		"Owner"
 	);
 
 	BOOST_CHECK_EQUAL(
-		(moneta::traits::detail::member_name<MONETA_MEMBER(Dog, int, ID)>::get()),
+		(moneta::traits::member_name<MONETA_MEMBER(Dog, int, ID)>::get()),
 		"ID"
 	);
 
 	BOOST_CHECK_EQUAL(
-		(moneta::traits::detail::member_name<MONETA_MEMBER(Dog, std::string, Name)>::get()),
+		(moneta::traits::member_name<MONETA_MEMBER(Dog, std::string, Name)>::get()),
 		"Name"
 	);
 
@@ -50,17 +50,17 @@ BOOST_AUTO_TEST_CASE(test_moneta_traits_member_names_get) {
 	// Address
 	//
 	BOOST_CHECK_EQUAL(
-		(moneta::traits::detail::member_name<MONETA_MEMBER(Address, int, ID)>::get()),
+		(moneta::traits::member_name<MONETA_MEMBER(Address, int, ID)>::get()),
 		"ID"
 	);
 
 	BOOST_CHECK_EQUAL(
-		(moneta::traits::detail::member_name<MONETA_MEMBER(Address, int, Number)>::get()),
+		(moneta::traits::member_name<MONETA_MEMBER(Address, int, Number)>::get()),
 		"Number"
 	);
 
 	BOOST_CHECK_EQUAL(
-		(moneta::traits::detail::member_name<MONETA_MEMBER(Address, std::string, Street)>::get()),
+		(moneta::traits::member_name<MONETA_MEMBER(Address, std::string, Street)>::get()),
 		"Street"
 	);
 }

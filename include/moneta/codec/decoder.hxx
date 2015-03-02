@@ -319,7 +319,7 @@ namespace moneta { namespace codec {
 	struct decoder_member {
 		template <class Entity, class DecoderState, class Member, class Path>
 		typename boost::enable_if<
-			traits::detail::fixed_value<Member>
+			traits::fixed_value<Member>
 		>::type
 		operator()(Entity& entity, DecoderState& decoder_state, Member, Path) const {
 			boost::mpl::for_each<typename DecoderState::member_actions>(
@@ -329,7 +329,7 @@ namespace moneta { namespace codec {
 			);
 
 			if (decoder_state.good) {
-				if (Member()(entity) != traits::detail::fixed_value<Member>::get()) {
+				if (Member()(entity) != traits::fixed_value<Member>::get()) {
 					decoder_state.good = false;
 					decoder_state.total_written = 0; // XXX: Confirm this is needed.
 					decoder_state.last_result = 0;
@@ -339,7 +339,7 @@ namespace moneta { namespace codec {
 
 		template <class Entity, class DecoderState, class Member, class Path>
 		typename boost::disable_if<
-			traits::detail::fixed_value<Member>
+			traits::fixed_value<Member>
 		>::type
 		operator()(Entity& entity, DecoderState& decoder_state, Member, Path) const {
 			boost::mpl::for_each<typename DecoderState::member_actions>(

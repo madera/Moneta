@@ -290,7 +290,7 @@ struct traversal_tester {
 
 	template <class Entity, class Member, class Path>
 	void operator()(Entity&) const {
-		_output.push_back(std::string("m:") + moneta::traits::detail::member_name<Member>::get());
+		_output.push_back(std::string("m:") + moneta::traits::member_name<Member>::get());
 	}
 
 	template <class Entity, class Path>

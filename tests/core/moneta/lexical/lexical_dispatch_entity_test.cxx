@@ -14,7 +14,7 @@ struct test_operation {
 
 	template <class Entity>
 	void operator()(Entity*) const {
-		_oss << moneta::traits::detail::entity_name<Entity>::get();
+		_oss << moneta::traits::entity_name<Entity>::get();
 	}
 };
 

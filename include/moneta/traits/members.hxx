@@ -7,7 +7,7 @@ MONETA_DECLARE_ENTITY_TRAIT(members_of)
 namespace moneta { namespace traits {
 
 	template <class Entity>
-	struct members : detail::members_of<
+	struct members : members_of<
 		typename pure_type<Entity>::type
 	> {};
 

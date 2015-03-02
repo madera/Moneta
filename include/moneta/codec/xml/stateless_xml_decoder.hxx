@@ -325,7 +325,7 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 
 		itr += result;
 
-		const std::string element_name = traits::detail::member_name<Member>::get(); // XXX
+		const std::string element_name = traits::member_name<Member>::get(); // XXX
 		if (opening_tag != element_name) {
 			return 0;
 		}
@@ -429,7 +429,7 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 		typename boost::disable_if<boost::mpl::empty<Path>, std::string>::type
 		operator()(Path) const {
 			typedef typename boost::mpl::back<Path>::type node;
-			return traits::detail::member_name<node>::get();
+			return traits::member_name<node>::get();
 		}
 	};
 
