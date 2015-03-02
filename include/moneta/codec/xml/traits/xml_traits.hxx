@@ -56,6 +56,8 @@ namespace moneta { namespace traits {
 		xml_attribute<Member>
 	> {};
 
+// --------------------------------------------------------------------------------------------------------------------
+
 	template <class Entity>
 	struct has_xml_attributes : boost::mpl::not_<
 		boost::is_same<
@@ -69,12 +71,16 @@ namespace moneta { namespace traits {
 		>
 	> {};
 
+// --------------------------------------------------------------------------------------------------------------------
+
 	template <class Entity>
 	struct xml_attribute_members : boost::mpl::copy_if<
 		typename members<Entity>::type,
 		is_xml_attribute<boost::mpl::_1>,
 		boost::mpl::back_inserter<boost::mpl::vector0<> >
 	> {};
+
+// --------------------------------------------------------------------------------------------------------------------
 
 	template <class Member>
 	struct is_first_xml_attribute_member : boost::is_same<
@@ -92,6 +98,8 @@ namespace moneta { namespace traits {
 		Member
 	> {};
 
+// --------------------------------------------------------------------------------------------------------------------
+
 	template <class Entity>
 	struct has_xml_elements : boost::mpl::not_<
 		boost::is_same<
@@ -105,12 +113,16 @@ namespace moneta { namespace traits {
 		>
 	> {};
 
+// --------------------------------------------------------------------------------------------------------------------
+
 	template <class Entity>
 	struct xml_element_members : boost::mpl::copy_if<
 		typename members<Entity>::type,
 		is_xml_element<boost::mpl::_1>,
 		boost::mpl::back_inserter<boost::mpl::vector0<> >
 	> {};
+
+// --------------------------------------------------------------------------------------------------------------------
 
 	template <class Member>
 	struct is_first_xml_element_member : boost::is_same<
