@@ -54,9 +54,9 @@ inline void static_test() {
 	BOOST_MPL_ASSERT_NOT((moneta::traits::is_xml_element<MONETA_MEMBER(E, int, m)>));
 	BOOST_MPL_ASSERT_NOT((moneta::traits::is_xml_element<MONETA_MEMBER(E, int, n)>));
 
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::has_xml_attributes<A>));
-	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::has_xml_attributes<B>));
-	BOOST_MPL_ASSERT    ((moneta::codec::detail::has_xml_attributes<E>));
+	BOOST_MPL_ASSERT    ((moneta::traits::has_xml_attributes<A>));
+	BOOST_MPL_ASSERT_NOT((moneta::traits::has_xml_attributes<B>));
+	BOOST_MPL_ASSERT    ((moneta::traits::has_xml_attributes<E>));
 
 	BOOST_MPL_ASSERT    ((moneta::codec::detail::has_xml_elements<A>));
 	BOOST_MPL_ASSERT_NOT((moneta::codec::detail::has_xml_elements<E>));

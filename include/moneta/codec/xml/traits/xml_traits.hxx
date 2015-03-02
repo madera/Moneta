@@ -52,10 +52,6 @@ namespace moneta { namespace traits {
 		traits::xml_attribute<Member>
 	> {};
 
-}}
-
-namespace moneta { namespace codec { namespace detail {
-
 	template <class Entity>
 	struct has_xml_attributes : boost::mpl::not_<
 		boost::is_same<
@@ -68,6 +64,10 @@ namespace moneta { namespace codec { namespace detail {
 			>::type
 		>
 	> {};
+
+}}
+
+namespace moneta { namespace codec { namespace detail {
 
 	template <class Entity>
 	struct xml_attribute_members : boost::mpl::copy_if<
