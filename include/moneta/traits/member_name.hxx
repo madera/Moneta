@@ -6,8 +6,6 @@
 
 #include <boost/preprocessor/stringize.hpp>
 
-// TODO: RENAME THIS FILE TO SINGULAR FORM
-
 MONETA_DECLARE_MEMBER_TRAIT(member_name)
 
 #define MONETA_MEMBER_NAME(member, name) \

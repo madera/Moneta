@@ -91,7 +91,8 @@ add_executable(core_tests
 	moneta/traits/detail/indices_of_test.cxx
 	moneta/traits/detail/is_functor_callable_test.cxx
 	moneta/traits/detail/sub_tie_vector_test.cxx
-	moneta/traits/detail/tie_vector_test.cxx	
+	moneta/traits/detail/tie_vector_test.cxx
+	moneta/traits/trait_array_test.cxx
 	moneta/traits/empty_pk_test.cxx
 	moneta/traits/extract_pk_test.cxx
 	moneta/traits/fixed_values_test.cxx

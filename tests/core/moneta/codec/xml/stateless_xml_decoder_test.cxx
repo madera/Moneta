@@ -582,7 +582,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_xml_item_name) 
 		"<point_3d>\n"
 		"\t<x_item>123</x_item>\n"
 		"\t<y_item>456</y_item>\n"
-		"\t<z_item>678</z_item>\n"
+		"\t<z_item>789</z_item>\n"
 		"</point_3d>"
 	;
 

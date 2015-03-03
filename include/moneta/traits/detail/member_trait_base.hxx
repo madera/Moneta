@@ -24,6 +24,16 @@
 	namespace moneta { namespace traits {      \
 		template <class T>                 \
 		struct trait : boost::false_type { \
+			typedef void trait_type;   \
+		};                                 \
+	}}
+
+// TODO: Is this naming ok? Or should it be RT_TRAIT?
+#define MONETA_DECLARE_TYPED_TRAIT(trait, type)    \
+	namespace moneta { namespace traits {      \
+		template <class T>                 \
+		struct trait : boost::false_type { \
+			typedef type trait_type;   \
 		};                                 \
 	}}
 
@@ -52,9 +62,7 @@
 	MONETA_DECLARE_TRAIT(trait)
 
 #define MONETA_DECLARE_MEMBER_TRAIT(trait) \
-	MONETA_DECLARE_TRAIT(trait)
-
-
+	MONETA_DECLARE_TYPED_TRAIT(trait, std::string)
 
 // TODO: Add a nice assert to capture non-registered entities early.
 #define MONETA_DEFINE_ENTITY_TRAIT_GETTER(trait, name)                   \

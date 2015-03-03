@@ -389,8 +389,7 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 		}
 
 		Iterator itr = begin;
-		//moneta::lexical::dispatch_member_alias<Entity, traits::xml_item_name>(
-		moneta::lexical::dispatch_member<Entity>(
+		moneta::lexical::dispatch_member_array_item<Entity, traits::xml_item_name>(
 			prefix, member_decoder<Iterator, Entity, Path>(itr, end, entity)
 		);
 

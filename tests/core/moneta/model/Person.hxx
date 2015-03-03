@@ -27,6 +27,8 @@ MONETA_DESCRIBE_SQL_ENTITY(
 
 MONETA_DECLARE_PRIMARY_KEY(Person, int, ID)
 
+// TODO: Finish these alternative versions...
+
 // Alternate non-variadic version:
 
 //MONETA_DESCRIBE_SQL_ENTITY(
