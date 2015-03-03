@@ -325,7 +325,7 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 
 		itr += result;
 
-		const std::string element_name = traits::member_name<Member>::get(); // XXX
+		const std::string element_name = traits::xml_item_name<Member>::get();
 		if (opening_tag != element_name) {
 			return 0;
 		}
@@ -389,6 +389,7 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 		}
 
 		Iterator itr = begin;
+		//moneta::lexical::dispatch_member_alias<Entity, traits::xml_item_name>(
 		moneta::lexical::dispatch_member<Entity>(
 			prefix, member_decoder<Iterator, Entity, Path>(itr, end, entity)
 		);
@@ -422,14 +423,14 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 		template <class Path>
 		typename boost::enable_if<boost::mpl::empty<Path>, std::string>::type
 		operator()(Path) const {
-			return traits::get_entity_name<Entity>();
+			return traits::xml_item_name<Entity>::get();
 		}
 
 		template <class Path>
 		typename boost::disable_if<boost::mpl::empty<Path>, std::string>::type
 		operator()(Path) const {
 			typedef typename boost::mpl::back<Path>::type node;
-			return traits::member_name<node>::get();
+			return traits::xml_item_name<node>::get();
 		}
 	};
 
@@ -541,8 +542,7 @@ namespace moneta { namespace codec { namespace detail {
 	template <class Entity>
 	struct prefix_value<stateless_xml_decoder_implementation::xml_prefix_reader, Entity> {
 		static std::string get() {
-			// XXX: Use XML element names.
-			return moneta::traits::get_entity_name<Entity>();
+			return traits::xml_item_name<Entity>::get();
 		}
 	};
 }}}

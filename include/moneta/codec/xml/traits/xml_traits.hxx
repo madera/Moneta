@@ -1,5 +1,7 @@
 #pragma once
+#include "../../../traits/is_entity.hxx"
 #include "../../../traits/members.hxx"
+#include "../../../traits/entity_name.hxx"
 #include "../../../traits/member_name.hxx"
 #include "../../../traits/detail/member_trait_base.hxx"
 #include <boost/mpl/find_if.hpp>
@@ -18,11 +20,38 @@ MONETA_DECLARE_TRAIT(xml_attribute)
 
 namespace moneta { namespace traits {
 
+	namespace detail {
+
+		template <class EntityOrMember, class Enable = void>
+		struct default_xml_item_name {
+			typedef std::string trait_type;
+
+			static trait_type get() {
+				return member_name<EntityOrMember>::get();
+			}
+		};
+
+		template <class EntityOrMember>
+		struct default_xml_item_name<
+			EntityOrMember,
+			typename boost::enable_if<
+				is_entity<EntityOrMember>
+			>::type
+		> {
+			typedef std::string trait_type;
+
+			static trait_type get() {
+				return entity_name<EntityOrMember>::get();
+			}
+		};
+
+	}
+
 	template <class Member>
 	struct xml_item_name {
 		typedef std::string trait_type;
 		static trait_type get() {
-			return member_name<Member>::get();
+			return detail::default_xml_item_name<Member>::get();
 		}
 	};
 

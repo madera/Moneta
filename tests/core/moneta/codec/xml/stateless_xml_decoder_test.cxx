@@ -565,4 +565,42 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_full_decode) {
 	}
 }
 
+MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+	Point3D,
+	((boost::uint32_t, x))
+	((boost::uint32_t, y))
+	((boost::uint32_t, z))
+)
+
+MONETA_XML_ITEM_NAME(Point3D, point_3d)
+MONETA_XML_ITEM_NAME(MONETA_MEMBER(Point3D, boost::uint32_t, x), x_item)
+MONETA_XML_ITEM_NAME(MONETA_MEMBER(Point3D, boost::uint32_t, y), y_item)
+MONETA_XML_ITEM_NAME(MONETA_MEMBER(Point3D, boost::uint32_t, z), z_item)
+
+BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_xml_item_name) {
+	static const std::string data =
+		"<point_3d>\n"
+		"\t<x_item>123</x_item>\n"
+		"\t<y_item>456</y_item>\n"
+		"\t<z_item>678</z_item>\n"
+		"</point_3d>"
+	;
+
+	typedef moneta::codec::stateless_xml_decoder<
+		moneta::traits::entity_group<Person, ThreeInts, A, Cat, Point, Worker, Point3D>
+	>::type decoder;
+
+	decoder::variant_type variant;
+	int result = decoder()(std::begin(data), std::end(data), variant);
+	BOOST_REQUIRE_EQUAL(result, data.size());
+
+	Point3D* entity = boost::get<Point3D>(&variant);
+	BOOST_REQUIRE(entity);
+
+	Point3D& point = *entity;
+	BOOST_CHECK_EQUAL(point.x, 123);
+	BOOST_CHECK_EQUAL(point.y, 456);
+	BOOST_CHECK_EQUAL(point.z, 789);
+}
+
 // TODO: Round trip encoding and decoding (on a separate file).
