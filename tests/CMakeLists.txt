@@ -1,7 +1,7 @@
 set(Boost_USE_STATIC_LIBS        ON)
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
-find_package(Boost 1.55.0 COMPONENTS test_exec_monitor)
+find_package(Boost 1.55.0 COMPONENTS system thread test_exec_monitor REQUIRED)
 if (Boost_FOUND)
 	message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
 	message(STATUS "Boost libs    : ${Boost_LIBRARIES}")

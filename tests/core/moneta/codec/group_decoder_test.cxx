@@ -177,6 +177,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_group_decoder_prefixed_test) {
 	BOOST_CHECK_EQUAL(oss.str(), "ThreeInts:11111111:22222222:55555555");
 }
 
+// TODO: Shouldn't this test be in its own file?
 BOOST_AUTO_TEST_CASE(test_moneta_codec_group_decoder_decode_many_test) {
 	unsigned char buffer[] = {
 		0x30,

@@ -4,6 +4,7 @@
 #include "../traits/is_entity.hxx"
 #include "../traits/detail/is_functor_callable.hxx"
 #include "../make_entity.hxx"
+#include <boost/mpl/for_each.hpp>
 
 // TODO: Document that this function should be called for_each_non_entity_member. Or find a better name for it.
 

@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include <moneta/codec/xml/stateless_xml_decoder.hxx>
 #include <moneta/pp/describe_entity.hxx>
-
 #include "../../model/Person.hxx"
 #include "../../model/simple/ThreeInts.hxx"
 #include "../../model/Cat.hxx"

@@ -15,6 +15,7 @@ endif()
 moneta_header_files(moneta_headers)
 file(GLOB_RECURSE local_project_headers "${CMAKE_CURRENT_SOURCE_DIR}/*.hxx")
 
+# TODO: Move this somewhere else.
 find_package(Soci)
 
 #
@@ -127,8 +128,10 @@ add_executable(core_tests
 	moneta/sql/generators/select_test.cxx
 	moneta/sql/traits/field_names_test.cxx
 	moneta/sql/traits/table_name_test.cxx
+
+	moneta/asio/decoder_thread_test.cxx
 )
 
-target_link_libraries(core_tests ${Boost_LIBRARIES})
+target_link_libraries(core_tests ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_LIBRARIES}) # ${Boost_FILESYSTEM_LIBRARY})
 
 add_test(core_tests core_tests)
