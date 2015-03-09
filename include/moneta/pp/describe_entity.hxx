@@ -30,7 +30,8 @@
 	MONETA_PP_EXPAND_ENTITY_MEMBERS(entity, members)      \
 	MONETA_PP_EXPAND_ENTITY_MEMBER_NAMES(entity, members)
 
-#define MONETA_DEFINE_ENTITY_NS(ns_seq, entity, members) \
-	MONETA_PP_NAMESPACE_BEGIN(ns_seq)                                   \
-	MONETA_PP_DEFINE_ENTITY_STRUCT(entity, members)                     \
-	MONETA_PP_NAMESPACE_END(ns_seq)
+#define MONETA_DEFINE_ENTITY_NS(ns_seq, entity, members)   \
+	MONETA_PP_NAMESPACE_BEGIN(ns_seq)                  \
+	MONETA_PP_DEFINE_ENTITY_STRUCT(entity, members)    \
+	MONETA_PP_NAMESPACE_END(ns_seq)                    \
+	MONETA_DESCRIBE_ENTITY_NS(ns_seq, entity, members)

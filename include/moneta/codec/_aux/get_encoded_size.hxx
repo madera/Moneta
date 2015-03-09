@@ -14,10 +14,10 @@ namespace moneta { namespace codec { namespace aux {
 				return _count;
 			}
 
-			bool operator==(const null_iterator& rhs) const {
+			bool operator==(const null_iterator&) const {
 				return false;
 			}
-			bool operator!=(const null_iterator& rhs) const {
+			bool operator!=(const null_iterator&) const {
 				return true;
 			}
 			void operator+=(const size_t size) {
@@ -32,7 +32,8 @@ namespace moneta { namespace codec { namespace aux {
 			}
 
 			char& operator*() {
-				static char ch; return ch;
+				static char ch;
+				return ch;
 			}
 		};
 
