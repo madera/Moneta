@@ -252,7 +252,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_encoder_optionals) {
 	BOOST_CHECK_EQUAL(expected, buffer);
 }
 
-BOOST_AUTO_TEST_CASE(test_moneta_codec_encoder_stream) {
+BOOST_AUTO_TEST_CASE(test_moneta_codec_encoder_ostream) {
 
 	typedef encoder<
 		start_actions<testcodec_start_encoding>,

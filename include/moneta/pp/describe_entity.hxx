@@ -56,6 +56,12 @@
 
 // ---
 
+#define MONETA_DESCRIBE_ENTITY(entity, members)               \
+	MONETA_ENTITY_NAME(entity, entity)                    \
+	MONETA_PP_EXPAND_ENTITY_MEMBERS(entity, members)      \
+	MONETA_PP_EXPAND_ENTITY_MEMBER_NAMES(entity, members)
+
+
 #define MONETA_DEFINE_AND_DESCRIBE_ENTITY(entity, members)    \
 	MONETA_PP_DEFINE_ENTITY_STRUCT(entity, members)       \
 	MONETA_ENTITY_NAME(entity, entity)                    \
