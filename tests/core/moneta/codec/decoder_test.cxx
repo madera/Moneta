@@ -9,20 +9,20 @@
 #include <moneta/algorithm/detail/stringize_path.hxx>
 #include <moneta/pp/describe_entity.hxx>
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	Point3D,
 	((boost::uint32_t, x))
 	((boost::uint32_t, y))
 	((boost::uint32_t, z))
 )
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	Triangle,
 	((Point3D, center))
 	((std::vector<Point3D>, points))
 )
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	LotteryNumbers,
 	((boost::uint32_t, date))
 	((std::vector<boost::uint32_t>, numbers))

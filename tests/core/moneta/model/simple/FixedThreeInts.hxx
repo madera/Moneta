@@ -2,7 +2,7 @@
 #include <moneta/pp/describe_entity.hxx>
 #include <moneta/traits/fixed_values.hxx>
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	FixedThreeInts,
 	((int, One  ))
 	((int, Two  ))

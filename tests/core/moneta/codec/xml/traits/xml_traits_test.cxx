@@ -78,7 +78,7 @@ inline void static_test() {
 	BOOST_MPL_ASSERT    ((moneta::traits::is_last_xml_element_member<MONETA_MEMBER(C, int, k)>));
 }
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	posix_named_entity,
 	((int,                                an_int            ))
 	((std::vector<int>,                   int_container       ))

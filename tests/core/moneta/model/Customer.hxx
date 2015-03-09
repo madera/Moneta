@@ -4,7 +4,7 @@
 #include "Address.hxx"
 #include "Dog.hxx"
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	Customer,
 	((std::string,                                Name       ))
 	((time_t,                                     DOB        ))

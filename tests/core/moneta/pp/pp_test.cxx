@@ -4,7 +4,7 @@
 
 typedef char char_16[16];
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY_STRUCT_WITH_NAMESPACE(
+MONETA_DEFINE_ENTITY_NS(
 	(ns0)(ns1)(ns2), some_entity,
 	((int,     a))
 	((double,  b))

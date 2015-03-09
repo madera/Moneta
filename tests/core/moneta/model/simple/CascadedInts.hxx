@@ -4,7 +4,7 @@
 #include "ThreeInts.hxx"
 #include "FourInts.hxx"
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	CascadedInts,
 	((::TwoInts,   TwoInts  ))
 	((::FourInts,  FourInts ))

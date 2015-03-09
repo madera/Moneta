@@ -271,7 +271,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_stateless_xml_encoder_optionals_2) {
 
 //
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	Point3D,
 	((boost::uint32_t, x))
 	((boost::uint32_t, y))

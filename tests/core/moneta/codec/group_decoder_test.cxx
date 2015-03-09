@@ -10,7 +10,7 @@
 #include "../model/Cat.hxx"
 #include "../model/Dog.hxx"
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	FiveInts,
 	((int, One  ))
 	((int, Two  ))

@@ -301,32 +301,32 @@ struct traversal_tester {
 
 #include <moneta/pp/describe_entity.hxx>
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	E,
 	((int, m))
 	((int, n))
 )
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	D,
 	((int, l))
 	((E  , e))
 )
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	C,
 	((int, j))
 	((int, k))
 )
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	B,
 	((C,   c))
 	((int, i))
 	((D  , d))
 )
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	A,
 	((int, f))
 	((int, g))

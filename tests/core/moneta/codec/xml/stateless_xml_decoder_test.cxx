@@ -6,13 +6,13 @@
 #include "../../model/Cat.hxx"
 #include "../../model/tree/A.hxx"
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	Point,
 	((int, x))
 	((int, y))
 )
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	Worker,
 	((int,         ID         ))
 	((std::string, Name       ))
@@ -564,7 +564,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_full_decode) {
 	}
 }
 
-MONETA_DEFINE_AND_DESCRIBE_ENTITY(
+MONETA_DEFINE_ENTITY(
 	Point3D,
 	((boost::uint32_t, x))
 	((boost::uint32_t, y))
