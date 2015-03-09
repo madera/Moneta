@@ -128,8 +128,6 @@ add_executable(core_tests
 	moneta/sql/generators/select_test.cxx
 	moneta/sql/traits/field_names_test.cxx
 	moneta/sql/traits/table_name_test.cxx
-
-	moneta/asio/decoder_thread_test.cxx
 )
 
 target_link_libraries(core_tests ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_LIBRARIES}) # ${Boost_FILESYSTEM_LIBRARY})
