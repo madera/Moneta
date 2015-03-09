@@ -1,5 +1,6 @@
 #pragma once
 #include "../algorithm/traverse.hxx"
+#include "_aux/get_encoded_size.hxx"
 
 // TODO: Put in detail, well, the detail impls...
 
@@ -537,6 +538,32 @@ namespace moneta { namespace codec {
 	template <class Encoder, class Iterator, class Entity, class State>
 	int encode(Iterator begin, Iterator end, const Entity& entity, State& state) {
 		return Encoder()(begin, end, entity, state);
+	}
+
+	//
+	// More Syntax candy
+	//
+
+	// TODO: Add legitimate ostream support! And add a version that has state at the end.
+	template <class Encoder, class OStream, class Entity, class State>
+	typename boost::enable_if<
+		traits::is_entity<Entity>,
+		int
+	>::type
+	encode(OStream& ostream, const Entity& entity, State& state = detail::no_state()) {
+		const size_t size = aux::get_encoded_size<Encoder>(entity, state);
+		if (size <= 0) {
+			return size;
+		}
+
+		char* buffer = new char[size];
+		const int result = Encoder()(buffer, buffer + size, entity, state);
+		if (result > 0) {
+			ostream.write(buffer, size);
+		}
+		delete[] buffer;
+
+		return result;
 	}
 
 }}

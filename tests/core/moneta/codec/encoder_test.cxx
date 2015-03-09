@@ -251,3 +251,41 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_encoder_optionals) {
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(expected, buffer);
 }
+
+BOOST_AUTO_TEST_CASE(test_moneta_codec_encoder_stream) {
+
+	typedef encoder<
+		start_actions<testcodec_start_encoding>,
+		enter_actions<testcodec_enter_entity>,
+		member_actions<testcodec_member>,
+		present_member_actions<testcodec_present_member>,
+		leave_actions<testcodec_leave_entity>,
+		enter_container_actions<testcodec_enter_container>,
+		container_item_actions<testcodec_container_item>,
+		leave_container_actions<testcodec_leave_container>,
+		finish_actions<testcodec_finish_encoding>
+	> encoder_t;
+
+	const std::string expected =
+		"S:Customer, 0\n"
+		"e:Customer, 1\n"
+		"\tm:Name, 2\n"
+		"\tpm:Name, 3\n"
+		"\tm:DOB, 4\n"
+		"\tpm:DOB, 5\n"
+		"\tm:Rating, 6\n"
+		"\tpm:Rating, 7\n"
+		"l:Customer, 8\n"
+		"F:Customer, 9\n"
+	;
+
+	Customer customer;
+	customer.Rating = 1;
+
+	std::ostringstream oss;
+	int level = 0;
+	int result = moneta::codec::encode<encoder_t>(oss, customer, level);
+
+	BOOST_CHECK_EQUAL(result, expected.size());
+	BOOST_CHECK_EQUAL(expected, oss.str().c_str());
+}
