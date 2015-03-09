@@ -65,6 +65,7 @@
 	MONETA_DECLARE_TYPED_TRAIT(trait, std::string)
 
 // TODO: Add a nice assert to capture non-registered entities early.
+// TODO: Deprecated.
 #define MONETA_DEFINE_ENTITY_TRAIT_GETTER(trait, name)                   \
 	template <class Entity>                                          \
 	const typename moneta::traits::trait<                            \
