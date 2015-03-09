@@ -38,6 +38,11 @@ namespace moneta { namespace codec { namespace aux {
 
 	}
 
+	template <class Encoder, class Entity>
+	size_t get_encoded_size(const Entity& entity) {
+		return Encoder()(detail::null_iterator(), detail::null_iterator(), entity);
+	}
+
 	template <class Encoder, class Entity, class State>
 	size_t get_encoded_size(const Entity& entity, State& state = algorithm::detail::no_state()) {
 		State tmp = state;

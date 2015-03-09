@@ -545,6 +545,28 @@ namespace moneta { namespace codec {
 	//
 
 	// TODO: Add legitimate ostream support! And add a version that has state at the end.
+	template <class Encoder, class OStream, class Entity>
+	typename boost::enable_if<
+		traits::is_entity<Entity>,
+		int
+	>::type
+	encode(OStream& ostream, const Entity& entity) {
+		const size_t size = aux::get_encoded_size<Encoder>(entity);
+		if (size <= 0) {
+			return size;
+		}
+
+		char* buffer = new char[size];
+		const int result = Encoder()(buffer, buffer + size, entity);
+		if (result > 0) {
+			ostream.write(buffer, size);
+		}
+		delete[] buffer;
+
+		return result;
+	}
+
+	// TODO: Add legitimate ostream support! And add a version that has state at the end.
 	template <class Encoder, class OStream, class Entity, class State>
 	typename boost::enable_if<
 		traits::is_entity<Entity>,
