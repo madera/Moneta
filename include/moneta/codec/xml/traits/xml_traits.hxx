@@ -4,6 +4,7 @@
 #include "../../../traits/entity_name.hxx"
 #include "../../../traits/member_name.hxx"
 #include "../../../traits/detail/member_trait_base.hxx"
+#include "../../../algorithm/detail/path.hxx"
 #include <boost/mpl/find_if.hpp>
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -67,6 +68,95 @@ namespace moneta { namespace traits {
 			}                                         \
 		};                                                \
 	}}
+
+// ---
+
+namespace moneta { namespace traits {
+
+	namespace detail {
+
+		template <class EntityOrMember, class Path, class Enable = void>
+		struct get_xml_item_name_impl {
+			typedef std::string trait_type;
+
+			static trait_type get() {
+				return xml_item_name<EntityOrMember>::get();
+			}
+		};
+
+		template <class EntityOrMember, class Path>
+		struct get_xml_item_name_impl<
+			EntityOrMember,
+			Path,
+			typename boost::enable_if<
+				boost::mpl::and_<
+					is_entity<EntityOrMember>,
+					boost::mpl::empty<Path>
+				>
+			>::type
+		> {
+			typedef std::string trait_type;
+
+			static trait_type get() {
+				return xml_item_name<EntityOrMember>::get();
+			}
+		};
+
+		template <class EntityOrMember, class Path>
+		struct get_xml_item_name_impl<
+			EntityOrMember,
+			Path,
+			typename boost::enable_if<
+				boost::mpl::and_<
+					is_entity<EntityOrMember>,
+					boost::mpl::not_<
+						boost::mpl::empty<Path>
+					>,
+					boost::mpl::not_<
+						algorithm::detail::is_cwd_container_member<Path>
+					>
+				>
+			>::type
+		> {
+			typedef std::string trait_type;
+
+			static trait_type get() {
+				return xml_item_name<
+					typename boost::mpl::back<Path>::type
+				>::get();
+			}
+		};
+
+		template <class EntityOrMember, class Path>
+		struct get_xml_item_name_impl<
+			EntityOrMember,
+			Path,
+			typename boost::enable_if<
+				boost::mpl::and_<
+					is_entity<EntityOrMember>,
+					boost::mpl::not_<
+						boost::mpl::empty<Path>
+					>,
+					algorithm::detail::is_cwd_container_member<Path>
+				>
+			>::type
+		> {
+			typedef std::string trait_type;
+
+			static trait_type get() {
+				return xml_item_name<EntityOrMember>::get();
+			}
+		};
+
+		
+	}
+
+	template <class Entity, class Path>
+	std::string get_xml_item_name() {
+		return detail::get_xml_item_name_impl<Entity, Path>::get();
+	}
+
+}}
 
 // --------------------------------------------------------------------------------------------------------------------
 

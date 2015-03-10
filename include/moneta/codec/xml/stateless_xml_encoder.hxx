@@ -98,7 +98,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		operator()(Iterator begin, Iterator end, const Entity&, Path) const {
 			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path>()
-				<< '<' << traits::xml_item_name<Entity>::get() << " />\n"
+				<< '<' << traits::get_xml_item_name<Entity, Path>() << " />\n"
 			;
 		}
 
@@ -113,7 +113,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		operator()(Iterator begin, Iterator end, const Entity&, Path) const {
 			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path>()
-				<< '<' << moneta::traits::xml_item_name<Entity>::get() << ">\n"
+				<< '<' << traits::get_xml_item_name<Entity, Path>() << ">\n"
 			;
 		}
 
@@ -128,7 +128,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		operator()(Iterator begin, Iterator end, const Entity& entity, Path) const {
 			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path>()
-				<< '<' << moneta::traits::xml_item_name<Entity>::get()
+				<< '<' << traits::get_xml_item_name<Entity, Path>()
 				<< detail::attribute_encoder<Entity>(entity)
 				<< " />\n"
 			;
@@ -145,7 +145,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		operator()(Iterator begin, Iterator end, const Entity& entity, Path) const {
 			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path>()
-				<< '<' << moneta::traits::xml_item_name<Entity>::get()
+				<< '<' << traits::get_xml_item_name<Entity, Path>()
 				<< detail::attribute_encoder<Entity>(entity)
 				<< ">\n"
 			;
@@ -201,7 +201,7 @@ namespace moneta { namespace codec { namespace stateless_xml_encoder_implementat
 		operator()(Iterator begin, Iterator end, const Entity&, Path) const {
 			return io::make_ostringstream(begin, end)
 				<< aux::path_tabs<Path>()
-				<< "</" << moneta::traits::xml_item_name<Entity>::get() << ">\n"
+				<< "</" << traits::get_xml_item_name<Entity, Path>() << ">\n"
 			;
 		}
 	};

@@ -2,6 +2,7 @@
 #include <moneta/codec/xml/stateless_xml_encoder.hxx>
 #include "../../../model/tree/A.hxx"
 #include "../../../model/Customer.hxx"
+#include "../../../model/Person.hxx"
 
 // Test tree:
 //
@@ -114,4 +115,23 @@ BOOST_AUTO_TEST_CASE(test_moneta_traits_detail_xml_container_item_name) {
 		),
 		"optional_container_item"
 	);
+}
+
+// ---
+
+MONETA_DEFINE_ENTITY(
+	Foo,
+	((int,    ID  ))
+	((Person, Dude))
+)
+
+BOOST_AUTO_TEST_CASE(test_moneta_traits_detail_xml_item_name_entity) {
+	BOOST_CHECK_EQUAL((moneta::traits::get_xml_item_name<Person, boost::mpl::vector0<> >()), "Person");
+
+	BOOST_CHECK_EQUAL((moneta::traits::get_xml_item_name<
+		Person,
+		boost::mpl::vector1<
+			MONETA_MEMBER(Foo, Person, Dude)
+		>
+	>()), "Dude");
 }
