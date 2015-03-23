@@ -161,7 +161,7 @@ namespace moneta { namespace container {
 
 	public:
 		template <class Entity>
-		const size_t size() {
+		size_t size() {
 			typename optional_rset<Entity>::type& optional_rset = get_container<Entity>();
 			return optional_rset? optional_rset->size() : 0;
 		}

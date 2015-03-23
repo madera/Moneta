@@ -5,6 +5,7 @@
 #include "../model/Lizard.hxx"
 
 BOOST_AUTO_TEST_CASE(entity_set_test) {
+	std::cerr << "---===== DEPRECATED rtuple_set TESTS BEGIN =====---" << std::endl;
 
 	std::vector<Cat> dataset = test_dataset<Cat>()();
 
@@ -41,4 +42,6 @@ BOOST_AUTO_TEST_CASE(entity_set_test) {
 
 	//set.persist(1);
 	//BOOST_CHECK(set.persisted(1));
+
+	std::cerr << "---===== DEPRECATED rtuple_set TESTS END =====---" << std::endl;
 }

@@ -89,7 +89,7 @@ namespace moneta { namespace container {
 				}
 			};
 
-			const bool operator==(const pk_rtuple_type& rhs) const {
+			bool operator==(const pk_rtuple_type& rhs) const {
 				return pk == rhs;
 			}
 
@@ -151,7 +151,7 @@ namespace moneta { namespace container {
 		container_type _container;
 
 	public:
-		const size_t size() {
+		size_t size() {
 			return _container.MONETA_INTRA_TEMPLATE_KEYWORD get<0>().size();
 		}
 
@@ -170,7 +170,7 @@ namespace moneta { namespace container {
 			erase(traits::to_pk_rtuple<Entity>(rtuple));
 		}
 
-		void erase(const pk_rtuple_type pk) {
+		void erase(const pk_rtuple_type /*pk*/) {
 			std::cerr << "erasing..." << std::endl;
 		}
 
@@ -178,27 +178,27 @@ namespace moneta { namespace container {
 		// --------------------------------------------------------------------------------
 		// --------------------------------------------------------------------------------
 
-		const bool is_bound(const pk_rtuple_param_type pk) const {
+		bool is_bound(const pk_rtuple_param_type pk) const {
 			return get_entry(pk).is_initialized();
 		}
 
 		// --------------------------------------------------------------------------------
 
-		const bool is_dirty(const pk_rtuple_param_type pk) const {
+		bool is_dirty(const pk_rtuple_param_type pk) const {
 			boost::optional<entry> entry = get_entry(pk);
 			return (entry.is_initialized())? entry->dirty(entry->data) : false;
 		}
 
 		// --------------------------------------------------------------------------------
 
-		const bool is_newcomer(const pk_rtuple_param_type pk) const {
+		bool is_newcomer(const pk_rtuple_param_type pk) const {
 			boost::optional<entry> entry = get_entry(pk);
 			return (entry.is_initialized())? ((entry->flags & NEWCOMER_FLAG) != 0) : false;
 		}
 
 		// --------------------------------------------------------------------------------
 
-		const bool is_removed(const pk_rtuple_param_type pk) const {
+		bool is_removed(const pk_rtuple_param_type pk) const {
 			boost::optional<entry> entry = get_entry(pk);
 			return (entry.is_initialized())? ((entry->flags & REMOVED_FLAG) != 0) : false;
 		}
@@ -207,7 +207,7 @@ namespace moneta { namespace container {
 		// --------------------------------------------------------------------------------
 		// --------------------------------------------------------------------------------
 		
-		const void remove(pk_rtuple_param_type pk) {
+		void remove(pk_rtuple_param_type pk) {
 			set_entry_flag(pk, REMOVED_FLAG);
 		}
 

@@ -69,7 +69,7 @@ namespace moneta { namespace container {
 			typedef const size_t result_type;
 
 			template <typename T>
-			const result_type operator()(const T value) const {		
+			result_type operator()(const T value) const {
 				return std::hash<T>()(value);
 				//return hash(value);
 			}
@@ -112,7 +112,7 @@ namespace moneta { namespace container {
 			change_state = hash_tuple(tuple);
 		}
 
-		const bool dirty(const tuple_type& tuple) const {
+		bool dirty(const tuple_type& tuple) const {
 			return change_state != hash_tuple(tuple);
 		}
 	};

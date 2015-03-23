@@ -27,7 +27,7 @@ namespace moneta { namespace container {
 			 : _instance(instance), _argument(argument) {}
 
 			template <class Base>
-			void operator()(const Base& ignored) const {
+			void operator()(const Base&) const {
 				BOOST_MPL_ASSERT((boost::is_base_and_derived<Base, InstanceType>));
 				Base* base_ptr = &_instance;
 				new (base_ptr) Base(_argument); // Placement new on sliced entity.
@@ -40,15 +40,21 @@ namespace moneta { namespace container {
 
 		DEFINE_HAS_MEMBER_TRAIT(to_string)
 
-		template <class T>
-		typename boost::enable_if<has_member_to_string<T>, std::string>::type
-		to_string_or_empty(const T& entity) {
+		template <class Entity>
+		typename boost::enable_if<
+			has_member_to_string<Entity>,
+			std::string
+		>::type
+		to_string_or_empty(const Entity& entity) {
 			return entity.to_string();
 		}
 
-		template <class T>
-		typename boost::disable_if<has_member_to_string<T>, std::string>::type
-		to_string_or_empty(const T& entity) {
+		template <class Entity>
+		typename boost::disable_if<
+			has_member_to_string<Entity>,
+			std::string
+		>::type
+		to_string_or_empty(const Entity&) {
 			return "";
 		}
 
@@ -69,12 +75,12 @@ namespace moneta { namespace container {
 			    _size(size), _iteration(0) {}
 
 			template <class Base>
-			void operator()(const Base& ignored) {
+			void operator()(const Base&) {
 				BOOST_MPL_ASSERT((boost::is_base_and_derived<Base, InstanceType>));
 				const Base& base = _instance;
 				_output << to_string_or_empty(base);
 
-				if (_size == -1 || ++_iteration < _size) {
+				if (_size == -1UL || ++_iteration < _size) {
 					_output << _separator;
 				}
 			}
@@ -99,7 +105,6 @@ namespace moneta { namespace container {
 		struct get_entry {
 			typedef typename T::entry type;
 		};
-
 
 		template <class Sequence>
 		struct meta_set_impl : boost::mpl::inherit_linearly<
@@ -133,7 +138,7 @@ namespace moneta { namespace container {
 					std::ostringstream oss;
 					boost::mpl::for_each<entries_type>(
 						sliced_to_string_or_empty_ostreamer<entry>(
-							*this, oss, " | ",
+							*this, oss, " || ",
 							boost::mpl::size<entries_type>::value
 						)
 					);

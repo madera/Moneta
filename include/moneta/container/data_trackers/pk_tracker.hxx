@@ -28,7 +28,7 @@ namespace moneta { namespace container {
 					pk = moneta::traits::extract_pk(entity);
 				}
 
-				const bool operator==(param_type rhs) const {
+				bool operator==(param_type rhs) const {
 					return pk == rhs;
 				}
 

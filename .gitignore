@@ -3,7 +3,7 @@
 
 # CMake build directories.
 _b
-_bw
+_b?
 
 # User-specific files
 *.suo

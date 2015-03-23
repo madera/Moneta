@@ -39,24 +39,30 @@ struct test_tracker : boost::mpl::lambda<
 >::type {};
 
 BOOST_AUTO_TEST_CASE(meta_set_test) {
+	std::cerr << "=== B: test_tracker ===" << std::endl;
+
 	typedef moneta::container::meta_set<
 		test_tracker<std::string>
-	> set_type;
+	> meta_set_type;
 
-	set_type set;
+	meta_set_type set;
 	BOOST_CHECK_EQUAL(set.size(), 0);
 
-	set_type::entry entry;
+	meta_set_type::entry entry;
 	set.insert(entry);
 	BOOST_CHECK_EQUAL(set.size(), 1);
+
+	std::cerr << "=== E: test_tracker ===" << std::endl;
 }
 
 BOOST_AUTO_TEST_CASE(meta_set_test_2) {
+	std::cerr << "=== B: pk_tracker + bitset_load_tracker2 + rtuple_data ===" << std::endl;
+
 	typedef moneta::container::meta_set<
 		moneta::container::pk_tracker<Person>,
 		moneta::container::bitset_load_tracker2<Person>,
 		moneta::container::rtuple_data<Person>
-	> set_type;
+	> meta_set_type;
 
 	Person joe;
 	joe.ID = 123;
@@ -64,15 +70,15 @@ BOOST_AUTO_TEST_CASE(meta_set_test_2) {
 	joe.Fingers = 10;
 	joe.Height = 1.80;
 
-	set_type set;
+	meta_set_type set;
 	BOOST_CHECK_EQUAL(set.size(), 0);
 
-	set_type::entry entry(joe);
+	meta_set_type::entry entry(joe);
 
 	set.insert(entry);
 	BOOST_CHECK_EQUAL(set.size(), 1);
 
-	boost::optional<set_type::entry> e0 = set.find(123);
+	boost::optional<meta_set_type::entry> e0 = set.find(123);
 	BOOST_REQUIRE(e0.is_initialized());
 
 	BOOST_CHECK_EQUAL(e0->pk, 123);
@@ -85,15 +91,19 @@ BOOST_AUTO_TEST_CASE(meta_set_test_2) {
 	set.insert(entry);
 	set.insert(entry);
 	BOOST_CHECK_EQUAL(set.size(), 1);
+
+	std::cerr << "=== E: pk_tracker + bitset_load_tracker2 + rtuple_data ===" << std::endl;
 }
 
 BOOST_AUTO_TEST_CASE(meta_set_test_3) {
+	std::cerr << "=== B: pk_tracker + bitset_load_tracker2 + rtuple_data + hash_change_tracker ===" << std::endl;
+
 	typedef moneta::container::meta_set<
 		moneta::container::pk_tracker<Person>,
 		moneta::container::bitset_load_tracker2<Person>,
 		moneta::container::rtuple_data<Person>,
 		moneta::container::hash_change_tracker2<Person>
-	> set_type;
+	> meta_set_type;
 
 	Person joe;
 	joe.ID = 123;
@@ -101,15 +111,15 @@ BOOST_AUTO_TEST_CASE(meta_set_test_3) {
 	joe.Fingers = 10;
 	joe.Height = 1.80;
 
-	set_type set;
+	meta_set_type set;
 	BOOST_CHECK_EQUAL(set.size(), 0);
 
-	set_type::entry entry(joe);
+	meta_set_type::entry entry(joe);
 
 	set.insert(entry);
 	BOOST_CHECK_EQUAL(set.size(), 1);
 
-	boost::optional<set_type::entry> e0 = set.find(123);
+	boost::optional<meta_set_type::entry> e0 = set.find(123);
 	BOOST_REQUIRE(e0.is_initialized());
 
 	BOOST_CHECK_EQUAL(e0->pk, 123);
@@ -118,8 +128,16 @@ BOOST_AUTO_TEST_CASE(meta_set_test_3) {
 	set.erase(123);
 	BOOST_CHECK_EQUAL(set.size(), 0);
 
+	// Repeated object insert: should ignore.
+	//
 	set.insert(entry);
 	set.insert(entry);
 	set.insert(entry);
 	BOOST_CHECK_EQUAL(set.size(), 1);
+
+	// Insert object directly (although in this case it's repeated and should be ignored).
+	set.insert(joe);
+	BOOST_CHECK_EQUAL(set.size(), 1);
+
+	std::cerr << "=== E: pk_tracker + bitset_load_tracker2 + rtuple_data + hash_change_tracker ===" << std::endl;
 }

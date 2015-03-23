@@ -22,7 +22,7 @@ namespace moneta { namespace container {
 					data = moneta::traits::to_rtuple(entity);
 				}
 
-				const bool operator==(const state_type& rhs) const {
+				bool operator==(const state_type& rhs) const {
 					return data == rhs;
 				}
 

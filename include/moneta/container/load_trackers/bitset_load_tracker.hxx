@@ -30,19 +30,22 @@ namespace moneta { namespace container {
 				entry() {
 				}
 
-				entry(const Entity& entity) {
+				entry(const Entity& /*entity*/) {
+					// TODO
 				}
 
 				std::string to_string() const {
 					return load_state.to_string();
 				}
 
-				bool operator<(const state_type& rhs) const {
+				bool operator<(const state_type& /*rhs*/) const {
+					// TODO
 					return false;
 				}
 			};
 
-			const bool is_loaded(const int ordinal) const {
+			bool is_loaded(const int /*ordinal*/) const {
+				// TODO
 				return 1;
 			}
 		};
@@ -70,7 +73,7 @@ namespace moneta { namespace container {
 			}
 		}
 
-		const bool loaded(const size_t ordinal) const {
+		bool loaded(const size_t ordinal) const {
 			return load_state[ordinal];
 		}
 

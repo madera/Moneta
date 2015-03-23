@@ -10,6 +10,7 @@
 
 inline void static_test() {
 	// TODO: Move this to a separate test file.
+	// TODO: Move seek_entity_types to a more general purpose traits file.
 
 	//
 	// details::seek_entity_types<>
@@ -45,6 +46,8 @@ inline void static_test() {
 }
 
 BOOST_AUTO_TEST_CASE(rcontext_test) {
+	std::cerr << "---===== DEPRECATED TESTS BEGIN =====---" << std::endl;
+
 	moneta::container::rcontext<Cat> context;
 
 	BOOST_CHECK_EQUAL(context.size<Cat>(), 0);
@@ -79,4 +82,5 @@ BOOST_AUTO_TEST_CASE(rcontext_test) {
 	context.get_container<Address>()->debug_dump();
 	std::cerr << "---------------------------------" << std::endl;
 
+	std::cerr << "---===== DEPRECATED TESTS BEGIN =====---" << std::endl;
 }

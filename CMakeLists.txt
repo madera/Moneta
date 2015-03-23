@@ -11,7 +11,13 @@ if(MSVC)
 
 	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 	set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMakeTargets")
+
+elseif(APPLE)
+	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+	
+	include_directories(/usr/local/include)
 endif()
+
 
 include_directories(include)
 
