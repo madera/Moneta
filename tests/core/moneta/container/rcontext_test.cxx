@@ -84,12 +84,11 @@ inline void static_test() {
 
 	typedef moneta::container::rcontext<Cat> context_type;
 
-
 	BOOST_MPL_ASSERT((
 		boost::is_same<
-			moneta::container::detail::rcontext_containers<
+			context_type::rcontext_containers<
 				Person,
-				moneta::container::rcontext<Person>::make_optional_set
+				context_type::make_optional_set
 			>::type,
 			boost::optional<
 				moneta::container::detail::meta_set_impl<
@@ -106,6 +105,30 @@ inline void static_test() {
 							0
 						>
 					>
+				>
+			>
+		>
+	));
+
+	typedef moneta::container::rcontext<Cat> context_type;
+
+	BOOST_MPL_ASSERT((
+		boost::is_same<
+			context_type::container_for<Person, context_type::make_optional_set>::type,
+			boost::optional<
+				moneta::container::detail::meta_set_impl<
+					boost::mpl::vector1<moneta::container::pk_tracker<Person> >
+				>
+			>
+		>
+	));
+
+	BOOST_MPL_ASSERT((
+		boost::is_same<
+			context_type::container_for<Cat, context_type::make_optional_set>::type,
+			boost::optional<
+				moneta::container::detail::meta_set_impl<
+					boost::mpl::vector1<moneta::container::pk_tracker<Cat> >
 				>
 			>
 		>

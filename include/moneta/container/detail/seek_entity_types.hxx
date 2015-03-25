@@ -19,16 +19,4 @@ namespace moneta { namespace container { namespace detail {
 		>
 	> {};
 
-	//
-	// XXX: Extract this... this should be elsewhere.
-	//
-	template <class RootEntity, class NodeFx>
-	struct rcontext_containers : boost::mpl::inherit_linearly<
-		typename seek_entity_types<RootEntity>::type,
-		boost::mpl::inherit<
-			boost::mpl::_1,
-			typename boost::mpl::apply<NodeFx, boost::mpl::_2>::type
-		>
-	> {};
-
 }}}

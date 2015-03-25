@@ -198,7 +198,7 @@ namespace moneta { namespace container {
 	struct container_for {
 		typedef typename boost::mpl::apply<
 			NodeFX,
-			boost::mpl::_2
+			Entity
 		>::type type;
 	};
 
