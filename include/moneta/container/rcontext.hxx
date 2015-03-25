@@ -1,6 +1,13 @@
 #pragma once
 #include "detail/seek_entity_types.hxx"
 #include "rtuple_set.hxx"
+
+#include "meta_set.hxx"
+#include "data_trackers/pk_tracker.hxx"
+#include "data_trackers/rtuple_data.hxx"
+#include "load_trackers/bitset_load_tracker.hxx"
+#include "change_trackers/hash_change_tracker.hxx"
+
 #include "../traits/tuple.hxx"
 #include "../traits/rtuple.hxx"
 #include "../traits/is_entity.hxx"
@@ -13,6 +20,25 @@
 #include <boost/fusion/tuple.hpp>
 
 #include "../sql/generators/insert.hxx"
+
+/////////// XXX: ORGANIZE THIS!!
+#include <boost/multi_index_container.hpp>
+#include <boost/multi_index/sequenced_index.hpp>
+#include <boost/multi_index/ordered_index.hpp>
+#include <boost/multi_index/hashed_index.hpp>
+#include <boost/multi_index/member.hpp>
+#include <boost/noncopyable.hpp>
+#include <boost/optional.hpp>
+#include <boost/mpl/vector_c.hpp>
+#include <boost/tuple/tuple_io.hpp>
+#include <boost/fusion/sequence/io.hpp>
+#include <boost/fusion/include/io.hpp>
+#include <boost/format.hpp>
+#include <boost/fusion/sequence/io.hpp>
+#include <boost/fusion/include/io.hpp>
+#include <iomanip>
+///////////
+#include <boost/mpl/print.hpp>
 
 namespace moneta { namespace container {
 
@@ -110,7 +136,7 @@ namespace moneta { namespace container {
 				typename traits::rtuple<Entity>::type rtuple;
 
 				typedef boost::fusion::vector<
-					typename traits::   tie<Entity>::type& ,
+					typename traits::   tie<Entity>::type&,
 					typename traits::rtuple<Entity>::type&
 				> zip_vector_type;
 
@@ -126,26 +152,68 @@ namespace moneta { namespace container {
 		};
 	}
 
-	template <class RootEntity>
-	class rcontext {
+	// XXX: Think about this...
+	template <class Entity>
+	struct default_meta_set : boost::mpl::identity<
+		detail::meta_set_impl<
+			boost::mpl::vector1<
+				//moneta::container::pk_tracker<Entity>
+				moneta::container::detail::pk_tracker_impl<boost::mpl::_1, Entity>
+			>
+		>
+	> {};
+
+	template <
+		class RootEntity,
+		
+		template <class Entity>
+		class Set = default_meta_set
+	>
+	/*class*/struct rcontext {
 		typedef rcontext this_type;
+
+
+
+		template <class Entity>
+		struct set_type : boost::mpl::identity<
+			//rtuple_set<Entity>
+			typename Set<Entity>::type
+		> {};
 
 		template <class Entity>
 		struct optional_rset : boost::mpl::identity<
 			boost::optional<
-				rtuple_set<Entity>
+				typename set_type<Entity>::type
 			>
 		> {};
 
-		struct make_container {
+		struct make_optional_set {
 			template <class Entity>
-			struct apply : optional_rset<Entity>
-			{};
+			struct apply {
+				typedef typename optional_rset<Entity>::type type;
+			};
 		};
 
-		typedef typename detail::rcontext_containers<
-			RootEntity,
-			make_container
+
+		template <class Entity>
+		struct container_for {
+			typedef typename boost::mpl::apply<
+				make_optional_set,
+				Entity
+			>::type type;
+		};
+
+		template <class Entity>
+		struct rcontext_containers : boost::mpl::inherit_linearly<
+			typename detail::seek_entity_types<RootEntity>::type,
+			boost::mpl::inherit<
+				boost::mpl::_1,
+				typename container_for<boost::mpl::_1>::type
+			>
+		> {};
+
+		typedef typename rcontext_containers<
+			RootEntity
 		>::type containers_type;
 
 		// --------------------------------------------------------------------------------
@@ -155,15 +223,16 @@ namespace moneta { namespace container {
 	public: // XXX: Exposed for debugging purposes :XXX
 		template <class Entity>
 		typename optional_rset<Entity>::type&
+		//typename container_for<Entity>::type&
 		get_container() {
-			return _containers;
+			return (typename optional_rset<Entity>::type&)_containers;
 		}
 
 	public:
 		template <class Entity>
 		size_t size() {
-			typename optional_rset<Entity>::type& optional_rset = get_container<Entity>();
-			return optional_rset? optional_rset->size() : 0;
+			typename optional_rset<Entity>::type& set = get_container<Entity>();
+			return set? set->size() : 0;
 		}
 
 		template <class Entity>
@@ -175,10 +244,10 @@ namespace moneta { namespace container {
 			// Get optional_rset entry, and "allocate" a new instance if not initialized.
 			typename optional_rset<Entity>::type& optional_rset = get_container<Entity>();
 			if (!optional_rset.is_initialized()) {
-				optional_rset.reset(rtuple_set<Entity>());
+				optional_rset.reset(typename set_type<Entity>::type());
 			}
 
-			optional_rset->insert(moneta::traits::to_rtuple(entity));
+			optional_rset->insert(entity);
 			return traits::extract_pk(entity);
 		}
 
@@ -191,7 +260,7 @@ namespace moneta { namespace container {
 			// Get optional_rset entry, and "allocate" a new instance if not initialized.
 			typename optional_rset<Entity>::type& optional_rset = get_container<Entity>();
 			if (!optional_rset.is_initialized()) {
-				optional_rset.reset(rtuple_set<Entity>());
+				optional_rset.reset(typename set_type<Entity>::type());
 			}
 
 			optional_rset->replace(moneta::traits::to_rtuple(entity));

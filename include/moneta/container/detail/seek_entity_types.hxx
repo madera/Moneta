@@ -1,8 +1,9 @@
-// XXX: Move this file.
+// XXX: Move this file to another namespace.
 #pragma once
 #include "../../traits/tuple.hxx"
 #include "../../traits/is_entity.hxx"
 #include <boost/mpl/vector.hpp>
+#include <boost/mpl/inherit.hpp>
 #include <boost/mpl/inherit_linearly.hpp>
 #include <boost/optional.hpp>
 
@@ -16,18 +17,6 @@ namespace moneta { namespace container { namespace detail {
 			traits::is_entity<boost::mpl::_2>,
 			moneta::container::detail::seek_entity_types<boost::mpl::_2, boost::mpl::_1>,
 			boost::mpl::_1
-		>
-	> {};
-
-	//
-	// XXX: Extract this... this should be elsewhere.
-	//
-	template <class RootEntity, class NodeFx>
-	struct rcontext_containers : boost::mpl::inherit_linearly<
-		typename seek_entity_types<RootEntity>::type,
-		boost::mpl::inherit<
-			boost::mpl::_1,
-			typename boost::mpl::apply<NodeFx, boost::mpl::_2>::type
 		>
 	> {};
 

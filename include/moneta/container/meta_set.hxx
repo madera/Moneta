@@ -80,7 +80,7 @@ namespace moneta { namespace container {
 				const Base& base = _instance;
 				_output << to_string_or_empty(base);
 
-				if (_size == -1UL || ++_iteration < _size) {
+				if (_size == size_t(-1) || ++_iteration < _size) {
 					_output << _separator;
 				}
 			}
@@ -98,7 +98,10 @@ namespace moneta { namespace container {
 		template <class Sequence>
 		struct meta_set_bases : boost::mpl::transform<
 			Sequence,
-			boost::mpl::apply_wrap1<boost::mpl::_1, meta_set_impl<Sequence> >
+			boost::mpl::apply_wrap1<
+				boost::mpl::_1,
+				meta_set_impl<Sequence> // Base type
+			>
 		> {};
 
 		template <class T>
@@ -160,7 +163,7 @@ namespace moneta { namespace container {
 					boost::mpl::vector<>,
 					boost::mpl::push_back<
 						boost::mpl::_1,
-							get_index<boost::mpl::_2>
+						get_index<boost::mpl::_2>
 					>
 				>
 			>::type index_vector;
@@ -219,8 +222,8 @@ namespace moneta { namespace container {
 				std::cerr << "Inserted: " << entry.to_string() << std::endl;
 			}
 
-			template <class T>
-			void insert(const T& x) {
+			template <class Entity>
+			void insert(const Entity& x) {
 				insert(entry(x));
 			}
 

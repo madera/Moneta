@@ -5,16 +5,11 @@
 #include <moneta/sql/describe_sql_entity.hxx>
 #include <string>
 
-template <class T, class U, class V>
-struct circle {
-};
-
 struct Person {
 	int ID;
 	std::string Name;
 	double Height;
 	int Fingers;
-//	circle<char, short, int> Circle;
 };
 
 MONETA_DESCRIBE_SQL_ENTITY(
@@ -26,6 +21,8 @@ MONETA_DESCRIBE_SQL_ENTITY(
 )
 
 MONETA_DECLARE_PRIMARY_KEY(Person, int, ID)
+
+// -----------------------------------------------
 
 // TODO: Finish these alternative versions...
 
