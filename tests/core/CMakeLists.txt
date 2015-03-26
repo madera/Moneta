@@ -39,6 +39,7 @@ add_executable(core_tests
 	moneta/algorithm/dispatch_entity_test.cxx
 	moneta/algorithm/for_each_member_test.cxx
 	moneta/algorithm/traverse_test.cxx
+	moneta/algorithm/hash_test.cxx
 
 
 	moneta/codec/_aux/tabs_test.cxx
