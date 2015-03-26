@@ -16,7 +16,7 @@ static Composite make_composite() {
 	composite.Person.ID = 123;
 	composite.Person.Name = "Somedude";
 	composite.Person.Height = 1.50;
-	composite.Person.Fingers = 10;
+	composite.Person.Ratings = 10;
 	composite.Dog.Owner = "Someowner";
 	composite.Dog.ID = 555;
 	composite.Dog.Name = "Doggy";
@@ -59,11 +59,11 @@ BOOST_AUTO_TEST_CASE(shell_codec_from_line_test) {
 	using moneta::codec::shell_decoder_implementation::from_line;
 
 	{
-		const char* line = "{ID=1 Name=John Height=1.80 Fingers=10}";
+		const char* line = "{ID=1 Name=John Height=1.80 Ratings=10}";
 		const Person person = from_line<Person>(line);
 		BOOST_CHECK_EQUAL(person.ID, 1);
 		BOOST_CHECK_EQUAL(person.Name, "John");
-		BOOST_CHECK_EQUAL(person.Fingers, 10);
+		BOOST_CHECK_EQUAL(person.Ratings, 10);
 	}
 
 	{
@@ -75,14 +75,14 @@ BOOST_AUTO_TEST_CASE(shell_codec_from_line_test) {
 	}
 
 	{
-		const char* line = "{Identifier=2600 Person={ID=5 Name=John Height=1.8 Fingers=12} Dog={Owner='Charlie Brown' ID=1 Name=Snoopy}}";
+		const char* line = "{Identifier=2600 Person={ID=5 Name=John Height=1.8 Ratings=12} Dog={Owner='Charlie Brown' ID=1 Name=Snoopy}}";
 		const Composite composite = from_line<Composite>(line);
 		BOOST_CHECK_EQUAL(composite.Identifier, 2600);
 
 		BOOST_CHECK_EQUAL(composite.Person.ID, 5);
 		BOOST_CHECK_EQUAL(composite.Person.Name, "John");
 		BOOST_CHECK_CLOSE(composite.Person.Height, 1.80, 0.1);
-		BOOST_CHECK_EQUAL(composite.Person.Fingers, 12);
+		BOOST_CHECK_EQUAL(composite.Person.Ratings, 12);
 
 		BOOST_CHECK_EQUAL(composite.Dog.Owner, "Charlie Brown");
 		BOOST_CHECK_EQUAL(composite.Dog.ID, 1);
@@ -97,7 +97,7 @@ BOOST_AUTO_TEST_CASE(shell_decoder_test) {
 		>
 	>::type decoder_type;
 
-	const std::string line = "Person={ID=5 Name=John Height=1.8 Fingers=12}";
+	const std::string line = "Person={ID=5 Name=John Height=1.8 Ratings=12}";
 	
 	decoder_type::variant_type variant;
 	const int result = decoder_type()(line.begin(), line.end(), variant);
@@ -109,10 +109,10 @@ BOOST_AUTO_TEST_CASE(shell_decoder_test) {
 	BOOST_CHECK_EQUAL(person->ID, 5);
 	BOOST_CHECK_EQUAL(person->Name, "John");
 	BOOST_CHECK_EQUAL(person->Height, 1.8);
-	BOOST_CHECK_EQUAL(person->Fingers, 12);
+	BOOST_CHECK_EQUAL(person->Ratings, 12);
 
 	{
-		const std::string line = "Person={ID=1 Name=John Height=1.80 Fingers=10}";
+		const std::string line = "Person={ID=1 Name=John Height=1.80 Ratings=10}";
 
 		decoder_type::variant_type variant;
 		const int result = decoder_type()(line.begin(), line.end(), variant);
@@ -123,7 +123,7 @@ BOOST_AUTO_TEST_CASE(shell_decoder_test) {
 
 		BOOST_CHECK_EQUAL(person->ID, 1);
 		BOOST_CHECK_EQUAL(person->Name, "John");
-		BOOST_CHECK_EQUAL(person->Fingers, 10);
+		BOOST_CHECK_EQUAL(person->Ratings, 10);
 	}
 
 	{
@@ -142,7 +142,7 @@ BOOST_AUTO_TEST_CASE(shell_decoder_test) {
 	}
 
 	{
-		const std::string line = "Composite={Identifier=2600 Person={ID=5 Name=John Height=1.8 Fingers=12} Dog={Owner='Charlie Brown' ID=1 Name=Snoopy}}";
+		const std::string line = "Composite={Identifier=2600 Person={ID=5 Name=John Height=1.8 Ratings=12} Dog={Owner='Charlie Brown' ID=1 Name=Snoopy}}";
 
 		decoder_type::variant_type variant;
 		const int result = decoder_type()(line.begin(), line.end(), variant);
@@ -154,7 +154,7 @@ BOOST_AUTO_TEST_CASE(shell_decoder_test) {
 		BOOST_CHECK_EQUAL(composite->Person.ID, 5);
 		BOOST_CHECK_EQUAL(composite->Person.Name, "John");
 		BOOST_CHECK_CLOSE(composite->Person.Height, 1.80, 0.1);
-		BOOST_CHECK_EQUAL(composite->Person.Fingers, 12);
+		BOOST_CHECK_EQUAL(composite->Person.Ratings, 12);
 
 		BOOST_CHECK_EQUAL(composite->Dog.Owner, "Charlie Brown");
 		BOOST_CHECK_EQUAL(composite->Dog.ID, 1);

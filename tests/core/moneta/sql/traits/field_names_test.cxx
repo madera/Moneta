@@ -19,8 +19,8 @@ BOOST_AUTO_TEST_CASE(field_name_test) {
 	);
 
 	BOOST_CHECK_EQUAL(
-		(moneta::traits::sql_field_name<MONETA_MEMBER(Person, int, Fingers)>::get()),
-		"PERSON_FINGERS"
+		(moneta::traits::sql_field_name<MONETA_MEMBER(Person, int, Ratings)>::get()),
+		"PERSON_RATINGS"
 	);
 }
 
@@ -30,5 +30,5 @@ BOOST_AUTO_TEST_CASE(field_names_test) {
 	BOOST_CHECK_EQUAL(names[0], "PERSON_ID");
 	BOOST_CHECK_EQUAL(names[1], "PERSON_NAME");
 	BOOST_CHECK_EQUAL(names[2], "PERSON_HEIGHT");
-	BOOST_CHECK_EQUAL(names[3], "PERSON_FINGERS");
+	BOOST_CHECK_EQUAL(names[3], "PERSON_RATINGS");
 }

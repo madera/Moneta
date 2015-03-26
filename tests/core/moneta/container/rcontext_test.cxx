@@ -184,7 +184,7 @@ BOOST_AUTO_TEST_CASE(rcontext_test) {
 	//Person joe;
 	//joe.ID = 12345;
 	//joe.Name = "Joe";
-	//joe.Fingers = 10;
+	//joe.Ratings = 10;
 	//joe.Height = 1.80;
 
 	//BOOST_CHECK_EQUAL(foo->size(), 0);

@@ -9,7 +9,7 @@ struct Person {
 	int ID;
 	std::string Name;
 	double Height;
-	int Fingers;
+	int Ratings;
 };
 
 MONETA_DESCRIBE_SQL_ENTITY(
@@ -17,7 +17,7 @@ MONETA_DESCRIBE_SQL_ENTITY(
 	((int,         ID,      PERSON_ID     ))
 	((std::string, Name,    PERSON_NAME   ))
 	((double,      Height,  PERSON_HEIGHT ))
-	((int,         Fingers, PERSON_FINGERS))
+	((int,         Ratings, PERSON_RATINGS))
 )
 
 MONETA_DECLARE_PRIMARY_KEY(Person, int, ID)
@@ -33,5 +33,5 @@ MONETA_DECLARE_PRIMARY_KEY(Person, int, ID)
 //	((int        )(ID     )(PERSON_ID     ))
 //	((std::string)(Name   )(PERSON_NAME   ))
 //	((double     )(Height )(PERSON_HEIGHT ))
-//	((int        )(Fingers)(PERSON_FINGERS))
+//	((int        )(Ratings)(PERSON_RATINGS))
 //)

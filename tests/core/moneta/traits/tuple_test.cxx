@@ -48,11 +48,11 @@ BOOST_AUTO_TEST_CASE(tuple_types_test) {
 	BOOST_MPL_ASSERT((is_same<at_c<mpl_vector_type, 0>::type, int        >)); // ID
 	BOOST_MPL_ASSERT((is_same<at_c<mpl_vector_type, 1>::type, std::string>)); // Name
 	BOOST_MPL_ASSERT((is_same<at_c<mpl_vector_type, 2>::type, double     >)); // Height
-	BOOST_MPL_ASSERT((is_same<at_c<mpl_vector_type, 3>::type, int        >)); // Fingers
+	BOOST_MPL_ASSERT((is_same<at_c<mpl_vector_type, 3>::type, int        >)); // Ratings
 
 	typedef moneta::traits::tuple<Person>::type tuple_type;
 	BOOST_MPL_ASSERT((is_same<at_c<tuple_type, 0>::type, int        >)); // ID
 	BOOST_MPL_ASSERT((is_same<at_c<tuple_type, 1>::type, std::string>)); // Name
 	BOOST_MPL_ASSERT((is_same<at_c<tuple_type, 2>::type, double     >)); // Height
-	BOOST_MPL_ASSERT((is_same<at_c<tuple_type, 3>::type, int        >)); // Fingers
+	BOOST_MPL_ASSERT((is_same<at_c<tuple_type, 3>::type, int        >)); // Ratings
 }

@@ -32,7 +32,7 @@ static Composite make_composite() {
 	composite.Person.ID = 123;
 	composite.Person.Name = "Somedude";
 	composite.Person.Height = 1.50;
-	composite.Person.Fingers = 10;
+	composite.Person.Ratings = 10;
 	composite.Dog.Owner = "Someowner";
 	composite.Dog.ID = 555;
 	composite.Dog.Name = "Doggy";
@@ -71,7 +71,7 @@ BOOST_AUTO_TEST_CASE(composite_encode_stateless_xml_encoder_test) {
 		"\t<Person ID=\"123\">\n"
 		"\t\t<Name>Somedude</Name>\n"
 		"\t\t<Height>1.5</Height>\n"
-		"\t\t<Fingers>10</Fingers>\n"
+		"\t\t<Ratings>10</Ratings>\n"
 		"\t</Person>\n"
 		"\t<Dog Owner=\"Someowner\" ID=\"555\">\n"
 		"\t\t<Name>Doggy</Name>\n"
@@ -156,12 +156,12 @@ BOOST_AUTO_TEST_CASE(country_with_string_Persons_stateless_xml_encoder_test) {
 		"\t\t<Person ID=\"0\">\n"
 		"\t\t\t<Name>Michael Jordan</Name>\n"
 		"\t\t\t<Height>2</Height>\n"
-		"\t\t\t<Fingers>0</Fingers>\n"
+		"\t\t\t<Ratings>0</Ratings>\n"
 		"\t\t</Person>\n"
 		"\t\t<Person ID=\"0\">\n"
 		"\t\t\t<Name>Magic Johnson</Name>\n"
 		"\t\t\t<Height>2.1000000000000001</Height>\n"
-		"\t\t\t<Fingers>0</Fingers>\n"
+		"\t\t\t<Ratings>0</Ratings>\n"
 		"\t\t</Person>\n"
 		"\t</Persons>\n"
 		"\t<Tags>\n"

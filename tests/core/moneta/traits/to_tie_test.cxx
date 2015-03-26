@@ -7,7 +7,7 @@ BOOST_AUTO_TEST_CASE(to_tie_test) {
 	person.ID = 1;
 	person.Name = "John Smith";
 	person.Height = 1.80;
-	person.Fingers = 10;
+	person.Ratings = 10;
 	
 	moneta::traits::tie<Person>::type tie = moneta::traits::to_tie(person);
 	boost::fusion::at_c<0>(tie) = 10;
@@ -15,7 +15,7 @@ BOOST_AUTO_TEST_CASE(to_tie_test) {
 
 	// Verify that changes were made to the instance.
 	BOOST_CHECK_EQUAL(person.ID, 10);
-	BOOST_CHECK_EQUAL(person.Fingers, 11);
+	BOOST_CHECK_EQUAL(person.Ratings, 11);
 }
 
 BOOST_AUTO_TEST_CASE(const_to_tie_test) {
@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE(const_to_tie_test) {
 	person.ID = 1;
 	person.Name = "John Smith";
 	person.Height = 1.80;
-	person.Fingers = 10;
+	person.Ratings = 10;
 	
 	moneta::traits::tie<const Person>::type const_tie = moneta::traits::to_tie(person);
 

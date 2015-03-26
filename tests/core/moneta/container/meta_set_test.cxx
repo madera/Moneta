@@ -81,7 +81,7 @@ BOOST_AUTO_TEST_CASE(meta_set_test_2) {
 	Person joe;
 	joe.ID = 123;
 	joe.Name = "Joe";
-	joe.Fingers = 10;
+	joe.Ratings = 10;
 	joe.Height = 1.80;
 
 	meta_set_type set;
@@ -122,7 +122,7 @@ BOOST_AUTO_TEST_CASE(meta_set_test_3) {
 	Person joe;
 	joe.ID = 123;
 	joe.Name = "Joe";
-	joe.Fingers = 10;
+	joe.Ratings = 10;
 	joe.Height = 1.80;
 
 	meta_set_type set;

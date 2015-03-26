@@ -35,7 +35,7 @@ inline void static_test() {
 
 	BOOST_MPL_ASSERT_NOT((is_pk<MONETA_MEMBER(Person, std::string, Name   )>));
 	BOOST_MPL_ASSERT_NOT((is_pk<MONETA_MEMBER(Person, double,      Height )>));
-	BOOST_MPL_ASSERT_NOT((is_pk<MONETA_MEMBER(Person, int,         Fingers)>));
+	BOOST_MPL_ASSERT_NOT((is_pk<MONETA_MEMBER(Person, int,         Ratings)>));
 
 	// Dog
 	BOOST_MPL_ASSERT((is_pk<MONETA_MEMBER(Dog, std::string, Owner)>));

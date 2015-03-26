@@ -24,8 +24,8 @@ BOOST_AUTO_TEST_CASE(test_moneta_traits_member_names_get) {
 	);
 
 	BOOST_CHECK_EQUAL(
-		(moneta::traits::member_name<MONETA_MEMBER(Person, int, Fingers)>::get()),
-		"Fingers"
+		(moneta::traits::member_name<MONETA_MEMBER(Person, int, Ratings)>::get()),
+		"Ratings"
 	);
 
 	//
@@ -72,7 +72,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_traits_member_names_get_member_names) {
 		BOOST_CHECK_EQUAL(names[0], "ID");
 		BOOST_CHECK_EQUAL(names[1], "Name");
 		BOOST_CHECK_EQUAL(names[2], "Height");
-		BOOST_CHECK_EQUAL(names[3], "Fingers");
+		BOOST_CHECK_EQUAL(names[3], "Ratings");
 	}
 
 	{
@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_traits_member_names_test_get_member_name_index)
 	BOOST_CHECK_EQUAL(moneta::traits::get_member_name_index<Person>("ID"), 0);
 	BOOST_CHECK_EQUAL(moneta::traits::get_member_name_index<Person>("Name"), 1);
 	BOOST_CHECK_EQUAL(moneta::traits::get_member_name_index<Person>("Height"), 2);
-	BOOST_CHECK_EQUAL(moneta::traits::get_member_name_index<Person>("Fingers"), 3);
+	BOOST_CHECK_EQUAL(moneta::traits::get_member_name_index<Person>("Ratings"), 3);
 
 	BOOST_CHECK_EQUAL(moneta::traits::get_member_name_index<Dog>("Owner"), 0);
 	BOOST_CHECK_EQUAL(moneta::traits::get_member_name_index<Dog>("ID"), 1);

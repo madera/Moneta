@@ -9,7 +9,7 @@ BOOST_AUTO_TEST_CASE(extract_pk_test) {
 	person.ID = 1;
 	person.Name = "John Smith";
 	person.Height = 1.80;
-	person.Fingers = 10;
+	person.Ratings = 10;
 
 	moneta::traits::extract_pk(person) = 555;
 	BOOST_CHECK_EQUAL(person.ID, 555);
@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE(const_extract_pk_test) {
 	person.ID = 1;
 	person.Name = "John Smith";
 	person.Height = 1.80;
-	person.Fingers = 10;
+	person.Ratings = 10;
 
 	const Person& const_person_a = person;
 	BOOST_CHECK_EQUAL(moneta::traits::extract_pk(const_person_a), 1);
@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_CASE(same_pk_test) {
 	person.ID = 1;
 	person.Name = "John Smith";
 	person.Height = 1.80;
-	person.Fingers = 10;
+	person.Ratings = 10;
 	BOOST_CHECK(moneta::traits::same_pk(person, person));
 
 	Person person2;

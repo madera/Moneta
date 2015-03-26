@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(for_each_member_test) {
 	person.ID = 345;
 	person.Name = "Anonymous";
 	person.Height = 1.75;
-	person.Fingers = 12;
+	person.Ratings = 12;
 
 	{
 		size_t count = 0;
@@ -121,12 +121,12 @@ BOOST_AUTO_TEST_CASE(mutable_for_each_member_test) {
 	person.ID = 345;
 	person.Name = "Anonymous";
 	person.Height = 1.75;
-	person.Fingers = 12;
+	person.Ratings = 12;
 
 	moneta::algorithm::for_each_member(person, member_incrementor());
 
 	BOOST_CHECK_EQUAL(person.ID, 346);
-	BOOST_CHECK_EQUAL(person.Fingers, 13);
+	BOOST_CHECK_EQUAL(person.Ratings, 13);
 }
 
 struct path_tester {

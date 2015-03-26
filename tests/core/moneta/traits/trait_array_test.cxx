@@ -30,6 +30,6 @@ BOOST_AUTO_TEST_CASE(test_moneta_traits_trait_array_test) {
 	moneta::traits::trait_array<moneta::traits::member_name, Person>::type traits =
 	moneta::traits::collect_member_traits<moneta::traits::member_name, Person>();
 
-	const char* expected[] = { "ID", "Name", "Height", "Fingers" };
+	const char* expected[] = { "ID", "Name", "Height", "Ratings" };
 	BOOST_CHECK_EQUAL_COLLECTIONS(std::begin(traits), std::end(traits), std::begin(expected), std::end(expected));
 }

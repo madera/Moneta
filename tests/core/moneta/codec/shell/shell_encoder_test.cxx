@@ -13,7 +13,7 @@ static Composite make_composite() {
 	composite.Person.ID = 123;
 	composite.Person.Name = "Somedude";
 	composite.Person.Height = 1.50;
-	composite.Person.Fingers = 10;
+	composite.Person.Ratings = 10;
 	composite.Dog.Owner = "Someowner";
 	composite.Dog.ID = 555;
 	composite.Dog.Name = "Doggy";
@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE(shell_encoder_test_1) {
 	std::fill(std::begin(buffer), std::end(buffer), 0);
 
 	const std::string expected =
-		"Composite={ Identifier=2600 Person={ ID=123 Name=\"Somedude\" Height=1.5 Fingers=10 } "
+		"Composite={ Identifier=2600 Person={ ID=123 Name=\"Somedude\" Height=1.5 Ratings=10 } "
 		"Dog={ Owner=\"Someowner\" ID=555 Name=\"Doggy\" } }"
 	;
 

@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_CASE(hash_state_tracker_test_2) {
 	Person joe;
 	joe.ID = 123;
 	joe.Name = "Joe";
-	joe.Fingers = 10;
+	joe.Ratings = 10;
 	joe.Height = 1.80;
 
 	typedef moneta::container::detail::hash_change_tracker_impl<void, Person> hasher_type;

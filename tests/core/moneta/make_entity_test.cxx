@@ -10,7 +10,7 @@ BOOST_AUTO_TEST_CASE(make_entity_test) {
 	BOOST_CHECK_EQUAL(person.ID, 0);
 	BOOST_CHECK(person.Name.empty());
 	BOOST_CHECK_EQUAL(person.Height, 0.00);
-	BOOST_CHECK_EQUAL(person.Fingers, 0);
+	BOOST_CHECK_EQUAL(person.Ratings, 0);
 
 	Dog dog = moneta::make_entity<Dog>();
 	BOOST_CHECK(dog.Owner.empty());
@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE(make_entity_test) {
 	BOOST_CHECK_EQUAL(composite.Person.ID, 0);
 	BOOST_CHECK(composite.Person.Name.empty());
 	BOOST_CHECK_EQUAL(composite.Person.Height, 0.00);
-	BOOST_CHECK_EQUAL(composite.Person.Fingers, 0);
+	BOOST_CHECK_EQUAL(composite.Person.Ratings, 0);
 
 	BOOST_CHECK(composite.Dog.Owner.empty());
 	BOOST_CHECK_EQUAL(composite.Dog.ID, 0);

@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE(to_rtie_2_test) {
 	composite.Person.ID = 123;
 	composite.Person.Name = "Somedude";
 	composite.Person.Height = 1.50;
-	composite.Person.Fingers = 10;
+	composite.Person.Ratings = 10;
 	composite.Dog.Owner = "Someowner";
 	composite.Dog.ID = 555;
 	composite.Dog.Name = "Doggy";

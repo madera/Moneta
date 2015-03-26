@@ -372,7 +372,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_0) {
 		BOOST_REQUIRE(entity);
 	}
 	{
-		const std::string data = "<Person Name=\"John Smith\" Fingers='10' />";
+		const std::string data = "<Person Name=\"John Smith\" Ratings='10' />";
 		decoder::variant_type variant;
 		int result = decoder()(std::begin(data), std::end(data), variant);
 		BOOST_CHECK_EQUAL(result, data.size());
@@ -380,10 +380,10 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_0) {
 		Person* entity = boost::get<Person>(&variant);
 		BOOST_REQUIRE(entity);
 		BOOST_CHECK_EQUAL(entity->Name, "John Smith");
-		BOOST_CHECK_EQUAL(entity->Fingers, 10);
+		BOOST_CHECK_EQUAL(entity->Ratings, 10);
 	}
 	{
-		const std::string data = "<Person Name=\"John Smith\" Fingers='10'/>";
+		const std::string data = "<Person Name=\"John Smith\" Ratings='10'/>";
 		decoder::variant_type variant;
 		int result = decoder()(std::begin(data), std::end(data), variant);
 		BOOST_CHECK_EQUAL(result, data.size());
@@ -391,7 +391,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_0) {
 		Person* entity = boost::get<Person>(&variant);
 		BOOST_REQUIRE(entity);
 		BOOST_CHECK_EQUAL(entity->Name, "John Smith");
-		BOOST_CHECK_EQUAL(entity->Fingers, 10);
+		BOOST_CHECK_EQUAL(entity->Ratings, 10);
 	}
 }
 
@@ -466,7 +466,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_full_decode) {
 		static const std::string data =
 			"<Person>\n"
 			"\t<Name>John Smith</Name>\n"
-			"\t<Fingers>8</Fingers>\n"
+			"\t<Ratings>8</Ratings>\n"
 			"</Person>"
 		;
 
@@ -478,7 +478,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_full_decode) {
 		BOOST_REQUIRE(entity);
 
 		BOOST_CHECK_EQUAL(entity->Name, "John Smith");
-		BOOST_CHECK_EQUAL(entity->Fingers, 8);
+		BOOST_CHECK_EQUAL(entity->Ratings, 8);
 	}
 	{
 		static const std::string data =

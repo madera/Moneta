@@ -8,7 +8,7 @@ BOOST_AUTO_TEST_CASE(set_value_by_name_test) {
 	Person person = moneta::make_entity<Person>();
 	BOOST_CHECK_EQUAL(person.Name, "");
 	BOOST_CHECK_EQUAL(person.Height, 0.0);
-	BOOST_CHECK_EQUAL(person.Fingers, 0);
+	BOOST_CHECK_EQUAL(person.Ratings, 0);
 
 	moneta::lexical::set_value(person, "ID", "123");
 	BOOST_CHECK_EQUAL(person.ID, 123);
@@ -19,8 +19,8 @@ BOOST_AUTO_TEST_CASE(set_value_by_name_test) {
 	moneta::lexical::set_value(person, "Height", "1.80");
 	BOOST_CHECK_CLOSE(person.Height, 1.80, 0.1);
 	
-	moneta::lexical::set_value(person, "Fingers", "100");
-	BOOST_CHECK_EQUAL(person.Fingers, 100);
+	moneta::lexical::set_value(person, "Ratings", "100");
+	BOOST_CHECK_EQUAL(person.Ratings, 100);
 }
 
 BOOST_AUTO_TEST_CASE(illegal_set_value_test) {

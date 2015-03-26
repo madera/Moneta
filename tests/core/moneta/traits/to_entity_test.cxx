@@ -9,7 +9,7 @@ BOOST_AUTO_TEST_CASE(to_entity_test) {
 	person.ID = 1;
 	person.Name = "John Smith";
 	person.Height = 1.80;
-	person.Fingers = 10;
+	person.Ratings = 10;
 
 	moneta::traits::tie<Person>::type tie = moneta::traits::to_tie(person);
 
@@ -18,5 +18,5 @@ BOOST_AUTO_TEST_CASE(to_entity_test) {
 	BOOST_CHECK_EQUAL(person.ID, copy.ID);
 	BOOST_CHECK_EQUAL(person.Name, copy.Name);
 	BOOST_CHECK_EQUAL(person.Height, copy.Height);
-	BOOST_CHECK_EQUAL(person.Fingers, copy.Fingers);
+	BOOST_CHECK_EQUAL(person.Ratings, copy.Ratings);
 }

@@ -17,12 +17,12 @@
 /Persons|	        <Person ID="0">						1	1	0	 0	|    2
 /Persons|		   +1   <Name>Michael Jordan</Name>			1	1	0	 1	|    3
 /Persons|		   +1   <Height>2</Height>				1	1	0	 1	|    3
-/Persons|		   +1   <Fingers>0</Fingers>				1	1	0	 1	|    3
+/Persons|		   +1   <Ratings>0</Ratings>				1	1	0	 1	|    3
 /Persons|		</Person>						1	1	0	 0	|    2
 /Persons|		<Person ID="0">						1	1	0	 0	|    2
 /Persons|		   +1   <Name>Magic Johnson</Name>			1	1	0	 1	|    3
 /Persons|		   +1   <Height>2.1000000000000001</Height>		1	1	0	 1	|    3
-/Persons|		   +1   <Fingers>0</Fingers>				1	1	0	 1	|    3
+/Persons|		   +1   <Ratings>0</Ratings>				1	1	0	 1	|    3
 /Persons|		</Person>						1	1	0	 0	|    2
 /Persons|	</Persons>							1	1	0	-1	|    1
 /Tags	|	<Tags>								1	1	0	-1	|    1

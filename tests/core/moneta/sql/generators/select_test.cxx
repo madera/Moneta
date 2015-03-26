@@ -6,7 +6,7 @@
 BOOST_AUTO_TEST_CASE(select_all_from_table_test) {
 	BOOST_CHECK_EQUAL(
 		moneta::sql::generators::select_all_from_table<Person>(),
-		"SELECT PERSON_ID, PERSON_NAME, PERSON_HEIGHT, PERSON_FINGERS\n  FROM PERSON"
+		"SELECT PERSON_ID, PERSON_NAME, PERSON_HEIGHT, PERSON_RATINGS\n  FROM PERSON"
 	);
 
 	BOOST_CHECK_EQUAL(
@@ -18,7 +18,7 @@ BOOST_AUTO_TEST_CASE(select_all_from_table_test) {
 BOOST_AUTO_TEST_CASE(select_all_from_table_where_pk_test) {
 	BOOST_CHECK_EQUAL(
 		moneta::sql::generators::select_all_from_table_where_pk<Person>(),
-		"SELECT PERSON_ID, PERSON_NAME, PERSON_HEIGHT, PERSON_FINGERS\n  FROM PERSON\n WHERE PERSON_ID = :person_id"
+		"SELECT PERSON_ID, PERSON_NAME, PERSON_HEIGHT, PERSON_RATINGS\n  FROM PERSON\n WHERE PERSON_ID = :person_id"
 	);
 
 	BOOST_CHECK_EQUAL(
