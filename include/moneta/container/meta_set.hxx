@@ -122,8 +122,6 @@ namespace moneta { namespace container {
 				get_entry<boost::mpl::_1>
 			>::type entries_type;
 
-
-
 			struct entry : boost::mpl::inherit_linearly<
 				entries_type,
 				boost::mpl::inherit<boost::mpl::_1, boost::mpl::_2>
@@ -148,6 +146,20 @@ namespace moneta { namespace container {
 
 					return oss.str();
 				}
+
+			};
+
+			// WARNING: Used for slow O(n) searches in first implementation.
+			//          If this proves useful in others scenarios, remove this comment.
+			struct is_equal {
+				const entry& _model;
+
+				is_equal(const entry& model)
+				 : _model(model) {}
+
+				bool operator()(const entry& other) {
+					return false;//!(_model < other) && !(other < _model);
+				}
 			};
 
 			template <typename T>
@@ -168,27 +180,21 @@ namespace moneta { namespace container {
 				>
 			>::type index_vector;
 
-			//BOOST_MPL_ASSERT(( // DBG //
-			//	boost::is_same<
-			//		typename boost::mpl::at_c<index_vector, 0>::type,
-			//		typename boost::mpl::at_c<bases_type, 0>::type::
-			//				get_index::template apply<entry>::type
-			//	>
-			//));
-
 			struct sequenced_index_tag;
 
 			typedef boost::multi_index::multi_index_container<
 				entry,
-				typename boost::mpl::push_back<
+				typename boost::mpl::push_front<
 					index_vector,
-					// XXX: Should this default index exist?
+					// Default index 0 is sequential index.
 					boost::multi_index::random_access<
 						boost::multi_index::tag<sequenced_index_tag>
 					>
 				>::type
 			> container_type;
 
+			//
+			// External component's access.
 			//
 			// protected:
 			//
@@ -216,7 +222,9 @@ namespace moneta { namespace container {
 			// public:
 			//
 
+			//
 			// Insert into default sequential index.
+			//
 			void insert(const entry& entry) {
 				_container.MONETA_INTRA_TEMPLATE_KEYWORD get<sequenced_index_tag>().push_back(entry);
 				std::cerr << "Inserted: " << entry.to_string() << std::endl;
@@ -225,6 +233,33 @@ namespace moneta { namespace container {
 			template <class Entity>
 			void insert(const Entity& x) {
 				insert(entry(x));
+			}
+
+			//
+			// Replace. TODO: Document.
+			//
+			void replace(const entry& entry_) {
+				// FIXME: SLOW: XXX
+				// TODO: Reach out to hashed O(1) impl if available.
+
+				auto b = _container.begin();
+				auto e = _container.end();
+
+				entry x;
+				entry y;
+
+				std::find_if(b, e, is_equal(entry_));
+				//auto itr = std::find(_container.begin(), _container.end(), entry);
+				//if (itr != c.end()) {
+				//	c.replace(itr, entry);
+				//}
+
+				std::cerr << "Replaced: " << entry_.to_string() << std::endl;
+			}
+
+			template <class Entity>
+			void replace(const Entity& x) {
+				replace(entry(x));
 			}
 
 			// Erase from default sequential index.

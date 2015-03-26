@@ -255,7 +255,7 @@ BOOST_AUTO_TEST_CASE(rcontext_test_3) {
 	conando.Address.Number = 55;
 	conando.Address.Street = "Conan Av.";
 	
-	//context.replace(conando);
+	context.replace(conando);
 
 	std::cerr << "---------------------------------" << std::endl;
 	context.get_container<Cat>()->debug_dump(std::cerr);
