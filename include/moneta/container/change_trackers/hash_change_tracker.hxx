@@ -1,15 +1,16 @@
 #pragma once
 #include "../meta_set.hxx"
+#include "../../algorithm/hash.hxx"
+#include "../../traits/rtuple.hxx"
+#include "../../traits/to_tie.hxx"
+#include "../../traits/to_rtuple.hxx"
+#include "../../traits/to_rtie.hxx"
 #include <boost/multi_index/hashed_index.hpp>
 #include <boost/array.hpp>
 #include <boost/fusion/include/copy.hpp>
 #include <boost/fusion/include/transform.hpp>
 #include <boost/fusion/include/boost_array.hpp>
 #include <boost/format.hpp>
-#include "../../traits/rtuple.hxx"
-#include "../../traits/to_tie.hxx"
-#include "../../traits/to_rtuple.hxx"
-#include "../../traits/to_rtie.hxx"
 
 // XXX: Move somewhere. The trash, maybe?
 template <class T, class U, class X, const size_t Y>
@@ -124,7 +125,7 @@ namespace moneta { namespace container {
 
 			template <typename T>
 			result_type operator()(const T value) const {		
-				return std::hash<T>()(value);
+				return algorithm::hash(value);
 			}
 		};
 

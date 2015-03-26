@@ -249,6 +249,17 @@ namespace moneta { namespace container {
 				return at(index);
 			}
 
+			// TODO: Surround by debug ifdefs.
+			// TODO: Convert to ostream operator.
+			template <class Ostream>
+			Ostream& debug_dump(Ostream& output) {
+				for (size_t i=0; i<size(); ++i) {
+					output << at(i).to_string() << '\n';
+				}
+
+				return output;
+			}
+
 		private:
 			container_type _container;
 		};

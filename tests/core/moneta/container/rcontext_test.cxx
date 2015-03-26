@@ -11,7 +11,6 @@
 inline void static_test() {
 	// TODO: Move this to a separate test file.
 	// TODO: Move seek_entity_types to a more general purpose traits file.
-
 	//
 	// details::seek_entity_types<>
 	//
@@ -36,6 +35,8 @@ inline void static_test() {
 		>
 	));
 
+	// ------------------------------------------------------------------------------------------------------------
+
 	//
 	// rcontext tests...
 	//
@@ -54,126 +55,65 @@ inline void static_test() {
 		>
 	));
 
-	BOOST_MPL_ASSERT((
-		boost::is_same<
-			moneta::container::rcontext<Person>::make_optional_set::apply<Person>::type,
-			boost::optional<
-				moneta::container::detail::meta_set_impl<
-					boost::mpl::vector1<
-						moneta::container::pk_tracker<Person>
-					>
-				>
-			>
-		>
-	));
+	//BOOST_MPL_ASSERT((
+	//	boost::is_same<
+	//		moneta::container::rcontext<Person>::make_optional_set::apply<Person>::type,
+	//		boost::optional<
+	//			moneta::container::detail::meta_set_impl<
+	//				boost::mpl::vector1<
+	//					moneta::container::pk_tracker<Person>
+	//				>
+	//			>
+	//		>
+	//	>
+	//));
 
-	BOOST_MPL_ASSERT((
-		boost::is_same<
-			moneta::container::rcontext<Cat>::optional_rset<Cat>::type,
-			boost::optional<
-				moneta::container::detail::meta_set_impl<
-					boost::mpl::vector1<
-						moneta::container::pk_tracker<Cat>
-					>
-				>
-			>
-		>
-	));
+	//BOOST_MPL_ASSERT((
+	//	boost::is_same<
+	//		moneta::container::rcontext<Cat>::optional_rset<Cat>::type,
+	//		boost::optional<
+	//			moneta::container::detail::meta_set_impl<
+	//				boost::mpl::vector1<
+	//					moneta::container::pk_tracker<Cat>
+	//				>
+	//			>
+	//		>
+	//	>
+	//));
 
 	// ---
 
 	typedef moneta::container::rcontext<Cat> context_type;
 
-	BOOST_MPL_ASSERT((
-		boost::is_same<
-			context_type::rcontext_containers<
-				Person,
-				context_type::make_optional_set
-			>::type,
-			boost::optional<
-				moneta::container::detail::meta_set_impl<
-					boost::mpl::vector1<
-						boost::mpl::protect<
-							boost::mpl::bind2<
-								boost::mpl::quote2<
-									moneta::container::detail::pk_tracker_impl,
-									boost::mpl::void_
-								>,
-								boost::mpl::arg<1>,
-								Person
-							>,
-							0
-						>
-					>
-				>
-			>
-		>
-	));
+	//BOOST_MPL_ASSERT((
+	//	boost::is_same<
+	//		context_type::container_for<Person>::type,
+	//		boost::optional<
+	//			moneta::container::detail::meta_set_impl<
+	//				boost::mpl::vector1<moneta::container::pk_tracker<Person> >
+	//			>
+	//		>
+	//	>
+	//));
 
-	typedef moneta::container::rcontext<Cat> context_type;
-
-	BOOST_MPL_ASSERT((
-		boost::is_same<
-			context_type::container_for<Person, context_type::make_optional_set>::type,
-			boost::optional<
-				moneta::container::detail::meta_set_impl<
-					boost::mpl::vector1<moneta::container::pk_tracker<Person> >
-				>
-			>
-		>
-	));
-
-	BOOST_MPL_ASSERT((
-		boost::is_same<
-			context_type::container_for<Cat, context_type::make_optional_set>::type,
-			boost::optional<
-				moneta::container::detail::meta_set_impl<
-					boost::mpl::vector1<moneta::container::pk_tracker<Cat> >
-				>
-			>
-		>
-	));
+	//BOOST_MPL_ASSERT((
+	//	boost::is_same<
+	//		context_type::container_for<Cat>::type,
+	//		boost::optional<
+	//			moneta::container::detail::meta_set_impl<
+	//				boost::mpl::vector1<moneta::container::pk_tracker<Cat> >
+	//			>
+	//		>
+	//	>
+	//));
 }
 
 BOOST_AUTO_TEST_CASE(rcontext_containers_test) {
 
 	typedef moneta::container::rcontext<Cat> context_type;
 
-	typedef boost::optional<
-		moneta::container::detail::meta_set_impl<
-			boost::mpl::vector1<
-				boost::mpl::protect<
-					boost::mpl::bind2<
-						boost::mpl::quote2<
-							moneta::container::detail::pk_tracker_impl,
-							boost::mpl::void_
-						>,
-						boost::mpl::arg<1>,
-						Cat
-					>,
-					0
-				>
-			>
-		>
-	> first_type;
-
-	typedef boost::optional<
-		moneta::container::detail::meta_set_impl<
-			boost::mpl::vector1<
-				boost::mpl::protect<
-					boost::mpl::bind2<
-						boost::mpl::quote2<
-							moneta::container::detail::pk_tracker_impl,
-							boost::mpl::void_
-						>,
-						boost::mpl::arg<1>,
-						Address
-					>,
-					0
-				>
-			>
-		>
-	> second_type;
+	typedef context_type::container_for<Cat    >::type  first_type;
+	typedef context_type::container_for<Address>::type second_type;
 
 	BOOST_MPL_ASSERT((boost::is_same<
 		context_type::containers_type,
@@ -215,10 +155,6 @@ BOOST_AUTO_TEST_CASE(rcontext_containers_test) {
 
 BOOST_AUTO_TEST_CASE(rcontext_test) {
 	std::cerr << "---===== DEPRECATED rcontext TESTS BEGIN =====---" << std::endl;
-
-
-
-
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -262,55 +198,75 @@ BOOST_AUTO_TEST_CASE(rcontext_test) {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+}
 
-
-
-
-
+BOOST_AUTO_TEST_CASE(rcontext_test_2) {
 
 	moneta::container::rcontext<Cat> context;
 
 	BOOST_CHECK_EQUAL(context.size<Cat>(), 0);
 	BOOST_CHECK_EQUAL(context.size<Address>(), 0);
 
-	Address addr;
-	context.insert(addr);
+	Address address = moneta::make_entity<Address>();
+	context.insert(address);
 	BOOST_CHECK_EQUAL(context.size<Cat>(), 0);
 	BOOST_CHECK_EQUAL(context.size<Address>(), 1);
+
+	Cat cat = moneta::make_entity<Cat>();
+	cat.Address.ID = 9000;
+	context.insert(cat);
+	BOOST_CHECK_EQUAL(context.size<Cat>(), 1);
+	BOOST_CHECK_EQUAL(context.size<Address>(), 1 + 1);
 
 	std::vector<Cat> dataset = test_dataset<Cat>()();
 	BOOST_FOREACH(Cat cat, dataset) {
 		context.insert(cat);
 	}
 
-	BOOST_CHECK_EQUAL(context.size<Cat>(), 4);
-	BOOST_CHECK_EQUAL(context.size<Address>(), 4);
+	BOOST_CHECK_EQUAL(context.size<Cat>(), 1 + dataset.size());
+	BOOST_CHECK_EQUAL(context.size<Address>(), 1 + 1 + dataset.size());
 
 	std::cerr << "---------------------------------" << std::endl;
-//	context.get_container<Cat>()->to_string();
+	context.get_container<Cat>()->debug_dump(std::cerr);
 	std::cerr << "---------------------------------" << std::endl;
-//	context.get_container<Address>()->to_string();
+	context.get_container<Address>()->debug_dump(std::cerr);
 	std::cerr << "---------------------------------" << std::endl;
+}
 
-//	Cat conando = dataset[0];
-//	conando.ID = 4;
-//	conando.Name = "Conando";
-//	conando.Address.ID = 10;
-//	conando.Address.Number = 55;
-//	conando.Address.Street = "Conan Av.";
-//	
-//	context.replace(conando);
-//
-//	std::cerr << "---------------------------------" << std::endl;
-//	context.get_container<Cat>()->to_string();
-//	std::cerr << "---------------------------------" << std::endl;
-//	context.get_container<Address>()->to_string();
-//	std::cerr << "---------------------------------" << std::endl;
+BOOST_AUTO_TEST_CASE(rcontext_test_3) {
+
+	moneta::container::rcontext<Cat> context;
+
+	BOOST_CHECK_EQUAL(context.size<Cat    >(), 0);
+	BOOST_CHECK_EQUAL(context.size<Address>(), 0);
+
+	std::vector<Cat> dataset = test_dataset<Cat>()();
+	BOOST_FOREACH(Cat cat, dataset) {
+		context.insert(cat);
+	}
+
+	BOOST_CHECK_EQUAL(context.size<Cat    >(), dataset.size());
+	BOOST_CHECK_EQUAL(context.size<Address>(), dataset.size());
+
+	Cat conando = dataset[0];
+	conando.ID = 4;
+	conando.Name = "Conando";
+	conando.Address.ID = 10;
+	conando.Address.Number = 55;
+	conando.Address.Street = "Conan Av.";
+	
+	//context.replace(conando);
+
+	std::cerr << "---------------------------------" << std::endl;
+	context.get_container<Cat>()->debug_dump(std::cerr);
+	std::cerr << "---------------------------------" << std::endl;
+	context.get_container<Address>()->debug_dump(std::cerr);
+	std::cerr << "---------------------------------" << std::endl;
 
 	std::cerr << "---===== DEPRECATED rcontext TESTS BEGIN =====---" << std::endl;
 }
 
-BOOST_AUTO_TEST_CASE(rcontext_test_2) {
+BOOST_AUTO_TEST_CASE(rcontext_test_4) {
 	typedef moneta::container::rcontext<Person> context_type;
 	context_type context;
 
