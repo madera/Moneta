@@ -1,3 +1,15 @@
+// [===========================================================================]
+// [                                M o n e t a                                ]
+// [---------------------------------------------------------------------------]
+// [                                                                           ]
+// [                          Copyright (C) 2005-2015                          ]
+// [                      Rodrigo Madera <madera@acm.org>                      ]
+// [                                                                           ]
+// [---------------------------------------------------------------------------]
+// [         Distributed under the Boost Software License, Version 1.0         ]
+// [ Read accompanying LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt ]
+// [===========================================================================]
+
 #ifndef BOOST_PP_IS_ITERATING
 #    ifndef MONETA_INCLUDER_HEADER
 #    define MONETA_INCLUDER_HEADER
