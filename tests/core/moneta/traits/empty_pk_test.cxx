@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/traits/empty_pk.hxx>
 #include <moneta/traits/extract_pk.hxx>
 #include <moneta/make_entity.hxx>

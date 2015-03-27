@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/traits/member_name.hxx>
 #include "../model/Person.hxx"
 #include "../model/Dog.hxx"

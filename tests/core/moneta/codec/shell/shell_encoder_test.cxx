@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/codec/shell/shell_encoder.hxx>
 #include "../../model/Person.hxx"
 #include "../../model/Dog.hxx"

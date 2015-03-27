@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/codec/rawbin/rawbin_decoder.hxx>
 #include "../../model/simple/ThreeInts.hxx"
 #include "../../model/simple/FourInts.hxx"

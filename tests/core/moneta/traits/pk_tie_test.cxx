@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/traits/pk_tie.hxx>
 #include <boost/mpl/equal.hpp>
 #include "../model/Person.hxx"

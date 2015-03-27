@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 
 // TODO: Investigate further why this header needs to be fully qualified.
 #define INCLUDES ("moneta/pp/detail/includer_test_header.hxx")

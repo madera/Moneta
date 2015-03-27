@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/container/rcontext.hxx>
 #include <boost/mpl/equal.hpp>
 #include <boost/foreach.hpp>

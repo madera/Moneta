@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/traits/member.hxx>
 #include <moneta/algorithm/detail/path.hxx>
 #include "../../model/SportsTeam.hxx"

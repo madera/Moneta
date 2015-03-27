@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/codec/prefix.hxx>
 #include "../model/Person.hxx"
 #include "../model/Address.hxx"

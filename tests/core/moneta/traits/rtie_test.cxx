@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/traits/rtie.hxx>
 #include <boost/mpl/equal.hpp>
 

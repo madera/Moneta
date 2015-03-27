@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/codec/_aux/tabs.hxx>
 
 BOOST_AUTO_TEST_CASE(test_codec_tabs_test) {

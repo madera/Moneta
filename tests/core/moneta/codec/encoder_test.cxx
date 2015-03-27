@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/codec/encoder.hxx>
 #include <moneta/codec/_aux/io/ostringstream.hxx>
 #include <moneta/codec/_aux/path_tabs.hxx>

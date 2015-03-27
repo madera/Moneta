@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/pp/describe_entity.hxx>
 #include <moneta/traits/is_entity.hxx>
 #include <boost/mpl/equal.hpp>

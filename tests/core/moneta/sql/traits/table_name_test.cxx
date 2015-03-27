@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/sql/traits/table_name.hxx>
 #include "../../model/Person.hxx"
 #include "../../model/Dog.hxx"

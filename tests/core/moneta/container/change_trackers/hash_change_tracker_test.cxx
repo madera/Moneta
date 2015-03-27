@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/container/change_trackers/hash_change_tracker.hxx>
 #include "../../model/Person.hxx"
 #include "../../model/Cat.hxx"

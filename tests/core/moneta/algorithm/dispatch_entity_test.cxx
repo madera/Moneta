@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/algorithm/dispatch_entity.hxx>
 #include <moneta/make_entity.hxx>
 #include <sstream>

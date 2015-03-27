@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/codec/xml/stateless_xml.hxx>
 
 inline void static_test() {

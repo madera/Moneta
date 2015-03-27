@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/sql/traits/field_names.hxx>
 #include "../../model/Person.hxx"
 

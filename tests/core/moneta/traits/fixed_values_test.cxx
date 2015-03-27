@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/traits/fixed_values.hxx>
 #include "../model/simple/ThreeInts.hxx"
 #include "../model/simple/FourInts.hxx"

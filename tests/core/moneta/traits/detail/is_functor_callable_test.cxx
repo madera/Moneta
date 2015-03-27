@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/traits/detail/is_functor_callable.hxx>
 
 struct a {

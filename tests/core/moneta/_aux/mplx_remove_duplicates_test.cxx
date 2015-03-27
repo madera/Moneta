@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/_aux/mplx_remove_duplicates.hxx>
 #include <boost/mpl/equal.hpp>
 #include <boost/mpl/vector.hpp>

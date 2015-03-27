@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/codec/shell/shell_decoder.hxx>
 #include <moneta/serialization/detail/hexdump.hxx>
 #include "../../model/Person.hxx"

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/traits/trait_array.hxx>
 #include <boost/mpl/equal.hpp>
 #include "../model/Person.hxx"

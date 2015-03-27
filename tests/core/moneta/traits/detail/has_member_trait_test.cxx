@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/traits/detail/has_member_trait.hxx>
 
 struct a {

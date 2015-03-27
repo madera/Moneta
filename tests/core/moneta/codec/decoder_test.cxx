@@ -2,7 +2,7 @@
 // TODO: Decode this file using Codec IO primitives.
 //
 
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/codec/decoder.hxx>
 #include <moneta/codec/_aux/io/ostringstream.hxx>
 #include <moneta/codec/_aux/path_tabs.hxx>

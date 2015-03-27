@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/traits/detail/deref_if_unary.hxx>
 #include <boost/fusion/include/vector.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>

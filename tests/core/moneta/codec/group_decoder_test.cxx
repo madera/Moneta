@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/codec/group_decoder.hxx>
 #include <moneta/codec/rawbin/rawbin_decoder.hxx>
 #include <moneta/codec/decode_many.hxx>

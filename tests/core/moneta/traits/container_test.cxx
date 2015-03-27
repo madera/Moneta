@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/traits/container.hxx>
 #include <boost/lexical_cast.hpp>
 

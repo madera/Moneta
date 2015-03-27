@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/traits/extract_pk.hxx>
 #include <moneta/traits/same_pk.hxx>
 #include "../model/Person.hxx"

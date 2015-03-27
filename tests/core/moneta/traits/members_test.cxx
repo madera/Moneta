@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include "../model/Person.hxx"
 #include "../model/tree/A.hxx"
 #include <boost/mpl/at.hpp>

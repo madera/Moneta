@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/traits/to_pk_rtuple.hxx>
 #include <moneta/traits/rtuple.hxx>
 #include <moneta/traits/to_rtuple.hxx>

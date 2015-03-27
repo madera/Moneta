@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/codec/_aux/io/read_string.hxx>
 #include <boost/iterator/filter_iterator.hpp>
 

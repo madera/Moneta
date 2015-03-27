@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/codec/xml/stateless_xml_encoder.hxx>
 #include <moneta/make_entity.hxx>
 #include "../../model/Person.hxx"

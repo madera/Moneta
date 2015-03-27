@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/traits/detail/sub_tie_vector.hxx>
 #include <moneta/traits/rtuple.hxx>
 #include <boost/mpl/vector_c.hpp>

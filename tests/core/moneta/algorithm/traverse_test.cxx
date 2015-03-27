@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/algorithm/detail/stringize_path.hxx>
 #include <moneta/algorithm/traverse.hxx>
 #include <boost/mpl/equal.hpp>

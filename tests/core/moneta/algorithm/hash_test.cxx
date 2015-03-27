@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/algorithm/hash.hxx>
 #include <moneta/make_entity.hxx>
 #include "../model/Person.hxx"

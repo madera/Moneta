@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/_aux/mplx_flatten.hxx>
 #include <boost/mpl/equal.hpp>
 

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/codec/xml/stateless_xml_encoder.hxx>
 #include "../../../model/tree/A.hxx"
 #include "../../../model/Customer.hxx"

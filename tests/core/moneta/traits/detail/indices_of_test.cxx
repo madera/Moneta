@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/traits/detail/indices_of.hxx>
 #include <boost/mpl/at.hpp>
 

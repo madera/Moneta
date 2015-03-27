@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.hxx"
 #include <moneta/container/meta_set.hxx>
 #include <moneta/container/data_trackers/pk_tracker.hxx>
 #include <moneta/container/data_trackers/rtuple_data.hxx>
