@@ -195,6 +195,8 @@ namespace moneta { namespace container {
 	template <class Entity>
 	struct hash_change_tracker2 : boost::mpl::lambda<
 		detail::hash_change_tracker_impl<boost::mpl::_1, Entity>
-	>::type {};
+	>::type {
+		typedef Entity entity_type;
+	};
 
 }}

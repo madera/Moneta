@@ -28,6 +28,9 @@ namespace moneta { namespace container {
 
 		template <class Master, class Entity>
 		struct bitset_load_tracker_impl {
+			typedef Master base_type;
+			typedef Entity entity_type;
+
 			typedef bitset_load_tracker_impl this_type;
 
 			struct entry {
@@ -97,6 +100,8 @@ namespace moneta { namespace container {
 	template <class Entity>
 	struct bitset_load_tracker2 : boost::mpl::lambda<
 		detail::bitset_load_tracker_impl<boost::mpl::_1, Entity>
-	>::type {};
+	>::type {
+		typedef Entity entity_type;
+	};
 
 }}

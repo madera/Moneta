@@ -23,6 +23,8 @@
 #include <boost/mpl/vector.hpp>
 #include <boost/optional.hpp>
 
+#include <boost/mpl/print.hpp>
+
 namespace moneta { namespace container {
 
 	namespace detail {
@@ -45,6 +47,8 @@ namespace moneta { namespace container {
 				new (base_ptr) Base(_argument); // Placement new on sliced entity.
 			}
 		};
+
+
 
 		//
 		// For entry to_string'ification.
@@ -69,6 +73,8 @@ namespace moneta { namespace container {
 		to_string_or_empty(const Entity&) {
 			return "";
 		}
+
+
 
 		template <class InstanceType, class OstreamType = std::basic_ostream<char> >
 		class sliced_to_string_or_empty_ostreamer {
@@ -102,7 +108,11 @@ namespace moneta { namespace container {
 			}
 		};
 
+
+
 		DEFINE_HAS_NESTED_TYPE(get_index)
+
+
 
 		template <class Sequence>
 		struct meta_set_impl;
@@ -116,16 +126,61 @@ namespace moneta { namespace container {
 			>
 		> {};
 
+
+
 		template <class T>
 		struct get_entry {
 			typedef typename T::entry type;
 		};
 
+		template <class T>
+		struct get_entity_type {
+			typedef typename T::entity_type type;
+		};
+
+		template <class Entity>
+		struct assert_same_entity_type {
+			template <class T>
+			void operator()(T) const {
+				BOOST_MPL_ASSERT((boost::is_same<T, Entity>));
+			}
+		};
+
 		template <class Sequence>
 		struct meta_set_impl : boost::mpl::inherit_linearly<
 			typename meta_set_bases<Sequence>::type,
-			boost::mpl::inherit<boost::mpl::_1, boost::mpl::_2>
+			boost::mpl::inherit<
+				boost::mpl::_1,
+				boost::mpl::_2
+			>
 		>::type {
+			BOOST_MPL_ASSERT_NOT((boost::mpl::empty<Sequence>));
+
+			typedef typename get_entity_type<
+				typename boost::mpl::front<Sequence>::type
+			>::type entity_type;
+
+			//
+			// Enforce that all components are of the same entity_type.
+			//
+			BOOST_MPL_ASSERT((
+				typename boost::mpl::fold<
+					Sequence,
+					boost::true_type,
+					boost::mpl::if_<
+						boost::mpl::and_<
+							boost::mpl::_1,
+							boost::is_same<
+								get_entity_type<boost::mpl::_2>,
+								entity_type
+							>
+						>,
+						boost::true_type,
+						boost::false_type
+					>
+				>::type
+			));
+
 			typedef meta_set_impl this_type;
 			typedef typename meta_set_bases<Sequence>::type bases_type;
 

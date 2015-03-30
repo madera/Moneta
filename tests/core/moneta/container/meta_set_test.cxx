@@ -21,6 +21,9 @@
 
 template <class Master, class Entity>
 struct test_tracker_impl {
+	typedef Master base_type;
+	typedef Entity entity_type;
+
 	typedef test_tracker_impl this_type;
 
 	struct entry {
@@ -49,37 +52,37 @@ struct test_tracker_impl {
 template <class Entity>
 struct test_tracker : boost::mpl::lambda<
 	test_tracker_impl<boost::mpl::_1, Entity>
->::type {};
+>::type {
+	typedef Entity entity_type;
+};
 
 //#include <boost/mpl/print.hpp>
 
-inline void static_test() {
+//inline void static_test() {
+//
+//	typedef moneta::container::meta_set<
+//		test_tracker<Person>
+//	> meta_set_type;
+//
+//	// TODO: Continue static tests here.
+//}
 
-	typedef moneta::container::meta_set<
-		test_tracker<std::string>
-	> meta_set_type;
-
-	//boost::mpl::print<
-	//	meta_set_type::bases_type
-	//> s;
-}
-
-BOOST_AUTO_TEST_CASE(meta_set_test) {
-	std::cerr << "=== B: test_tracker ===" << std::endl;
-
-	typedef moneta::container::meta_set<
-		test_tracker<std::string>
-	> meta_set_type;
-
-	meta_set_type set;
-	BOOST_CHECK_EQUAL(set.size(), 0);
-
-	meta_set_type::entry entry;
-	set.insert(entry);
-	BOOST_CHECK_EQUAL(set.size(), 1);
-
-	std::cerr << "=== E: test_tracker ===" << std::endl;
-}
+//BOOST_AUTO_TEST_CASE(meta_set_test) {
+//	std::cerr << "=== B: test_tracker ===" << std::endl;
+//
+//	typedef moneta::container::meta_set<
+//		test_tracker<Person>
+//	> meta_set_type;
+//
+//	meta_set_type set;
+//	BOOST_CHECK_EQUAL(set.size(), 0);
+//
+//	meta_set_type::entry entry;
+//	set.insert(entry);
+//	BOOST_CHECK_EQUAL(set.size(), 1);
+//
+//	std::cerr << "=== E: test_tracker ===" << std::endl;
+//}
 
 BOOST_AUTO_TEST_CASE(meta_set_test_2) {
 	std::cerr << "=== B: pk_tracker + bitset_load_tracker2 + rtuple_data ===" << std::endl;

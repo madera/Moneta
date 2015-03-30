@@ -22,6 +22,9 @@ namespace moneta { namespace container {
 
 		template <class Master, class Entity>
 		struct rtuple_data_impl {
+			typedef Master base_type;
+			typedef Entity entity_type;
+
 			typedef rtuple_data_impl this_type;
 
 			struct entry {
@@ -55,6 +58,8 @@ namespace moneta { namespace container {
 	template <class Entity>
 	struct rtuple_data : boost::mpl::lambda<
 		detail::rtuple_data_impl<boost::mpl::_1, Entity>
-	>::type {};
+	>::type {
+		typedef Entity entity_type;
+	};
 
 }}

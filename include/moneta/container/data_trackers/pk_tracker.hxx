@@ -23,6 +23,9 @@ namespace moneta { namespace container {
 
 		template <class Master, class Entity>
 		struct pk_tracker_impl {
+			typedef Master base_type;
+			typedef Entity entity_type;
+
 			typedef pk_tracker_impl this_type;
 
 			typedef typename boost::call_traits<
@@ -104,6 +107,8 @@ namespace moneta { namespace container {
 	template <class Entity>
 	struct pk_tracker : boost::mpl::lambda<
 		detail::pk_tracker_impl<boost::mpl::_1, Entity>
-	>::type {};
+	>::type {
+		typedef Entity entity_type;
+	};
 
 }}

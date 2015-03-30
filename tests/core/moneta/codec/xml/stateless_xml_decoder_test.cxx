@@ -604,7 +604,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_xml_item_name) 
 	>::type decoder;
 
 	decoder::variant_type variant;
-	int result = decoder()(std::begin(data), std::end(data), variant);
+	const int result = decoder()(std::begin(data), std::end(data), variant);
 	BOOST_REQUIRE_EQUAL(result, data.size());
 
 	Point3D* entity = boost::get<Point3D>(&variant);

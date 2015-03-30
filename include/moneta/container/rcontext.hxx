@@ -12,7 +12,6 @@
 
 #pragma once
 #include "detail/seek_entity_types.hxx"
-#include "rtuple_set.hxx"
 
 #include "meta_set.hxx"
 #include "data_trackers/pk_tracker.hxx"
@@ -103,9 +102,9 @@ namespace moneta { namespace container {
 				fusion::zip_view<zip_vector_type> zip(zip_vector_type(entity_tuple, rtuple));
 				fusion::for_each(zip, rcontext_inserter(_context));
 
-				std::cout << "Inserting entity: "
-					  << traits::get_entity_name<Entity>()
-					  << std::endl;
+				//std::cout << "Inserting entity: "
+				//	  << traits::get_entity_name<Entity>()
+				//	  << std::endl;
 
 				return extract_pk(entity);
 			}
