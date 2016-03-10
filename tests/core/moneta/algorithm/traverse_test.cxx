@@ -11,17 +11,19 @@
 // [===========================================================================]
 
 #include "pch.hxx"
+#include "../model/tree/A.hxx"
+#include "../model/Cat.hxx"
+#include "../model/SportsTeam.hxx"
+#include "../model/Customer.hxx"
 #include <moneta/algorithm/detail/stringize_path.hxx>
 #include <moneta/algorithm/traverse.hxx>
 #include <boost/mpl/equal.hpp>
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/size.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
 #include <vector>
 #include <string>
-#include "../model/tree/A.hxx"
-#include "../model/Cat.hxx"
-#include "../model/SportsTeam.hxx"
-#include "../model/Customer.hxx"
 
 inline void static_test() {
 	using namespace moneta::algorithm;
@@ -468,7 +470,7 @@ BOOST_AUTO_TEST_CASE(with_container_members_traverse_test) {
 		"F:SportsTeam"
 	};
 
-	const size_t line_count = std::distance(std::begin(expected), std::end(expected));
+	const size_t line_count = std::distance(boost::begin(expected), boost::end(expected));
 
 	BOOST_REQUIRE_EQUAL(state.lines.size(), line_count);
 	BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + line_count);
@@ -510,7 +512,7 @@ BOOST_AUTO_TEST_CASE(traverse_test) {
 		"F:A"
 	};
 
-	const size_t line_count = std::distance(std::begin(expected), std::end(expected));
+	const size_t line_count = std::distance(boost::begin(expected), boost::end(expected));
 
 	{
 		test_state state;
@@ -556,7 +558,7 @@ BOOST_AUTO_TEST_CASE(stateful_traverse_test) {
 		"F:Cat"
 	};
 
-	const size_t line_count = std::distance(std::begin(expected), std::end(expected));
+	const size_t line_count = std::distance(boost::begin(expected), boost::end(expected));
 	BOOST_REQUIRE_EQUAL(state.lines.size(), line_count);
 	BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + line_count);
 }
@@ -630,7 +632,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_algorithm_traverse_present_members) {
 			"F:Customer"
 		};
 
-		const size_t line_count = std::distance(std::begin(expected), std::end(expected));
+		const size_t line_count = std::distance(boost::begin(expected), boost::end(expected));
 		BOOST_CHECK_EQUAL(state.lines.size(), line_count);
 		BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + line_count);
 
@@ -680,7 +682,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_algorithm_traverse_present_members) {
 			"F:Customer"
 		};
 
-		const size_t line_count = std::distance(std::begin(expected), std::end(expected));
+		const size_t line_count = std::distance(boost::begin(expected), boost::end(expected));
 		BOOST_CHECK_EQUAL(state.lines.size(), line_count);
 		BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + line_count);
 
@@ -770,7 +772,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_algorithm_traverse_present_members) {
 			"F:Customer"
 		};
 
-		const size_t line_count = std::distance(std::begin(expected), std::end(expected));
+		const size_t line_count = std::distance(boost::begin(expected), boost::end(expected));
 		BOOST_CHECK_EQUAL(state.lines.size(), line_count);
 		BOOST_CHECK_EQUAL_COLLECTIONS(state.lines.begin(), state.lines.end(), expected, expected + line_count);
 

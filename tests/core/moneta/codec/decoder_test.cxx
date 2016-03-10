@@ -20,6 +20,8 @@
 #include <moneta/codec/_aux/path_tabs.hxx>
 #include <moneta/algorithm/detail/stringize_path.hxx>
 #include <moneta/pp/describe_entity.hxx>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
 
 MONETA_DEFINE_ENTITY(
 	Point3D,
@@ -196,7 +198,7 @@ BOOST_AUTO_TEST_CASE(point3d_simple_decoder_test) {
 	};
 
 	Point3D point;
-	const int result = decoder_t()(std::begin(buffer), std::end(buffer), point);
+	const int result = decoder_t()(boost::begin(buffer), boost::end(buffer), point);
 
 	BOOST_CHECK_EQUAL(result, 1 + (1 + 3 * sizeof(boost::uint32_t) + 1) + 1);
 	BOOST_CHECK_EQUAL(point.x, 1);
@@ -222,7 +224,7 @@ BOOST_AUTO_TEST_CASE(lottery_simple_decoder_test) {
 	};
 
 	LotteryNumbers lottery;
-	const int result = decoder_t()(std::begin(buffer), std::end(buffer), lottery);
+	const int result = decoder_t()(boost::begin(buffer), boost::end(buffer), lottery);
 
 	BOOST_CHECK_EQUAL(result, sizeof(buffer));
 	BOOST_CHECK_EQUAL(lottery.date, 0x01020304);

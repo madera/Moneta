@@ -11,16 +11,18 @@
 // [===========================================================================]
 
 #include "pch.hxx"
-#include <moneta/codec/group_decoder.hxx>
-#include <moneta/codec/rawbin/rawbin_decoder.hxx>
-#include <moneta/codec/decode_many.hxx>
-#include <boost/variant/static_visitor.hpp>
 #include "../model/simple/ThreeInts.hxx"
 #include "../model/simple/FourInts.hxx"
 #include "../model/Person.hxx"
 #include "../model/Address.hxx"
 #include "../model/Cat.hxx"
 #include "../model/Dog.hxx"
+#include <moneta/codec/group_decoder.hxx>
+#include <moneta/codec/rawbin/rawbin_decoder.hxx>
+#include <moneta/codec/decode_many.hxx>
+#include <boost/variant/static_visitor.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
 
 MONETA_DEFINE_ENTITY(
 	FiveInts,
@@ -82,7 +84,12 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_group_decoder) {
 	std::ostringstream oss;
 	entity_visitor visitor(oss);
 
-	int result = decoder(std::begin(good_threeint), std::end(good_threeint), visitor);
+	int result = decoder(
+		boost::begin(good_threeint),
+		boost::end(good_threeint),
+		visitor
+	);
+
 	BOOST_CHECK_EQUAL(result, 12);
 	BOOST_CHECK_EQUAL(oss.str(), "ThreeInts:11111111:22222222:55555555");
 }
@@ -103,8 +110,14 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_group_decoder_with_bad_fixed_values) {
 	std::ostringstream oss;
 	entity_visitor visitor(oss);
 
-	// Should fail to decode a ThreeInts and chain to the FourInts decoder to successfully decode.
-	int result = decoder(std::begin(bad_threeint), std::end(bad_threeint), visitor);
+	// Should fail to decode a ThreeInts and chain to
+	// the FourInts decoder to successfully decode.
+	int result = decoder(
+		boost::begin(bad_threeint),
+		boost::end(bad_threeint),
+		visitor
+	);
+
 	BOOST_CHECK_EQUAL(result, 16);
 	BOOST_CHECK_EQUAL(oss.str(), "FourInts:11111111:aaaaaaaa:55555555:77777777");
 }
@@ -183,7 +196,11 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_group_decoder_prefixed_test) {
 	std::ostringstream oss;
 	entity_visitor visitor(oss);
 
-	int result = decoder()(std::begin(buffer), std::end(buffer), visitor);
+	int result = decoder()(
+		boost::begin(buffer),
+		boost::end(buffer),
+		visitor
+	);
 
 	BOOST_CHECK_EQUAL(result, 1 + 12);
 	BOOST_CHECK_EQUAL(oss.str(), "ThreeInts:11111111:22222222:55555555");
@@ -220,9 +237,19 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_group_decoder_decode_many_test) {
 	std::ostringstream oss;
 	entity_visitor visitor(oss);
 
-	int result = moneta::codec::decode_many<decoder>(std::begin(buffer), std::end(buffer), visitor);
+	int result = moneta::codec::decode_many<decoder>(
+		boost::begin(buffer),
+		boost::end(buffer),
+		visitor
+	);
 
-	BOOST_CHECK_EQUAL(result, 1 + sizeof(ThreeInts) + 1 + sizeof(FourInts) + 1 + sizeof(FiveInts));
+	BOOST_CHECK_EQUAL(
+		result,
+		1 + sizeof(ThreeInts) +
+		1 + sizeof(FourInts ) +
+		1 + sizeof(FiveInts )
+	);
+
 	BOOST_CHECK_EQUAL(
 		oss.str(),
 		"ThreeInts:11111111:22222222:55555555"

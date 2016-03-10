@@ -346,17 +346,8 @@ MONETA_DEFINE_ENTITY(
 	((int, h))
 )
 
-// Test tree:
 //
-//     A________
-//    / \ \     \
-//   f  g  B__   h
-//        / \ \
-//       C  i  D
-//     / |    / \
-//    j  k   l   E
-//              / \
-//             m   n
+// Test tree:
 //
 
 BOOST_AUTO_TEST_CASE(traversal_for_each_member_test) {

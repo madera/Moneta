@@ -95,7 +95,7 @@ inline void static_test() {
 
 	// ---
 
-	typedef moneta::container::rcontext<Cat> context_type;
+	//typedef moneta::container::rcontext<Cat> context_type;
 
 	//BOOST_MPL_ASSERT((
 	//	boost::is_same<
@@ -166,53 +166,6 @@ BOOST_AUTO_TEST_CASE(rcontext_containers_test) {
 }
 
 BOOST_AUTO_TEST_CASE(rcontext_test) {
-	std::cerr << "---===== DEPRECATED rcontext TESTS BEGIN =====---" << std::endl;
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	//using namespace moneta::container;
-
-	//typedef moneta::container::detail::meta_set_impl<
-	//	boost::mpl::vector1<
-	//		boost::mpl::protect<
-	//			boost::mpl::bind2<
-	//				boost::mpl::quote2<detail::pk_tracker_impl, mpl_::void_>,
-	//				mpl_::arg<1>,
-	//				Person
-	//			>,
-	//			0
-	//		>
-	//	>
-	//> meta_set_type;
-
-	//boost::optional<
-	//	meta_set_type
-	//> foo;
-
-	//foo = meta_set_type();
-
-	//Person joe;
-	//joe.ID = 12345;
-	//joe.Name = "Joe";
-	//joe.Ratings = 10;
-	//joe.Height = 1.80;
-
-	//BOOST_CHECK_EQUAL(foo->size(), 0);
-	//foo->insert(joe);
-
-	//BOOST_CHECK_EQUAL(foo->size(), 1);
-
-	//boost::optional<meta_set_type::entry> e0 = foo->find(12345);
-	//BOOST_REQUIRE(e0.is_initialized());
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-}
-
-BOOST_AUTO_TEST_CASE(rcontext_test_2) {
 
 	moneta::container::rcontext<Cat> context;
 
@@ -245,7 +198,7 @@ BOOST_AUTO_TEST_CASE(rcontext_test_2) {
 	std::cerr << "---------------------------------" << std::endl;
 }
 
-BOOST_AUTO_TEST_CASE(rcontext_test_3) {
+BOOST_AUTO_TEST_CASE(rcontext_test_2) {
 
 	moneta::container::rcontext<Cat> context;
 
@@ -274,11 +227,9 @@ BOOST_AUTO_TEST_CASE(rcontext_test_3) {
 	std::cerr << "---------------------------------" << std::endl;
 	context.get_container<Address>()->debug_dump(std::cerr);
 	std::cerr << "---------------------------------" << std::endl;
-
-	std::cerr << "---===== DEPRECATED rcontext TESTS BEGIN =====---" << std::endl;
 }
 
-BOOST_AUTO_TEST_CASE(rcontext_test_4) {
+BOOST_AUTO_TEST_CASE(rcontext_test_3) {
 	typedef moneta::container::rcontext<Person> context_type;
 	context_type context;
 

@@ -25,24 +25,24 @@
 //struct operation {
 //	void operator()(Person& person) const {
 //		char buffer[1024];
-//		std::fill(std::begin(buffer), std::end(buffer), 0);
-//		moneta::codec::encode<moneta::codec::debug_dump>(person, std::begin(buffer), std::end(buffer));
-//		std::cerr << "visitor::op()<Person>:\n" << buffer << std::endl;
+//		std::fill(boost::begin(buffer), boost::end(buffer), 0);
+//		moneta::codec::encode<moneta::codec::debug_dump>(person, boost::begin(buffer), boost::end(buffer));
+//		std::cerr << "visitor::op()<Person>:\n" << buffer << boost::endl;
 //	}
 //
 //	void operator()(Address& address) const {
 //		char buffer[1024];
-//		std::fill(std::begin(buffer), std::end(buffer), 0);
-//		moneta::codec::encode<moneta::codec::debug_dump>(address, std::begin(buffer), std::end(buffer));
-//		std::cerr << "visitor::op()<Address>:\n" << buffer << std::endl;
+//		std::fill(boost::begin(buffer), boost::end(buffer), 0);
+//		moneta::codec::encode<moneta::codec::debug_dump>(address, boost::begin(buffer), boost::end(buffer));
+//		std::cerr << "visitor::op()<Address>:\n" << buffer << boost::endl;
 //	}
 //
 //	template <class Entity>
 //	void operator()(Entity& entity) const {
 //		char buffer[1024];
-//		std::fill(std::begin(buffer), std::end(buffer), 0);
-//		moneta::codec::encode<moneta::codec::debug_dump>(entity, std::begin(buffer), std::end(buffer));
-//		std::cerr << "visitor::op()<default>:\n" << buffer << std::endl;
+//		std::fill(boost::begin(buffer), boost::end(buffer), 0);
+//		moneta::codec::encode<moneta::codec::debug_dump>(entity, boost::begin(buffer), boost::end(buffer));
+//		std::cerr << "visitor::op()<default>:\n" << buffer << boost::endl;
 //	}
 //};
 //
@@ -50,7 +50,7 @@
 ////	console::shell<> shell;
 ////
 ////	shell.add("hello", []() {
-////		std::cerr << "Hello, fine sir!" << std::endl;
+////		std::cerr << "Hello, fine sir!" << boost::endl;
 ////	});
 ////
 ////	shell.add("decode", [](const std::vector<std::string>& args) {
@@ -61,7 +61,7 @@
 ////		}
 ////
 ////		typedef boost::mpl::vector5<Person, Address, Cat, Composite, Dog> entities;
-////		moneta::codec::decode_unknown<moneta::codec::shell, entities>(operation(), std::begin(input), std::end(input));
+////		moneta::codec::decode_unknown<moneta::codec::shell, entities>(operation(), boost::begin(input), boost::end(input));
 ////	});
 ////
 ////	console::loop_until_quit_or_exit(shell, std::cin, std::cout);

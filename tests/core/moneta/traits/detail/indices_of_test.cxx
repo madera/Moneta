@@ -13,6 +13,7 @@
 #include "pch.hxx"
 #include <moneta/traits/detail/indices_of.hxx>
 #include <boost/mpl/at.hpp>
+#include <boost/type_traits/is_float.hpp>
 
 inline void static_test() {
 	using moneta::traits::detail::indices_of;

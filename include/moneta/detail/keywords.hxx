@@ -12,6 +12,7 @@
 
 #pragma once
 #include <boost/config.hpp>
+#include <boost/config/suffix.hpp>
 
 #ifdef BOOST_MSVC
 #define MONETA_INTRA_TEMPLATE_KEYWORD

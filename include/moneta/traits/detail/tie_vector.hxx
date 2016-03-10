@@ -23,6 +23,8 @@
 #include <boost/fusion/adapted.hpp>
 #include <boost/fusion/sequence/intrinsic/at_c.hpp>
 #include <boost/fusion/include/at_c.hpp>
+#include <boost/fusion/container/vector/convert.hpp>
+#include <boost/fusion/include/as_vector.hpp>
 
 namespace moneta { namespace traits { namespace detail {
 

@@ -10,6 +10,8 @@
 // [ Read accompanying LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt ]
 // [===========================================================================]
 
+// TODO: Use BOOST_DEDUCED_TYPENAME
+
 #pragma once
 #include "../meta_set.hxx"
 #include "../../traits/pk.hxx"
@@ -43,10 +45,6 @@ namespace moneta { namespace container {
 					pk = moneta::traits::extract_pk(entity);
 				}
 
-				bool operator==(param_type rhs) const {
-					return pk == rhs;
-				}
-
 				std::string to_string() const {
 					return boost::lexical_cast<std::string>(pk);
 				}
@@ -66,15 +64,33 @@ namespace moneta { namespace container {
 				};
 			};
 
+			struct is_entry_equal {
+				param_type& _needle;
+				
+				is_entry_equal(const param_type& needle)
+				 : _needle(needle) {}
+
+				bool operator()(const entry& e) {
+					return e.pk == _needle;
+				}
+			};
+
 			template <class LazyHack = Master>
 			boost::optional<typename LazyHack::entry>
 			find(param_type pk) const {
 				const typename Master::container_type& _container = Master::container(this);
 				typedef typename Master::container_type::template index<this_type>::type index;
-				typename index::const_iterator begin = _container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().begin();
-				typename index::const_iterator end   = _container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().end();
-				typename index::const_iterator itr   = std::find(begin, end, pk);
-				return (itr == end)? boost::optional<typename Master::entry>() : *itr;
+
+				// TODO: Use the fucking index, motherfucker!!
+
+				typename index::const_iterator itr = std::find_if(
+					_container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().begin(),
+					_container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().end(),
+					is_entry_equal(pk)
+				);
+
+				return (itr == _container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().end())?
+					boost::optional<typename Master::entry>() : *itr;
 			}
 
 			void erase(param_type pk) {
@@ -82,7 +98,7 @@ namespace moneta { namespace container {
 				typedef typename Master::container_type::template index<this_type>::type index;
 				typename index::const_iterator begin = _container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().begin();
 				typename index::const_iterator end   = _container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().end();
-				typename index::const_iterator itr   = std::find(begin, end, pk);
+				typename index::const_iterator itr   = std::find_if(begin, end, is_entry_equal(pk));
 
 				if (itr != end) {
 					_container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().erase(itr);
@@ -96,7 +112,7 @@ namespace moneta { namespace container {
 				typedef typename Master::container_type::template index<this_type>::type index;
 				typename index::const_iterator begin = _container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().begin();
 				typename index::const_iterator end   = _container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().end();
-				typename index::const_iterator itr   = std::find(begin, end, pk);
+				typename index::const_iterator itr   = std::find_if(begin, end, is_entry_equal(pk));
 				assert(itr != end);
 				_container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().replace(itr, entry_);
 			}

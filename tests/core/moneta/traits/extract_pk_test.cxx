@@ -11,10 +11,10 @@
 // [===========================================================================]
 
 #include "pch.hxx"
-#include <moneta/traits/extract_pk.hxx>
-#include <moneta/traits/same_pk.hxx>
 #include "../model/Person.hxx"
 #include "../model/Dog.hxx"
+#include <moneta/traits/extract_pk.hxx>
+#include <moneta/traits/same_pk.hxx>
 
 BOOST_AUTO_TEST_CASE(extract_pk_test) {
 	Person person;
@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE(extract_pk_test) {
 	dog.ID = 1;
 	dog.Name = "Snoopy";
 
-	moneta::traits::extract_pk(dog).m1 = 5;
+	boost::fusion::at_c<1>(moneta::traits::extract_pk(dog)) = 5;
 	BOOST_CHECK_EQUAL(dog.ID, 5);
 }
 
@@ -59,8 +59,8 @@ BOOST_AUTO_TEST_CASE(const_extract_pk_test) {
 	const Dog& const_dog = dog;
 	moneta::traits::pk_tie<const Dog>::type cpk_tie = moneta::traits::extract_pk(const_dog);
 	
-	BOOST_CHECK_EQUAL(cpk_tie.m0, "Charlie");
-	BOOST_CHECK_EQUAL(cpk_tie.m1, 1);
+	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(cpk_tie), "Charlie");
+	BOOST_CHECK_EQUAL(boost::fusion::at_c<1>(cpk_tie), 1);
 
 	// Alternate syntax... TODO: Just keep one of the two: using .mN or at_c<N>().
 	BOOST_CHECK_EQUAL(boost::fusion::at_c<0>(moneta::traits::extract_pk(const_dog)), "Charlie");

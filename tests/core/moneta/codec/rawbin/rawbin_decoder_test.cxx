@@ -11,9 +11,11 @@
 // [===========================================================================]
 
 #include "pch.hxx"
-#include <moneta/codec/rawbin/rawbin_decoder.hxx>
 #include "../../model/simple/ThreeInts.hxx"
 #include "../../model/simple/FourInts.hxx"
+#include <moneta/codec/rawbin/rawbin_decoder.hxx>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
 
 BOOST_AUTO_TEST_CASE(test_moneta_codec_rawbin_decoder) {
 	unsigned char data[16] = {
@@ -22,7 +24,11 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_rawbin_decoder) {
 	};
 
 	FourInts ints;
-	int result = moneta::codec::rawbin_decoder()(std::begin(data), std::end(data), ints);
+	int result = moneta::codec::rawbin_decoder()(
+		boost::begin(data),
+		boost::end(data),
+		ints
+	);
 
 	BOOST_CHECK_EQUAL(result, 4*sizeof(int));
 	BOOST_CHECK_EQUAL(ints.One,   0x11223344);
@@ -38,7 +44,12 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_rawbin_decoder_with_fixed_values) {
 	};
 
 	ThreeInts ints;
-	int result = moneta::codec::rawbin_decoder()(std::begin(bad), std::end(bad), ints);
+	int result = moneta::codec::rawbin_decoder()(
+		boost::begin(bad),
+		boost::end(bad),
+		ints
+	);
+
 	BOOST_CHECK_EQUAL(result, 0);
 
 	unsigned char good[16] = {
@@ -46,7 +57,12 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_rawbin_decoder_with_fixed_values) {
 		0x55, 0x55, 0x55, 0x55, 0x00, 0x00, 0x00, 0x00
 	};
 
-	result = moneta::codec::rawbin_decoder()(std::begin(good), std::end(good), ints);
+	result = moneta::codec::rawbin_decoder()(
+		boost::begin(good),
+		boost::end(good),
+		ints
+	);
+
 	BOOST_CHECK_EQUAL(result, 3 * sizeof(int));
 	BOOST_CHECK_EQUAL(ints.One, 0x11111111);
 	BOOST_CHECK_EQUAL(ints.Two, 0x22222222);

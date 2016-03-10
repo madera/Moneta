@@ -16,19 +16,6 @@
 #include "../../../model/Customer.hxx"
 #include "../../../model/Person.hxx"
 
-// Test tree:
-//
-//     A________
-//    / \ \     \
-//   f  g  B__   h
-//        / \ \
-//       C  i  D
-//     / |    / \
-//    j  k   l   E
-//              / \
-//             m   n
-//
-
 MONETA_XML_ATTIBUTE(A, MONETA_MEMBER(A, int, f))
 MONETA_XML_ATTIBUTE(A, MONETA_MEMBER(A, int, g))
 MONETA_XML_ATTIBUTE(A, MONETA_MEMBER(A, int, h))

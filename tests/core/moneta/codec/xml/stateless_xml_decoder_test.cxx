@@ -11,12 +11,14 @@
 // [===========================================================================]
 
 #include "pch.hxx"
-#include <moneta/codec/xml/stateless_xml_decoder.hxx>
-#include <moneta/pp/describe_entity.hxx>
 #include "../../model/Person.hxx"
 #include "../../model/simple/ThreeInts.hxx"
 #include "../../model/Cat.hxx"
 #include "../../model/tree/A.hxx"
+#include <moneta/codec/xml/stateless_xml_decoder.hxx>
+#include <moneta/pp/describe_entity.hxx>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
 
 MONETA_DEFINE_ENTITY(
 	Point,
@@ -40,76 +42,118 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_prefix) {
 	using moneta::codec::stateless_xml_decoder_implementation::read_prefix;
 
 	{
-		// We need at least three bytes for, say, a single letter named entity and separator.
+		// We need at least three bytes for, say,
+		// a single letter named entity and separator.
 		std::string prefix;
 		const std::string s;
-		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), -3); // "<a_"
+		
+		// "<a_"
+		BOOST_CHECK_EQUAL(
+			read_prefix(boost::begin(s), boost::end(s), prefix),
+			-3
+		);
+
 		BOOST_CHECK(prefix.empty());
 	}
 	{
 		std::string prefix;
 		const std::string s = "<";
-		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), -2);
+		BOOST_CHECK_EQUAL(
+			read_prefix(boost::begin(s), boost::end(s), prefix),
+			-2
+		);
 		BOOST_CHECK(prefix.empty());
 	}
 	{
 		std::string prefix;
 		const std::string s = "<e";
-		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), -1);
+		BOOST_CHECK_EQUAL(
+			read_prefix(boost::begin(s), boost::end(s), prefix),
+			-1
+		);
 		BOOST_CHECK(prefix.empty());
 	}
 	{
 		std::string prefix;
 		const std::string s = "<ee";
-		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), -1);
-		BOOST_CHECK_EQUAL(prefix, "ee"); // Partial result, which shouldn't be used on error.
+		BOOST_CHECK_EQUAL(
+			read_prefix(boost::begin(s), boost::end(s), prefix),
+			-1
+		);
+
+		// Partial result, which shouldn't be used on error.
+		BOOST_CHECK_EQUAL(prefix, "ee");
 	}
 	{
 		std::string prefix;
 		const std::string s = "<e ";
-		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), 2);
+		BOOST_CHECK_EQUAL(
+			read_prefix(boost::begin(s), boost::end(s), prefix),
+			2
+		);
 		BOOST_CHECK_EQUAL(prefix, "e");
 	}
 	{
 		std::string prefix;
 		const std::string s = "<ee ";
-		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), 3);
+		BOOST_CHECK_EQUAL(
+			read_prefix(boost::begin(s), boost::end(s), prefix),
+			3
+		);
 		BOOST_CHECK_EQUAL(prefix, "ee");
 	}
 	{
 		std::string prefix;
 		const std::string s = "<e/";
-		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), 2);
+		BOOST_CHECK_EQUAL(
+			read_prefix(boost::begin(s), boost::end(s), prefix),
+			2
+		);
 		BOOST_CHECK_EQUAL(prefix, "e");
 	}
 	{
 		std::string prefix;
 		const std::string s = "<an_entity";
-		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), -1);
+		BOOST_CHECK_EQUAL(
+			read_prefix(boost::begin(s), boost::end(s), prefix),
+			-1
+		);
 		BOOST_CHECK_EQUAL(prefix, "an_entity");
 	}
 	{
 		std::string prefix;
 		const std::string s = "<an_entity ";
-		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), 10);
+		BOOST_CHECK_EQUAL(
+			read_prefix(boost::begin(s), boost::end(s), prefix),
+			10
+		);
 		BOOST_CHECK_EQUAL(prefix, "an_entity");
 	}
 	{
 		std::string prefix;
 		const std::string s = "<example/>";
-		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), 8);
+		BOOST_CHECK_EQUAL(
+			read_prefix(boost::begin(s), boost::end(s), prefix),
+			8
+		);
 		BOOST_CHECK_EQUAL(prefix, "example");
 	}
 	{
 		std::string prefix;
 		const std::string s = "<example />";
-		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), 8);
+		BOOST_CHECK_EQUAL(
+			read_prefix(boost::begin(s), boost::end(s), prefix),
+			8
+		);
 		BOOST_CHECK_EQUAL(prefix, "example");
 	}
 	{
 		std::string prefix;
 		const std::string s = "</a>";
-		BOOST_CHECK_EQUAL(read_prefix(std::begin(s), std::end(s), prefix), 0);
+		BOOST_CHECK_EQUAL(
+			read_prefix(boost::begin(s), boost::end(s), prefix),
+			0
+		);
 	}
 }
 
@@ -119,39 +163,60 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_tag) {
 	{
 		const std::string s;
 		std::string tag;
-		BOOST_CHECK_EQUAL(tag_reader<>()(std::begin(s), std::end(s), tag), -3);
+		BOOST_CHECK_EQUAL(
+			tag_reader<>()(boost::begin(s), boost::end(s), tag),
+			-3
+		);
 	}
 	{
 		const std::string s = "<";
 		std::string tag;
-		BOOST_CHECK_EQUAL(tag_reader<>()(std::begin(s), std::end(s), tag), -2);
+		BOOST_CHECK_EQUAL(
+			tag_reader<>()(boost::begin(s), boost::end(s), tag),
+			-2
+		);
 	}
 	{
 		const std::string s = "<a";
 		std::string tag;
-		BOOST_CHECK_EQUAL(tag_reader<>()(std::begin(s), std::end(s), tag), -1);
+		BOOST_CHECK_EQUAL(
+			tag_reader<>()(boost::begin(s), boost::end(s), tag),
+			-1
+		);
 	}
 	{
 		const std::string s = "<aa";
 		std::string tag;
-		BOOST_CHECK_EQUAL(tag_reader<>()(std::begin(s), std::end(s), tag), -1);
+		BOOST_CHECK_EQUAL(
+			tag_reader<>()(boost::begin(s), boost::end(s), tag),
+			-1
+		);
 	}
 	{
 		const std::string s = "<a ";
 		std::string tag;
-		BOOST_CHECK_EQUAL(tag_reader<>()(std::begin(s), std::end(s), tag), -1);
+		BOOST_CHECK_EQUAL(
+			tag_reader<>()(boost::begin(s), boost::end(s), tag),
+			-1
+		);
 	}
 	{
 		const std::string s = "<a /";
 		std::string tag;
-		BOOST_CHECK_EQUAL(tag_reader<>()(std::begin(s), std::end(s), tag), -1);
+		BOOST_CHECK_EQUAL(
+			tag_reader<>()(boost::begin(s), boost::end(s), tag),
+			-1
+		);
 	}
 	{
 		const std::string s = "<a>";
 		std::string tag;
 
 		tag_reader<> reader;
-		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), s.size());
+		BOOST_CHECK_EQUAL(
+			reader(boost::begin(s), boost::end(s), tag),
+			s.size()
+		);
 		BOOST_CHECK_EQUAL(tag, "a");
 		BOOST_CHECK(reader.last.is_opening);
 		BOOST_CHECK(!reader.last.has_attributes);
@@ -162,7 +227,10 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_tag) {
 		std::string tag;
 
 		tag_reader<> reader;
-		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), s.size());
+		BOOST_CHECK_EQUAL(
+			reader(boost::begin(s), boost::end(s), tag),
+			s.size()
+		);
 		BOOST_CHECK_EQUAL(tag, "a");
 		BOOST_CHECK(!reader.last.is_opening);
 		BOOST_CHECK(!reader.last.has_attributes);
@@ -174,7 +242,10 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_tag) {
 		std::string tag;
 
 		tag_reader<> reader;
-		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), 0);
+		BOOST_CHECK_EQUAL(
+			reader(boost::begin(s), boost::end(s), tag),
+			0
+		);
 	}
 	{
 		// With error on attribute
@@ -182,7 +253,10 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_tag) {
 		std::string tag;
 
 		tag_reader<> reader;
-		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), 0);
+		BOOST_CHECK_EQUAL(
+			reader(boost::begin(s), boost::end(s), tag),
+			0
+		);
 	}
 	{
 		// With error on attribute
@@ -190,7 +264,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_tag) {
 		std::string tag;
 
 		tag_reader<> reader;
-		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), 0);
+		BOOST_CHECK_EQUAL(reader(boost::begin(s), boost::end(s), tag), 0);
 	}
 	{
 		// With error on attribute
@@ -198,14 +272,14 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_tag) {
 		std::string tag;
 
 		tag_reader<> reader;
-		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), 0);
+		BOOST_CHECK_EQUAL(reader(boost::begin(s), boost::end(s), tag), 0);
 	}
 	{
 		const std::string s = "<a k=\"v\" />";
 		std::string tag;
 
 		tag_reader<> reader;
-		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), s.size());
+		BOOST_CHECK_EQUAL(reader(boost::begin(s), boost::end(s), tag), s.size());
 		BOOST_CHECK_EQUAL(tag, "a");
 		BOOST_CHECK(!reader.last.is_opening);
 		BOOST_CHECK(reader.last.has_attributes);
@@ -216,7 +290,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_tag) {
 		std::string tag;
 
 		tag_reader<> reader;
-		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), s.size());
+		BOOST_CHECK_EQUAL(reader(boost::begin(s), boost::end(s), tag), s.size());
 		BOOST_CHECK_EQUAL(tag, "a");
 		BOOST_CHECK(!reader.last.is_opening);
 		BOOST_CHECK(reader.last.has_attributes);
@@ -227,7 +301,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_tag) {
 		std::string tag;
 
 		tag_reader<> reader;
-		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), s.size());
+		BOOST_CHECK_EQUAL(reader(boost::begin(s), boost::end(s), tag), s.size());
 		BOOST_CHECK_EQUAL(tag, "a");
 		BOOST_CHECK(!reader.last.is_opening);
 		BOOST_CHECK(reader.last.has_attributes);
@@ -238,7 +312,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_tag) {
 		std::string tag;
 
 		tag_reader<> reader;
-		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), s.size());
+		BOOST_CHECK_EQUAL(reader(boost::begin(s), boost::end(s), tag), s.size());
 		BOOST_CHECK_EQUAL(tag, "a");
 		BOOST_CHECK(!reader.last.is_opening);
 		BOOST_CHECK(reader.last.has_attributes);
@@ -249,7 +323,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_tag) {
 		std::string tag;
 
 		tag_reader<> reader;
-		BOOST_CHECK_EQUAL(reader(std::begin(s), std::end(s), tag), s.size());
+		BOOST_CHECK_EQUAL(reader(boost::begin(s), boost::end(s), tag), s.size());
 		BOOST_CHECK_EQUAL(tag, "a");
 		BOOST_CHECK(reader.last.is_opening);
 		BOOST_CHECK(reader.last.has_attributes);
@@ -262,43 +336,43 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_stateless_xml_decoder_implementation_igno
 	
 	{
 		const std::string data = "<a></a>";
-		const int result = ignore_tag(std::begin(data), std::end(data));
+		const int result = ignore_tag(boost::begin(data), boost::end(data));
 		BOOST_CHECK_EQUAL(result, data.size());
 	}
 	{
 		const std::string data = "<a><b></b></a>";
-		const int result = ignore_tag(std::begin(data), std::end(data));
+		const int result = ignore_tag(boost::begin(data), boost::end(data));
 		BOOST_CHECK_EQUAL(result, data.size());
 	}
 	{
 		const std::string data = "<a><b><c></c></b></a>";
-		const int result = ignore_tag(std::begin(data), std::end(data));
+		const int result = ignore_tag(boost::begin(data), boost::end(data));
 		BOOST_CHECK_EQUAL(result, data.size());
 	}
 	{
 		const std::string data = "<a><b><c /></b></a>";
-		const int result = ignore_tag(std::begin(data), std::end(data));
+		const int result = ignore_tag(boost::begin(data), boost::end(data));
 		BOOST_CHECK_EQUAL(result, data.size());
 	}
 	{
 		const std::string data = "<a><b><c/></b></a>";
-		const int result = ignore_tag(std::begin(data), std::end(data));
+		const int result = ignore_tag(boost::begin(data), boost::end(data));
 		BOOST_CHECK_EQUAL(result, data.size());
 	}
 	{
 		// Invalid closing order.
 		const std::string data = "<a><b></a></b>";
-		const int result = ignore_tag(std::begin(data), std::end(data));
+		const int result = ignore_tag(boost::begin(data), boost::end(data));
 		BOOST_CHECK_EQUAL(result, 0);
 	}
 	{
 		const std::string data = "<a/>";
-		const int result = ignore_tag(std::begin(data), std::end(data));
+		const int result = ignore_tag(boost::begin(data), boost::end(data));
 		BOOST_CHECK_EQUAL(result, data.size());
 	}
 	{
 		const std::string data = "<a />";
-		const int result = ignore_tag(std::begin(data), std::end(data));
+		const int result = ignore_tag(boost::begin(data), boost::end(data));
 		BOOST_CHECK_EQUAL(result, data.size());
 	}
 
@@ -308,22 +382,22 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_stateless_xml_decoder_implementation_igno
 	// TODO: Be more thorough...
 	{
 		const std::string data = "<something><blabla>";
-		const int result = ignore_tag(std::begin(data), std::end(data));
+		const int result = ignore_tag(boost::begin(data), boost::end(data));
 		BOOST_CHECK_EQUAL(result, 0 - std::string("</blabla></something>").size());
 	}
 	{
 		const std::string data = "<something><blabla></bla";
-		const int result = ignore_tag(std::begin(data), std::end(data));
+		const int result = ignore_tag(boost::begin(data), boost::end(data));
 		BOOST_CHECK_EQUAL(result, 0 - std::string("bla></something>").size());
 	}
 	{
 		const std::string data = "<something><blabla></";
-		const int result = ignore_tag(std::begin(data), std::end(data));
+		const int result = ignore_tag(boost::begin(data), boost::end(data));
 		BOOST_CHECK_EQUAL(result, 0 - std::string("blabla></something>").size());
 	}
 	{
 		const std::string data = "<something><blabla></blabla";
-		const int result = ignore_tag(std::begin(data), std::end(data));
+		const int result = ignore_tag(boost::begin(data), boost::end(data));
 		BOOST_CHECK_EQUAL(result, 0 - std::string("></something>").size());
 	}
 }
@@ -337,7 +411,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_read_element_me
 		const std::string data = "<Name>John Smith</Name>";
 		const int result = read_element_member<
 			MONETA_MEMBER(Person, std::string, Name)
-		>(std::begin(data), std::end(data), person);
+		>(boost::begin(data), boost::end(data), person);
 
 		BOOST_CHECK_EQUAL(result, data.size());
 		BOOST_CHECK_EQUAL(person.Name, "John Smith");
@@ -350,7 +424,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_0) {
 	{
 		const std::string data = "<ThreeInts/>";
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_CHECK_EQUAL(result, data.size());
 		
 		ThreeInts* entity = boost::get<ThreeInts>(&variant);
@@ -359,7 +433,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_0) {
 	{
 		const std::string data = "<ThreeInts />";
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_CHECK_EQUAL(result, data.size());
 		
 		ThreeInts* entity = boost::get<ThreeInts>(&variant);
@@ -368,7 +442,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_0) {
 	{
 		const std::string data = "<Person/>";
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_CHECK_EQUAL(result, data.size());
 		
 		Person* entity = boost::get<Person>(&variant);
@@ -377,7 +451,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_0) {
 	{
 		const std::string data = "<Person />";
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_CHECK_EQUAL(result, data.size());
 
 		Person* entity = boost::get<Person>(&variant);
@@ -386,7 +460,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_0) {
 	{
 		const std::string data = "<Person Name=\"John Smith\" Ratings='10' />";
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_CHECK_EQUAL(result, data.size());
 
 		Person* entity = boost::get<Person>(&variant);
@@ -397,7 +471,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_0) {
 	{
 		const std::string data = "<Person Name=\"John Smith\" Ratings='10'/>";
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_CHECK_EQUAL(result, data.size());
 
 		Person* entity = boost::get<Person>(&variant);
@@ -411,61 +485,61 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_incomplete_clos
 	{
 		const std::string data = "<Person>";
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_CHECK_EQUAL(result, 0 - std::string("</Person>").size());
 	}
 	{
 		const std::string data = "<Person><";
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_CHECK_EQUAL(result, 0 - std::string("/Person>").size());
 	}
 	{
 		const std::string data = "<Person></";
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_CHECK_EQUAL(result, 0 - std::string("Person>").size());
 	}
 	{
 		const std::string data = "<Person></P";
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_CHECK_EQUAL(result, 0 - std::string("erson>").size());
 	}
 	{
 		const std::string data = "<Person></Pe";
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_CHECK_EQUAL(result, 0 - std::string("rson>").size());
 	}
 	{
 		const std::string data = "<Person></Per";
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_CHECK_EQUAL(result, 0 - std::string("son>").size());
 	}
 	{
 		const std::string data = "<Person></Pers";
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_CHECK_EQUAL(result, 0 - std::string("on>").size());
 	}
 	{
 		const std::string data = "<Person></Perso";
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_CHECK_EQUAL(result, 0 - std::string("n>").size());
 	}
 	{
 		const std::string data = "<Person></Person";
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_CHECK_EQUAL(result, 0 - std::string(">").size());
 	}
 	{
 		const std::string data = "<Person></Person>";
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_CHECK_EQUAL(result, data.size());
 
 		Person* entity = boost::get<Person>(&variant);
@@ -483,7 +557,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_full_decode) {
 		;
 
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_REQUIRE_EQUAL(result, data.size());
 
 		Person* entity = boost::get<Person>(&variant);
@@ -509,7 +583,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_full_decode) {
 		;
 
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_REQUIRE_EQUAL(result, data.size());
 
 		A* entity = boost::get<A>(&variant);
@@ -536,7 +610,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_full_decode) {
 		;
 
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_REQUIRE_EQUAL(result, data.size());
 
 		Cat* entity = boost::get<Cat>(&variant);
@@ -558,7 +632,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_full_decode) {
 		;
 
 		decoder::variant_type variant;
-		int result = decoder()(std::begin(data), std::end(data), variant);
+		int result = decoder()(boost::begin(data), boost::end(data), variant);
 		BOOST_REQUIRE_EQUAL(result, data.size());
 
 		Worker* entity = boost::get<Worker>(&variant);
@@ -604,7 +678,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_xml_item_name) 
 	>::type decoder;
 
 	decoder::variant_type variant;
-	const int result = decoder()(std::begin(data), std::end(data), variant);
+	const int result = decoder()(boost::begin(data), boost::end(data), variant);
 	BOOST_REQUIRE_EQUAL(result, data.size());
 
 	Point3D* entity = boost::get<Point3D>(&variant);
@@ -637,7 +711,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_xml_stateless_xml_decoder_xml_item_name) 
 //	>::type decoder;
 //
 //	decoder::variant_type variant;
-//	int result = decoder()(std::begin(data), std::end(data), variant);
+//	int result = decoder()(boost::begin(data), boost::end(data), variant);
 //	BOOST_REQUIRE_EQUAL(result, data.size());
 //
 //	Point3D* entity = boost::get<Point3D>(&variant);

@@ -39,49 +39,49 @@ inline void static_test() {
 	using moneta::traits::optional_value_type;
 
 	BOOST_MPL_ASSERT((boost::is_same<
-		typename optional_value_type<boost::optional<char> >::type,
+		optional_value_type<boost::optional<char> >::type,
 		char
 	>));
 
 	BOOST_MPL_ASSERT((boost::is_same<
-		typename optional_value_type<boost::optional<std::string> >::type,
+		optional_value_type<boost::optional<std::string> >::type,
 		std::string
 	>));
 
 	BOOST_MPL_ASSERT((boost::is_same<
-		typename optional_value_type<boost::optional<std::vector<std::string> > >::type,
+		optional_value_type<boost::optional<std::vector<std::string> > >::type,
 		std::vector<std::string>
 	>));
 
 	BOOST_MPL_ASSERT((boost::is_same<
-		typename optional_value_type<boost::optional<const char> >::type,
+		optional_value_type<boost::optional<const char> >::type,
 		const char
 	>));
 
 	BOOST_MPL_ASSERT((boost::is_same<
-		typename optional_value_type<boost::optional<const std::string> >::type,
+		optional_value_type<boost::optional<const std::string> >::type,
 		const std::string
 	>));
 
 	BOOST_MPL_ASSERT((boost::is_same<
-		typename optional_value_type<boost::optional<const std::vector<std::string> > >::type,
+		optional_value_type<boost::optional<const std::vector<std::string> > >::type,
 		const std::vector<std::string>
 	>));
 
 	//
 
 	BOOST_MPL_ASSERT((boost::is_same<
-		typename optional_value_type<const boost::optional<char> >::type,
+		optional_value_type<const boost::optional<char> >::type,
 		const char
 	>));
 
 	BOOST_MPL_ASSERT((boost::is_same<
-		typename optional_value_type<const boost::optional<std::string> >::type,
+		optional_value_type<const boost::optional<std::string> >::type,
 		const std::string
 	>));
 
 	BOOST_MPL_ASSERT((boost::is_same<
-		typename optional_value_type<const boost::optional<std::vector<std::string> > >::type,
+		optional_value_type<const boost::optional<std::vector<std::string> > >::type,
 		const std::vector<std::string>
 	>));
 }

@@ -16,6 +16,7 @@
 #include "detail/memptr_constructor.hxx"
 #include "detail/is_fusion_vector.hxx"
 #include <boost/fusion/include/equal_to.hpp>
+#include <boost/fusion/container/vector.hpp>
 
 namespace moneta { namespace traits {
 

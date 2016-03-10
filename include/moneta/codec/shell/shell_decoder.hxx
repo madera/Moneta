@@ -28,7 +28,7 @@ namespace moneta { namespace codec { namespace shell_decoder_implementation {
 	inline std::vector<std::string> special_split(std::string line) {
 		boost::trim(line);
 		if (line.size() >= 2) {
-			if (line.front() == '{' && line.back() == '}') {
+			if (*line.begin() == '{' && *(--line.end()) == '}') {
 				line.erase(0, 1);
 				line.erase(line.size() - 1);
 			}

@@ -15,6 +15,8 @@
 #include "../traits/member_name.hxx"
 #include "../traits/trait_array.hxx"
 #include "../_aux/mplx_at_c.hxx"
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
 
 namespace moneta { namespace lexical {
 
@@ -33,10 +35,10 @@ namespace moneta { namespace lexical {
 		typedef typename traits::trait_array<TypedTrait, Entity>::type array_type;
 		array_type traits = traits::collect_member_traits<TypedTrait, Entity>();
 
-		typename array_type::iterator itr = std::find(std::begin(traits), std::end(traits), name);
-		BOOST_ASSERT(itr != std::end(traits));
+		typename array_type::iterator itr = std::find(boost::begin(traits), boost::end(traits), name);
+		BOOST_ASSERT(itr != boost::end(traits));
 
-		const int ordinal = std::distance(std::begin(traits), itr);
+		const int ordinal = std::distance(boost::begin(traits), itr);
 		mplx::at_c<typename moneta::traits::members<Entity>::type>(ordinal, operation);
 	}
 

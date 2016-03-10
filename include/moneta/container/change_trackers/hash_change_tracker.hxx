@@ -23,15 +23,16 @@
 #include <boost/fusion/include/transform.hpp>
 #include <boost/fusion/include/boost_array.hpp>
 #include <boost/format.hpp>
+#include <boost/functional/hash.hpp>
 
 // XXX: Move somewhere. The trash, maybe?
 template <class T, class U, class X, const size_t Y>
 std::basic_ostream<T, U>& operator<<(std::basic_ostream<T, U>& output, const boost::array<X, Y>& rhs) {
 	typedef typename boost::array<X, Y>::const_iterator const_iterator_type;
 
-	const_iterator_type last = std::begin(rhs) + rhs.size() - 1;
-	const_iterator_type  itr = std::begin(rhs);
-	for ( ; itr != std::end(rhs); ++itr) {
+	const_iterator_type last = boost::begin(rhs) + rhs.size() - 1;
+	const_iterator_type  itr = boost::begin(rhs);
+	for ( ; itr != boost::end(rhs); ++itr) {
 		output << *itr
 		       << (itr != last? ", [OLD] " : "");
 	}
@@ -75,15 +76,15 @@ namespace moneta { namespace container {
 		//static
 		//typename boost::disable_if<traits::is_entity<T>, size_t>::type
 		//hash(const T x) {
-		//	return std::hash<T>()(x);
+		//	return boost::hash<T>()(x);
 		//}
 
 		struct std_hasher {
-			typedef const size_t result_type;
+			typedef size_t result_type;
 
 			template <typename T>
 			result_type operator()(const T value) const {
-				return std::hash<T>()(value);
+				return boost::hash<T>()(value);
 				//return hash(value);
 			}
 		};
@@ -133,7 +134,7 @@ namespace moneta { namespace container {
 	namespace detail {
 
 		struct std_hasher {
-			typedef const size_t result_type;
+			typedef size_t result_type;
 
 			template <typename T>
 			result_type operator()(const T value) const {		
@@ -161,10 +162,10 @@ namespace moneta { namespace container {
 				std::string to_string() const {
 					std::ostringstream oss;
 
-					typename state_type::const_iterator itr = std::begin(hash);
+					typename state_type::const_iterator itr = boost::begin(hash);
 					typename state_type::const_iterator last = itr + hash.size() - 1;
 
-					for ( ; itr != std::end(hash); ++itr) {
+					for ( ; itr != boost::end(hash); ++itr) {
 						oss << boost::format("0x%|08x|") % *itr
 						    << (itr != last? ", " : "");
 					}

@@ -11,14 +11,16 @@
 // [===========================================================================]
 
 #include "pch.hxx"
-#include <moneta/codec/xml/stateless_xml_encoder.hxx>
-#include <moneta/make_entity.hxx>
 #include "../../model/Person.hxx"
 #include "../../model/Dog.hxx"
 #include "../../model/Composite.hxx"
 #include "../../model/tree/A.hxx"
 #include "../../model/Customer.hxx"
+#include <moneta/codec/xml/stateless_xml_encoder.hxx>
+#include <moneta/make_entity.hxx>
 #include <moneta/serialization/detail/hexdump.hxx>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
 
 using moneta::codec::stateless_xml_encoder;
 
@@ -55,7 +57,7 @@ BOOST_AUTO_TEST_CASE(stateless_xml_encoder_basic_test) {
 	char buffer[1024];
 	std::fill(buffer, buffer + sizeof(buffer), 0);
 
-	const int result = stateless_xml_encoder()(std::begin(buffer), buffer + sizeof(buffer) - 1, A());
+	const int result = stateless_xml_encoder()(boost::begin(buffer), buffer + sizeof(buffer) - 1, A());
 
 	static const std::string expected =
 		"<A f=\"0\" g=\"0\" h=\"0\">\n"
@@ -91,10 +93,10 @@ BOOST_AUTO_TEST_CASE(composite_encode_stateless_xml_encoder_test) {
 	;
 	
 	char buffer[256];
-	std::fill(std::begin(buffer), std::end(buffer), 0);
+	std::fill(boost::begin(buffer), boost::end(buffer), 0);
 
 	const Composite composite = make_composite();
-	const int result = stateless_xml_encoder()(std::begin(buffer), buffer + sizeof(buffer) - 1, composite);
+	const int result = stateless_xml_encoder()(boost::begin(buffer), buffer + sizeof(buffer) - 1, composite);
 
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(expected, buffer);
@@ -117,9 +119,9 @@ BOOST_AUTO_TEST_CASE(tree_encode_stateless_xml_encoder_test) {
 	;
 	
 	char buffer[256];
-	std::fill(std::begin(buffer), std::end(buffer), 0);
+	std::fill(boost::begin(buffer), boost::end(buffer), 0);
 
-	const int result = stateless_xml_encoder()(std::begin(buffer), buffer + sizeof(buffer) - 1, A());
+	const int result = stateless_xml_encoder()(boost::begin(buffer), buffer + sizeof(buffer) - 1, A());
 
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(expected, buffer);
@@ -184,11 +186,11 @@ BOOST_AUTO_TEST_CASE(country_with_string_Persons_stateless_xml_encoder_test) {
 	;
 	
 	char buffer[2048];
-	std::fill(std::begin(buffer), std::end(buffer), 0);
+	std::fill(boost::begin(buffer), boost::end(buffer), 0);
 
 	using namespace moneta::codec;
 
-	const int result = stateless_xml_encoder()(std::begin(buffer), std::end(buffer), cwss);
+	const int result = stateless_xml_encoder()(boost::begin(buffer), boost::end(buffer), cwss);
 
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(buffer, expected);
@@ -250,10 +252,10 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_stateless_xml_encoder_optionals) {
 	;
 
 	char buffer[2048];
-	std::fill(std::begin(buffer), std::end(buffer), 0);
+	std::fill(boost::begin(buffer), boost::end(buffer), 0);
 
 	using namespace moneta::codec;
-	const int result = stateless_xml_encoder()(std::begin(buffer), std::end(buffer), customer);
+	const int result = stateless_xml_encoder()(boost::begin(buffer), boost::end(buffer), customer);
 
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(buffer, expected);
@@ -272,10 +274,10 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_stateless_xml_encoder_optionals_2) {
 	;
 
 	char buffer[2048];
-	std::fill(std::begin(buffer), std::end(buffer), 0);
+	std::fill(boost::begin(buffer), boost::end(buffer), 0);
 
 	using namespace moneta::codec;
-	const int result = stateless_xml_encoder()(std::begin(buffer), std::end(buffer), customer);
+	const int result = stateless_xml_encoder()(boost::begin(buffer), boost::end(buffer), customer);
 
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(buffer, expected);
@@ -310,10 +312,10 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_stateless_xml_encoder_xml_item_name) {
 	;
 
 	char buffer[2048];
-	std::fill(std::begin(buffer), std::end(buffer), 0);
+	std::fill(boost::begin(buffer), boost::end(buffer), 0);
 
 	using namespace moneta::codec;
-	const int result = stateless_xml_encoder()(std::begin(buffer), std::end(buffer), point);
+	const int result = stateless_xml_encoder()(boost::begin(buffer), boost::end(buffer), point);
 
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(buffer, expected);

@@ -12,6 +12,7 @@
 
 #pragma once
 #include "detail/member_trait_base.hxx"
+#include <boost/mpl/vector.hpp>
 #include <boost/mpl/copy_if.hpp>
 
 MONETA_DECLARE_ENTITY_TRAIT(members_of)

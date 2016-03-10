@@ -11,14 +11,16 @@
 // [===========================================================================]
 
 #include "pch.hxx"
-#include <moneta/codec/encoder.hxx>
-#include <moneta/codec/_aux/io/ostringstream.hxx>
-#include <moneta/codec/_aux/path_tabs.hxx>
-#include <moneta/algorithm/detail/stringize_path.hxx>
 #include "../model/tree/A.hxx"
 #include "../model/Cat.hxx"
 #include "../model/SportsTeam.hxx"
 #include "../model/Customer.hxx"
+#include <moneta/codec/encoder.hxx>
+#include <moneta/codec/_aux/io/ostringstream.hxx>
+#include <moneta/codec/_aux/path_tabs.hxx>
+#include <moneta/algorithm/detail/stringize_path.hxx>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
 
 using moneta::codec::aux::path_tabs;
 
@@ -165,7 +167,7 @@ BOOST_AUTO_TEST_CASE(encoder_basic_test) {
 	;
 
 	int level = 0;
-	const int result = encoder_t()(std::begin(buffer), buffer + sizeof(buffer) - 1, A(), level);
+	const int result = encoder_t()(boost::begin(buffer), buffer + sizeof(buffer) - 1, A(), level);
 
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(expected, buffer);
@@ -220,7 +222,7 @@ BOOST_AUTO_TEST_CASE(traversal_encoder_test) {
 	;
 
 	int level = 0;
-	const int result = encoder_t()(std::begin(buffer), buffer + sizeof(buffer) - 1, team, level);
+	const int result = encoder_t()(boost::begin(buffer), buffer + sizeof(buffer) - 1, team, level);
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(expected, buffer);
 }
@@ -259,7 +261,7 @@ BOOST_AUTO_TEST_CASE(test_moneta_codec_encoder_optionals) {
 	customer.Rating = 1;
 
 	int level = 0;
-	const int result = encoder_t()(std::begin(buffer), buffer + sizeof(buffer) - 1, customer, level);
+	const int result = encoder_t()(boost::begin(buffer), buffer + sizeof(buffer) - 1, customer, level);
 	BOOST_CHECK_EQUAL(result, expected.size());
 	BOOST_CHECK_EQUAL(expected, buffer);
 }

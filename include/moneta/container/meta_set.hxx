@@ -23,8 +23,6 @@
 #include <boost/mpl/vector.hpp>
 #include <boost/optional.hpp>
 
-#include <boost/mpl/print.hpp>
-
 namespace moneta { namespace container {
 
 	namespace detail {
@@ -213,7 +211,6 @@ namespace moneta { namespace container {
 
 					return oss.str();
 				}
-
 			};
 
 			// WARNING: Used for slow O(n) searches in first implementation.
@@ -224,7 +221,7 @@ namespace moneta { namespace container {
 				is_equal(const entry& model)
 				 : _model(model) {}
 
-				bool operator()(const entry& other) {
+				bool operator()(const entry& /*other*/) {
 					return false;//!(_model < other) && !(other < _model);
 				}
 			};
