@@ -22,18 +22,21 @@
 #include "../../model/Composite.hxx"
 #include "../../model/Address.hxx"
 
-static Composite make_composite() {
-	Composite composite;
-	composite.Identifier = 2600;
-	composite.Person.ID = 123;
-	composite.Person.Name = "Somedude";
-	composite.Person.Height = 1.50;
-	composite.Person.Ratings = 10;
-	composite.Dog.Owner = "Someowner";
-	composite.Dog.ID = 555;
-	composite.Dog.Name = "Doggy";
-	return composite;
-}
+//
+// TODO: Review the need.
+//
+// static Composite make_composite() {
+// 	Composite composite;
+// 	composite.Identifier = 2600;
+// 	composite.Person.ID = 123;
+// 	composite.Person.Name = "Somedude";
+// 	composite.Person.Height = 1.50;
+// 	composite.Person.Ratings = 10;
+// 	composite.Dog.Owner = "Someowner";
+// 	composite.Dog.ID = 555;
+// 	composite.Dog.Name = "Doggy";
+// 	return composite;
+// }
 
 BOOST_AUTO_TEST_CASE(detail_special_split_test) {
 	using moneta::codec::shell_decoder_implementation::special_split;

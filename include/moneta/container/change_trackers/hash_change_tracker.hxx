@@ -27,7 +27,9 @@
 
 // XXX: Move somewhere. The trash, maybe?
 template <class T, class U, class X, const size_t Y>
-std::basic_ostream<T, U>& operator<<(std::basic_ostream<T, U>& output, const boost::array<X, Y>& rhs) {
+std::basic_ostream<T, U>& operator<<(
+	std::basic_ostream<T, U>& output, const boost::array<X, Y>& rhs
+) {
 	typedef typename boost::array<X, Y>::const_iterator const_iterator_type;
 
 	const_iterator_type last = boost::begin(rhs) + rhs.size() - 1;
@@ -107,7 +109,10 @@ namespace moneta { namespace container {
 		template <class Tuple>
 		state_type hash_tuple(const Tuple& tuple) const {
 			state_type hashes;
-			boost::fusion::copy(boost::fusion::transform(tuple, std_hasher()), hashes);
+			boost::fusion::copy(
+				boost::fusion::transform(tuple, std_hasher()),
+				hashes
+			);
 			return hashes;
 		}
 	public:
@@ -150,7 +155,9 @@ namespace moneta { namespace container {
 				typedef boost::array<
 					size_t,
 					boost::mpl::size<
-						typename traits::rtuple<Entity>::type
+						typename traits::rtuple<
+							Entity
+						>::type
 					>::value
 				> state_type;
 
@@ -162,13 +169,18 @@ namespace moneta { namespace container {
 				std::string to_string() const {
 					std::ostringstream oss;
 
-					typename state_type::const_iterator itr = boost::begin(hash);
-					typename state_type::const_iterator last = itr + hash.size() - 1;
+					typename state_type::const_iterator
+					itr = boost::begin(hash);
 
-					for ( ; itr != boost::end(hash); ++itr) {
+					typename state_type::const_iterator
+					last = itr + hash.size() - 1;
+
+					oss << "hashes={ ";
+					for (; itr != boost::end(hash); ++itr) {
 						oss << boost::format("0x%|08x|") % *itr
 						    << (itr != last? ", " : "");
 					}
+					oss << " }";
 
 					return oss.str();
 				}
@@ -190,7 +202,7 @@ namespace moneta { namespace container {
 				}
 			};
 		};
-	
+
 	} // namespace detail
 
 	template <class Entity>

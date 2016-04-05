@@ -10,8 +10,6 @@
 // [ Read accompanying LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt ]
 // [===========================================================================]
 
-// TODO: Use BOOST_DEDUCED_TYPENAME
-
 #pragma once
 #include "../meta_set.hxx"
 #include "../../traits/pk.hxx"
@@ -31,11 +29,14 @@ namespace moneta { namespace container {
 			typedef pk_tracker_impl this_type;
 
 			typedef typename boost::call_traits<
-				typename moneta::traits::pk<Entity>::type
+				typename traits::pk<Entity>::type
 			>::param_type param_type;
 
 			struct entry {
-				typedef typename moneta::traits::pk<Entity>::type state_type;
+				typedef typename traits::pk<
+					Entity
+				>::type state_type;
+
 				state_type pk;
 
 				entry() {}
@@ -46,7 +47,9 @@ namespace moneta { namespace container {
 				}
 
 				std::string to_string() const {
-					return boost::lexical_cast<std::string>(pk);
+					const std::string pk_str =
+					  boost::lexical_cast<std::string>(pk);
+					return std::string("pk=") + pk_str;
 				}
 			};
 
@@ -64,57 +67,63 @@ namespace moneta { namespace container {
 				};
 			};
 
-			struct is_entry_equal {
-				param_type& _needle;
-				
-				is_entry_equal(const param_type& needle)
-				 : _needle(needle) {}
+			template <class M>
+			struct traits {
+				typedef typename M::container_type container_type;
+				typedef const container_type const_container_type;
 
-				bool operator()(const entry& e) {
-					return e.pk == _needle;
-				}
+
+				typedef typename container_type::
+					template index<
+						this_type
+					>::type
+				index_type;
+				typedef const index_type const_index_type;
+
+
+				typedef typename index_type::iterator
+					iterator_type;
+
+				typedef typename index_type::const_iterator
+					const_iterator_type;
 			};
 
 			template <class LazyHack = Master>
 			boost::optional<typename LazyHack::entry>
 			find(param_type pk) const {
-				const typename Master::container_type& _container = Master::container(this);
-				typedef typename Master::container_type::template index<this_type>::type index;
+				typename traits<Master>::const_index_type&
+				index = Master::container(this).
+				  MONETA_DEDUCED_TYPENAME get<this_type>();
 
-				// TODO: Use the fucking index, motherfucker!!
+				typename traits<Master>::const_iterator_type
+				itr = index.find(pk);
 
-				typename index::const_iterator itr = std::find_if(
-					_container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().begin(),
-					_container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().end(),
-					is_entry_equal(pk)
-				);
-
-				return (itr == _container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().end())?
-					boost::optional<typename Master::entry>() : *itr;
+				return (itr != index.end())? *itr :
+				       boost::optional<typename Master::entry>();
 			}
 
 			void erase(param_type pk) {
-				typename Master::container_type& _container = Master::container(this);
-				typedef typename Master::container_type::template index<this_type>::type index;
-				typename index::const_iterator begin = _container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().begin();
-				typename index::const_iterator end   = _container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().end();
-				typename index::const_iterator itr   = std::find_if(begin, end, is_entry_equal(pk));
+				typename traits<Master>::index_type&
+				index = Master::container(this).
+				  MONETA_DEDUCED_TYPENAME get<this_type>();
 
-				if (itr != end) {
-					_container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().erase(itr);
+				typename traits<Master>::iterator_type
+				itr = index.find(pk);
+
+				if (itr != index.end()) {
+					index.erase(itr);
 				}
 			}
 
-			// DEPRECATED UNTIL REFACTORING
+			// TODO: Verify deprecation.
 			template <class LazyHack = Master>
 			void replace(param_type pk, typename LazyHack::entry& entry_) {
-				typename Master::container_type& _container = Master::container(this);
-				typedef typename Master::container_type::template index<this_type>::type index;
-				typename index::const_iterator begin = _container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().begin();
-				typename index::const_iterator end   = _container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().end();
-				typename index::const_iterator itr   = std::find_if(begin, end, is_entry_equal(pk));
-				assert(itr != end);
-				_container.MONETA_INTRA_TEMPLATE_KEYWORD get<this_type>().replace(itr, entry_);
+				typename traits<Master>::index_type& index = Master::container(this).MONETA_DEDUCED_TYPENAME get<this_type>();
+				typename traits<Master>::iterator_type itr = index.find(pk);
+
+				if (itr != index.end()) {
+				//	index.replace(itr, entry_);
+				}
 			}
 		};
 	

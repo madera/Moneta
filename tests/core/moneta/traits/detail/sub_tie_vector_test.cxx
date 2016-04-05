@@ -24,9 +24,6 @@ inline void static_test() {
 	using boost::fusion::vector;
 	using boost::mpl::vector_c;
 
-	typedef boost::fusion::vector<char , short , int > tuple_t;
-	typedef boost::fusion::vector<char&, short&, int&>   tie_t;
-
 	BOOST_MPL_ASSERT((boost::mpl::equal<
 		sub_tie_vector<
 			vector<char, short, int>,

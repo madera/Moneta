@@ -170,8 +170,8 @@ namespace moneta { namespace container {
 			boost::mpl::vector4<
 				moneta::container::pk_tracker<Entity>,
 				moneta::container::bitset_load_tracker2<Entity>,
-				moneta::container::rtuple_data<Entity>,
-				moneta::container::hash_change_tracker2<Entity>
+				moneta::container::hash_change_tracker2<Entity>,
+				moneta::container::rtuple_data<Entity>
 			>
 		>
 	> {};

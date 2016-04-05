@@ -28,6 +28,7 @@ BOOST_AUTO_TEST_CASE(to_pk_rtuple_test) {
 	rtuple_t rtuple = moneta::traits::to_rtuple<Cat>(felix);
 
 	int pk = moneta::traits::to_pk_rtuple<Cat>(rtuple);
+	// TODO: Test pk's value.
 }
 
 BOOST_AUTO_TEST_CASE(const_to_pk_rtuple_test) {
@@ -40,6 +41,7 @@ BOOST_AUTO_TEST_CASE(const_to_pk_rtuple_test) {
 	const rtuple_t rtuple = moneta::traits::to_rtuple<Cat>(felix);
 
 	int pk = moneta::traits::to_pk_rtuple<Cat>(rtuple);
+	// TODO: Test pk's value.
 }
 
 BOOST_AUTO_TEST_CASE(to_pk_rtuple_test_2) {

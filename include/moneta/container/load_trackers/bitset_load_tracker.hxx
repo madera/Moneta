@@ -50,12 +50,7 @@ namespace moneta { namespace container {
 				}
 
 				std::string to_string() const {
-					return load_state.to_string();
-				}
-
-				bool operator<(const state_type& /*rhs*/) const {
-					// TODO
-					return false;
+					return std::string("bits=") + load_state.to_string();
 				}
 			};
 

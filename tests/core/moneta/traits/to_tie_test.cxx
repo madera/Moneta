@@ -38,7 +38,9 @@ BOOST_AUTO_TEST_CASE(const_to_tie_test) {
 	person.Ratings = 10;
 	
 	moneta::traits::tie<const Person>::type const_tie = moneta::traits::to_tie(person);
+	// TODO: Test value.
 
 	const Person& const_person = person;
 	moneta::traits::tie<const Person>::type const_tie2 = moneta::traits::to_tie(const_person);
+	// TODO: Test value.
 }

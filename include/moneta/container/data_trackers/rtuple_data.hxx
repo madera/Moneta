@@ -28,24 +28,24 @@ namespace moneta { namespace container {
 			typedef rtuple_data_impl this_type;
 
 			struct entry {
-				typedef typename moneta::traits::rtuple<Entity>::type state_type;
+				typedef typename traits::rtuple<
+					Entity
+				>::type state_type;
+
 				state_type data;
 
 				entry() {}
 
 				entry(const Entity& entity) {
-					data = moneta::traits::to_rtuple(entity);
-				}
-
-				bool operator==(const state_type& rhs) const {
-					return data == rhs;
+					data = traits::to_rtuple(entity);
 				}
 
 				std::string to_string() const {
+					using namespace boost::fusion;
 					std::ostringstream oss;
-					oss << boost::fusion::tuple_open("(")
-					    << boost::fusion::tuple_close(")")
-					    << boost::fusion::tuple_delimiter(", ")
+					oss << tuple_open("tuple={ ")
+					    << tuple_close(" }")
+					    << tuple_delimiter(", ")
 					    << data;
 			
 					return oss.str();
