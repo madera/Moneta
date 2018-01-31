@@ -1,0 +1,48 @@
+
+    Static Visitor
+
+        PROS
+        
+        CONS
+            
+            Method per Message
+                One more message means one more method.
+                
+                Could be separated into hierarchical visitors.
+                i.e. handshake, auth, operation, etc.
+    
+    Dynamic Visitor - Composed at CT using mpl::vector.
+    
+    
+    
+    Visitor Hierarchy:
+    
+        operation_visitor = mpl::vector<
+            category_a_visitor,
+            category_b_visitor,
+            category_x_visitor
+        >
+    
+        mpl::vector<
+            handshake_visitor,
+            authentication_visitor,
+            operation_visitor,
+        >
+    
+    MEQUEDE: container components are having op== troubles.
+    
+        Maybe have a member op== in meta_set and just delegate to some
+        other free function besides op==? There are conflicts...
+        
+    UPDATE: MEQUEDE: Now we have more stuff... op== was eliminated.
+    
+        SOLVE THE O(n) WEIRDNESS!!!
+        
+    Multi-index should be used to its full potential.
+    
+
+    Also, review final user API... keep it in mind.
+
+
+        rcontext<Cat> context;
+
