@@ -64,11 +64,11 @@ namespace moneta { namespace codec { namespace stateless_xml_decoder_implementat
 		const int whitespaces = moneta::codec::io::consume_whitespaces(itr, end);
 		itr += whitespaces;
 
-		if (*itr++ != '<') {
+		if (itr == end || *itr++ != '<') {
 			return 0;
 		}
 
-		if (*itr == '/') {
+		if (itr == end || *itr == '/') {
 			return 0;
 		}
 

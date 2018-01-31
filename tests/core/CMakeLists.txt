@@ -67,6 +67,7 @@ add_executable(core_tests
 	moneta/codec/encoder_test.cxx
 	moneta/codec/decoder_test.cxx
 	moneta/codec/group_decoder_test.cxx
+	moneta/codec/buffered_decoder_test.cxx
 	#
 	moneta/codec/xml/traits/xml_traits_test.cxx
 	moneta/codec/xml/stateless_xml_encoder_test.cxx
